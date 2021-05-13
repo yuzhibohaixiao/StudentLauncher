@@ -1,11 +1,15 @@
 package com.alight.android.aoa_launcher
 
 import android.util.Log
+import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import kotlinx.android.synthetic.main.activity_main.*
 
-
-class LauncherActivity : BaseActivity() {
+/**
+ * Launcher主页
+ */
+class LauncherActivity : BaseActivity(), View.OnClickListener {
 //    lateinit var mAdapter: MyAdapter
 
     //初始化控件
@@ -15,16 +19,21 @@ class LauncherActivity : BaseActivity() {
 //        main_recy.adapter = mAdapter
     }
 
+    override fun setListener() {
+        iv_video_launcher.setOnClickListener(this)
+        iv_game_launcher.setOnClickListener(this)
+        iv_other_launcher.setOnClickListener(this)
+        iv_education_launcher.setOnClickListener(this)
+        iv_setting_launcher.setOnClickListener(this)
+        iv_app_store.setOnClickListener(this)
+    }
+
     override fun initData() {
 
         var map = hashMapOf<String, Any>()
-
-//        getPresenter().getModel(MyUrls.BANNER, map, BannerBean::class.java)
 //        map.put("page", 1)
 //        map.put("count", 10)
 //        getPresenter().getModel(MyUrls.ZZ_MOVIE, map, ZZBean::class.java)
-//        getPresenter().getModel(MyUrls.JJ_MOVIE, map, JJBean::class.java)
-//        getPresenter().getModel(MyUrls.HOT_MOVIE, map, HotBean::class.java)
     }
 
 
@@ -47,6 +56,17 @@ class LauncherActivity : BaseActivity() {
 
     override fun onError(error: String) {
         Log.e("error", error)
+    }
+
+    override fun onClick(view: View) {
+        when (view.id) {
+            R.id.iv_video_launcher -> ""
+            R.id.iv_game_launcher -> ""
+            R.id.iv_other_launcher -> ""
+            R.id.iv_education_launcher -> ""
+            R.id.iv_setting_launcher -> ""
+            R.id.iv_app_store -> ""
+        }
     }
 
 

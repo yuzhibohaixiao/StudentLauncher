@@ -22,11 +22,15 @@ abstract class BaseActivity : AppCompatActivity(), IContract.IView {
             mPresenter = initPresenter()
             mPresenter!!.onAttach(this)
             initView()
+            setListener()
             initData()
         } else {
             throw IllegalStateException("this activity no layout")
         }
     }
+
+    //设置监听器
+    abstract fun setListener()
 
     //初始化数据 调用网络请求
     abstract fun initData()
