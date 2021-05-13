@@ -9,10 +9,11 @@ android {
 
     defaultConfig {
         applicationId "com.alight.android.aoa_launcher"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -75,4 +76,8 @@ dependencies {
 
     // image
     implementation "com.github.bumptech.glide:glide:$glide_version"
+
+    //multi dex
+    implementation 'androidx.multidex:multidex:2.0.0'
+
 }
