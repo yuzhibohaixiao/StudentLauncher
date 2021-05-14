@@ -9,5 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="launcher_cambridge_blue">#4183D7</color>
     <color name="launcher_dark_blue">#3367AB</color>
+    <color name="launcher_dialog_bg">#60ffffff</color>
+
 
 </resources>
