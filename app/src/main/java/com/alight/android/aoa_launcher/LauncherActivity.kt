@@ -1,12 +1,19 @@
 package com.alight.android.aoa_launcher
 
-import android.app.AlertDialog
+import android.content.ComponentName
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.alight.android.aoa_launcher.adapter.LauncherAppDialogAdapter
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.view.CustomDialog
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 /**
  * Launcher主页
@@ -63,42 +70,37 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun showDialog() {
-        val view =
-            LayoutInflater.from(LauncherApplication.getContext()).inflate(
-                R.layout.dialog_app_launcher,
-                null,
-                false
-            )
-        val dialog =
-            AlertDialog.Builder(LauncherApplication.getContext())
-                .setView(view).create()
-
-        /*  Button btn_cancel_high_opion = view.findViewById(R.id.btn_cancel_high_opion);
-        Button btn_agree_high_opion = view.findViewById(R.id.btn_agree_high_opion);
-
-        btn_cancel_high_opion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferencesUnitls.setParam(getApplicationContext(), "HighOpinion", "false");
-                //... To-do
-                dialog.dismiss();
-            }
-        });
-
-        btn_agree_high_opion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //... To-do
-                dialog.dismiss();
-            }
-        });
-
+        //弹出自定义dialog
+        var dialog = CustomDialog(this, R.layout.dialog_app_launcher)
+        val recyclerView = dialog.findViewById<RecyclerView>(R.id.rv_app_dialog_launcher)
+        recyclerView.layoutManager = GridLayoutManager(this, 3)
+        val appName = arrayListOf<String>()
+        for (i in 1..9) {
+            appName.add("第${i}个应用")
+        }
+        recyclerView.adapter = LauncherAppDialogAdapter(this, appName)
         dialog.show();
-        //此处设置位置窗体大小，我这里设置为了手机屏幕宽度的3/4  注意一定要在show方法调用后再写设置窗口大小的代码，否则不起效果会
-        dialog.getWindow().setLayout(
-                (ScreenUtils.getScreenWidth(this) / 4 * 3),
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );*/
+    }
+
+    /**
+     * 打开系统设置
+     */
+    private fun showSystemSetting() {
+
+        val intent = Intent(Settings.ACTION_SETTINGS)
+        startActivity(intent)
+//        var localIntent: Intent
+//        if (Build.VERSION.SDK_INT > 10) {
+//            localIntent = Intent("android.settings.WIRELESS_SETTINGS")
+//            localIntent.component = ComponentName(
+//                "com.android.settings",
+//                "com.android.settings.WirelessSettings"
+//            )
+//            localIntent.action = "android.intent.action.VIEW"
+//            startActivity(localIntent)
+//        }
+
+
     }
 
 
@@ -107,13 +109,13 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
             //视频
             R.id.iv_video_launcher -> showDialog()
             //游戏
-            R.id.iv_game_launcher -> ""
+            R.id.iv_game_launcher -> showDialog()
             //其他
-            R.id.iv_other_launcher -> ""
+            R.id.iv_other_launcher -> showDialog()
             //教育
-            R.id.iv_education_launcher -> ""
+            R.id.iv_education_launcher -> showDialog()
             //设置
-            R.id.iv_setting_launcher -> ""
+            R.id.iv_setting_launcher -> showSystemSetting()
             //应用市场（安智）
             R.id.iv_app_store -> ""
         }

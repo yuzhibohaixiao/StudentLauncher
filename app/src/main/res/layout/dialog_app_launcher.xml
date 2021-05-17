@@ -2,24 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="@drawable/launcher_app_dialog"
+    android:orientation="vertical"
+    android:padding="32dp">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_app_dialog_launcher"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:text="Rate US"
-        android:textColor="@color/black"
-        android:textSize="18sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:text="We're glad you're enjoying using our app! Would you mind giving us a review?"
-        android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
