@@ -1,8 +1,20 @@
 package com.alight.android.aoa_launcher.presenter
 
+import android.util.Log
+import com.alight.android.aoa_launcher.LauncherApplication
+import com.alight.android.aoa_launcher.MainActivity
 import com.alight.android.aoa_launcher.base.BasePresenter
 import com.alight.android.aoa_launcher.contract.IContract
 import com.alight.android.aoa_launcher.utils.NetUtils
+import com.google.gson.Gson
+import com.qweather.sdk.bean.base.Code
+import com.qweather.sdk.bean.base.Lang
+import com.qweather.sdk.bean.base.Unit
+import com.qweather.sdk.bean.geo.GeoBean
+import com.qweather.sdk.bean.weather.WeatherNowBean
+import com.qweather.sdk.view.QWeather
+import com.qweather.sdk.view.QWeather.OnResultGeoListener
+import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
 
 /**
  * @author wangzhe
@@ -11,6 +23,8 @@ import com.alight.android.aoa_launcher.utils.NetUtils
  */
 class PresenterImpl : BasePresenter<IContract.IView>() {
 
+
+    private var TAG = "PresenterImpl"
     override fun <T> getModel(url: String, map: HashMap<String, Any>, cls: Class<T>) {
         //调用model
         getModel().getNetInfo(url, map, cls, object : NetUtils.NetCallback {
@@ -24,5 +38,60 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 getView().onError(error)
             }
         })
+    }
+
+    override fun getWeather() {
+        /**
+         * 实况天气数据
+         * @param location 所查询的地区，可通过该地区名称、ID、IP和经纬度进行查询经纬度格式：经度,纬度
+         * （英文,分隔，十进制格式，北纬东经为正，南纬西经为负)
+         * @param lang     (选填)多语言，可以不使用该参数，默认为简体中文
+         * @param unit     (选填)单位选择，公制（m）或英制（i），默认为公制单位
+         * @param listener 网络访问结果回调
+         */
+        QWeather.getGeoCityLookup(
+            LauncherApplication.getContext(),
+            "116.41,39.92",
+            object : OnResultGeoListener {
+                override fun onError(throwable: Throwable) {}
+                override fun onSuccess(geoBean: GeoBean) {
+                    if (geoBean != null) {
+                        QWeather.getWeatherNow(
+                            LauncherApplication.getContext(),
+                            geoBean.locationBean[0].id,
+                            Lang.ZH_HANS,
+                            Unit.METRIC,
+                            object : OnResultWeatherNowListener {
+                                override fun onError(e: Throwable) {
+                                    Log.i(TAG, "getWeather onError: $e")
+                                }
+
+                                override fun onSuccess(weatherBean: WeatherNowBean) {
+                                    Log.i(
+                                        TAG,
+                                        "getWeather onSuccess: " + Gson().toJson(weatherBean)
+                                    )
+                                    //先判断返回的status是否正确，当status正确时获取数据，若status不正确，可查看status对应的Code值找到原因
+                                    if (Code.OK == weatherBean.code) {
+//                                        val now = weatherBean.now
+//                                        tv_city.setText(
+//                                            "城市:" + geoBean.locationBean[0].adm1
+//                                        )
+//                                        tv_tianqi.setText("当前天气:" + weatherBean.now.text)
+//                                        tv_kongqi.setText("当前温度:" + weatherBean.now.temp)
+                                        getView().onWeather(geoBean.locationBean[0].adm1,weatherBean)
+                                    } else {
+                                        //在此查看返回数据失败的原因
+                                        val code =
+                                            weatherBean.code
+                                        Log.i(TAG, "failed code: $code")
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+            })
+
     }
 }

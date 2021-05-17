@@ -12,6 +12,7 @@ import com.alight.android.aoa_launcher.adapter.LauncherAppDialogAdapter
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.view.CustomDialog
+import com.qweather.sdk.bean.weather.WeatherNowBean
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -69,6 +70,13 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
         Log.e("error", error)
     }
 
+    /**
+     * 天气处理
+     */
+    override fun onWeather(city: String, weatherNowBean: WeatherNowBean) {
+        TODO("Not yet implemented")
+    }
+
     private fun showDialog() {
         //弹出自定义dialog
         var dialog = CustomDialog(this, R.layout.dialog_app_launcher)
@@ -86,21 +94,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
      * 打开系统设置
      */
     private fun showSystemSetting() {
-
         val intent = Intent(Settings.ACTION_SETTINGS)
         startActivity(intent)
-//        var localIntent: Intent
-//        if (Build.VERSION.SDK_INT > 10) {
-//            localIntent = Intent("android.settings.WIRELESS_SETTINGS")
-//            localIntent.component = ComponentName(
-//                "com.android.settings",
-//                "com.android.settings.WirelessSettings"
-//            )
-//            localIntent.action = "android.intent.action.VIEW"
-//            startActivity(localIntent)
-//        }
-
-
     }
 
 
