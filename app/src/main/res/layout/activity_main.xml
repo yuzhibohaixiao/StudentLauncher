@@ -41,13 +41,57 @@
         android:layout_alignTop="@id/iv_other_launcher"
         android:src="@drawable/launcher_education" />
 
-    <ImageView
+    <LinearLayout
         android:layout_width="320dp"
         android:layout_height="360dp"
         android:layout_alignTop="@id/iv_video_launcher"
         android:layout_marginStart="45dp"
         android:layout_toEndOf="@id/iv_education_launcher"
-        android:src="@drawable/launcher_weather_clock" />
+        android:background="@drawable/launcher_weather_clock"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="12:12"
+            android:textColor="#ffffffff"
+            android:textSize="64sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3月25日 周四"
+            android:textColor="#ffffffff"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2021年"
+            android:textColor="#ffffffff"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24°C"
+                android:textColor="#ffffffff"
+                android:textSize="64sp" />
+
+            <ImageView
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:src="@mipmap/ic_launcher_round" />
+
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
