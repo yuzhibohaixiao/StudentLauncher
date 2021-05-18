@@ -1,8 +1,6 @@
 package com.alight.android.aoa_launcher
 
-import android.content.ComponentName
 import android.content.Intent
-import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.view.View
@@ -14,6 +12,7 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.view.CustomDialog
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 
 /**
@@ -27,6 +26,24 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
 //        main_recy.layoutManager = LinearLayoutManager(this)
 //        mAdapter = MyAdapter(baseContext)
 //        main_recy.adapter = mAdapter
+        setCurrentDate()
+    }
+
+
+    /**
+     * 设置时间显示
+     */
+    private fun setCurrentDate() {
+        var calendar = Calendar.getInstance()
+        calendar.timeZone = TimeZone.getDefault();//默认当前时区
+        var year = calendar.get(Calendar.YEAR)// 获取当前年份
+        var month = calendar.get(Calendar.MONTH) + 1// 获取当前月份
+        var day = calendar.get(Calendar.DAY_OF_MONTH)// 获取当前月份的日期号码
+        var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
+        var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
+        tv_month_launcher.text = "${month}月${day}日"
+        tv_year_launcher.text = "${year}年"
+        tv_time_launcher.text = "$hour:$minute"
     }
 
     override fun setListener() {
@@ -39,7 +56,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
-
+        //获取天气
+        getPresenter().getWeather(this)
         var map = hashMapOf<String, Any>()
 //        map.put("page", 1)
 //        map.put("count", 10)
@@ -74,7 +92,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
      * 天气处理
      */
     override fun onWeather(city: String, weatherNowBean: WeatherNowBean) {
-        TODO("Not yet implemented")
+        tv_temperature_launcher.text = weatherNowBean.now.temp + "°C"
     }
 
     private fun showDialog() {

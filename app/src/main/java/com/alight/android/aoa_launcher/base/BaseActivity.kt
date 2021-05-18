@@ -1,5 +1,7 @@
 package com.alight.android.aoa_launcher.base
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.alight.android.aoa_launcher.contract.IContract
