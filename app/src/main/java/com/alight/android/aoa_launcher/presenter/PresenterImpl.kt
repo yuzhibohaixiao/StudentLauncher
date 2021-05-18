@@ -2,6 +2,7 @@ package com.alight.android.aoa_launcher.presenter
 
 import android.content.Context
 import android.util.Log
+import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.base.BasePresenter
 import com.alight.android.aoa_launcher.contract.IContract
 import com.alight.android.aoa_launcher.utils.NetUtils
@@ -15,7 +16,6 @@ import com.qweather.sdk.view.HeConfig
 import com.qweather.sdk.view.QWeather
 import com.qweather.sdk.view.QWeather.OnResultGeoListener
 import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
-import java.util.*
 import kotlin.collections.HashMap
 
 /**
@@ -43,7 +43,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     private fun initWeather() {
-        //  key
+        // param publicId  appKey
         HeConfig.init("HE2105171641531090", "49fba87b52944fe08ba36e5c74dfb4a1")
         //切换至开发版服务
         HeConfig.switchToDevService()
@@ -51,6 +51,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 //        HeConfig.switchToBizService();
     }
 
+    /**
+     * 获取天气控件的所需参数
+     */
     override fun getWeather(context: Context) {
         //初始化天气服务
         initWeather()
@@ -95,7 +98,12 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 //                                        )
 //                                        tv_tianqi.setText("当前天气:" + weatherBean.now.text)
 //                                        tv_kongqi.setText("当前温度:" + weatherBean.now.temp)
-                                    getView().onWeather(geoBean.locationBean[0].adm1, weatherBean)
+
+                                    getView().onWeather(
+                                        geoBean.locationBean[0].adm1,
+                                        weatherBean,
+                                        getWeatherIcon(weatherBean)
+                                    )
                                 } else {
                                     //在此查看返回数据失败的原因
                                     val code =
@@ -107,6 +115,54 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     )
                 }
             })
+    }
+
+    /**
+     *  通过和风天气代码获取对应的图标
+     */
+    private fun getWeatherIcon(weatherNowBean: WeatherNowBean): Int {
+        return when (weatherNowBean.now.icon) {
+            "100", "150" -> R.drawable.sunny   //晴
+            "101" -> R.drawable.cloudy  //多云
+            "102" -> R.drawable.partly_cloudy   //少云
+            "103", "153" -> R.drawable.cloudy  //晴间多云
+            "104", "154" -> R.drawable.cloudy_day  //阴
+            "300", "350" -> R.drawable.shower   //阵雨
+            "301", "351" -> R.drawable.heavy_rain   //强阵雨
+            "302" -> R.drawable.thundershower   //雷阵雨
+            "303" -> R.drawable.thundershower   //强雷阵雨
+            "304" -> R.drawable.rain_and_hail   //雷阵雨
+            "305", "399" -> R.drawable.moderate_rain   //小雨
+            "306" -> R.drawable.heavy_rain      //中雨
+            "307" -> R.drawable.heavy_rain      //大雨
+            "308" -> R.drawable.heavy_rain      //极端降雨
+            "309" -> R.drawable.moderate_rain      //毛毛雨
+            "310" -> R.drawable.rainstorm           //暴雨
+            "311" -> R.drawable.big_rainstorm           //大暴雨
+            "312" -> R.drawable.big_rainstorm           //特大暴雨
+            "313" -> R.drawable.big_rainstorm           //冻雨
+            "314", "408" -> R.drawable.heavy_rain           //小到中雨
+            "315", "409" -> R.drawable.heavy_rain           //中到大雨
+            "316", "410" -> R.drawable.rainstorm           //大到暴雨
+            "317" -> R.drawable.rainstorm           //暴雨到大暴雨
+            "318" -> R.drawable.big_rainstorm       //大暴雨到特大暴雨
+            "400" -> R.drawable.light_snow
+            "401", "499" -> R.drawable.moderate_snow
+            "402" -> R.drawable.heavy_snow
+            "403" -> R.drawable.blizzard
+            "404", "405", "406", "407", "457" -> R.drawable.snow_shower
+            "456" -> R.drawable.sleet   //雨夹雪
+            "500", "501", "509", "510", "514", "515" -> R.drawable.fog  //雾
+            "502" -> R.drawable.haze
+            "503", "504", "507" -> R.drawable.sand_storm
+            "508" -> R.drawable.heavy_sandstorm
+            "511" -> R.drawable.moderate_haze
+            "512" -> R.drawable.heavy_haze
+            "513" -> R.drawable.severe_haze
+            else -> R.drawable.sunny    //未知天气
+        }
+
+
     }
 
 

@@ -25,7 +25,11 @@ interface IContract {
     interface IView {
         fun onSuccess(any: Any)
         fun onError(error: String)
-        fun onWeather(city: String, weatherNowBean: WeatherNowBean)
+        fun onWeather(
+            city: String,
+            weatherNowBean: WeatherNowBean,
+            weatherIcon: Int
+        )
     }
 
     // Presenter 逻辑处理层

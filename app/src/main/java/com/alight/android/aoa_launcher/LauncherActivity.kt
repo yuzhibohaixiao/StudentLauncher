@@ -31,7 +31,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
 
 
     /**
-     * 设置时间显示
+     * 设置日期时间展示
      */
     private fun setCurrentDate() {
         var calendar = Calendar.getInstance()
@@ -91,8 +91,14 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
     /**
      * 天气处理
      */
-    override fun onWeather(city: String, weatherNowBean: WeatherNowBean) {
+    override fun onWeather(
+        city: String,
+        weatherNowBean: WeatherNowBean,
+        weatherIcon: Int
+    ) {
         tv_temperature_launcher.text = weatherNowBean.now.temp + "°C"
+        iv_weather_launcher.setImageResource(weatherIcon)
+
     }
 
     private fun showDialog() {
