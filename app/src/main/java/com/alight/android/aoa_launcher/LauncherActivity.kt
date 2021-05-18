@@ -18,8 +18,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.adapter.LauncherAppDialogAdapter
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.view.CustomDialog
 import com.qweather.sdk.bean.weather.WeatherNowBean
+import com.qweather.sdk.c.c
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -74,9 +76,10 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
             var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
             var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
             GlobalScope.launch(Dispatchers.Main) {
-                tv_month_launcher.text = "${month}月${day}日"
+                tv_month_launcher.text = "${month}月${day}日 " + DateUtil.getDayOfWeek(calendar)
                 tv_year_launcher.text = "${year}年"
-                tv_time_launcher.text = "$hour:$minute"
+                tv_time_launcher.text =
+                    "$hour:" + if (minute >= 10) minute else "0$minute"
             }
             delay(10000)
             initWeatherDate()
@@ -148,7 +151,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
                 Log.e("android_lat", lat.toString())
                 Log.e("android_lon", lon.toString())
                 //获取天气信息
-                getPresenter().getWeather(this@LauncherActivity,location)
+                getPresenter().getWeather(this@LauncherActivity, location)
             }
         }
         // 监听位置变化，2秒一次，距离10米以上
