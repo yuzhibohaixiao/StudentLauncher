@@ -90,9 +90,10 @@
                 android:textSize="64sp" />
 
             <ImageView
+                android:id="@+id/iv_weather_launcher"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
-                android:src="@mipmap/ic_launcher_round" />
+                android:src="@drawable/sunny" />
 
         </LinearLayout>
     </LinearLayout>
