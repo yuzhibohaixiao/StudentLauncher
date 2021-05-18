@@ -1,6 +1,8 @@
 package com.alight.android.aoa_launcher.presenter
 
 import android.content.Context
+import android.location.Location
+import android.location.LocationManager
 import android.util.Log
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.base.BasePresenter
@@ -16,6 +18,8 @@ import com.qweather.sdk.view.HeConfig
 import com.qweather.sdk.view.QWeather
 import com.qweather.sdk.view.QWeather.OnResultGeoListener
 import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import kotlin.collections.HashMap
 
 /**
@@ -25,7 +29,8 @@ import kotlin.collections.HashMap
  */
 class PresenterImpl : BasePresenter<IContract.IView>() {
 
-
+    private var locationManager: LocationManager? = null
+    private var locationProvider: String? = null
     private var TAG = "PresenterImpl"
     override fun <T> getModel(url: String, map: HashMap<String, Any>, cls: Class<T>) {
         //调用model
@@ -54,10 +59,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     /**
      * 获取天气控件的所需参数
      */
-    override fun getWeather(context: Context) {
+    override fun getWeather(context: Context, location: Location) {
         //初始化天气服务
         initWeather()
-
         /**
          * 实况天气数据
          * @param location 所查询的地区，可通过该地区名称、ID、IP和经纬度进行查询经纬度格式：经度,纬度
@@ -67,8 +71,8 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
          * @param listener 网络访问结果回调
          */
         QWeather.getGeoCityLookup(
-            context,
-            "116.41,39.92",
+            context, location.longitude.toString()
+                    + "," + location.latitude,
             object : OnResultGeoListener {
                 override fun onError(throwable: Throwable) {
 

@@ -1,9 +1,18 @@
 package com.alight.android.aoa_launcher
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Criteria
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.adapter.LauncherAppDialogAdapter
@@ -43,7 +52,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
 
     override fun initData() {
         //初始化天气控件
-        initWeatherControl()
+        initWeatherDate()
+        getLocation()
 //        var map = hashMapOf<String, Any>()
 //        map.put("page", 1)
 //        map.put("count", 10)
@@ -53,7 +63,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
     /**
      *  初始化天气控件 异步获取天气和时间 每10秒刷新一次
      */
-    private fun initWeatherControl() {
+    private fun initWeatherDate() {
         GlobalScope.launch(Dispatchers.IO) {
             //获取当前系统时间
             var calendar = Calendar.getInstance()
@@ -63,17 +73,89 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
             var day = calendar.get(Calendar.DAY_OF_MONTH)// 获取当前月份的日期号码
             var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
             var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
-            //获取天气信息
-            getPresenter().getWeather(this@LauncherActivity)
             GlobalScope.launch(Dispatchers.Main) {
                 tv_month_launcher.text = "${month}月${day}日"
                 tv_year_launcher.text = "${year}年"
                 tv_time_launcher.text = "$hour:$minute"
             }
             delay(10000)
-            initWeatherControl()
+            initWeatherDate()
         }
 
+    }
+
+    private fun getLocation() {
+
+        // 位置
+        val locationManager: LocationManager
+        val locationListener: LocationListener
+        val location: Location?
+        val contextService: String = Context.LOCATION_SERVICE
+        val provider: String?
+        var lat: Double
+        var lon: Double
+        locationManager = getSystemService(contextService) as LocationManager
+        val criteria = Criteria()
+        criteria.accuracy = Criteria.ACCURACY_FINE // 高精度
+
+        criteria.isAltitudeRequired = false // 不要求海拔
+
+        criteria.isBearingRequired = false // 不要求方位
+
+        criteria.isCostAllowed = true // 允许有花费
+
+        criteria.powerRequirement = Criteria.POWER_LOW // 低功耗
+
+        // 从可用的位置提供器中，匹配以上标准的最佳提供器
+        // 从可用的位置提供器中，匹配以上标准的最佳提供器
+        provider = locationManager.getBestProvider(criteria, true)
+        // 获得最后一次变化的位置
+        // 获得最后一次变化的位置
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        location = locationManager.getLastKnownLocation(provider!!)
+        locationListener = object : LocationListener {
+            override fun onStatusChanged(
+                provider: String, status: Int,
+                extras: Bundle
+            ) {
+            }
+
+            override fun onProviderEnabled(provider: String) {
+            }
+
+            override fun onProviderDisabled(provider: String) {
+            }
+
+            override fun onLocationChanged(location: Location) {
+                lat = location.latitude
+                lon = location.longitude
+                Log.e("android_lat", lat.toString())
+                Log.e("android_lon", lon.toString())
+                //获取天气信息
+                getPresenter().getWeather(this@LauncherActivity,location)
+            }
+        }
+        // 监听位置变化，2秒一次，距离10米以上
+        locationManager.requestLocationUpdates(
+            provider, 2000, 10f,
+            locationListener
+        )
     }
 
 
