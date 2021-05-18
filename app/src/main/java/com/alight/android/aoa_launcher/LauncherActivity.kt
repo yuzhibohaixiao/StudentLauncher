@@ -12,6 +12,10 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.view.CustomDialog
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -26,24 +30,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
 //        main_recy.layoutManager = LinearLayoutManager(this)
 //        mAdapter = MyAdapter(baseContext)
 //        main_recy.adapter = mAdapter
-        setCurrentDate()
-    }
-
-
-    /**
-     * 设置日期时间展示
-     */
-    private fun setCurrentDate() {
-        var calendar = Calendar.getInstance()
-        calendar.timeZone = TimeZone.getDefault();//默认当前时区
-        var year = calendar.get(Calendar.YEAR)// 获取当前年份
-        var month = calendar.get(Calendar.MONTH) + 1// 获取当前月份
-        var day = calendar.get(Calendar.DAY_OF_MONTH)// 获取当前月份的日期号码
-        var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
-        var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
-        tv_month_launcher.text = "${month}月${day}日"
-        tv_year_launcher.text = "${year}年"
-        tv_time_launcher.text = "$hour:$minute"
     }
 
     override fun setListener() {
@@ -56,12 +42,38 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
-        //获取天气
-        getPresenter().getWeather(this)
-        var map = hashMapOf<String, Any>()
+        //初始化天气控件
+        initWeatherControl()
+//        var map = hashMapOf<String, Any>()
 //        map.put("page", 1)
 //        map.put("count", 10)
 //        getPresenter().getModel(MyUrls.ZZ_MOVIE, map, ZZBean::class.java)
+    }
+
+    /**
+     *  初始化天气控件 异步获取天气和时间 每10秒刷新一次
+     */
+    private fun initWeatherControl() {
+        GlobalScope.launch(Dispatchers.IO) {
+            //获取当前系统时间
+            var calendar = Calendar.getInstance()
+            calendar.timeZone = TimeZone.getDefault();//默认当前时区
+            var year = calendar.get(Calendar.YEAR)// 获取当前年份
+            var month = calendar.get(Calendar.MONTH) + 1// 获取当前月份
+            var day = calendar.get(Calendar.DAY_OF_MONTH)// 获取当前月份的日期号码
+            var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
+            var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
+            //获取天气信息
+            getPresenter().getWeather(this@LauncherActivity)
+            GlobalScope.launch(Dispatchers.Main) {
+                tv_month_launcher.text = "${month}月${day}日"
+                tv_year_launcher.text = "${year}年"
+                tv_time_launcher.text = "$hour:$minute"
+            }
+            delay(10000)
+            initWeatherControl()
+        }
+
     }
 
 
