@@ -1,13 +1,26 @@
 package com.alight.android.aoa_launcher.presenter
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Criteria
 import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.alight.android.aoa_launcher.LauncherActivity
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.adapter.LauncherAppDialogAdapter
 import com.alight.android.aoa_launcher.base.BasePresenter
 import com.alight.android.aoa_launcher.contract.IContract
 import com.alight.android.aoa_launcher.utils.NetUtils
+import com.alight.android.aoa_launcher.view.CustomDialog
 import com.google.gson.Gson
 import com.qweather.sdk.bean.base.Code
 import com.qweather.sdk.bean.base.Lang
@@ -23,14 +36,12 @@ import java.text.DecimalFormat
 import kotlin.collections.HashMap
 
 /**
+ * launcher业务处理类
  * @author wangzhe
- * Presenter的实现
  * Created on 2021/5/12
  */
 class PresenterImpl : BasePresenter<IContract.IView>() {
 
-    private var locationManager: LocationManager? = null
-    private var locationProvider: String? = null
     private var TAG = "PresenterImpl"
     override fun <T> getModel(url: String, map: HashMap<String, Any>, cls: Class<T>) {
         //调用model
@@ -47,6 +58,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         })
     }
 
+    /**
+     *  初始化天气服务
+     */
     private fun initWeather() {
         // param publicId  appKey
         HeConfig.init("HE2105171641531090", "49fba87b52944fe08ba36e5c74dfb4a1")
@@ -57,11 +71,90 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     /**
-     * 获取天气控件的所需参数
+     * 该方法先获取到用户的经纬度，通过经纬度获取到用户所在城市的id，
+     * 最终通过城市id调用获取天气情况的方法
      */
-    override fun getWeather(context: Context, location: Location) {
-        //初始化天气服务
+    fun getLocationAndWeather() {
+        //初始化天气sdk
         initWeather()
+        val activity = getView() as LauncherActivity
+        // 位置
+        val locationManager: LocationManager
+        val locationListener: LocationListener
+        val location: Location?
+        val contextService: String = Context.LOCATION_SERVICE
+        val provider: String?
+        var lat: Double
+        var lon: Double
+        locationManager = activity.getSystemService(contextService) as LocationManager
+        val criteria = Criteria()
+        criteria.accuracy = Criteria.ACCURACY_FINE // 高精度
+
+        criteria.isAltitudeRequired = false // 不要求海拔
+
+        criteria.isBearingRequired = false // 不要求方位
+
+        criteria.isCostAllowed = true // 允许有花费
+
+        criteria.powerRequirement = Criteria.POWER_LOW // 低功耗
+
+        // 从可用的位置提供器中，匹配以上标准的最佳提供器
+        // 从可用的位置提供器中，匹配以上标准的最佳提供器
+        provider = locationManager.getBestProvider(criteria, true)
+        // 获得最后一次变化的位置
+        // 获得最后一次变化的位置
+        if (ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        location = locationManager.getLastKnownLocation(provider!!)
+        locationListener = object : LocationListener {
+            override fun onStatusChanged(
+                provider: String, status: Int,
+                extras: Bundle
+            ) {
+            }
+
+            override fun onProviderEnabled(provider: String) {
+            }
+
+            override fun onProviderDisabled(provider: String) {
+            }
+
+            override fun onLocationChanged(location: Location) {
+                lat = location.latitude
+                lon = location.longitude
+                Log.e("android_lat", lat.toString())
+                Log.e("android_lon", lon.toString())
+                //获取天气信息
+                getWeather(activity, location)
+            }
+        }
+        // 监听位置变化，2秒一次，距离10米以上
+        locationManager.requestLocationUpdates(
+            provider, 2000, 10f,
+            locationListener
+        )
+    }
+
+    /**
+     * 获取天气控件的所需参数 调用该方法前需要先调用initWeather()方法
+     */
+    private fun getWeather(context: Context, location: Location) {
+
         /**
          * 实况天气数据
          * @param location 所查询的地区，可通过该地区名称、ID、IP和经纬度进行查询经纬度格式：经度,纬度
@@ -169,5 +262,29 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     }
 
+
+    fun showDialog() {
+        val launcherActivity = getView() as LauncherActivity
+        //弹出自定义dialog
+        var dialog = CustomDialog(launcherActivity, R.layout.dialog_app_launcher)
+        val recyclerView = dialog.findViewById<RecyclerView>(R.id.rv_app_dialog_launcher)
+        recyclerView.layoutManager = GridLayoutManager(launcherActivity, 3)
+        val appName = arrayListOf<String>()
+        for (i in 1..9) {
+            appName.add("第${i}个应用")
+        }
+        recyclerView.adapter = LauncherAppDialogAdapter(launcherActivity, appName)
+        dialog.show();
+    }
+
+
+    /**
+     * 打开系统设置
+     */
+    fun showSystemSetting() {
+        val launcherActivity = getView() as LauncherActivity
+        val intent = Intent(Settings.ACTION_SETTINGS)
+        launcherActivity.startActivity(intent)
+    }
 
 }
