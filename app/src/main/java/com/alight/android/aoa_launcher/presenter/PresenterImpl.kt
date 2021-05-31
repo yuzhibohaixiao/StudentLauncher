@@ -260,6 +260,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     }
 
+    /**
+     * 获取系统应用并封装
+     */
     private fun getAppData(
         activity: LauncherActivity,
         pageSize: Int
@@ -280,21 +283,23 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             datas.add(
                 AppBean(
                     resolveInfo.loadLabel(packageManager)
-                    , resolveInfo.activityInfo.packageName,
+                    , resolveInfo.activityInfo.applicationInfo.packageName,
                     resolveInfo.loadIcon(packageManager)
                 )
             )
         }
         val pageTempSize = apps.size / 9
         val pageRemainder = if (apps.size % 9 != 1) 1 else 0
+        //实际总页数
         val totalPageSize = pageTempSize + pageRemainder
         var startPage = 0
         var pageItems: List<AppBean>
+        //根据实际页数对数据进行封装
         for (pageNumber in 1..totalPageSize) {
             pageItems = if (pageNumber >= totalPageSize) {
                 datas.subList(startPage, datas.size - 1)
             } else {
-                datas.subList(startPage, pageNumber * pageSize - 1)
+                datas.subList(startPage, pageNumber * pageSize)
             }
             startPage = pageNumber * pageSize
             maps.add(pageItems)

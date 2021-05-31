@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +33,13 @@ public class HorizontalScrollItemAdapter extends RecyclerView.Adapter<Horizontal
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HorizontalItemHolder viewHolder, int i) {
-        AppBean itemBean = itemBeans.get(i);
+    public void onBindViewHolder(@NonNull HorizontalItemHolder viewHolder, int position) {
+        AppBean itemBean = itemBeans.get(position);
         viewHolder.setItem(itemBean);
+        viewHolder.itemView.setOnClickListener(v -> {
+            Intent intent = context.getPackageManager().getLaunchIntentForPackage(itemBean.getAppPackName());
+            context.startActivity(intent);
+        });
     }
 
     @Override
