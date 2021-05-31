@@ -19,6 +19,7 @@
         android:layout_marginBottom="20dp"
         app:fillColor="@android:color/white"
         app:pageColor="@android:color/darker_gray"
-        app:radius="4dp" />
+        app:radius="4dp"
+        app:strokeColor="@android:color/darker_gray" />
 
 </LinearLayout>

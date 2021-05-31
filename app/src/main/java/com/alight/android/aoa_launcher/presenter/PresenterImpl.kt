@@ -260,30 +260,45 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     }
 
-    private fun getAppData(pageSize: Int): List<List<AppBean>>? {
+    private fun getAppData(
+        activity: LauncherActivity,
+        pageSize: Int
+    ): List<List<AppBean>>? {
         val datas: MutableList<AppBean> = ArrayList()
         val maps: MutableList<List<AppBean>> = ArrayList()
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        //第二页
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
-        val firstPageItems: List<AppBean> = datas.subList(0, pageSize)
-        val secondPageItems: List<AppBean> = datas.subList(pageSize, datas.size)
-        maps.add(firstPageItems)
-        maps.add(secondPageItems)
+        var packageManager = activity.packageManager
+        var mainIntent = Intent(Intent.ACTION_MAIN, null)
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        // get all apps
+        var apps = packageManager.queryIntentActivities(mainIntent, 0)
+
+//        Activity获取方法:resolve.activityInfo.name
+//        Activity包名获取方法：resolve.activityInfo.packageName
+//        App包名获取方法:resolve.activityInfo.applicationInfo.packageName
+        for (position in apps.indices) {
+            val resolveInfo = apps[position]
+            datas.add(
+                AppBean(
+                    resolveInfo.loadLabel(packageManager)
+                    , resolveInfo.activityInfo.packageName,
+                    resolveInfo.loadIcon(packageManager)
+                )
+            )
+        }
+        val pageTempSize = apps.size / 9
+        val pageRemainder = if (apps.size % 9 != 1) 1 else 0
+        val totalPageSize = pageTempSize + pageRemainder
+        var startPage = 0
+        var pageItems: List<AppBean>
+        for (pageNumber in 1..totalPageSize) {
+            pageItems = if (pageNumber >= totalPageSize) {
+                datas.subList(startPage, datas.size - 1)
+            } else {
+                datas.subList(startPage, pageNumber * pageSize - 1)
+            }
+            startPage = pageNumber * pageSize
+            maps.add(pageItems)
+        }
         return maps
     }
 
@@ -291,7 +306,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         val activity = getView() as LauncherActivity
         val pageSize = 9 //每页多少条
 
-        val appBeans: List<List<AppBean>> = getAppData(pageSize)!!
+        val appBeans: List<List<AppBean>> = getAppData(activity, pageSize)!!
         val scrollAdapter =
             HorizontalScrollAdapter(
                 activity,

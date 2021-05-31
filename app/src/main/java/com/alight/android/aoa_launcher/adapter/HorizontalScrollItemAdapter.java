@@ -53,7 +53,7 @@ public class HorizontalScrollItemAdapter extends RecyclerView.Adapter<Horizontal
         }
 
         public void setItem(AppBean appBean) {
-            verticalImgView.setImageResource(appBean.getAppIcon());
+            verticalImgView.setImageDrawable(appBean.getAppIcon());
             verticalText.setText(appBean.getAppName());
         }
     }
