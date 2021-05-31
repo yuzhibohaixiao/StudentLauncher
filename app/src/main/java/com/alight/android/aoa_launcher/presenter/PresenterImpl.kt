@@ -12,12 +12,12 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.LauncherActivity
 import com.alight.android.aoa_launcher.R
-import com.alight.android.aoa_launcher.adapter.LauncherAppDialogAdapter
+import com.alight.android.aoa_launcher.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.base.BasePresenter
+import com.alight.android.aoa_launcher.bean.AppBean
 import com.alight.android.aoa_launcher.contract.IContract
 import com.alight.android.aoa_launcher.utils.NetUtils
 import com.alight.android.aoa_launcher.view.CustomDialog
@@ -31,8 +31,8 @@ import com.qweather.sdk.view.HeConfig
 import com.qweather.sdk.view.QWeather
 import com.qweather.sdk.view.QWeather.OnResultGeoListener
 import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
-import java.math.RoundingMode
-import java.text.DecimalFormat
+import com.viewpagerindicator.CirclePageIndicator
+import java.util.ArrayList
 import kotlin.collections.HashMap
 
 /**
@@ -99,9 +99,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         criteria.powerRequirement = Criteria.POWER_LOW // 低功耗
 
         // 从可用的位置提供器中，匹配以上标准的最佳提供器
-        // 从可用的位置提供器中，匹配以上标准的最佳提供器
         provider = locationManager.getBestProvider(criteria, true)
-        // 获得最后一次变化的位置
         // 获得最后一次变化的位置
         if (ActivityCompat.checkSelfPermission(
                 activity,
@@ -262,18 +260,51 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     }
 
+    private fun getAppData(pageSize: Int): List<List<AppBean>>? {
+        val datas: MutableList<AppBean> = ArrayList()
+        val maps: MutableList<List<AppBean>> = ArrayList()
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        //第二页
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        datas.add(AppBean("测试应用", "com.baidu", R.mipmap.ic_launcher_round))
+        val firstPageItems: List<AppBean> = datas.subList(0, pageSize)
+        val secondPageItems: List<AppBean> = datas.subList(pageSize, datas.size)
+        maps.add(firstPageItems)
+        maps.add(secondPageItems)
+        return maps
+    }
 
     fun showDialog() {
+        val activity = getView() as LauncherActivity
+        val pageSize = 9 //每页多少条
+
+        val appBeans: List<List<AppBean>> = getAppData(pageSize)!!
+        val scrollAdapter =
+            HorizontalScrollAdapter(
+                activity,
+                appBeans
+            )
+
         val launcherActivity = getView() as LauncherActivity
         //弹出自定义dialog
         var dialog = CustomDialog(launcherActivity, R.layout.dialog_app_launcher)
-        val recyclerView = dialog.findViewById<RecyclerView>(R.id.rv_app_dialog_launcher)
-        recyclerView.layoutManager = GridLayoutManager(launcherActivity, 3)
-        val appName = arrayListOf<String>()
-        for (i in 1..9) {
-            appName.add("第${i}个应用")
-        }
-        recyclerView.adapter = LauncherAppDialogAdapter(launcherActivity, appName)
+        val viewPager = dialog.findViewById<ViewPager>(R.id.horizontalScrollView)
+        val circlePageIndicator = dialog.findViewById<CirclePageIndicator>(R.id.circleIndicator)
+        viewPager.adapter = scrollAdapter
+        circlePageIndicator.setViewPager(viewPager)
         dialog.show();
     }
 

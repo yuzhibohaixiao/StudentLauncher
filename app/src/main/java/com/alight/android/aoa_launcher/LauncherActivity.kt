@@ -41,6 +41,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
         initWeatherDate()
         //定位后获取天气
         getPresenter().getLocationAndWeather()
+
 //        var map = hashMapOf<String, Any>()
 //        map.put("page", 1)
 //        map.put("count", 10)
@@ -108,7 +109,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
         iv_weather_launcher.setImageResource(weatherIcon)
 
     }
-
 
     override fun onClick(view: View) {
         when (view.id) {
