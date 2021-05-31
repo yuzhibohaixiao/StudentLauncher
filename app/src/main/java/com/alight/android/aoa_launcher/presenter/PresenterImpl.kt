@@ -4,14 +4,18 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.LauncherActivity
 import com.alight.android.aoa_launcher.R
@@ -22,6 +26,7 @@ import com.alight.android.aoa_launcher.contract.IContract
 import com.alight.android.aoa_launcher.utils.NetUtils
 import com.alight.android.aoa_launcher.view.CustomDialog
 import com.google.gson.Gson
+import com.qweather.sdk.b.m
 import com.qweather.sdk.bean.base.Code
 import com.qweather.sdk.bean.base.Lang
 import com.qweather.sdk.bean.base.Unit
@@ -32,8 +37,7 @@ import com.qweather.sdk.view.QWeather
 import com.qweather.sdk.view.QWeather.OnResultGeoListener
 import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
 import com.viewpagerindicator.CirclePageIndicator
-import java.util.ArrayList
-import kotlin.collections.HashMap
+import java.util.*
 
 /**
  * launcher业务处理类
@@ -336,6 +340,20 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         val launcherActivity = getView() as LauncherActivity
         val intent = Intent(Settings.ACTION_SETTINGS)
         launcherActivity.startActivity(intent)
+    }
+
+    /**
+     * 打开安智市场
+     */
+    fun showAZMarket() {
+        var activity = getView() as LauncherActivity
+        try {
+            var intent = activity.packageManager.getLaunchIntentForPackage("com.coolapk.market")
+            activity.startActivity(intent)
+        } catch (e: Exception) {
+            Log.e("showAZMarket", "没有安装")
+        }
+
     }
 
 }

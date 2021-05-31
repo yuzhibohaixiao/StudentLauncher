@@ -122,8 +122,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
             R.id.iv_education_launcher -> getPresenter().showDialog()
             //设置
             R.id.iv_setting_launcher -> getPresenter().showSystemSetting()
-            //应用市场（安智）
-            R.id.iv_app_store -> ""
+            // 打开应用市场（安智）
+            R.id.iv_app_store -> getPresenter().showAZMarket()
         }
     }
 
