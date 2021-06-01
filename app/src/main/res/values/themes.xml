@@ -29,7 +29,7 @@
         <!-- 模糊 -->
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 遮罩层 -->
-        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:backgroundDimAmount">0.7</item>
     </style>
     <!-- 隐藏状态栏的activity样式 -->
     <style name="Theme.AppCompat.Light.NoActionBar.WindowFullscreen">

@@ -39,7 +39,7 @@ public class HorizontalScrollAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         RecyclerView recyclerView = new RecyclerView(context);
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         HorizontalScrollItemAdapter itemAdapter = new HorizontalScrollItemAdapter(context, maps.get(position));
         recyclerView.setAdapter(itemAdapter);

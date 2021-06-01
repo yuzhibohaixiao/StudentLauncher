@@ -292,8 +292,8 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 )
             )
         }
-        val pageTempSize = apps.size / 9
-        val pageRemainder = if (apps.size % 9 != 1) 1 else 0
+        val pageTempSize = apps.size / pageSize
+        val pageRemainder = if (apps.size % pageSize != 1) 1 else 0
         //实际总页数
         val totalPageSize = pageTempSize + pageRemainder
         var startPage = 0
@@ -313,7 +313,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     fun showDialog() {
         val activity = getView() as LauncherActivity
-        val pageSize = 9 //每页多少条
+        val pageSize = 12 //每页多少条
 
         val appBeans: List<List<AppBean>> = getAppData(activity, pageSize)!!
         val scrollAdapter =
