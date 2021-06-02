@@ -4,29 +4,26 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.LauncherActivity
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.base.BasePresenter
 import com.alight.android.aoa_launcher.bean.AppBean
+import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.contract.IContract
 import com.alight.android.aoa_launcher.utils.NetUtils
+import com.alight.android.aoa_launcher.utils.ProperTiesUtil
 import com.alight.android.aoa_launcher.view.CustomDialog
 import com.google.gson.Gson
-import com.qweather.sdk.b.m
 import com.qweather.sdk.bean.base.Code
 import com.qweather.sdk.bean.base.Lang
 import com.qweather.sdk.bean.base.Unit
@@ -268,9 +265,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      * 获取系统应用并封装
      */
     private fun getAppData(
+        appType: String,
         activity: LauncherActivity,
-        pageSize: Int
-    ): List<List<AppBean>>? {
+        pageSize: Int = 12
+    ): List<List<AppBean>> {
         val datas: MutableList<AppBean> = ArrayList()
         val maps: MutableList<List<AppBean>> = ArrayList()
         var packageManager = activity.packageManager
@@ -282,18 +280,69 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 //        Activity获取方法:resolve.activityInfo.name
 //        Activity包名获取方法：resolve.activityInfo.packageName
 //        App包名获取方法:resolve.activityInfo.applicationInfo.packageName
+        val properties = ProperTiesUtil.getProperties(activity)
+        //音视频
+        val mediaAppPackageName: String = properties.getProperty(AppConstants.MEDIA_APP)
+        //游戏
+        val gameAppPackageName: String = properties.getProperty(AppConstants.GAME_APP)
+        //教育
+        val educationAppPackageName: String = properties.getProperty(AppConstants.EDUCATION_APP)
+
+        val mediaAppPackageNames = mediaAppPackageName.split(",")
+        val gameAppPackageNames = gameAppPackageName.split(",")
+        val educationAppPackageNames = educationAppPackageName.split(",")
+        //获取应用 只有当类型和包名都相同时才去进行添加
         for (position in apps.indices) {
             val resolveInfo = apps[position]
-            datas.add(
-                AppBean(
-                    resolveInfo.loadLabel(packageManager)
-                    , resolveInfo.activityInfo.applicationInfo.packageName,
-                    resolveInfo.loadIcon(packageManager)
-                )
-            )
+            val packageName = resolveInfo.activityInfo.applicationInfo.packageName
+            when {
+                appType == AppConstants.MEDIA_APP && mediaAppPackageNames.contains(packageName) -> {
+                    datas.add(
+                        AppBean(
+                            resolveInfo.loadLabel(packageManager)
+                            , packageName,
+                            resolveInfo.loadIcon(packageManager)
+                        )
+                    )
+                }
+                appType == AppConstants.GAME_APP && gameAppPackageNames.contains(packageName) -> {
+                    datas.add(
+                        AppBean(
+                            resolveInfo.loadLabel(packageManager)
+                            , packageName,
+                            resolveInfo.loadIcon(packageManager)
+                        )
+                    )
+                }
+                appType == AppConstants.EDUCATION_APP && educationAppPackageNames.contains(
+                    packageName
+                ) -> {
+                    datas.add(
+                        AppBean(
+                            resolveInfo.loadLabel(packageManager)
+                            , packageName,
+                            resolveInfo.loadIcon(packageManager)
+                        )
+                    )
+                }
+                appType == AppConstants.OTHER_APP && !mediaAppPackageNames.contains(packageName)
+                        && !gameAppPackageNames.contains(packageName) && !educationAppPackageNames.contains(
+                    packageName
+                ) -> {
+                    datas.add(
+                        AppBean(
+                            resolveInfo.loadLabel(packageManager)
+                            , packageName,
+                            resolveInfo.loadIcon(packageManager)
+                        )
+                    )
+                }
+            }
+
+            Log.i("AppName", "" + resolveInfo.loadLabel(packageManager))
         }
-        val pageTempSize = apps.size / pageSize
-        val pageRemainder = if (apps.size % pageSize != 1) 1 else 0
+        val pageTempSize = datas.size / pageSize
+        val pageRemainder = if (datas.size % pageSize != 1 || datas.size < pageSize) 1 else 0
         //实际总页数
         val totalPageSize = pageTempSize + pageRemainder
         var startPage = 0
@@ -301,7 +350,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         //根据实际页数对数据进行封装
         for (pageNumber in 1..totalPageSize) {
             pageItems = if (pageNumber >= totalPageSize) {
-                datas.subList(startPage, datas.size - 1)
+                datas.subList(startPage, if (datas.size - 1 <= 1) 1 else datas.size)
             } else {
                 datas.subList(startPage, pageNumber * pageSize)
             }
@@ -311,11 +360,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         return maps
     }
 
-    fun showDialog() {
+    fun showDialog(appType: String) {
         val activity = getView() as LauncherActivity
-        val pageSize = 12 //每页多少条
-
-        val appBeans: List<List<AppBean>> = getAppData(activity, pageSize)!!
+        val appBeans: List<List<AppBean>> = getAppData(appType, activity)
         val scrollAdapter =
             HorizontalScrollAdapter(
                 activity,

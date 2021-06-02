@@ -3,6 +3,7 @@ package com.alight.android.aoa_launcher
 import android.util.Log
 import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
+import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.qweather.sdk.bean.weather.WeatherNowBean
@@ -42,6 +43,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
         //定位后获取天气
         getPresenter().getLocationAndWeather()
 
+        getPresenter().showDialog(AppConstants.GAME_APP)
 //        var map = hashMapOf<String, Any>()
 //        map.put("page", 1)
 //        map.put("count", 10)
@@ -112,14 +114,14 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
-            //视频
-            R.id.iv_video_launcher -> getPresenter().showDialog()
+            //音视频
+            R.id.iv_video_launcher -> getPresenter().showDialog(AppConstants.MEDIA_APP)
             //游戏
-            R.id.iv_game_launcher -> getPresenter().showDialog()
+            R.id.iv_game_launcher -> getPresenter().showDialog(AppConstants.GAME_APP)
             //其他
-            R.id.iv_other_launcher -> getPresenter().showDialog()
+            R.id.iv_other_launcher -> getPresenter().showDialog(AppConstants.OTHER_APP)
             //教育
-            R.id.iv_education_launcher -> getPresenter().showDialog()
+            R.id.iv_education_launcher -> getPresenter().showDialog(AppConstants.EDUCATION_APP)
             //设置
             R.id.iv_setting_launcher -> getPresenter().showSystemSetting()
             // 打开应用市场（安智）
