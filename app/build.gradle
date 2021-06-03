@@ -7,7 +7,25 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+    signingConfigs {
+//        debug {
+//            storeFile file('../sign/platformUBI.jks') // devplatform: 鑫中宏
+//            storePassword 'android' // system   鑫中宏: 123456   ubi: android
+//            keyAlias 'key' //'nanopc-system' 鑫中宏 android ubi: key
+//            keyPassword 'android' // system  鑫中宏123456   ubi: android
+//            v1SigningEnabled true
+//            v2SigningEnabled true
+//        }
 
+        debug {
+            storeFile file('../sign/devplatform.jks') // devplatform: 鑫中宏
+            storePassword '123456' // system   鑫中宏: 123456   ubi: android
+            keyAlias 'android' //'nanopc-system' 鑫中宏 android ubi: key
+            keyPassword '123456' // system  鑫中宏123456   ubi: android
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
     defaultConfig {
         applicationId "com.alight.android.aoa_launcher"
         minSdkVersion 17
@@ -15,7 +33,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-
+        signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
