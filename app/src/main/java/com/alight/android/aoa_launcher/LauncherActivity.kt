@@ -1,5 +1,6 @@
 package com.alight.android.aoa_launcher
 
+import android.content.Intent
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -7,6 +8,7 @@ import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.utils.DateUtil
+import com.alight.android.aoa_launcher.utils.SPUtils
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +41,11 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
+        //如果是新用户则打开Splash
+        val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
+        if (isNewUser) {
+            startActivity(Intent(this, SplashActivity::class.java))
+        }
         //初始化天气控件日期
         initWeatherDate()
         //定位后获取天气

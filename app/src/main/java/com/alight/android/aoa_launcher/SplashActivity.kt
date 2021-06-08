@@ -1,10 +1,13 @@
 package com.alight.android.aoa_launcher
 
+import android.content.Intent
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
+import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.utils.SPUtils
 import kotlinx.android.synthetic.main.activity_splash.*
 
 
@@ -45,8 +48,13 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             R.id.fl_splash ->
-                Log.i("TAG", "onClick: ")
+                closeSplash()
         }
+    }
+
+    private fun closeSplash() {
+        SPUtils.asyncPutData(AppConstants.NEW_USER, false)
+        finish()
     }
 
     /**
