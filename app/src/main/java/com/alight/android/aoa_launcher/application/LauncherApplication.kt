@@ -2,21 +2,15 @@ package com.alight.android.aoa_launcher.application
 
 import android.app.Application
 import android.content.Context
-import androidx.multidex.MultiDexApplication
 
-class LauncherApplication : MultiDexApplication() {
-
+class LauncherApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         context = this
     }
 
     companion object {
-        var context: Application? = null
-
-        fun getContext(): Context {
-            return context!!
-        }
+        var context: Context? = null
+            private set
     }
-
 }

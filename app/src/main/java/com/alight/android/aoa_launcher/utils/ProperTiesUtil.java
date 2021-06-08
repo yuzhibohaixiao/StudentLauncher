@@ -5,6 +5,9 @@ import android.content.Context;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * 获取配置文件的工具类
+ */
 public class ProperTiesUtil {
 
     public static Properties getProperties(Context context) {

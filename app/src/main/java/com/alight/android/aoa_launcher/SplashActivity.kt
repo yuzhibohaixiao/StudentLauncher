@@ -4,16 +4,8 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
-import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
-import com.alight.android.aoa_launcher.utils.DateUtil
-import com.qweather.sdk.bean.weather.WeatherNowBean
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.*
+import kotlinx.android.synthetic.main.activity_splash.*
 
 
 /**
@@ -26,9 +18,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun setListener() {
+        fl_splash.setOnClickListener(this)
     }
 
     override fun initData() {
+
     }
 
     override fun initPresenter(): PresenterImpl {
@@ -50,7 +44,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
-
+            R.id.fl_splash ->
+                Log.i("TAG", "onClick: ")
         }
     }
 
