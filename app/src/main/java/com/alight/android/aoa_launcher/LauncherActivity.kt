@@ -102,7 +102,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
     /**
      * 天气处理
      */
-    override fun onWeather(
+    fun onWeather(
         city: String,
         weatherNowBean: WeatherNowBean,
         weatherIcon: Int

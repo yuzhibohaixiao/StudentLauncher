@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher.presenter
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,6 +12,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.LauncherActivity
@@ -152,7 +154,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     /**
      * 获取天气控件的所需参数 调用该方法前需要先调用initWeather()方法
      */
-    private fun getWeather(context: Context, location: Location) {
+    private fun getWeather(activity: LauncherActivity, location: Location) {
 
         /**
          * 实况天气数据
@@ -163,7 +165,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
          * @param listener 网络访问结果回调
          */
         QWeather.getGeoCityLookup(
-            context, location.longitude.toString()
+            activity, location.longitude.toString()
                     + "," + location.latitude,
             object : OnResultGeoListener {
                 override fun onError(throwable: Throwable) {
@@ -172,7 +174,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
                 override fun onSuccess(geoBean: GeoBean) {
                     QWeather.getWeatherNow(
-                        context,
+                        activity,
                         geoBean.locationBean[0].id,
                         Lang.ZH_HANS,
                         Unit.METRIC,
@@ -195,7 +197,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 //                                        tv_tianqi.setText("当前天气:" + weatherBean.now.text)
 //                                        tv_kongqi.setText("当前温度:" + weatherBean.now.temp)
 
-                                    getView().onWeather(
+                                    activity.onWeather(
                                         geoBean.locationBean[0].adm1,
                                         weatherBean,
                                         getWeatherIcon(weatherBean)
@@ -341,6 +343,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
             Log.i("AppName", "" + resolveInfo.loadLabel(packageManager))
         }
+        if (datas.isEmpty()) {
+            return maps
+        }
         val pageTempSize = datas.size / pageSize
         val pageRemainder = if (datas.size % pageSize != 1 || datas.size < pageSize) 1 else 0
         //实际总页数
@@ -363,6 +368,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     fun showDialog(appType: String) {
         val activity = getView() as LauncherActivity
         val appBeans: List<List<AppBean>> = getAppData(appType, activity)
+        if (appBeans.isEmpty()) {
+            Toast.makeText(activity, R.string.no_app, Toast.LENGTH_LONG).show()
+            return
+        }
         val scrollAdapter =
             HorizontalScrollAdapter(
                 activity,

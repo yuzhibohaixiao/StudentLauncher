@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">aoa_launcher</string>
+    <string name="no_app">当前分类没有应用</string>
 </resources>
