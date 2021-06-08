@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher
 
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.constants.AppConstants
@@ -43,7 +44,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
         //定位后获取天气
         getPresenter().getLocationAndWeather()
 
-        getPresenter().showDialog(AppConstants.GAME_APP)
 //        var map = hashMapOf<String, Any>()
 //        map.put("page", 1)
 //        map.put("count", 10)
@@ -129,5 +129,16 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * 屏蔽系统返回按钮
+     */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        return if (event.keyCode == KeyEvent.KEYCODE_BACK) {
+            //do something.
+            true;//系统层不做处理 就可以了
+        } else {
+            super.dispatchKeyEvent(event);
+        }
+    }
 
 }
