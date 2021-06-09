@@ -1,13 +1,12 @@
 package com.alight.android.aoa_launcher
 
 import android.content.Intent
+import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
-import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
-import com.alight.android.aoa_launcher.utils.SPUtils
 import kotlinx.android.synthetic.main.activity_splash.*
 
 
@@ -48,14 +47,16 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             R.id.fl_splash ->
-                closeSplash()
+                startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
         }
+//                closeSplash()
     }
 
-    private fun closeSplash() {
-        SPUtils.asyncPutData(AppConstants.NEW_USER, false)
-        finish()
-    }
+
+/*private fun closeSplash() {
+    SPUtils.asyncPutData(AppConstants.NEW_USER, false)
+    finish()
+}*/
 
     /**
      * 屏蔽系统返回按钮
