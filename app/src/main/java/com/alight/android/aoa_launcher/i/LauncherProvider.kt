@@ -8,11 +8,11 @@ interface LauncherProvider {
     fun getCurrentUser(currentUser: Any)
 
     //选择用户
-    fun selectUser(userId: String)
+    fun selectUser(userId: Any)
 
     //获取token
-    fun getToken(token: String)
+    fun getToken(token: Any)
 
     //发送消息
-    fun getMessage(message: String)
+    fun getMessage(message: Any)
 }
