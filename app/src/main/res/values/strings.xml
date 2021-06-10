@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">aoa_launcher</string>
     <string name="no_app">当前分类没有应用</string>
+    <string name="splash_welcome">欢迎使用本系统，首次使用本系统时需要进行联网操作，并在手机端进行账号的添加
+请用交互笔，点击页面任意位置，进行联网操作！</string>
 </resources>
