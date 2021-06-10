@@ -5,14 +5,15 @@ import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Toast
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.InternetUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import kotlinx.android.synthetic.main.activity_splash.*
+import java.util.*
 
 
 /**
@@ -27,7 +28,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             //判断网络是否连接
             if (InternetUtil.isNetworkAvalible(this)) {
                 fl_splash1.visibility = View.GONE
-                fl_splash2.visibility = View.VISIBLE
+                ll_splash2.visibility = View.VISIBLE
             } else {
                 ToastUtils.showLong(this, getString(R.string.splash_reconnection))
             }
@@ -40,11 +41,24 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     override fun setListener() {
         fl_splash1.setOnClickListener(this)
-        fl_splash2.setOnClickListener(this)
+        ll_splash2.setOnClickListener(this)
+        fl_splash3.setOnClickListener(this)
     }
 
     override fun initData() {
+        getSystemDate()
+    }
 
+    private fun getSystemDate() {
+        var calendar = Calendar.getInstance()
+        calendar.timeZone = TimeZone.getDefault();//默认当前时区
+        var year = calendar.get(Calendar.YEAR)// 获取当前年份
+        var month = calendar.get(Calendar.MONTH) + 1// 获取当前月份
+        var day = calendar.get(Calendar.DAY_OF_MONTH)// 获取当前月份的日期号码
+        var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
+        var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
+        tv_date_splash.text =
+            "${year}/${month}/${day} " + DateUtil.getDayOfWeek(calendar) + "$hour:" + if (minute >= 10) minute else "0$minute"
     }
 
     override fun initPresenter(): PresenterImpl {
@@ -71,18 +85,21 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 wifiFlag = true
                 if (InternetUtil.isNetworkAvalible(this)) {
                     fl_splash1.visibility = View.GONE
-                    fl_splash2.visibility = View.VISIBLE
+                    ll_splash2.visibility = View.VISIBLE
                 } else {
                     ToastUtils.showLong(this, getString(R.string.splash_network_connections))
                     startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
                 }
             }
-            R.id.fl_splash2 -> {
+            R.id.ll_splash2 -> {
+                ll_splash2.visibility = View.GONE
+                fl_splash3.visibility = View.VISIBLE
+            }
+            R.id.fl_splash3 -> {
                 //系统引导设置完毕，关闭引导页
                 closeSplash()
             }
         }
-//                closeSplash()
     }
 
 

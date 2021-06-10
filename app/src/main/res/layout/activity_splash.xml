@@ -8,6 +8,17 @@
     android:orientation="vertical"
     tools:context=".SplashActivity">
 
+    <TextView
+        android:id="@+id/tv_date_splash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="70dp"
+        android:text="2020/9/23 星期二 17:05"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
     <FrameLayout
         android:id="@+id/fl_splash1"
         android:layout_width="match_parent"
@@ -46,7 +57,7 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/fl_splash2"
+        android:id="@+id/ll_splash2"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
@@ -68,5 +79,25 @@
             android:layout_marginTop="32dp"
             android:src="@drawable/qr_image" />
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_splash3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/splash_earth" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="183.5dp"
+            android:src="@drawable/splash_track" />
+    </FrameLayout>
 
 </FrameLayout>
