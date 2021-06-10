@@ -8,34 +8,65 @@
     android:orientation="vertical"
     tools:context=".SplashActivity">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/splash1_left" />
-
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="53.5dp"
-        android:background="@drawable/splash1_center">
+        android:id="@+id/fl_splash1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:gravity="center_horizontal"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="150dp"
-            android:layout_marginTop="121dp"
-            android:layout_marginEnd="150dp"
-            android:lineSpacingExtra="13dp"
-            android:text="@string/splash_welcome"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:src="@drawable/splash1_left" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="53.5dp"
+            android:background="@drawable/splash1_center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="150dp"
+                android:layout_marginTop="121dp"
+                android:layout_marginEnd="150dp"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="13dp"
+                android:text="@string/splash_welcome"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </FrameLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="63.5dp"
+            android:src="@drawable/splash1_right" />
     </FrameLayout>
 
-    <ImageView
+    <LinearLayout
+        android:id="@+id/fl_splash2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="63.5dp"
-        android:src="@drawable/splash1_right" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="122dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请用微信扫一扫打开并授权小程序"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/qr_image" />
+    </LinearLayout>
+
 </FrameLayout>

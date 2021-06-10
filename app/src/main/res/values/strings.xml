@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">aoa_launcher</string>
     <string name="no_app">当前分类没有应用</string>
+    <string name="splash_network_connections">将进入wifi连接页面，请你通过wifi设置进行网络连接</string>
+    <string name="splash_reconnection">您未连接网络，请点击任意处重新连接</string>
     <string name="splash_welcome">欢迎使用本系统，首次使用本系统时需要进行联网操作，并在手机端进行账号的添加
 请用交互笔，点击页面任意位置，进行联网操作！</string>
 </resources>
