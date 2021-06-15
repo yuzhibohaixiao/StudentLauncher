@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".LauncherActivity">
 
+
     <ImageView
         android:id="@+id/iv_video_launcher"
         android:layout_width="255dp"
@@ -40,6 +41,14 @@
         android:layout_alignStart="@id/iv_game_launcher"
         android:layout_alignTop="@id/iv_other_launcher"
         android:src="@drawable/launcher_education" />
+
+    <ImageView
+        android:id="@+id/iv_aoa_launcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="255dp"
+        android:layout_marginTop="180dp"
+        android:src="@drawable/launcher_aoa" />
 
     <FrameLayout
         android:layout_width="360dp"

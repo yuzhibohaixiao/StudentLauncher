@@ -38,12 +38,13 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
         iv_education_launcher.setOnClickListener(this)
         iv_setting_launcher.setOnClickListener(this)
         iv_app_store.setOnClickListener(this)
+        iv_aoa_launcher.setOnClickListener(this)
     }
 
     override fun initData() {
         //如果是新用户则打开Splash
         val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
-        if (true) {
+        if (false) {
             startActivity(Intent(this, SplashActivity::class.java))
         }
         //初始化天气控件日期
@@ -133,6 +134,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
             R.id.iv_setting_launcher -> getPresenter().showSystemSetting()
             // 打开应用市场（安智）
             R.id.iv_app_store -> getPresenter().showAZMarket()
+            //打开aoa星仔伴学
+            R.id.iv_aoa_launcher -> getPresenter().showAOA()
         }
     }
 

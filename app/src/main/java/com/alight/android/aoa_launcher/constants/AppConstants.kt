@@ -8,5 +8,12 @@ class AppConstants {
         const val OTHER_APP = "other_app"
         const val NEW_USER = "new_user"
 
+        //AOA星仔伴学包名
+        const val AOA_PACKAGE_NAME = "com.alight.android.aoa"
+
+        const val LAUNCHER_PACKAGE_NAME = "com.alight.android.aoa_launcher"
+
+        //安智市场包名
+        const val AZ_PACKAGE_NAME = "com.coolapk.market"
     }
 }

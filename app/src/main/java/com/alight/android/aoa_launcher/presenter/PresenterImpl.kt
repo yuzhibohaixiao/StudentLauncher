@@ -330,7 +330,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 appType == AppConstants.OTHER_APP && !mediaAppPackageNames.contains(packageName)
                         && !gameAppPackageNames.contains(packageName) && !educationAppPackageNames.contains(
                     packageName
-                ) -> {
+                ) && packageName != AppConstants.AOA_PACKAGE_NAME
+                        && packageName != AppConstants.LAUNCHER_PACKAGE_NAME
+                -> {
                     datas.add(
                         AppBean(
                             resolveInfo.loadLabel(packageManager)
@@ -404,10 +406,26 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     fun showAZMarket() {
         var activity = getView() as LauncherActivity
         try {
-            var intent = activity.packageManager.getLaunchIntentForPackage("com.coolapk.market")
+            var intent =
+                activity.packageManager.getLaunchIntentForPackage(AppConstants.AZ_PACKAGE_NAME)
             activity.startActivity(intent)
         } catch (e: Exception) {
             Log.e("showAZMarket", "没有安装")
+        }
+
+    }
+
+    /**
+     * 打开AOA星仔办学
+     */
+    fun showAOA() {
+        var activity = getView() as LauncherActivity
+        try {
+            var intent =
+                activity.packageManager.getLaunchIntentForPackage(AppConstants.AOA_PACKAGE_NAME)
+            activity.startActivity(intent)
+        } catch (e: Exception) {
+            Log.e("showAOA", "没有安装")
         }
 
     }
