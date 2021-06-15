@@ -107,4 +107,8 @@ dependencies {
 
     implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
 
+    //socketio
+    // socketio
+    implementation ('io.socket:socket.io-client:2.0.0')
+
 }

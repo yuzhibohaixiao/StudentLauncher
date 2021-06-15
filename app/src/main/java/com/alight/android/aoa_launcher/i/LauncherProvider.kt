@@ -21,4 +21,9 @@ interface LauncherProvider {
 
     // get dsn
     fun getDSN():String
+
+    fun run()
+
+    // register
+    fun register(obj:LauncherListener)
 }
