@@ -22,4 +22,11 @@ interface AccountService {
     fun declareUser(@Header("ACToken") token: String,@Body body:RequestBody):Call<Response>
 
 
+    @Headers("Connection : close")
+    @POST("family/v1/parents/messages")
+    fun postMsg(@Header("ACToken") token: String,@Body body: RequestBody):Call<Response>
+
+
+
+
 }
