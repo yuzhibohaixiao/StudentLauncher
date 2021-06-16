@@ -17,6 +17,7 @@ import io.socket.client.Socket
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.Response
+import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +27,7 @@ import java.net.URI
 
 
 object AccountUtil : LauncherProvider {
-    const val DSN = "xxxxxxxxxxxxxxxxxxx" // #todo get dsn m cpu
+    const val DSN = "d7f0c2f9-3b2f-4193-9e7d-7fea378d5932" // #todo get dsn m cpu
     const val LOG_TAG = "token manager"
     var currentUserId: Int? = null
     var tokenMap: MutableMap<Int, TokenPair> = HashMap()
@@ -42,7 +43,7 @@ object AccountUtil : LauncherProvider {
         if (blocking) {
             val rep = call.execute()
             if (rep.isSuccessful()) {
-                val jsonObj = JsonParser.parseString(rep.body()!!.body()!!.string()).asJsonObject
+                val jsonObj = JsonParser.parseString(rep.body()!!.string()).asJsonObject
                 val cod = jsonObj.get("code").asInt
                 if (cod >= 400) {
                     throw TokenManagerException(
@@ -55,24 +56,24 @@ object AccountUtil : LauncherProvider {
                 tokenPair.expireTime = data.get("expire_time").asDouble
             }
         } else {
-            call.enqueue(object : Callback<Response> {
-                override fun onFailure(call: Call<Response>, t: Throwable) {
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.w(LOG_TAG, "async renew token fail.Fail(${call.toString()},${t.toString()}")
                 }
 
                 override fun onResponse(
-                    call: Call<Response>,
-                    response: retrofit2.Response<Response>
+                    call: Call<ResponseBody>,
+                    response: retrofit2.Response<ResponseBody>
                 ) {
                     if (response.isSuccessful()) {
                         val jsonObj =
-                            JsonParser.parseString(response.body()!!.body()!!.string()).asJsonObject
+                            JsonParser.parseString(response.body()!!.string()).asJsonObject
                         val cod = jsonObj.get("code").asInt
                         if (cod >= 400) {
                             Log.w(
                                 LOG_TAG,
                                 "async renew token fail.Fail(${response.code()},${
-                                    response.body()?.body()?.string()
+                                    response.body()?.string()
                                 }"
                             )
                             return
@@ -90,7 +91,7 @@ object AccountUtil : LauncherProvider {
         val newMap = HashMap<Int, TokenPair>() as MutableMap<Int, TokenPair>
         val rep = service.getRelatedUsers(DSN).execute()
         if (rep.isSuccessful()) {
-            val jsonObj = JsonParser.parseString(rep.body()!!.body()!!.string()).asJsonObject
+            val jsonObj = JsonParser.parseString(rep.body()!!.string()).asJsonObject
             val cod = jsonObj.get("code").asInt
             if (cod >= 400) {
                 throw TokenManagerException(
@@ -107,7 +108,7 @@ object AccountUtil : LauncherProvider {
         } else {
             throw TokenManagerException(
                 TokenManagerException.CODE_ERR,
-                "update all token fail.Fail(${rep.code()},${rep.body()?.body()?.string()})"
+                "update all token fail.Fail(${rep.code()},${rep.body()?.string()})"
             )
         }
     }
@@ -124,7 +125,7 @@ object AccountUtil : LauncherProvider {
             )
         ).execute()
         if (rep.isSuccessful()) {
-            val jsonObj = JsonParser.parseString(rep.body()!!.body()!!.string()).asJsonObject
+            val jsonObj = JsonParser.parseString(rep.body()!!.string()).asJsonObject
             val cod = jsonObj.get("code").asInt
             if (cod >= 400) {
                 throw TokenManagerException(
@@ -136,7 +137,7 @@ object AccountUtil : LauncherProvider {
         } else {
             throw TokenManagerException(
                 TokenManagerException.CODE_ERR,
-                "update all token fail.Fail(${rep.code()},${rep.body()!!.body()!!.string()})"
+                "update all token fail.Fail(${rep.code()},${rep.body()!!.string()})"
             )
         }
     }
@@ -200,7 +201,7 @@ object AccountUtil : LauncherProvider {
             )
         ).execute()
         if (rep.isSuccessful()) {
-            val jsonObj = JsonParser.parseString(rep.body()!!.body()!!.string()).asJsonObject
+            val jsonObj = JsonParser.parseString(rep.body()!!.string()).asJsonObject
             val cod = jsonObj.get("code").asInt
             if (cod >= 400) {
                 throw TokenManagerException(
@@ -218,7 +219,7 @@ object AccountUtil : LauncherProvider {
 
     object SocketIOHandler {
         const val LOG_TAG = "asf socketio"
-        private val asfUrl = "https://xxxxxx" //todo get it from config
+        private val asfUrl = "https://test.api.alight-sys.com:46002" //todo get it from config
         private lateinit var socket: Socket
         private var handler: LauncherListener? = null
         fun initSocketIo() {
@@ -255,10 +256,12 @@ object AccountUtil : LauncherProvider {
 
         fun onConnectFail() {
             handler?.onDisconnect()
+//            Log.e(LOG_TAG,"disconnect")
             initSocketIo()
         }
 
         fun onConnect() {
+//            Log.e(LOG_TAG,"connect")
             socket.emit(
                 "ASF.AOSBindDSN", mapOf(
                     "title" to "ASF.AOSBindDSN",
