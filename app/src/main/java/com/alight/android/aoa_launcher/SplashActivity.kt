@@ -12,7 +12,12 @@ import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.InternetUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_splash.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -50,15 +55,21 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun getSystemDate() {
-        var calendar = Calendar.getInstance()
-        calendar.timeZone = TimeZone.getDefault();//默认当前时区
-        var year = calendar.get(Calendar.YEAR)// 获取当前年份
-        var month = calendar.get(Calendar.MONTH) + 1// 获取当前月份
-        var day = calendar.get(Calendar.DAY_OF_MONTH)// 获取当前月份的日期号码
-        var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
-        var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
-        tv_date_splash.text =
-            "${year}/${month}/${day} " + DateUtil.getDayOfWeek(calendar) + "$hour:" + if (minute >= 10) minute else "0$minute"
+        GlobalScope.launch(Dispatchers.IO) {
+            var calendar = Calendar.getInstance()
+            calendar.timeZone = TimeZone.getDefault();//默认当前时区
+            var year = calendar.get(Calendar.YEAR)// 获取当前年份
+            var month = calendar.get(Calendar.MONTH) + 1// 获取当前月份
+            var day = calendar.get(Calendar.DAY_OF_MONTH)// 获取当前月份的日期号码
+            var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
+            var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
+            GlobalScope.launch(Dispatchers.Main) {
+                tv_date_splash.text =
+                    "${year}/${month}/${day} " + DateUtil.getDayOfWeek(calendar) + "$hour:" + if (minute >= 10) minute else "0$minute"
+            }
+            delay(10000)
+            getSystemDate()
+        }
     }
 
     override fun initPresenter(): PresenterImpl {

@@ -92,12 +92,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/splash_earth" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginTop="183.5dp"
-            android:src="@drawable/splash_track" />
     </FrameLayout>
 
 </FrameLayout>
