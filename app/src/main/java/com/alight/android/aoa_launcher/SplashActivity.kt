@@ -5,6 +5,9 @@ import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.alight.android.aoa_launcher.adapter.SplashUserAdapter
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
@@ -12,7 +15,6 @@ import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.InternetUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -52,6 +54,28 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     override fun initData() {
         getSystemDate()
+    }
+
+    fun startQRCode() {
+
+    }
+
+    private fun showChildUser() {
+        rv_select_child_splash.layoutManager = LinearLayoutManager(
+            this,
+            RecyclerView.HORIZONTAL, false
+        )
+        val arrayListOf = arrayListOf<String>()
+        arrayListOf.add("张三")
+        arrayListOf.add("李四")
+        arrayListOf.add("王五")
+        val splashUserAdapter = SplashUserAdapter()
+        rv_select_child_splash.adapter = splashUserAdapter
+        //第一次添加数据
+        splashUserAdapter.setNewInstance(arrayListOf)
+        //追加数据
+        //splashUserAdapter.addData(arrayListOf)
+
     }
 
     private fun getSystemDate() {
@@ -105,6 +129,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             R.id.ll_splash2 -> {
                 ll_splash2.visibility = View.GONE
                 fl_splash3.visibility = View.VISIBLE
+                showChildUser()
             }
             R.id.fl_splash3 -> {
                 //系统引导设置完毕，关闭引导页

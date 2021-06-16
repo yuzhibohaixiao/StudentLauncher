@@ -22,7 +22,8 @@
     <FrameLayout
         android:id="@+id/fl_splash1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -92,6 +93,39 @@
             android:layout_height="wrap_content"
             android:src="@drawable/splash_earth" />
 
+        <LinearLayout
+            android:id="@+id/ll_no_child_splash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/launcher_gradual_change_bg"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="创建孩子"
+                android:textColor="#ff000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:text="当前家庭没有孩子，需要在小程序上添加一个孩子哦"
+                android:textColor="#ff000000"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_select_child_splash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
     </FrameLayout>
+
 
 </FrameLayout>
