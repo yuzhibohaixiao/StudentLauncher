@@ -15,6 +15,7 @@ import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.InternetUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
+import com.chad.library.adapter.base.listener.OnItemClickListener
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -70,6 +71,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         arrayListOf.add("李四")
         arrayListOf.add("王五")
         val splashUserAdapter = SplashUserAdapter()
+        //点击事件
+        splashUserAdapter.setOnItemClickListener { adapter, view, position ->
+            ToastUtils.showShort(this, "你点到我了！$position")
+        }
         rv_select_child_splash.adapter = splashUserAdapter
         //第一次添加数据
         splashUserAdapter.setNewInstance(arrayListOf)
