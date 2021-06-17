@@ -9,10 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.adapter.SplashUserAdapter
 import com.alight.android.aoa_launcher.base.BaseActivity
+import com.alight.android.aoa_launcher.bean.TokenManagerException
+import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.utils.*
-import com.chad.library.adapter.base.listener.OnItemClickListener
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -62,26 +63,32 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun showChildUser() {
-        val allUser = AccountUtil.getAllToken()
-        rv_select_child_splash.layoutManager = LinearLayoutManager(
-            this,
-            RecyclerView.HORIZONTAL, false
-        )
-        val arrayListOf = arrayListOf<String>()
-        arrayListOf.add("张三")
-        arrayListOf.add("李四")
-        arrayListOf.add("王五")
-        val splashUserAdapter = SplashUserAdapter()
-        //点击事件
-        splashUserAdapter.setOnItemClickListener { adapter, view, position ->
-            ToastUtils.showShort(this, "你点到我了！$position")
-        }
-        rv_select_child_splash.adapter = splashUserAdapter
-        //第一次添加数据
-        splashUserAdapter.setNewInstance(arrayListOf)
-        //追加数据
-        //splashUserAdapter.addData(arrayListOf)
+        try {
+            GlobalScope.launch(Dispatchers.IO) {
+                val allUser = AccountUtil.getAllToken() as MutableList<TokenPair>
+                GlobalScope.launch(Dispatchers.Main) {
+                    if (allUser.isNullOrEmpty()) {
+                        ll_no_child_splash.visibility = View.VISIBLE
+                        rv_select_child_splash.visibility = View.GONE
+                    } else {
+                        rv_select_child_splash.layoutManager = LinearLayoutManager(
+                            this@SplashActivity,
+                            RecyclerView.HORIZONTAL, false
+                        )
+                        val splashUserAdapter = SplashUserAdapter()
+                        //点击事件
+                        splashUserAdapter.setOnItemClickListener { adapter, view, position ->
+                            ToastUtils.showShort(this@SplashActivity, "你点到我了！$position")
+                        }
+                        rv_select_child_splash.adapter = splashUserAdapter
+                        //第一次添加数据
+                        splashUserAdapter.setNewInstance(allUser)
+                    }
+                }
+            }
+        } catch (tokenManagerException: TokenManagerException) {
 
+        }
     }
 
     private fun getSystemDate() {
