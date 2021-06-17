@@ -11,10 +11,7 @@ import com.alight.android.aoa_launcher.adapter.SplashUserAdapter
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
-import com.alight.android.aoa_launcher.utils.DateUtil
-import com.alight.android.aoa_launcher.utils.InternetUtil
-import com.alight.android.aoa_launcher.utils.SPUtils
-import com.alight.android.aoa_launcher.utils.ToastUtils
+import com.alight.android.aoa_launcher.utils.*
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
@@ -55,13 +52,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     override fun initData() {
         getSystemDate()
+        //获取用户信息之前必须调用的初始化方法
+        AccountUtil.run()
     }
 
     fun startQRCode() {
+        AccountUtil.getValidToken()
 
     }
 
     private fun showChildUser() {
+        val allUser = AccountUtil.getAllToken()
         rv_select_child_splash.layoutManager = LinearLayoutManager(
             this,
             RecyclerView.HORIZONTAL, false
