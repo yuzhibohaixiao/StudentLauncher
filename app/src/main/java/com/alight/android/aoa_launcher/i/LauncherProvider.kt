@@ -24,6 +24,8 @@ interface LauncherProvider {
 
     fun run()
 
+    fun getQrCode(): ByteArray
+
     // register
     fun register(obj:LauncherListener)
 }
