@@ -349,7 +349,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             return maps
         }
         val pageTempSize = datas.size / pageSize
-        val pageRemainder = if (datas.size % pageSize != 1 || datas.size < pageSize) 1 else 0
+        val pageRemainder = if (datas.size % pageSize != 0 || datas.size < pageSize) 1 else 0
         //实际总页数
         val totalPageSize = pageTempSize + pageRemainder
         var startPage = 0
