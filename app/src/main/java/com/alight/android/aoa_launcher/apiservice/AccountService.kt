@@ -28,6 +28,8 @@ interface AccountService {
     fun postMsg(@Header("ACToken") token: String,@Body body: RequestBody):Call<ResponseBody>
 
 
-
+    @Headers("Connection:close")
+    @GET("/device/v1/qr-code")
+    fun getQrCode(@Query("dsn")dsn:String):Call<ResponseBody>
 
 }

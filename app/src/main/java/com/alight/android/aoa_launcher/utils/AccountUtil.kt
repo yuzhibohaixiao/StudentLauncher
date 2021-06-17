@@ -192,6 +192,18 @@ object AccountUtil : LauncherProvider {
         SocketIOHandler.register(obj)
     }
 
+    override fun getQrCode(): ByteArray {
+        val rep = service.getQrCode(DSN).execute()
+        if (rep.isSuccessful()) {
+            return rep.body()!!.bytes()
+        } else {
+            throw TokenManagerException(
+                TokenManagerException.CODE_ERR,
+                "get qr code failed"
+            )
+        }
+    }
+
     override fun postMessage(message: TokenMessage) {
         val tk = getValidToken()
         val rep = service.postMsg(
