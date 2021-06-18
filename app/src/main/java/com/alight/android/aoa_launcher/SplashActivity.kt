@@ -20,6 +20,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.Exception
+import java.net.SocketTimeoutException
 import java.util.*
 
 
@@ -31,18 +33,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private var wifiFlag = false
     override fun onResume() {
         super.onResume()
-        if (wifiFlag) {
-            //判断网络是否连接
-            if (InternetUtil.isNetworkAvalible(this)) {
-                fl_splash1.visibility = View.GONE
-                ll_splash2.visibility = View.VISIBLE
-                val qrCode = AccountUtil.getQrCode()
-                val bitmap = BitmapFactory.decodeByteArray(qrCode, 0, qrCode.size)
-                iv_qr_splash.setImageBitmap(bitmap)
-            } else {
-                ToastUtils.showLong(this, getString(R.string.splash_reconnection))
-            }
-        }
+        showQRCode()
     }
 
     //初始化控件
@@ -61,33 +52,60 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         AccountUtil.run()
     }
 
-    fun startQRCode() {
-        AccountUtil.getValidToken()
+    private fun showQRCode() {
+        if (!wifiFlag) return
+        //判断网络是否连接
+        if (InternetUtil.isNetworkAvalible(this)) {
+            fl_splash1.visibility = View.GONE
+            ll_splash2.visibility = View.VISIBLE
 
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    val qrCode = AccountUtil.getQrCode()
+                    GlobalScope.launch(Dispatchers.Main) {
+                        val bitmap = BitmapFactory.decodeByteArray(qrCode, 0, qrCode.size)
+                        iv_qr_splash.setImageBitmap(bitmap)
+                    }
+                } catch (e: SocketTimeoutException) {
+                    e.printStackTrace()
+                }catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+        } else {
+            ToastUtils.showLong(this, getString(R.string.splash_reconnection))
+        }
     }
 
     private fun showChildUser() {
         try {
             GlobalScope.launch(Dispatchers.IO) {
-                val allUser = AccountUtil.getAllToken() as MutableList<TokenPair>
-                GlobalScope.launch(Dispatchers.Main) {
-                    if (allUser.isNullOrEmpty()) {
-                        ll_no_child_splash.visibility = View.VISIBLE
-                        rv_select_child_splash.visibility = View.GONE
-                    } else {
-                        rv_select_child_splash.layoutManager = LinearLayoutManager(
-                            this@SplashActivity,
-                            RecyclerView.HORIZONTAL, false
-                        )
-                        val splashUserAdapter = SplashUserAdapter()
-                        //点击事件
-                        splashUserAdapter.setOnItemClickListener { adapter, view, position ->
-                            ToastUtils.showShort(this@SplashActivity, "你点到我了！$position")
+                try {
+                    val allUser = AccountUtil.getAllToken() as MutableList<TokenPair>
+                    GlobalScope.launch(Dispatchers.Main) {
+                        if (allUser.isNullOrEmpty()) {
+                            ll_no_child_splash.visibility = View.VISIBLE
+                            rv_select_child_splash.visibility = View.GONE
+                        } else {
+                            rv_select_child_splash.layoutManager = LinearLayoutManager(
+                                this@SplashActivity,
+                                RecyclerView.HORIZONTAL, false
+                            )
+                            val splashUserAdapter = SplashUserAdapter()
+                            //点击事件
+                            splashUserAdapter.setOnItemClickListener { adapter, view, position ->
+                                ToastUtils.showShort(this@SplashActivity, "你点到我了！$position")
+                            }
+                            rv_select_child_splash.adapter = splashUserAdapter
+                            //第一次添加数据
+                            splashUserAdapter.setNewInstance(allUser)
                         }
-                        rv_select_child_splash.adapter = splashUserAdapter
-                        //第一次添加数据
-                        splashUserAdapter.setNewInstance(allUser)
                     }
+                } catch (e: SocketTimeoutException) {
+                    e.printStackTrace()
+                }catch (e:Exception){
+                    e.printStackTrace()
                 }
             }
         } catch (tokenManagerException: TokenManagerException) {
@@ -136,8 +154,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 //开始判断网络状态
                 wifiFlag = true
                 if (InternetUtil.isNetworkAvalible(this)) {
-                    fl_splash1.visibility = View.GONE
-                    ll_splash2.visibility = View.VISIBLE
+                    showQRCode()
                 } else {
                     ToastUtils.showLong(this, getString(R.string.splash_network_connections))
                     startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
