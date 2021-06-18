@@ -1,6 +1,5 @@
 package com.alight.android.aoa_launcher
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.provider.Settings
@@ -16,6 +15,7 @@ import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.utils.*
+import com.tencent.mmkv.MMKV
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -98,6 +98,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                 try {
                                     GlobalScope.launch(Dispatchers.IO) {
                                         AccountUtil.selectUser(allUser[position].userId)
+
+//                                        val mmkv = MMKV.defaultMMKV() as MMKV
+//
+//                                        mmkv.encode("bool", true)
+//                                        val bValue = mmkv.decodeBool("bool")
+//
+//                                        mmkv.encode("int", Int.MIN_VALUE)
+//                                        val iValue = mmkv.decodeInt("int")
+//
+//                                        mmkv.encode("string", "Hello from mmkv")
+//                                        val str = mmkv.decodeString("string")
                                     }
                                     finish()
                                 } catch (e: Exception) {

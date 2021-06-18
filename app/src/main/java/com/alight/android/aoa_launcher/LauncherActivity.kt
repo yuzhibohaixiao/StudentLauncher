@@ -5,8 +5,11 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
+import com.alight.android.aoa_launcher.bean.TokenMessage
 import com.alight.android.aoa_launcher.constants.AppConstants
+import com.alight.android.aoa_launcher.i.LauncherListener
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.qweather.sdk.bean.weather.WeatherNowBean
@@ -21,7 +24,7 @@ import java.util.*
 /**
  * Launcher主页
  */
-class LauncherActivity : BaseActivity(), View.OnClickListener {
+class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener {
 //    lateinit var mAdapter: MyAdapter
 
     //初始化控件
@@ -29,6 +32,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
 //        main_recy.layoutManager = LinearLayoutManager(this)
 //        mAdapter = MyAdapter(baseContext)
 //        main_recy.adapter = mAdapter
+        AccountUtil.register(this)
     }
 
     override fun setListener() {
@@ -150,6 +154,18 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
         } else {
             super.dispatchKeyEvent(event);
         }
+    }
+
+    override fun onReceive(message: TokenMessage) {
+
+    }
+
+    override fun onConnect() {
+
+    }
+
+    override fun onDisconnect() {
+
     }
 
 }

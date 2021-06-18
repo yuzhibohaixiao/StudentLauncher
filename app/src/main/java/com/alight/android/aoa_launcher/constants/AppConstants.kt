@@ -8,6 +8,8 @@ class AppConstants {
         const val OTHER_APP = "other_app"
         const val NEW_USER = "new_user"
 
+        const val LAUNCHER_USER_INFO = "launcher_user_info"
+
         //AOA星仔伴学包名
         const val AOA_PACKAGE_NAME = "com.alight.android.aoa"
 
