@@ -78,8 +78,7 @@
             android:id="@+id/iv_qr_splash"
             android:layout_width="240dp"
             android:layout_height="240dp"
-            android:layout_marginTop="32dp"
-            android:src="@drawable/qr_image" />
+            android:layout_marginTop="32dp" />
     </LinearLayout>
 
     <FrameLayout

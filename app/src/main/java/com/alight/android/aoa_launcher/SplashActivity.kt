@@ -1,5 +1,6 @@
 package com.alight.android.aoa_launcher
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.provider.Settings
@@ -20,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.net.SocketTimeoutException
 import java.util.*
 
@@ -68,7 +68,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                     }
                 } catch (e: SocketTimeoutException) {
                     e.printStackTrace()
-                }catch (e: Exception) {
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
@@ -95,7 +95,14 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                             val splashUserAdapter = SplashUserAdapter()
                             //点击事件
                             splashUserAdapter.setOnItemClickListener { adapter, view, position ->
-                                ToastUtils.showShort(this@SplashActivity, "你点到我了！$position")
+                                try {
+                                    GlobalScope.launch(Dispatchers.IO) {
+                                        AccountUtil.selectUser(allUser[position].userId)
+                                    }
+                                    finish()
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
                             }
                             rv_select_child_splash.adapter = splashUserAdapter
                             //第一次添加数据
@@ -104,7 +111,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                     }
                 } catch (e: SocketTimeoutException) {
                     e.printStackTrace()
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }

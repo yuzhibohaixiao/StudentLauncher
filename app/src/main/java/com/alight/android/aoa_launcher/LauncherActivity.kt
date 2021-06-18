@@ -36,6 +36,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener {
         iv_game_launcher.setOnClickListener(this)
         iv_other_launcher.setOnClickListener(this)
         iv_education_launcher.setOnClickListener(this)
+
         iv_setting_launcher.setOnClickListener(this)
         iv_app_store.setOnClickListener(this)
         iv_aoa_launcher.setOnClickListener(this)
