@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
@@ -35,6 +36,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             if (InternetUtil.isNetworkAvalible(this)) {
                 fl_splash1.visibility = View.GONE
                 ll_splash2.visibility = View.VISIBLE
+                val qrCode = AccountUtil.getQrCode()
+                val bitmap = BitmapFactory.decodeByteArray(qrCode, 0, qrCode.size)
+                iv_qr_splash.setImageBitmap(bitmap)
             } else {
                 ToastUtils.showLong(this, getString(R.string.splash_reconnection))
             }
