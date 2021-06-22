@@ -1,7 +1,10 @@
 package com.alight.android.aoa_launcher
 
+import android.content.ContentValues
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
@@ -15,7 +18,6 @@ import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.utils.*
-import com.tencent.mmkv.MMKV
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -97,18 +99,40 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                             splashUserAdapter.setOnItemClickListener { adapter, view, position ->
                                 try {
                                     GlobalScope.launch(Dispatchers.IO) {
-                                        AccountUtil.selectUser(allUser[position].userId)
+                                        val tokenPair = allUser[position]
+                                        AccountUtil.selectUser(tokenPair.userId)
+                                        GlobalScope.launch(Dispatchers.Main) {
+                                            writeUserInfo(tokenPair)
+                                        }
 
-//                                        val mmkv = MMKV.defaultMMKV() as MMKV
-//
-//                                        mmkv.encode("bool", true)
-//                                        val bValue = mmkv.decodeBool("bool")
-//
-//                                        mmkv.encode("int", Int.MIN_VALUE)
-//                                        val iValue = mmkv.decodeInt("int")
-//
-//                                        mmkv.encode("string", "Hello from mmkv")
-//                                        val str = mmkv.decodeString("string")
+                                        //获取mmkv实例 参数为跨进程模式和key
+                                        /*  val mmkv = MMKV.defaultMMKV(MMKV.MULTI_PROCESS_MODE, "")!!
+                                          //保存用户数据
+                                          mmkv.encode(
+                                              AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
+                                              tokenPair.token
+                                          )
+                                          mmkv.encode(
+                                              AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR,
+                                              tokenPair.avatar
+                                          )
+                                          mmkv.encode(
+                                              AppConstants.AOA_LAUNCHER_USER_INFO_NAME,
+                                              tokenPair.name
+                                          )
+                                          mmkv.encode(
+                                              AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID,
+                                              tokenPair.userId
+                                          )
+                                          mmkv.encode(
+                                              AppConstants.AOA_LAUNCHER_USER_INFO_GENDER,
+                                              tokenPair.gender!!
+                                          )
+                                          mmkv.encode(
+                                              AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME,
+                                              tokenPair.expireTime!!
+                                          )
+                                          mmkv.decodeString(AppConstants.AOA_LAUNCHER_USER_INFO_NAME)*/
                                     }
                                     finish()
                                 } catch (e: Exception) {
@@ -130,6 +154,62 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
         }
     }
+
+    /**
+     * 往Provider中写入数据
+     */
+    private fun writeUserInfo(tokenPair: TokenPair) {
+        val boyUri =
+            Uri.parse("content://com.alight.android.aoa_launcher.provider.LauncherContentProvider/child")
+        val contentValues = ContentValues()
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN, tokenPair.token)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR, tokenPair.avatar)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_NAME, tokenPair.name)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID, tokenPair.userId)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER, tokenPair.gender)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME, tokenPair.expireTime)
+        contentResolver.insert(boyUri, contentValues);
+        val boyCursor = contentResolver.query(
+            boyUri,
+            arrayOf(
+                "_id",
+                AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
+                AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR,
+                AppConstants.AOA_LAUNCHER_USER_INFO_NAME,
+                AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID,
+                AppConstants.AOA_LAUNCHER_USER_INFO_GENDER,
+                AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME
+            ),
+            null,
+            null,
+            null
+        )
+        if (boyCursor != null) {
+            while (boyCursor.moveToNext()) {
+                Log.e(
+                    "childInfo",
+                    "ID:" + boyCursor.getInt(boyCursor.getColumnIndex("_id")) + "  token:" +
+                            boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN)) + "  token:" + boyCursor.getString(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR)
+                    )
+                            + "  name:" + boyCursor.getString(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_NAME)
+                    )
+                            + "  userId:" + boyCursor.getInt(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID)
+                    )
+                            + "  gender:" + boyCursor.getInt(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER)
+                    )
+                            + "  expireTime:" + boyCursor.getDouble(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME)
+                    )
+                )
+            }
+            boyCursor.close()
+        }
+    }
+
 
     private fun getSystemDate() {
         GlobalScope.launch(Dispatchers.IO) {

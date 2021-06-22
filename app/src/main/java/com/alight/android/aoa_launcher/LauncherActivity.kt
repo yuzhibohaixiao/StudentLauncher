@@ -13,6 +13,7 @@ import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.qweather.sdk.bean.weather.WeatherNowBean
+import com.tencent.mmkv.MMKV
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

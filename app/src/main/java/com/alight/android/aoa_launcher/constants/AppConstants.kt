@@ -8,8 +8,6 @@ class AppConstants {
         const val OTHER_APP = "other_app"
         const val NEW_USER = "new_user"
 
-        const val LAUNCHER_USER_INFO = "launcher_user_info"
-
         //AOA星仔伴学包名
         const val AOA_PACKAGE_NAME = "com.alight.android.aoa"
 
@@ -17,5 +15,13 @@ class AppConstants {
 
         //安智市场包名
         const val AZ_PACKAGE_NAME = "com.coolapk.market"
+
+        //sqlite 用户信息存储 key
+        const val AOA_LAUNCHER_USER_INFO_TOKEN = "aoa_launcher_user_info_token"
+        const val AOA_LAUNCHER_USER_INFO_AVATAR = "aoa_launcher_user_info_avatar"
+        const val AOA_LAUNCHER_USER_INFO_NAME = "aoa_launcher_user_info_name"
+        const val AOA_LAUNCHER_USER_INFO_USER_ID = "aoa_launcher_user_info_user_id"
+        const val AOA_LAUNCHER_USER_INFO_GENDER = "aoa_launcher_user_info_gender"
+        const val AOA_LAUNCHER_USER_INFO_EXPIRE_TIME = "aoa_launcher_user_info_expire_time"
     }
 }
