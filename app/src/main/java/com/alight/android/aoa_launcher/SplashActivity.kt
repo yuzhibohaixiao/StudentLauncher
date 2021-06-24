@@ -46,6 +46,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         fl_splash1.setOnClickListener(this)
         ll_splash2.setOnClickListener(this)
         fl_splash3.setOnClickListener(this)
+        tv_next_launcher_splash.setOnClickListener(this)
     }
 
     override fun initData() {
@@ -102,39 +103,16 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                         val tokenPair = allUser[position]
                                         AccountUtil.selectUser(tokenPair.userId)
                                         GlobalScope.launch(Dispatchers.Main) {
+                                            //保存用户信息
                                             writeUserInfo(tokenPair)
-                                        }
+                                            //显示launcher引导
+                                            fl_splash.setBackgroundResource(R.drawable.launcher_splash1)
+                                            tv_next_launcher_splash.visibility = View.VISIBLE
+                                            iv_splash_earth.visibility = View.GONE
+                                            rv_select_child_splash.visibility = View.GONE
 
-                                        //获取mmkv实例 参数为跨进程模式和key
-                                        /*  val mmkv = MMKV.defaultMMKV(MMKV.MULTI_PROCESS_MODE, "")!!
-                                          //保存用户数据
-                                          mmkv.encode(
-                                              AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
-                                              tokenPair.token
-                                          )
-                                          mmkv.encode(
-                                              AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR,
-                                              tokenPair.avatar
-                                          )
-                                          mmkv.encode(
-                                              AppConstants.AOA_LAUNCHER_USER_INFO_NAME,
-                                              tokenPair.name
-                                          )
-                                          mmkv.encode(
-                                              AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID,
-                                              tokenPair.userId
-                                          )
-                                          mmkv.encode(
-                                              AppConstants.AOA_LAUNCHER_USER_INFO_GENDER,
-                                              tokenPair.gender!!
-                                          )
-                                          mmkv.encode(
-                                              AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME,
-                                              tokenPair.expireTime!!
-                                          )
-                                          mmkv.decodeString(AppConstants.AOA_LAUNCHER_USER_INFO_NAME)*/
+                                        }
                                     }
-                                    finish()
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -265,7 +243,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.fl_splash3 -> {
                 //系统引导设置完毕，关闭引导页
-                closeSplash()
+//                closeSplash()
+            }
+            R.id.tv_next_launcher_splash -> {
+                fl_splash.setBackgroundResource(R.drawable.launcher_splash2)
+                tv_next_launcher_splash.text = "下一步"
             }
         }
     }

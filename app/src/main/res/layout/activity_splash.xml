@@ -89,6 +89,7 @@
         android:visibility="gone">
 
         <ImageView
+            android:id="@+id/iv_splash_earth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/splash_earth" />
@@ -127,5 +128,15 @@
             android:layout_gravity="center" />
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/tv_next_launcher_splash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="100dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/launcher_splash_btn"
+        android:text="开始学习"
+        android:visibility="gone" />
 
 </FrameLayout>
