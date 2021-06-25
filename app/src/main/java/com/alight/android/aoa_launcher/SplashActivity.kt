@@ -25,6 +25,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -33,6 +34,14 @@ import java.util.*
 class SplashActivity : BaseActivity(), View.OnClickListener {
 
     private var wifiFlag = false
+    private val userSplashBgList = arrayListOf(
+        R.drawable.launcher_splash1,
+        R.drawable.launcher_splash2,
+        R.drawable.launcher_splash3,
+        R.drawable.launcher_splash4
+    )
+    private var userSplashNumber = 0
+
     override fun onResume() {
         super.onResume()
         showQRCode()
@@ -105,11 +114,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                         GlobalScope.launch(Dispatchers.Main) {
                                             //保存用户信息
                                             writeUserInfo(tokenPair)
-                                            //显示launcher引导
-                                            fl_splash.setBackgroundResource(R.drawable.launcher_splash1)
-                                            tv_next_launcher_splash.visibility = View.VISIBLE
-                                            iv_splash_earth.visibility = View.GONE
-                                            rv_select_child_splash.visibility = View.GONE
+                                            openUserSplash()
 
                                         }
                                     }
@@ -130,6 +135,26 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
         } catch (tokenManagerException: TokenManagerException) {
 
+        }
+    }
+
+    private fun openUserSplash() {
+        if (userSplashNumber == userSplashBgList.size) {
+            closeSplash()
+            return
+        }
+        //显示launcher引导
+        if (userSplashNumber == 0) {
+            tv_next_launcher_splash.visibility = View.VISIBLE
+            iv_splash_earth.visibility = View.GONE
+            rv_select_child_splash.visibility = View.GONE
+        } else {
+            tv_next_launcher_splash.text = "下一步"
+        }
+        fl_splash.setBackgroundResource(userSplashBgList[userSplashNumber])
+        userSplashNumber++
+        if (userSplashNumber == userSplashBgList.size) {
+            tv_next_launcher_splash.text = "完成引导"
         }
     }
 
@@ -246,8 +271,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 //                closeSplash()
             }
             R.id.tv_next_launcher_splash -> {
-                fl_splash.setBackgroundResource(R.drawable.launcher_splash2)
-                tv_next_launcher_splash.text = "下一步"
+                openUserSplash()
             }
         }
     }

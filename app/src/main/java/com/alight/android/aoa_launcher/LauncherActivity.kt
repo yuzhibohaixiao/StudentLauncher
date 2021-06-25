@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher
 
 import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -14,6 +15,7 @@ import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import com.tencent.mmkv.MMKV
+import com.xuexiang.xupdate.XUpdate
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,6 +36,20 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        mAdapter = MyAdapter(baseContext)
 //        main_recy.adapter = mAdapter
         AccountUtil.register(this)
+
+        //XUpdate 更新
+//        promptThemeColor: 设置主题颜色
+//        promptButtonTextColor: 设置按钮的文字颜色
+//        promptTopResId: 设置顶部背景图片
+//        promptWidthRatio: 设置版本更新提示器宽度占屏幕的比例，默认是-1，不做约束
+//        promptHeightRatio: 设置版本更新提示器高度占屏幕的比例，默认是-1，不做约束
+        XUpdate.newBuild(this)
+            .updateUrl("mUpdateUrl")
+            .promptThemeColor(resources.getColor(R.color.white))
+            .promptButtonTextColor(Color.WHITE)
+            .promptTopResId(R.mipmap.ic_launcher_round)
+            .promptWidthRatio(0.7F)
+            .update();
     }
 
     override fun setListener() {

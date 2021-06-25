@@ -46,7 +46,6 @@ class LauncherApplication : Application() {
                     fileName: String,
                     callback: IUpdateHttpService.DownloadCallback
                 ) {
-                    TODO("Not yet implemented")
                 }
 
                 override fun asyncGet(
@@ -54,11 +53,9 @@ class LauncherApplication : Application() {
                     params: MutableMap<String, Any>,
                     callBack: IUpdateHttpService.Callback
                 ) {
-                    TODO("Not yet implemented")
                 }
 
                 override fun cancelDownload(url: String) {
-                    TODO("Not yet implemented")
                 }
 
                 override fun asyncPost(
@@ -66,7 +63,6 @@ class LauncherApplication : Application() {
                     params: MutableMap<String, Any>,
                     callBack: IUpdateHttpService.Callback
                 ) {
-                    TODO("Not yet implemented")
                 }
             }) //这个必须设置！实现网络请求功能。
             .init(this) //这个必须初始化
