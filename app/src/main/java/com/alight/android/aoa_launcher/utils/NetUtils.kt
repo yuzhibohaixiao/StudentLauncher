@@ -46,7 +46,7 @@ class NetUtils private constructor() {
             .connectTimeout(10, TimeUnit.SECONDS)
             .build()
         var retro = Retrofit.Builder()
-            .baseUrl(Urls.BASEURL_WAI)
+            .baseUrl(Urls.BASEURL_TEST)
             .client(ok)
             //1 替换Factory CoroutineCallAdapterFactory()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

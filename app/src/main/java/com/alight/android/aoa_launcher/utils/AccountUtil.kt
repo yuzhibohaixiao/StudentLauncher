@@ -22,6 +22,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 import java.net.URI
 
@@ -32,7 +33,7 @@ object AccountUtil : LauncherProvider {
     var currentUserId: Int? = null
     var tokenMap: MutableMap<Int, TokenPair> = HashMap()
     var retrofit = Retrofit.Builder()
-        .baseUrl(Urls.ALIGHT_URL)
+        .baseUrl(Urls.BASEURL_TEST)
 //        .addConverterFactory(GsonConverterFactory.create())
         .build()
 

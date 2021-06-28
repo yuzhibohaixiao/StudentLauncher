@@ -56,6 +56,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         ll_splash2.setOnClickListener(this)
         fl_splash3.setOnClickListener(this)
         tv_next_launcher_splash.setOnClickListener(this)
+        tv_next_launcher_splash2.setOnClickListener(this)
+        tv_skip_splash.setOnClickListener(this)
     }
 
     override fun initData() {
@@ -140,12 +142,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     private fun openUserSplash() {
         if (userSplashNumber == userSplashBgList.size) {
-            closeSplash()
+            //新用户的状态设为false
+            SPUtils.asyncPutData(AppConstants.NEW_USER, false)
+            getPresenter().showAOA()
+            finish()
             return
         }
         //显示launcher引导
         if (userSplashNumber == 0) {
             tv_next_launcher_splash.visibility = View.VISIBLE
+            tv_date_splash.visibility = View.GONE
+            tv_skip_splash.visibility = View.VISIBLE
             iv_splash_earth.visibility = View.GONE
             rv_select_child_splash.visibility = View.GONE
         } else {
@@ -154,7 +161,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         fl_splash.setBackgroundResource(userSplashBgList[userSplashNumber])
         userSplashNumber++
         if (userSplashNumber == userSplashBgList.size) {
-            tv_next_launcher_splash.text = "完成引导"
+            tv_next_launcher_splash.text = "开始学习"
+            tv_next_launcher_splash2.visibility = View.VISIBLE
         }
     }
 
@@ -171,7 +179,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID, tokenPair.userId)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER, tokenPair.gender)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME, tokenPair.expireTime)
-        contentResolver.insert(boyUri, contentValues);
+        contentResolver.insert(boyUri, contentValues)
         val boyCursor = contentResolver.query(
             boyUri,
             arrayOf(
@@ -272,6 +280,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_next_launcher_splash -> {
                 openUserSplash()
+            }
+            R.id.tv_next_launcher_splash2, R.id.tv_skip_splash -> {
+                closeSplash()
             }
         }
     }

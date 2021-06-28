@@ -419,7 +419,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      * 打开AOA星仔办学
      */
     fun showAOA() {
-        var activity = getView() as LauncherActivity
+        var activity = getView() as Activity
         try {
             var intent =
                 activity.packageManager.getLaunchIntentForPackage(AppConstants.AOA_PACKAGE_NAME)
