@@ -171,6 +171,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private fun writeUserInfo(tokenPair: TokenPair) {
         val boyUri =
             Uri.parse("content://com.alight.android.aoa_launcher.provider.LauncherContentProvider/child")
+        contentResolver.delete(boyUri, null, null)
         val contentValues = ContentValues()
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN, tokenPair.token)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR, tokenPair.avatar)
