@@ -66,7 +66,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     override fun initData() {
         //如果是新用户则打开Splash
         val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
-        if (false) {
+        if (true) {
             startActivity(Intent(this, SplashActivity::class.java))
         }
         //初始化天气控件日期

@@ -2,7 +2,6 @@ package com.alight.android.aoa_launcher
 
 import android.content.ContentValues
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.Settings
@@ -25,7 +24,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -150,11 +148,12 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         }
         //显示launcher引导
         if (userSplashNumber == 0) {
-            tv_next_launcher_splash.visibility = View.VISIBLE
+            sc_next_launcher_splash.visibility = View.VISIBLE
             tv_date_splash.visibility = View.GONE
             tv_skip_splash.visibility = View.VISIBLE
             iv_splash_earth.visibility = View.GONE
             rv_select_child_splash.visibility = View.GONE
+            sc_next_launcher_splash.visibility = View.VISIBLE
         } else {
             tv_next_launcher_splash.text = "下一步"
         }
@@ -162,7 +161,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         userSplashNumber++
         if (userSplashNumber == userSplashBgList.size) {
             tv_next_launcher_splash.text = "开始学习"
-            tv_next_launcher_splash2.visibility = View.VISIBLE
+            sc_next_launcher_splash2.visibility = View.VISIBLE
         }
     }
 
