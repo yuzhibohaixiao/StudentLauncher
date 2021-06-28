@@ -145,7 +145,7 @@
             app:containerCornerRadius="30dp"
             app:containerDeltaLength="3dp"
             app:containerShadowColor="@color/launcher_purple"
-            app:containerShadowRadius="2dp"
+            app:containerShadowRadius="1dp"
             app:deltaY="5px">
 
             <TextView
@@ -170,7 +170,7 @@
             app:containerCornerRadius="30dp"
             app:containerDeltaLength="3dp"
             app:containerShadowColor="@color/launcher_purple"
-            app:containerShadowRadius="2dp"
+            app:containerShadowRadius="1dp"
             app:deltaY="5px">
 
             <TextView
