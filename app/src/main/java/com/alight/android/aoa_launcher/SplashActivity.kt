@@ -171,6 +171,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private fun writeUserInfo(tokenPair: TokenPair) {
         val boyUri =
             Uri.parse("content://com.alight.android.aoa_launcher.provider.LauncherContentProvider/child")
+        //插入数据前清除之前的数据
         contentResolver.delete(boyUri, null, null)
         val contentValues = ContentValues()
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN, tokenPair.token)
@@ -179,6 +180,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID, tokenPair.userId)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER, tokenPair.gender)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME, tokenPair.expireTime)
+        //将登陆的用户数据插入保存
         contentResolver.insert(boyUri, contentValues)
         val boyCursor = contentResolver.query(
             boyUri,
