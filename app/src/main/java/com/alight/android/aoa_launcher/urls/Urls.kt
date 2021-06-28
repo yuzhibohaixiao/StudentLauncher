@@ -12,4 +12,6 @@ object Urls {
     val JJ_MOVIE = "movie/v2/findComingSoonMovieList"
     val BANNER = "tool/v2/banner"
     val BANNER2 = "tool/v2/banne"
+
+    val UPDATE = "/device/app-version"
 }

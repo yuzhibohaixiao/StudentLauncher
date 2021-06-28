@@ -10,4 +10,5 @@ interface Apiservice {
 
     @GET
     fun getAllInfo(@Url url: String, @QueryMap map: HashMap<String, Any>): Observable<ResponseBody>
+
 }

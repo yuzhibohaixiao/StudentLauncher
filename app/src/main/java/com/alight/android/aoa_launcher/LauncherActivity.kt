@@ -7,15 +7,21 @@ import android.view.KeyEvent
 import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenMessage
+import com.alight.android.aoa_launcher.bean.UpdateBean
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.i.LauncherListener
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.urls.Urls
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
+import com.google.gson.Gson
 import com.qweather.sdk.bean.weather.WeatherNowBean
-import com.tencent.mmkv.MMKV
 import com.xuexiang.xupdate.XUpdate
+import com.xuexiang.xupdate.entity.UpdateEntity
+import com.xuexiang.xupdate.listener.IUpdateParseCallback
+import com.xuexiang.xupdate.proxy.IUpdateParser
+import com.xuexiang.xupdate.proxy.impl.DefaultUpdateChecker
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -44,19 +50,33 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        promptWidthRatio: 设置版本更新提示器宽度占屏幕的比例，默认是-1，不做约束
 //        promptHeightRatio: 设置版本更新提示器高度占屏幕的比例，默认是-1，不做约束
         XUpdate.newBuild(this)
-            .updateUrl("mUpdateUrl")
+            .updateUrl(Urls.BASEURL + Urls.UPDATE)
+            //检查更新
+            .updateChecker(object : DefaultUpdateChecker() {
+                override fun onBeforeCheck() {
+                    super.onBeforeCheck()
+//                    CProgressDialogUtils.showProgressDialog(getActivity(), "查询中...")
+                }
+
+                override fun onAfterCheck() {
+                    super.onAfterCheck()
+//                    CProgressDialogUtils.cancelProgressDialog(getActivity())
+                }
+            })
             .promptThemeColor(resources.getColor(R.color.white))
             .promptButtonTextColor(Color.WHITE)
+            .updateParser(CustomUpdateParser())
             .promptTopResId(R.mipmap.ic_launcher_round)
             .promptWidthRatio(0.7F)
             .update();
     }
 
+
     override fun setListener() {
-        iv_video_launcher.setOnClickListener(this)
+        iv_education_launcher.setOnClickListener(this)
         iv_game_launcher.setOnClickListener(this)
         iv_other_launcher.setOnClickListener(this)
-        iv_education_launcher.setOnClickListener(this)
+        iv_video_launcher.setOnClickListener(this)
 
         iv_setting_launcher.setOnClickListener(this)
         iv_app_store.setOnClickListener(this)
@@ -105,6 +125,32 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
     }
 
+    /**
+     * 更新解析器
+     */
+    class CustomUpdateParser : IUpdateParser {
+        override fun parseJson(json: String): UpdateEntity {
+            val result: UpdateBean = Gson().fromJson(json, UpdateBean::class.java)
+            return if (result != null) {
+                val data = result.data[0]
+                UpdateEntity()
+                    .setHasUpdate(data.is_active)
+                    .setIsIgnorable(data.app_force_upgrade)
+                    .setVersionCode(data.version_code)
+                    .setVersionName(data.version_name)
+                    .setUpdateContent(data.content)
+                    .setDownloadUrl(data.app_url)
+            } else result
+        }
+
+        override fun parseJson(json: String, callback: IUpdateParseCallback) {
+        }
+
+        override fun isAsyncParser(): Boolean {
+            return true
+        }
+    }
+
 
     override fun initPresenter(): PresenterImpl {
         return PresenterImpl()
@@ -144,14 +190,14 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
     override fun onClick(view: View) {
         when (view.id) {
-            //音视频
-            R.id.iv_video_launcher -> getPresenter().showDialog(AppConstants.MEDIA_APP)
+            //教育
+            R.id.iv_education_launcher -> getPresenter().showDialog(AppConstants.EDUCATION_APP)
             //游戏
             R.id.iv_game_launcher -> getPresenter().showDialog(AppConstants.GAME_APP)
             //其他
             R.id.iv_other_launcher -> getPresenter().showDialog(AppConstants.OTHER_APP)
-            //教育
-            R.id.iv_education_launcher -> getPresenter().showDialog(AppConstants.EDUCATION_APP)
+            //音视频
+            R.id.iv_video_launcher -> getPresenter().showDialog(AppConstants.MEDIA_APP)
             //设置
             R.id.iv_setting_launcher -> getPresenter().showSystemSetting()
             // 打开应用市场（安智）
@@ -184,5 +230,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     override fun onDisconnect() {
 
     }
+
 
 }

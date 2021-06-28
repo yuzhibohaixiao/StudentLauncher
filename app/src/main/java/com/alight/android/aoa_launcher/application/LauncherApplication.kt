@@ -9,6 +9,7 @@ import com.xuexiang.xupdate.XUpdate
 import com.xuexiang.xupdate.entity.UpdateError
 import com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION
 import com.xuexiang.xupdate.listener.OnUpdateFailureListener
+import com.xuexiang.xupdate.logs.ILogger
 import com.xuexiang.xupdate.proxy.IUpdateHttpService
 import com.xuexiang.xupdate.utils.UpdateUtils
 
@@ -31,6 +32,9 @@ class LauncherApplication : Application() {
             .isAutoMode(false) //默认设置非自动模式，可根据具体使用配置
             .param("versionCode", UpdateUtils.getVersionCode(this)) //设置默认公共请求参数
             .param("appKey", packageName)
+            .setILogger { priority, tag, message, t ->
+                Log.i(TAG, "XUpdate ILogger: $message")
+            }
             .setOnUpdateFailureListener { error ->
 
                 //设置版本更新出错的监听
