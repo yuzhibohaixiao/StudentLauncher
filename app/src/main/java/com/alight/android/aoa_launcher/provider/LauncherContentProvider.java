@@ -14,12 +14,15 @@ import androidx.annotation.Nullable;
 
 import com.alight.android.aoa_launcher.db.DbOpenHelper;
 
+import java.net.URI;
+
 public class LauncherContentProvider extends ContentProvider {
 
     private Context context;
 
     private SQLiteDatabase sqLiteDatabase;
-
+    public static Uri URI =
+            Uri.parse("content://com.alight.android.aoa_launcher.provider.LauncherContentProvider/child");
     public static final String AUTHORITY = "com.alight.android.aoa_launcher.provider.LauncherContentProvider";
 
     public static final int CHILD_URI_CODE = 0;
@@ -32,6 +35,7 @@ public class LauncherContentProvider extends ContentProvider {
 
     /**
      * 获取表名
+     *
      * @param uri
      * @return
      */
@@ -44,7 +48,6 @@ public class LauncherContentProvider extends ContentProvider {
         }
         return tableName;
     }
-
 
 
     @Override
@@ -91,7 +94,7 @@ public class LauncherContentProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         String tableName = getTableName(uri);
-        if(TextUtils.isEmpty(tableName)){
+        if (TextUtils.isEmpty(tableName)) {
             throw new IllegalArgumentException("Unsupported URI:" + uri);
         }
         sqLiteDatabase.insert(tableName, null, values);

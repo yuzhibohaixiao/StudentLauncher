@@ -1,16 +1,22 @@
 package com.alight.android.aoa_launcher
 
 import android.content.Intent
+import android.database.ContentObserver
 import android.graphics.Color
+import android.net.Uri
+import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.widget.Toast
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenMessage
 import com.alight.android.aoa_launcher.bean.UpdateBean
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.i.LauncherListener
+import com.alight.android.aoa_launcher.i.LauncherProvider
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.urls.Urls
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
@@ -34,7 +40,57 @@ import java.util.*
  * Launcher主页
  */
 class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener {
-//    lateinit var mAdapter: MyAdapter
+    private var TAG = "LauncherActivity"
+
+    //    lateinit var mAdapter: MyAdapter
+    private var uri: Uri? = null
+    private val handler =
+        Handler(Handler.Callback { msg ->
+            if (msg.what == 0x123) {
+                if (uri != null) {
+                    val cursor =
+                        contentResolver.query(uri!!, null, null, null, null)
+                    if (null != cursor) {
+                        cursor.moveToNext()
+                        val id =
+                            cursor.getInt(cursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN))
+                        val name =
+                            cursor.getString(cursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_NAME))
+                        val token =
+                            cursor.getString(cursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN))
+                        Toast.makeText(
+                            this@LauncherActivity,
+                            "ID=$id ; name=$name; token=$token",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    Toast.makeText(this@LauncherActivity, "数据发生变化", Toast.LENGTH_SHORT).show()
+                }
+            }
+            false
+        })
+
+    /**
+     * 内容提供者监听类
+     */
+    private val contentObserver: ContentObserver = object : ContentObserver(handler) {
+        override fun deliverSelfNotifications(): Boolean {
+            Log.i(TAG, "deliverSelfNotifications")
+            return super.deliverSelfNotifications()
+        }
+
+        override fun onChange(selfChange: Boolean) {
+            super.onChange(selfChange)
+            Log.i(TAG, "onChange-------->")
+        }
+
+        override fun onChange(selfChange: Boolean, uri: Uri?) {
+            super.onChange(selfChange, uri)
+            Log.i(TAG, "onChange-------->$uri")
+            handler.sendEmptyMessage(0x123)
+        }
+    }
 
     //初始化控件
     override fun initView() {
@@ -42,6 +98,13 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        mAdapter = MyAdapter(baseContext)
 //        main_recy.adapter = mAdapter
         AccountUtil.register(this)
+
+        //监听contentProvider是否被操作
+        contentResolver.registerContentObserver(
+            LauncherContentProvider.URI,
+            true,
+            contentObserver
+        );
 
         //XUpdate 更新
 //        promptThemeColor: 设置主题颜色
@@ -99,6 +162,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        map.put("count", 10)
 //        getPresenter().getModel(MyUrls.ZZ_MOVIE, map, ZZBean::class.java)
     }
+
 
     /**
      *  初始化天气控件的日期和时间 异步获取天气和时间 每10秒刷新一次
@@ -203,7 +267,52 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             // 打开应用市场（安智）
             R.id.iv_app_store -> getPresenter().showAZMarket()
             //打开aoa星仔伴学
-            R.id.iv_aoa_launcher -> getPresenter().showAOA()
+            R.id.iv_aoa_launcher ->
+                getPresenter().showAOA()
+//                queryUserInfo()
+
+        }
+    }
+
+    private fun queryUserInfo() {
+        val boyCursor = contentResolver.query(
+            LauncherContentProvider.URI,
+            arrayOf(
+                "_id",
+                AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
+                AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR,
+                AppConstants.AOA_LAUNCHER_USER_INFO_NAME,
+                AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID,
+                AppConstants.AOA_LAUNCHER_USER_INFO_GENDER,
+                AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME
+            ),
+            null,
+            null,
+            null
+        )
+        if (boyCursor != null) {
+            while (boyCursor.moveToNext()) {
+                Log.e(
+                    "childInfo",
+                    "ID:" + boyCursor.getInt(boyCursor.getColumnIndex("_id")) + "  token:" +
+                            boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN)) + "  token:" + boyCursor.getString(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR)
+                    )
+                            + "  name:" + boyCursor.getString(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_NAME)
+                    )
+                            + "  userId:" + boyCursor.getInt(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID)
+                    )
+                            + "  gender:" + boyCursor.getInt(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER)
+                    )
+                            + "  expireTime:" + boyCursor.getDouble(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME)
+                    )
+                )
+            }
+            boyCursor.close()
         }
     }
 
