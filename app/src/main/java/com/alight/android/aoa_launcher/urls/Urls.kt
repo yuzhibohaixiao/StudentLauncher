@@ -13,5 +13,5 @@ object Urls {
     val BANNER = "tool/v2/banner"
     val BANNER2 = "tool/v2/banne"
 
-    val UPDATE = "/device/app-version"
+    val UPDATE = "/device/v1/app-version"
 }

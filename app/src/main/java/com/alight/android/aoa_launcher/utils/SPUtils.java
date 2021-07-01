@@ -44,6 +44,7 @@ public class SPUtils {
         editor.apply();
     }
 
+/*
     public static boolean putData(String key, Object data) {
 
         String type = data.getClass().getSimpleName();
@@ -65,6 +66,7 @@ public class SPUtils {
 
         return editor.commit();
     }
+*/
 
     /**
      * 从文件中读取数据

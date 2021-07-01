@@ -39,36 +39,36 @@ class LauncherApplication : Application() {
 
                 //设置版本更新出错的监听
                 if (error.code !== CHECK_NO_NEW_VERSION) {          //对不同错误进行处理
-                    ToastUtils.showShort(this@LauncherApplication, error.toString())
+                    Log.i(TAG, "XUpdate ILogger: $error")
                 }
             }
-            .supportSilentInstall(true) //设置是否支持静默安装，默认是true
-            .setIUpdateHttpService(object : IUpdateHttpService {
-                override fun download(
-                    url: String,
-                    path: String,
-                    fileName: String,
-                    callback: IUpdateHttpService.DownloadCallback
-                ) {
-                }
-
-                override fun asyncGet(
-                    url: String,
-                    params: MutableMap<String, Any>,
-                    callBack: IUpdateHttpService.Callback
-                ) {
-                }
-
-                override fun cancelDownload(url: String) {
-                }
-
-                override fun asyncPost(
-                    url: String,
-                    params: MutableMap<String, Any>,
-                    callBack: IUpdateHttpService.Callback
-                ) {
-                }
-            }) //这个必须设置！实现网络请求功能。
+            .supportSilentInstall(false) //设置是否支持静默安装，默认是true
+//            .setIUpdateHttpService(object : IUpdateHttpService {
+//                override fun download(
+//                    url: String,
+//                    path: String,
+//                    fileName: String,
+//                    callback: IUpdateHttpService.DownloadCallback
+//                ) {
+//                }
+//
+//                override fun asyncGet(
+//                    url: String,
+//                    params: MutableMap<String, Any>,
+//                    callBack: IUpdateHttpService.Callback
+//                ) {
+//                }
+//
+//                override fun cancelDownload(url: String) {
+//                }
+//
+//                override fun asyncPost(
+//                    url: String,
+//                    params: MutableMap<String, Any>,
+//                    callBack: IUpdateHttpService.Callback
+//                ) {
+//                }
+//            }) //这个必须设置！实现网络请求功能。
             .init(this) //这个必须初始化
     }
 

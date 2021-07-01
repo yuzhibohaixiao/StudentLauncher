@@ -2,32 +2,26 @@ package com.alight.android.aoa_launcher
 
 import android.content.Intent
 import android.database.ContentObserver
-import android.graphics.Color
 import android.net.Uri
 import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Toast
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenMessage
 import com.alight.android.aoa_launcher.bean.UpdateBean
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.i.LauncherListener
-import com.alight.android.aoa_launcher.i.LauncherProvider
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
-import com.alight.android.aoa_launcher.urls.Urls
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.google.gson.Gson
 import com.qweather.sdk.bean.weather.WeatherNowBean
-import com.xuexiang.xupdate.XUpdate
 import com.xuexiang.xupdate.entity.UpdateEntity
 import com.xuexiang.xupdate.listener.IUpdateParseCallback
 import com.xuexiang.xupdate.proxy.IUpdateParser
-import com.xuexiang.xupdate.proxy.impl.DefaultUpdateChecker
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -100,7 +94,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        main_recy.layoutManager = LinearLayoutManager(this)
 //        mAdapter = MyAdapter(baseContext)
 //        main_recy.adapter = mAdapter
-        AccountUtil.register(this)
+        //初始化用户获取工具
+        initAccountUtil()
 
         //监听contentProvider是否被操作
         contentResolver.registerContentObserver(
@@ -115,8 +110,14 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        promptTopResId: 设置顶部背景图片
 //        promptWidthRatio: 设置版本更新提示器宽度占屏幕的比例，默认是-1，不做约束
 //        promptHeightRatio: 设置版本更新提示器高度占屏幕的比例，默认是-1，不做约束
-        XUpdate.newBuild(this)
-            .updateUrl(Urls.BASEURL + Urls.UPDATE)
+/*
+        EasyUpdate.create(this, Urls.BASEURL_TEST + Urls.UPDATE)
+            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
+            .updateParser(CustomUpdateParser())
+            .update()
+*/
+/*        XUpdate.newBuild(this)
+            .updateUrl(Urls.BASEURL_TEST + Urls.UPDATE)
             //检查更新
             .updateChecker(object : DefaultUpdateChecker() {
                 override fun onBeforeCheck() {
@@ -129,12 +130,30 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //                    CProgressDialogUtils.cancelProgressDialog(getActivity())
                 }
             })
+            //支持断点续传
+            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
             .promptThemeColor(resources.getColor(R.color.white))
             .promptButtonTextColor(Color.WHITE)
             .updateParser(CustomUpdateParser())
             .promptTopResId(R.mipmap.ic_launcher_round)
             .promptWidthRatio(0.7F)
-            .update();
+            .update()*//*;*/
+    }
+
+    private fun initAccountUtil() {
+        AccountUtil.register(this)
+        val userId = SPUtils.getData(AppConstants.USER_ID, -1) as Int
+        if (userId != -1) {
+            GlobalScope.launch(Dispatchers.IO) {
+                val allToken = AccountUtil.getAllToken()
+                allToken.forEach {
+                    if (it.userId == userId) {
+                        AccountUtil.selectUser(it.userId)
+                    }
+                }
+
+            }
+        }
     }
 
 
@@ -152,7 +171,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     override fun initData() {
         //如果是新用户则打开Splash
         val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
-        if (true) {
+        if (isNewUser) {
             startActivity(Intent(this, SplashActivity::class.java))
         }
         //初始化天气控件日期
@@ -202,7 +221,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 val data = result.data[0]
                 UpdateEntity()
                     .setHasUpdate(data.is_active)
-                    .setIsIgnorable(data.app_force_upgrade)
+                    .setIsIgnorable(!data.app_force_upgrade)
                     .setVersionCode(data.version_code)
                     .setVersionName(data.version_name)
                     .setUpdateContent(data.content)
@@ -211,6 +230,21 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         }
 
         override fun parseJson(json: String, callback: IUpdateParseCallback) {
+            val result: UpdateBean = Gson().fromJson(json, UpdateBean::class.java)
+            val data = result.data[0]
+            var updateEntity = UpdateEntity()
+                .setHasUpdate(data.is_active)
+                //可以忽略
+//                .setIsIgnorable(data.app_force_upgrade)
+                .setForce(data.app_force_upgrade)
+//                .setSize(data.app_force_upgrade)
+//                .setMd5(data.app_force_upgrade)
+                .setForce(data.app_force_upgrade)
+                .setVersionCode(data.version_code)
+                .setVersionName(data.version_name)
+                .setUpdateContent(data.content)
+                .setDownloadUrl(data.app_url)
+            callback.onParseResult(updateEntity)
         }
 
         override fun isAsyncParser(): Boolean {
@@ -271,8 +305,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             R.id.iv_app_store -> getPresenter().showAZMarket()
             //打开aoa星仔伴学
             R.id.iv_aoa_launcher ->
-                getPresenter().showAOA()
-//                queryUserInfo()
+//                getPresenter().showAOA()
+                queryUserInfo()
 
         }
     }
@@ -332,7 +366,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     }
 
     override fun onReceive(message: TokenMessage) {
+        // todo 1 服务端发给我消息 发一个广播给其他的应用接收
 
+        // todo 2 其他应用给我发消息 我需要调用AccountUtil.postMessage()发给服务端
     }
 
     override fun onConnect() {
