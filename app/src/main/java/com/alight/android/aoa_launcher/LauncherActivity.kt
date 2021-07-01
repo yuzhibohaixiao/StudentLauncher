@@ -58,14 +58,17 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                             cursor.getString(cursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_NAME))
                         val token =
                             cursor.getString(cursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN))
-                        Toast.makeText(
+                        /*Toast.makeText(
                             this@LauncherActivity,
                             "ID=$id ; name=$name; token=$token",
                             Toast.LENGTH_SHORT
-                        ).show()
+                        ).show()*/
+                        Log.i(TAG, "ID=$id ; name=$name; token=$token")
+
                     }
                 } else {
-                    Toast.makeText(this@LauncherActivity, "数据发生变化", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, "数据发生变化")
+//                    Toast.makeText(this@LauncherActivity, "数据发生变化", Toast.LENGTH_SHORT).show()
                 }
             }
             false

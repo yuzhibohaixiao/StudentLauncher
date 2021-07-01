@@ -16,6 +16,7 @@ import com.alight.android.aoa_launcher.bean.TokenManagerException
 import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.utils.*
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
@@ -110,6 +111,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                 try {
                                     GlobalScope.launch(Dispatchers.IO) {
                                         val tokenPair = allUser[position]
+                                        SPUtils.putData(AppConstants.USER_ID, tokenPair.userId)
                                         AccountUtil.selectUser(tokenPair.userId)
                                         GlobalScope.launch(Dispatchers.Main) {
                                             //保存用户信息
@@ -169,10 +171,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
      * 往Provider中写入数据
      */
     private fun writeUserInfo(tokenPair: TokenPair) {
-        val boyUri =
-            Uri.parse("content://com.alight.android.aoa_launcher.provider.LauncherContentProvider/child")
         //插入数据前清除之前的数据
-        contentResolver.delete(boyUri, null, null)
+        contentResolver.delete(LauncherContentProvider.URI, null, null)
         val contentValues = ContentValues()
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN, tokenPair.token)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR, tokenPair.avatar)
@@ -181,9 +181,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER, tokenPair.gender)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME, tokenPair.expireTime)
         //将登陆的用户数据插入保存
-        contentResolver.insert(boyUri, contentValues)
+        contentResolver.insert(LauncherContentProvider.URI, contentValues)
         val boyCursor = contentResolver.query(
-            boyUri,
+            LauncherContentProvider.URI,
             arrayOf(
                 "_id",
                 AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
