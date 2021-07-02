@@ -1,5 +1,3 @@
-package com.alight.android.aoa_launcher.bean
-
 data class UpdateBean(
     val code: Int,
     val data: List<Data>,
@@ -9,7 +7,8 @@ data class UpdateBean(
 
 data class Data(
     val apk_md5: String,
-    val app_force_upgrade: Boolean,
+    val apk_size: Long,
+    val app_force_upgrade: Int,
     val app_name: String,
     val app_url: String,
     val content: String,

@@ -1,7 +1,9 @@
 package com.alight.android.aoa_launcher
 
+import UpdateBean
 import android.content.Intent
 import android.database.ContentObserver
+import android.graphics.Color
 import android.net.Uri
 import android.os.Handler
 import android.util.Log
@@ -9,19 +11,23 @@ import android.view.KeyEvent
 import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenMessage
-import com.alight.android.aoa_launcher.bean.UpdateBean
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.i.LauncherListener
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
+import com.alight.android.aoa_launcher.urls.Urls
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.google.gson.Gson
 import com.qweather.sdk.bean.weather.WeatherNowBean
+import com.xuexiang.xupdate.XUpdate
+import com.xuexiang.xupdate.aria.AriaDownloader
+import com.xuexiang.xupdate.easy.EasyUpdate
 import com.xuexiang.xupdate.entity.UpdateEntity
 import com.xuexiang.xupdate.listener.IUpdateParseCallback
 import com.xuexiang.xupdate.proxy.IUpdateParser
+import com.xuexiang.xupdate.proxy.impl.DefaultUpdateChecker
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -110,12 +116,11 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        promptTopResId: 设置顶部背景图片
 //        promptWidthRatio: 设置版本更新提示器宽度占屏幕的比例，默认是-1，不做约束
 //        promptHeightRatio: 设置版本更新提示器高度占屏幕的比例，默认是-1，不做约束
-/*
         EasyUpdate.create(this, Urls.BASEURL_TEST + Urls.UPDATE)
             .updateHttpService(AriaDownloader.getUpdateHttpService(this))
             .updateParser(CustomUpdateParser())
             .update()
-*/
+
 /*        XUpdate.newBuild(this)
             .updateUrl(Urls.BASEURL_TEST + Urls.UPDATE)
             //检查更新
@@ -137,7 +142,38 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             .updateParser(CustomUpdateParser())
             .promptTopResId(R.mipmap.ic_launcher_round)
             .promptWidthRatio(0.7F)
-            .update()*//*;*/
+            .update()*/;
+    }
+
+    /**
+     * 更新解析器
+     */
+    class CustomUpdateParser : IUpdateParser {
+        override fun parseJson(json: String): UpdateEntity? {
+            return null
+        }
+
+        override fun parseJson(json: String, callback: IUpdateParseCallback) {
+            val result: UpdateBean = Gson().fromJson(json, UpdateBean::class.java)
+            val data = result.data[0]
+            var updateEntity = UpdateEntity()
+                .setHasUpdate(data.is_active)
+                .setSize(data.apk_size)
+                .setMd5(data.apk_md5)
+//                .setIsIgnorable(!data.app_force_upgrade)
+                .setForce(data.app_force_upgrade == 1)
+                .setVersionCode(data.version_code)
+                .setVersionName(data.version_name)
+                .setUpdateContent(data.content)
+                .setDownloadUrl(data.app_url)
+            callback.onParseResult(updateEntity)
+            //todo 可设置多个回调 从而处理多个应用更新
+//            callback.onParseResult(updateEntity)
+        }
+
+        override fun isAsyncParser(): Boolean {
+            return true
+        }
     }
 
     private fun initAccountUtil() {
@@ -171,7 +207,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     override fun initData() {
         //如果是新用户则打开Splash
         val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
-        if (isNewUser) {
+        if (false) {
             startActivity(Intent(this, SplashActivity::class.java))
         }
         //初始化天气控件日期
@@ -210,48 +246,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         }
 
     }
-
-    /**
-     * 更新解析器
-     */
-    class CustomUpdateParser : IUpdateParser {
-        override fun parseJson(json: String): UpdateEntity {
-            val result: UpdateBean = Gson().fromJson(json, UpdateBean::class.java)
-            return if (result != null) {
-                val data = result.data[0]
-                UpdateEntity()
-                    .setHasUpdate(data.is_active)
-                    .setIsIgnorable(!data.app_force_upgrade)
-                    .setVersionCode(data.version_code)
-                    .setVersionName(data.version_name)
-                    .setUpdateContent(data.content)
-                    .setDownloadUrl(data.app_url)
-            } else result
-        }
-
-        override fun parseJson(json: String, callback: IUpdateParseCallback) {
-            val result: UpdateBean = Gson().fromJson(json, UpdateBean::class.java)
-            val data = result.data[0]
-            var updateEntity = UpdateEntity()
-                .setHasUpdate(data.is_active)
-                //可以忽略
-//                .setIsIgnorable(data.app_force_upgrade)
-                .setForce(data.app_force_upgrade)
-//                .setSize(data.app_force_upgrade)
-//                .setMd5(data.app_force_upgrade)
-                .setForce(data.app_force_upgrade)
-                .setVersionCode(data.version_code)
-                .setVersionName(data.version_name)
-                .setUpdateContent(data.content)
-                .setDownloadUrl(data.app_url)
-            callback.onParseResult(updateEntity)
-        }
-
-        override fun isAsyncParser(): Boolean {
-            return true
-        }
-    }
-
 
     override fun initPresenter(): PresenterImpl {
         return PresenterImpl()
