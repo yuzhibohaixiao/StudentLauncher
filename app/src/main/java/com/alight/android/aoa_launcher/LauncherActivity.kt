@@ -3,9 +3,10 @@ package com.alight.android.aoa_launcher
 import UpdateBean
 import android.content.Intent
 import android.database.ContentObserver
-import android.graphics.Color
 import android.net.Uri
+import android.os.Environment
 import android.os.Handler
+import android.os.RecoverySystem
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -21,18 +22,19 @@ import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.google.gson.Gson
 import com.qweather.sdk.bean.weather.WeatherNowBean
-import com.xuexiang.xupdate.XUpdate
 import com.xuexiang.xupdate.aria.AriaDownloader
 import com.xuexiang.xupdate.easy.EasyUpdate
 import com.xuexiang.xupdate.entity.UpdateEntity
 import com.xuexiang.xupdate.listener.IUpdateParseCallback
 import com.xuexiang.xupdate.proxy.IUpdateParser
-import com.xuexiang.xupdate.proxy.impl.DefaultUpdateChecker
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.IOException
+import java.security.GeneralSecurityException
 import java.util.*
 
 
@@ -108,41 +110,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             LauncherContentProvider.URI,
             true,
             contentObserver
-        );
-
-        //XUpdate 更新
-//        promptThemeColor: 设置主题颜色
-//        promptButtonTextColor: 设置按钮的文字颜色
-//        promptTopResId: 设置顶部背景图片
-//        promptWidthRatio: 设置版本更新提示器宽度占屏幕的比例，默认是-1，不做约束
-//        promptHeightRatio: 设置版本更新提示器高度占屏幕的比例，默认是-1，不做约束
-        EasyUpdate.create(this, Urls.BASEURL_TEST + Urls.UPDATE)
-            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
-            .updateParser(CustomUpdateParser())
-            .update()
-
-/*        XUpdate.newBuild(this)
-            .updateUrl(Urls.BASEURL_TEST + Urls.UPDATE)
-            //检查更新
-            .updateChecker(object : DefaultUpdateChecker() {
-                override fun onBeforeCheck() {
-                    super.onBeforeCheck()
-//                    CProgressDialogUtils.showProgressDialog(getActivity(), "查询中...")
-                }
-
-                override fun onAfterCheck() {
-                    super.onAfterCheck()
-//                    CProgressDialogUtils.cancelProgressDialog(getActivity())
-                }
-            })
-            //支持断点续传
-            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
-            .promptThemeColor(resources.getColor(R.color.white))
-            .promptButtonTextColor(Color.WHITE)
-            .updateParser(CustomUpdateParser())
-            .promptTopResId(R.mipmap.ic_launcher_round)
-            .promptWidthRatio(0.7F)
-            .update()*/;
+        )
     }
 
     /**
@@ -159,6 +127,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             var updateEntity = UpdateEntity()
                 .setHasUpdate(data.is_active)
                 .setSize(data.apk_size)
+                .setIsAutoInstall(true)
                 .setMd5(data.apk_md5)
 //                .setIsIgnorable(!data.app_force_upgrade)
                 .setForce(data.app_force_upgrade == 1)
@@ -166,6 +135,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 .setVersionName(data.version_name)
                 .setUpdateContent(data.content)
                 .setDownloadUrl(data.app_url)
+            Log.i("XUpdate", "parseJson: $updateEntity")
             callback.onParseResult(updateEntity)
             //todo 可设置多个回调 从而处理多个应用更新
 //            callback.onParseResult(updateEntity)
@@ -214,6 +184,41 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         initWeatherDate()
         //定位后获取天气
         getPresenter().getLocationAndWeather()
+        //XUpdate 更新
+//        promptThemeColor: 设置主题颜色
+//        promptButtonTextColor: 设置按钮的文字颜色
+//        promptTopResId: 设置顶部背景图片
+//        promptWidthRatio: 设置版本更新提示器宽度占屏幕的比例，默认是-1，不做约束
+//        promptHeightRatio: 设置版本更新提示器高度占屏幕的比例，默认是-1，不做约束
+        EasyUpdate.create(this, Urls.BASEURL_TEST + Urls.UPDATE)
+            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
+            .updateParser(CustomUpdateParser())
+            .update()
+        //检测系统升级
+        systemUpdate()
+/*        XUpdate.newBuild(this)
+            .updateUrl(Urls.BASEURL_TEST + Urls.UPDATE)
+            //检查更新
+            .updateChecker(object : DefaultUpdateChecker() {
+                override fun onBeforeCheck() {
+                    super.onBeforeCheck()
+//                    CProgressDialogUtils.showProgressDialog(getActivity(), "查询中...")
+                }
+
+                override fun onAfterCheck() {
+                    super.onAfterCheck()
+//                    CProgressDialogUtils.cancelProgressDialog(getActivity())
+                }
+            })
+            //支持断点续传
+            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
+            .promptThemeColor(resources.getColor(R.color.white))
+            .promptButtonTextColor(Color.WHITE)
+            .updateParser(CustomUpdateParser())
+            .promptTopResId(R.mipmap.ic_launcher_round)
+            .promptWidthRatio(0.7F)
+            .update()*/;
+
 
 //        var map = hashMapOf<String, Any>()
 //        map.put("page", 1)
@@ -221,6 +226,48 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        getPresenter().getModel(MyUrls.ZZ_MOVIE, map, ZZBean::class.java)
     }
 
+    /**
+     * 获取升级包
+     *
+     * @return 升级包file
+     */
+    private fun getUpdateFile(): File {
+        var updateFile: File? = null
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            val updatePath: String =
+                (Environment.getExternalStorageDirectory().absolutePath
+                        + File.separator).toString() + "update.zip"
+            updateFile = File(updatePath)
+            val isExists: Boolean = updateFile.exists()
+            Log.i(TAG, "\"是否存在升级包：$isExists")
+            if (isExists) {
+                return updateFile
+            }
+        }
+        return updateFile!!
+    }
+
+    /**
+     * 系统升级
+     */
+    private fun systemUpdate() {
+        val udapterFile: File = getUpdateFile()
+        try {
+            //签名校验
+            RecoverySystem.verifyPackage(
+                udapterFile,
+                { progress ->
+                    Log.i(TAG, "签名校验进度:$progress")
+                }, null
+            )
+            //升级
+            RecoverySystem.installPackage(this, udapterFile)
+        } catch (e: GeneralSecurityException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
 
     /**
      *  初始化天气控件的日期和时间 异步获取天气和时间 每10秒刷新一次

@@ -58,7 +58,7 @@ class LauncherApplication : Application() {
                 if (error.code !== CHECK_NO_NEW_VERSION) {          //对不同错误进行处理
                     Log.i(TAG, "XUpdate ILogger: $error")
                 }
-            }
+            }.init(this) //这个必须初始化
 //            .setIUpdateHttpService(object : IUpdateHttpService {
 //                override fun download(
 //                    url: String,
@@ -85,7 +85,7 @@ class LauncherApplication : Application() {
 //                ) {
 //                }
 //            }) //这个必须设置！实现网络请求功能。
-            .init(this) //这个必须初始化
+
     }
 
     companion object {

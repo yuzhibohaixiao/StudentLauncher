@@ -89,7 +89,7 @@ class LauncherContentProvider : ContentProvider() {
         sortOrder: String?
     ): Cursor? {
         val tableName = getTableName(uri)
-        val uri = runBlocking {
+        val uri2 = runBlocking {
             delete(URI, null, null)
             GlobalScope.async(Dispatchers.IO) {
                 val tokenPair = AccountUtil.getToken()
@@ -108,6 +108,8 @@ class LauncherContentProvider : ContentProvider() {
             }.await()
         }
         require(!TextUtils.isEmpty(tableName)) { "Unsupported URI:$uri" }
+        //todo 也可通过handler去刷新token
+        mContext!!.contentResolver.notifyChange(uri, null)
         return sqLiteDatabase!!.query(
             tableName,
             projection,
@@ -124,6 +126,8 @@ class LauncherContentProvider : ContentProvider() {
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
+
+        //todo 不再需要操作数据库 需要把msg数据直接发广播
         val tableName = getTableName(uri)
         require(!TextUtils.isEmpty(tableName)) { "Unsupported URI:$uri" }
         sqLiteDatabase!!.insert(tableName, null, values)
