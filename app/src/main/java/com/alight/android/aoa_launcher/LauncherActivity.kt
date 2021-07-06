@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher
 
 import UpdateBean
+import android.Manifest
 import android.content.Intent
 import android.database.ContentObserver
 import android.net.Uri
@@ -10,6 +11,7 @@ import android.os.RecoverySystem
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.widget.Toast
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenMessage
 import com.alight.android.aoa_launcher.constants.AppConstants
@@ -18,9 +20,14 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.urls.Urls
 import com.alight.android.aoa_launcher.utils.AccountUtil
+import com.alight.android.aoa_launcher.utils.AssetsUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.google.gson.Gson
+import com.permissionx.guolindev.PermissionX
+import com.permissionx.guolindev.callback.ExplainReasonCallback
+import com.permissionx.guolindev.callback.ExplainReasonCallbackWithBeforeParam
+import com.permissionx.guolindev.request.ExplainScope
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import com.xuexiang.xupdate.aria.AriaDownloader
 import com.xuexiang.xupdate.easy.EasyUpdate
@@ -102,15 +109,23 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        main_recy.layoutManager = LinearLayoutManager(this)
 //        mAdapter = MyAdapter(baseContext)
 //        main_recy.adapter = mAdapter
-        //初始化用户获取工具
-        initAccountUtil()
+    }
 
-        //监听contentProvider是否被操作
-        contentResolver.registerContentObserver(
-            LauncherContentProvider.URI,
-            true,
-            contentObserver
-        )
+    private fun initPermission() {
+        PermissionX.init(this)
+            .permissions(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE
+            )
+            .request { allGranted, grantedList, deniedList ->
+                if (allGranted) {
+                    Log.i(TAG, "initPermission: All permissions are granted")
+                } else {
+                    Log.i(TAG, "initPermission: These permissions are denied: $deniedList")
+                }
+            }
     }
 
     /**
@@ -129,8 +144,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 .setSize(data.apk_size)
                 .setIsAutoInstall(true)
                 .setMd5(data.apk_md5)
-//                .setIsIgnorable(!data.app_force_upgrade)
-                .setForce(data.app_force_upgrade == 1)
+                .setIsIgnorable(true)
+//                .setForce(data.app_force_upgrade == 1)
                 .setVersionCode(data.version_code)
                 .setVersionName(data.version_name)
                 .setUpdateContent(data.content)
@@ -175,6 +190,16 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     }
 
     override fun initData() {
+        //初始化权限
+        initPermission()
+        //初始化用户获取工具
+        initAccountUtil()
+        //监听contentProvider是否被操作
+        contentResolver.registerContentObserver(
+            LauncherContentProvider.URI,
+            true,
+            contentObserver
+        )
         //如果是新用户则打开Splash
         val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
         if (false) {
@@ -184,18 +209,20 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         initWeatherDate()
         //定位后获取天气
         getPresenter().getLocationAndWeather()
+        //检测系统升级
+//        systemUpdate()
         //XUpdate 更新
 //        promptThemeColor: 设置主题颜色
 //        promptButtonTextColor: 设置按钮的文字颜色
 //        promptTopResId: 设置顶部背景图片
 //        promptWidthRatio: 设置版本更新提示器宽度占屏幕的比例，默认是-1，不做约束
 //        promptHeightRatio: 设置版本更新提示器高度占屏幕的比例，默认是-1，不做约束
+/*
         EasyUpdate.create(this, Urls.BASEURL_TEST + Urls.UPDATE)
             .updateHttpService(AriaDownloader.getUpdateHttpService(this))
             .updateParser(CustomUpdateParser())
             .update()
-        //检测系统升级
-        systemUpdate()
+*/
 /*        XUpdate.newBuild(this)
             .updateUrl(Urls.BASEURL_TEST + Urls.UPDATE)
             //检查更新
@@ -231,12 +258,12 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
      *
      * @return 升级包file
      */
-    private fun getUpdateFile(): File {
+    private fun getUpdateFile(): File? {
         var updateFile: File? = null
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
             val updatePath: String =
                 (Environment.getExternalStorageDirectory().absolutePath
-                        + File.separator).toString() + "update.zip"
+                        + File.separator) + "update.zip"
             updateFile = File(updatePath)
             val isExists: Boolean = updateFile.exists()
             Log.i(TAG, "\"是否存在升级包：$isExists")
@@ -244,30 +271,37 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 return updateFile
             }
         }
-        return updateFile!!
+        return null
     }
 
     /**
      * 系统升级
      */
     private fun systemUpdate() {
-        val udapterFile: File = getUpdateFile()
-        try {
-            //签名校验
-            RecoverySystem.verifyPackage(
-                udapterFile,
-                { progress ->
-                    Log.i(TAG, "签名校验进度:$progress")
-                }, null
-            )
-            //升级
-            RecoverySystem.installPackage(this, udapterFile)
-        } catch (e: GeneralSecurityException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
+//        AssetsUtil.copyAssertDirToData(
+//            this, "update.zip", Environment.getExternalStorageDirectory().absolutePath
+//                    + File.separator + "update.zip"
+//        )
+        var updateFile = getUpdateFile()
+        if (updateFile != null) {
+            try {
+                //签名校验
+//                RecoverySystem.verifyPackage(
+//                    updateFile,
+//                    { progress ->
+//                        Log.i(TAG, "签名校验进度:$progress")
+//                    }, null
+//                )
+                //升级
+                RecoverySystem.installPackage(this, updateFile)
+            } catch (e: GeneralSecurityException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
     }
+
 
     /**
      *  初始化天气控件的日期和时间 异步获取天气和时间 每10秒刷新一次
@@ -297,7 +331,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     override fun initPresenter(): PresenterImpl {
         return PresenterImpl()
     }
-    //初始化并弹出对话框方法
+//初始化并弹出对话框方法
 
 
     override fun getLayout(): Int {

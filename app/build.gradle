@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+    id 'newlens'
 }
 
 android {
@@ -112,7 +113,7 @@ dependencies {
 
     //socketio
     // socketio
-    implementation ('io.socket:socket.io-client:2.0.0')
+    implementation('io.socket:socket.io-client:2.0.0')
 
     //BRVAH
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
@@ -125,4 +126,11 @@ dependencies {
     // 如果需要使用断点续传下载功能的话添加该依赖（可选）
     implementation 'com.github.xuexiangjys.XUpdateAPI:xupdate-downloader-aria:1.0.0'
 
+    //听云
+    implementation 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.14.10'
+    //听云采集崩溃
+    implementation 'com.networkbench.newlens.agent.android2:nbs.newlens.nativecrash:2.0.0'
+
+    //动态权限获取库
+    implementation 'com.permissionx.guolindev:permissionx:1.4.0'
 }

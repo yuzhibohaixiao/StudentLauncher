@@ -3,18 +3,11 @@ package com.alight.android.aoa_launcher.application
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import com.alight.android.aoa_launcher.utils.ToastUtils
+import com.networkbench.agent.impl.NBSAppAgent
 import com.tencent.mmkv.MMKV
 import com.xuexiang.xupdate.XUpdate
-import com.xuexiang.xupdate.entity.DownloadEntity
-import com.xuexiang.xupdate.entity.UpdateError
 import com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION
-import com.xuexiang.xupdate.listener.OnInstallListener
-import com.xuexiang.xupdate.listener.OnUpdateFailureListener
-import com.xuexiang.xupdate.logs.ILogger
-import com.xuexiang.xupdate.proxy.IUpdateHttpService
 import com.xuexiang.xupdate.utils.UpdateUtils
-import java.io.File
 
 
 class LauncherApplication : Application() {
@@ -28,6 +21,10 @@ class LauncherApplication : Application() {
     }
 
     private fun init() {
+        //初始化听云sdk
+        NBSAppAgent.setLicenseKey("3a10fd88b32941dfa9c9a72fc14b9635")
+            .withLocationServiceEnabled(true).start(this);//Appkey 请从官网获取
+        //XUpdate全局初始化
         XUpdate.get()
             .debug(true)
             .isWifiOnly(false) //默认设置只在wifi下检查版本更新
