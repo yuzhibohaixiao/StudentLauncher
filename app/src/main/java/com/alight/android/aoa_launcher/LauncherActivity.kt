@@ -2,35 +2,28 @@ package com.alight.android.aoa_launcher
 
 import UpdateBean
 import android.Manifest
+import android.content.ComponentName
 import android.content.Intent
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Environment
 import android.os.Handler
-import android.os.RecoverySystem
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Toast
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenMessage
 import com.alight.android.aoa_launcher.constants.AppConstants
+import com.alight.android.aoa_launcher.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
 import com.alight.android.aoa_launcher.i.LauncherListener
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
-import com.alight.android.aoa_launcher.urls.Urls
 import com.alight.android.aoa_launcher.utils.AccountUtil
-import com.alight.android.aoa_launcher.utils.AssetsUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
-import com.permissionx.guolindev.callback.ExplainReasonCallback
-import com.permissionx.guolindev.callback.ExplainReasonCallbackWithBeforeParam
-import com.permissionx.guolindev.request.ExplainScope
 import com.qweather.sdk.bean.weather.WeatherNowBean
-import com.xuexiang.xupdate.aria.AriaDownloader
-import com.xuexiang.xupdate.easy.EasyUpdate
 import com.xuexiang.xupdate.entity.UpdateEntity
 import com.xuexiang.xupdate.listener.IUpdateParseCallback
 import com.xuexiang.xupdate.proxy.IUpdateParser
@@ -40,8 +33,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
-import java.io.IOException
-import java.security.GeneralSecurityException
 import java.util.*
 
 
@@ -210,7 +201,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         //定位后获取天气
         getPresenter().getLocationAndWeather()
         //检测系统升级
-//        systemUpdate()
+        checkSystemUpdate()
         //XUpdate 更新
 //        promptThemeColor: 设置主题颜色
 //        promptButtonTextColor: 设置按钮的文字颜色
@@ -275,31 +266,21 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     }
 
     /**
-     * 系统升级
+     * 检测系统升级
      */
-    private fun systemUpdate() {
-//        AssetsUtil.copyAssertDirToData(
-//            this, "update.zip", Environment.getExternalStorageDirectory().absolutePath
-//                    + File.separator + "update.zip"
-//        )
-        var updateFile = getUpdateFile()
-        if (updateFile != null) {
-            try {
-                //签名校验
-//                RecoverySystem.verifyPackage(
-//                    updateFile,
-//                    { progress ->
-//                        Log.i(TAG, "签名校验进度:$progress")
-//                    }, null
-//                )
-                //升级
-                RecoverySystem.installPackage(this, updateFile)
-            } catch (e: GeneralSecurityException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
+    private fun checkSystemUpdate() {
+        val intent = Intent()
+        intent.component = ComponentName(
+            "android.rockchip.update.service",
+            "android.rockchip.update.service.FirmwareUpdatingActivity"
+        )
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.putExtra(
+            EXTRA_IMAGE_PATH,
+//                (Environment.getExternalStorageDirectory().absolutePath+ File.separator) + "update.zip"
+            "/data/media/0/update.zip"
+        )
+        startActivity(intent)
     }
 
 
@@ -317,7 +298,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
             var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
             GlobalScope.launch(Dispatchers.Main) {
-                tv_month_launcher.text = "${month}月${day}日 " + DateUtil.getDayOfWeek(calendar)
+                tv_month_launcher.text =
+                    "${month}月${day}日 " + DateUtil.getDayOfWeek(calendar)
                 tv_year_launcher.text = "${year}年"
                 tv_time_launcher.text =
                     "$hour:" + if (minute >= 10) minute else "0$minute"
