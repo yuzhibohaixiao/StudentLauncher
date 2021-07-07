@@ -67,66 +67,11 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         initWeatherDate()
         //定位后获取天气
         getPresenter().getLocationAndWeather()
-        //XUpdate 更新
-        /*EasyUpdate.create(this, Urls.BASEURL_TEST + Urls.UPDATE)
-            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
-            .updateParser(CustomUpdateParser())
-            .update()*/
 
-        val url = "update.zip"
-        val path = SYSTEM_ZIP_PATH
-        DownloadUtil.download(url, path, object : DownloadListener {
-
-            override fun onStart() {
-                //运行在子线程
-            }
-
-            override fun onProgress(progress: Int) {
-                //运行在子线程
-                Log.i(TAG, "onProgress: $progress")
-            }
-
-            override fun onFinish(path: String?) {
-                Log.i(TAG, "onProgress: 下载完成，尝试提示安装")
-                //运行在子线程
-                checkSystemUpdate()
-            }
-
-            override fun onFail(errorInfo: String?) {
-                //运行在子线程
-            }
-        })
-/*        XUpdate.newBuild(this)
-            .updateUrl(Urls.BASEURL_TEST + Urls.UPDATE)
-            //检查更新
-            .updateChecker(object : DefaultUpdateChecker() {
-                override fun onBeforeCheck() {
-                    super.onBeforeCheck()
-//                    CProgressDialogUtils.showProgressDialog(getActivity(), "查询中...")
-                }
-
-                override fun onAfterCheck() {
-                    super.onAfterCheck()
-//                    CProgressDialogUtils.cancelProgressDialog(getActivity())
-                }
-            })
-            //支持断点续传
-            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
-            .promptThemeColor(resources.getColor(R.color.white))
-            .promptButtonTextColor(Color.WHITE)
-            .updateParser(CustomUpdateParser())
-            .promptTopResId(R.mipmap.ic_launcher_round)
-            .promptWidthRatio(0.7F)
-            .update()*/;
-
-
-//        var map = hashMapOf<String, Any>()
-//        map.put("page", 1)
-//        map.put("count", 10)
-//        getPresenter().getModel(MyUrls.ZZ_MOVIE, map, ZZBean::class.java)
+        //获取App和系统固件更新
+        getPresenter().updateAppAndSystem()
     }
 
-    //    lateinit var mAdapter: MyAdapter
     private var uri: Uri? = null
     private val handler =
         Handler(Handler.Callback { msg ->
@@ -206,7 +151,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     /**
      * 更新解析器
      */
-    class CustomUpdateParser : IUpdateParser {
+    inner class CustomUpdateParser : IUpdateParser {
         override fun parseJson(json: String): UpdateEntity? {
             /*  val updateBean = Gson().fromJson(json, UpdateBean::class.java)
               val data = updateBean.data
@@ -257,6 +202,28 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 Log.i("XUpdate", "parseJson: $launcherApp")
                 callback.onParseResult(launcherEntity)
             }
+            DownloadUtil.download(systemApp?.app_url, SYSTEM_ZIP_PATH, object : DownloadListener {
+
+                override fun onStart() {
+                    //运行在子线程
+                }
+
+                override fun onProgress(progress: Int) {
+                    //运行在子线程
+                    Log.i("TAG", "onProgress: $progress")
+                }
+
+                override fun onFinish(path: String?) {
+                    Log.i("TAG", "onProgress: 下载完成，尝试提示安装")
+                    //运行在子线程
+                    checkSystemUpdate()
+                }
+
+                override fun onFail(errorInfo: String?) {
+                    //运行在子线程
+                }
+            })
+
             //todo 可设置多个回调 从而处理多个应用更新
 //            callback.onParseResult(updateEntity)
         }
@@ -264,6 +231,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         override fun isAsyncParser(): Boolean {
             return true
         }
+
     }
 
     private fun initAccountUtil() {

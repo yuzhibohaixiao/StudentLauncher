@@ -30,7 +30,6 @@ public class DownloadUtil {
     public static void download(String url, final String path, final DownloadListener downloadListener) {
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://alight-apk.oss-cn-beijing.aliyuncs.com/")
                 //通过线程池获取一个线程，指定callback在子线程中运行。
                 .callbackExecutor(Executors.newSingleThreadExecutor())
                 .build();

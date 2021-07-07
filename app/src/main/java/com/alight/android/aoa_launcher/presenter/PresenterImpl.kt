@@ -1,7 +1,10 @@
 package com.alight.android.aoa_launcher.presenter
 
+import Data
+import UpdateBean
 import android.Manifest
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,6 +17,8 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.LauncherActivity
 import com.alight.android.aoa_launcher.R
@@ -21,7 +26,12 @@ import com.alight.android.aoa_launcher.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.base.BasePresenter
 import com.alight.android.aoa_launcher.bean.AppBean
 import com.alight.android.aoa_launcher.constants.AppConstants
+import com.alight.android.aoa_launcher.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
+import com.alight.android.aoa_launcher.constants.AppConstants.Companion.SYSTEM_ZIP_PATH
 import com.alight.android.aoa_launcher.contract.IContract
+import com.alight.android.aoa_launcher.listener.DownloadListener
+import com.alight.android.aoa_launcher.urls.Urls
+import com.alight.android.aoa_launcher.utils.DownloadUtil
 import com.alight.android.aoa_launcher.utils.NetUtils
 import com.alight.android.aoa_launcher.utils.ProperTiesUtil
 import com.alight.android.aoa_launcher.view.CustomDialog
@@ -36,6 +46,11 @@ import com.qweather.sdk.view.QWeather
 import com.qweather.sdk.view.QWeather.OnResultGeoListener
 import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
 import com.viewpagerindicator.CirclePageIndicator
+import com.xuexiang.xupdate.aria.AriaDownloader
+import com.xuexiang.xupdate.easy.EasyUpdate
+import com.xuexiang.xupdate.entity.UpdateEntity
+import com.xuexiang.xupdate.listener.IUpdateParseCallback
+import com.xuexiang.xupdate.proxy.IUpdateParser
 import java.util.*
 
 /**
@@ -428,6 +443,115 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             Log.e("showAOA", "没有安装")
         }
 
+    }
+
+    fun updateAppAndSystem() {
+        var activity = getView() as Activity
+        //XUpdate 更新
+        EasyUpdate.create(activity, Urls.BASEURL_TEST + Urls.UPDATE)
+            .updateHttpService(AriaDownloader.getUpdateHttpService(activity))
+            .updateParser(CustomUpdateParser(activity))
+            .update()
+    }
+
+
+    /**
+     * 更新解析器
+     */
+    class CustomUpdateParser(var context: Context) : IUpdateParser {
+        override fun parseJson(json: String): UpdateEntity? {
+            /*  val updateBean = Gson().fromJson(json, UpdateBean::class.java)
+              val data = updateBean.data
+              var updateData: Any
+              for (position in updateBean.data.indices) {
+                  if (updateData(position))
+              }
+              if (data != null) {
+                  return UpdateEntity()
+                      .setHasUpdate(data.is_active)
+                      .setSize(data.apk_size)
+                      .setIsAutoInstall(true)
+                      .setMd5(data.apk_md5)
+                      .setIsIgnorable(true)
+    //                .setForce(data.app_force_upgrade == 1)
+                      .setVersionCode(data.version_code)
+                      .setVersionName(data.version_name)
+                      .setUpdateContent(data.content)
+                      .setDownloadUrl(data.app_url)
+              }*/
+            return null
+        }
+
+        override fun parseJson(json: String, callback: IUpdateParseCallback) {
+            val result: UpdateBean = Gson().fromJson(json, UpdateBean::class.java)
+            val data = result.data
+            var systemApp: Data? = null
+            var launcherApp: Data? = null
+            for (position in data.indices) {
+                when (data[position].app_name) {
+                    //系统升级
+                    "system" -> systemApp = data[position]
+                    "test2_apk" -> launcherApp = data[position]
+                }
+            }
+            launcherApp?.let {
+                var launcherEntity = UpdateEntity()
+                    .setHasUpdate(launcherApp.is_active)
+                    .setSize(launcherApp.apk_size)
+                    .setIsAutoInstall(true)
+                    .setMd5(launcherApp.apk_md5)
+                    .setIsIgnorable(true)
+//                    .setForce(launcherApp.app_force_upgrade == 1)
+                    .setVersionCode(launcherApp.version_code)
+                    .setVersionName(launcherApp.version_name)
+                    .setUpdateContent(launcherApp.content)
+                    .setDownloadUrl(launcherApp.app_url)
+                Log.i("XUpdate", "parseJson: $launcherApp")
+                callback.onParseResult(launcherEntity)
+            }
+            DownloadUtil.download(systemApp?.app_url, SYSTEM_ZIP_PATH, object : DownloadListener {
+
+                override fun onStart() {
+                    //运行在子线程
+                }
+
+                override fun onProgress(progress: Int) {
+                    //运行在子线程
+                    Log.i("TAG", "onProgress: $progress")
+                }
+
+                override fun onFinish(path: String?) {
+                    Log.i("TAG", "onProgress: 下载完成，尝试提示安装")
+                    //运行在子线程
+
+                    /**
+                     * 检测系统升级
+                     */
+                    val intent = Intent()
+                    intent.component = ComponentName(
+                        "android.rockchip.update.service",
+                        "android.rockchip.update.service.FirmwareUpdatingActivity"
+                    )
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.putExtra(
+                        EXTRA_IMAGE_PATH,
+                        SYSTEM_ZIP_PATH
+                    )
+                    context.startActivity(intent)
+                }
+
+                override fun onFail(errorInfo: String?) {
+                    //运行在子线程
+                }
+            })
+
+            //todo 可设置多个回调 从而处理多个应用更新
+//            callback.onParseResult(updateEntity)
+        }
+
+        override fun isAsyncParser(): Boolean {
+            return true
+        }
     }
 
 }
