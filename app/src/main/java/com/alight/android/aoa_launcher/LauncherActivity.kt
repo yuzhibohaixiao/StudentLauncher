@@ -277,7 +277,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.putExtra(
             EXTRA_IMAGE_PATH,
-//                (Environment.getExternalStorageDirectory().absolutePath+ File.separator) + "update.zip"
             "/data/media/0/update.zip"
         )
         startActivity(intent)
