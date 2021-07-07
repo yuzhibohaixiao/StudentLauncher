@@ -22,7 +22,7 @@ class LauncherApplication : Application() {
 
     private fun init() {
         //初始化听云sdk
-        NBSAppAgent.setLicenseKey("3a10fd88b32941dfa9c9a72fc14b9635")
+        NBSAppAgent.setLicenseKey("32c1f7c04eb64c3c95e1c4cd9625aa65")
             .withLocationServiceEnabled(true).start(this);//Appkey 请从官网获取
         //XUpdate全局初始化
         XUpdate.get()

@@ -27,5 +27,8 @@ class AppConstants {
         const val AOA_LAUNCHER_USER_INFO_EXPIRE_TIME = "aoa_launcher_user_info_expire_time"
 
         const val EXTRA_IMAGE_PATH = "android.rockchip.update.extra.IMAGE_PATH"
+
+        //系统固件升级包下载｜安装路径
+        const val SYSTEM_ZIP_PATH = "/data/media/0/update.zip"
     }
 }

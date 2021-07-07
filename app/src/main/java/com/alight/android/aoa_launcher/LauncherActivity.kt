@@ -1,5 +1,6 @@
 package com.alight.android.aoa_launcher
 
+import Data
 import UpdateBean
 import android.Manifest
 import android.content.ComponentName
@@ -15,11 +16,14 @@ import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenMessage
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
+import com.alight.android.aoa_launcher.constants.AppConstants.Companion.SYSTEM_ZIP_PATH
 import com.alight.android.aoa_launcher.i.LauncherListener
+import com.alight.android.aoa_launcher.listener.DownloadListener
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
+import com.alight.android.aoa_launcher.utils.DownloadUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
@@ -40,7 +44,87 @@ import java.util.*
  * Launcher主页
  */
 class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener {
+
     private var TAG = "LauncherActivity"
+
+    override fun initData() {
+        //初始化权限
+        initPermission()
+        //初始化用户获取工具
+        initAccountUtil()
+        //监听contentProvider是否被操作
+        contentResolver.registerContentObserver(
+            LauncherContentProvider.URI,
+            true,
+            contentObserver
+        )
+        //如果是新用户则打开Splash
+        val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
+        if (isNewUser) {
+            startActivity(Intent(this, SplashActivity::class.java))
+        }
+        //初始化天气控件日期
+        initWeatherDate()
+        //定位后获取天气
+        getPresenter().getLocationAndWeather()
+        //XUpdate 更新
+        /*EasyUpdate.create(this, Urls.BASEURL_TEST + Urls.UPDATE)
+            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
+            .updateParser(CustomUpdateParser())
+            .update()*/
+
+        val url = "update.zip"
+        val path = SYSTEM_ZIP_PATH
+        DownloadUtil.download(url, path, object : DownloadListener {
+
+            override fun onStart() {
+                //运行在子线程
+            }
+
+            override fun onProgress(progress: Int) {
+                //运行在子线程
+                Log.i(TAG, "onProgress: $progress")
+            }
+
+            override fun onFinish(path: String?) {
+                Log.i(TAG, "onProgress: 下载完成，尝试提示安装")
+                //运行在子线程
+                checkSystemUpdate()
+            }
+
+            override fun onFail(errorInfo: String?) {
+                //运行在子线程
+            }
+        })
+/*        XUpdate.newBuild(this)
+            .updateUrl(Urls.BASEURL_TEST + Urls.UPDATE)
+            //检查更新
+            .updateChecker(object : DefaultUpdateChecker() {
+                override fun onBeforeCheck() {
+                    super.onBeforeCheck()
+//                    CProgressDialogUtils.showProgressDialog(getActivity(), "查询中...")
+                }
+
+                override fun onAfterCheck() {
+                    super.onAfterCheck()
+//                    CProgressDialogUtils.cancelProgressDialog(getActivity())
+                }
+            })
+            //支持断点续传
+            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
+            .promptThemeColor(resources.getColor(R.color.white))
+            .promptButtonTextColor(Color.WHITE)
+            .updateParser(CustomUpdateParser())
+            .promptTopResId(R.mipmap.ic_launcher_round)
+            .promptWidthRatio(0.7F)
+            .update()*/;
+
+
+//        var map = hashMapOf<String, Any>()
+//        map.put("page", 1)
+//        map.put("count", 10)
+//        getPresenter().getModel(MyUrls.ZZ_MOVIE, map, ZZBean::class.java)
+    }
 
     //    lateinit var mAdapter: MyAdapter
     private var uri: Uri? = null
@@ -124,25 +208,55 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
      */
     class CustomUpdateParser : IUpdateParser {
         override fun parseJson(json: String): UpdateEntity? {
+            /*  val updateBean = Gson().fromJson(json, UpdateBean::class.java)
+              val data = updateBean.data
+              var updateData: Any
+              for (position in updateBean.data.indices) {
+                  if (updateData(position))
+              }
+              if (data != null) {
+                  return UpdateEntity()
+                      .setHasUpdate(data.is_active)
+                      .setSize(data.apk_size)
+                      .setIsAutoInstall(true)
+                      .setMd5(data.apk_md5)
+                      .setIsIgnorable(true)
+  //                .setForce(data.app_force_upgrade == 1)
+                      .setVersionCode(data.version_code)
+                      .setVersionName(data.version_name)
+                      .setUpdateContent(data.content)
+                      .setDownloadUrl(data.app_url)
+              }*/
             return null
         }
 
         override fun parseJson(json: String, callback: IUpdateParseCallback) {
             val result: UpdateBean = Gson().fromJson(json, UpdateBean::class.java)
-            val data = result.data[0]
-            var updateEntity = UpdateEntity()
-                .setHasUpdate(data.is_active)
-                .setSize(data.apk_size)
-                .setIsAutoInstall(true)
-                .setMd5(data.apk_md5)
-                .setIsIgnorable(true)
-//                .setForce(data.app_force_upgrade == 1)
-                .setVersionCode(data.version_code)
-                .setVersionName(data.version_name)
-                .setUpdateContent(data.content)
-                .setDownloadUrl(data.app_url)
-            Log.i("XUpdate", "parseJson: $updateEntity")
-            callback.onParseResult(updateEntity)
+            val data = result.data
+            var systemApp: Data? = null
+            var launcherApp: Data? = null
+            for (position in data.indices) {
+                when (data[position].app_name) {
+                    //系统升级
+                    "system" -> systemApp = data[position]
+                    "test2_apk" -> launcherApp = data[position]
+                }
+            }
+            launcherApp?.let {
+                var launcherEntity = UpdateEntity()
+                    .setHasUpdate(launcherApp.is_active)
+                    .setSize(launcherApp.apk_size)
+                    .setIsAutoInstall(true)
+                    .setMd5(launcherApp.apk_md5)
+                    .setIsIgnorable(true)
+//                    .setForce(launcherApp.app_force_upgrade == 1)
+                    .setVersionCode(launcherApp.version_code)
+                    .setVersionName(launcherApp.version_name)
+                    .setUpdateContent(launcherApp.content)
+                    .setDownloadUrl(launcherApp.app_url)
+                Log.i("XUpdate", "parseJson: $launcherApp")
+                callback.onParseResult(launcherEntity)
+            }
             //todo 可设置多个回调 从而处理多个应用更新
 //            callback.onParseResult(updateEntity)
         }
@@ -180,69 +294,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         iv_aoa_launcher.setOnClickListener(this)
     }
 
-    override fun initData() {
-        //初始化权限
-        initPermission()
-        //初始化用户获取工具
-        initAccountUtil()
-        //监听contentProvider是否被操作
-        contentResolver.registerContentObserver(
-            LauncherContentProvider.URI,
-            true,
-            contentObserver
-        )
-        //如果是新用户则打开Splash
-        val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
-        if (false) {
-            startActivity(Intent(this, SplashActivity::class.java))
-        }
-        //初始化天气控件日期
-        initWeatherDate()
-        //定位后获取天气
-        getPresenter().getLocationAndWeather()
-        //检测系统升级
-        checkSystemUpdate()
-        //XUpdate 更新
-//        promptThemeColor: 设置主题颜色
-//        promptButtonTextColor: 设置按钮的文字颜色
-//        promptTopResId: 设置顶部背景图片
-//        promptWidthRatio: 设置版本更新提示器宽度占屏幕的比例，默认是-1，不做约束
-//        promptHeightRatio: 设置版本更新提示器高度占屏幕的比例，默认是-1，不做约束
-/*
-        EasyUpdate.create(this, Urls.BASEURL_TEST + Urls.UPDATE)
-            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
-            .updateParser(CustomUpdateParser())
-            .update()
-*/
-/*        XUpdate.newBuild(this)
-            .updateUrl(Urls.BASEURL_TEST + Urls.UPDATE)
-            //检查更新
-            .updateChecker(object : DefaultUpdateChecker() {
-                override fun onBeforeCheck() {
-                    super.onBeforeCheck()
-//                    CProgressDialogUtils.showProgressDialog(getActivity(), "查询中...")
-                }
-
-                override fun onAfterCheck() {
-                    super.onAfterCheck()
-//                    CProgressDialogUtils.cancelProgressDialog(getActivity())
-                }
-            })
-            //支持断点续传
-            .updateHttpService(AriaDownloader.getUpdateHttpService(this))
-            .promptThemeColor(resources.getColor(R.color.white))
-            .promptButtonTextColor(Color.WHITE)
-            .updateParser(CustomUpdateParser())
-            .promptTopResId(R.mipmap.ic_launcher_round)
-            .promptWidthRatio(0.7F)
-            .update()*/;
-
-
-//        var map = hashMapOf<String, Any>()
-//        map.put("page", 1)
-//        map.put("count", 10)
-//        getPresenter().getModel(MyUrls.ZZ_MOVIE, map, ZZBean::class.java)
-    }
 
     /**
      * 获取升级包
@@ -277,7 +328,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.putExtra(
             EXTRA_IMAGE_PATH,
-            "/data/media/0/update.zip"
+            SYSTEM_ZIP_PATH
         )
         startActivity(intent)
     }
@@ -361,8 +412,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             R.id.iv_app_store -> getPresenter().showAZMarket()
             //打开aoa星仔伴学
             R.id.iv_aoa_launcher ->
-//                getPresenter().showAOA()
-                queryUserInfo()
+                getPresenter().showAOA()
+//                queryUserInfo()
 
         }
     }
@@ -417,7 +468,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             //do something.
             true;//系统层不做处理 就可以了
         } else {
-            super.dispatchKeyEvent(event);
+            super.dispatchKeyEvent(event)
         }
     }
 
