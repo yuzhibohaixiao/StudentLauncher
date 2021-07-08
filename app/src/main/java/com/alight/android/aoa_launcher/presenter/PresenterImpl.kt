@@ -460,25 +460,6 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      */
     class CustomUpdateParser(var context: Context) : IUpdateParser {
         override fun parseJson(json: String): UpdateEntity? {
-            /*  val updateBean = Gson().fromJson(json, UpdateBean::class.java)
-              val data = updateBean.data
-              var updateData: Any
-              for (position in updateBean.data.indices) {
-                  if (updateData(position))
-              }
-              if (data != null) {
-                  return UpdateEntity()
-                      .setHasUpdate(data.is_active)
-                      .setSize(data.apk_size)
-                      .setIsAutoInstall(true)
-                      .setMd5(data.apk_md5)
-                      .setIsIgnorable(true)
-    //                .setForce(data.app_force_upgrade == 1)
-                      .setVersionCode(data.version_code)
-                      .setVersionName(data.version_name)
-                      .setUpdateContent(data.content)
-                      .setDownloadUrl(data.app_url)
-              }*/
             return null
         }
 

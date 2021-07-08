@@ -1,11 +1,13 @@
 package com.alight.android.aoa_launcher.utils;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.alight.android.aoa_launcher.apiservice.Apiservice;
 import com.alight.android.aoa_launcher.listener.DownloadListener;
+import com.alight.android.aoa_launcher.urls.Urls;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -28,15 +30,24 @@ import retrofit2.Retrofit;
 public class DownloadUtil {
 
     public static void download(String url, final String path, final DownloadListener downloadListener) {
-
+       /* if (TextUtils.isEmpty(url))
+            return;
+        String[] urls = url.split("//");
+        for (int i = 0; i < urls.length; i++) {
+            if (TextUtils.isEmpty(urls[i])) {
+                if (TextUtils.isEmpty(url))
+                    return;
+            }
+        }*/
         Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://alight-apk.oss-cn-beijing.aliyuncs.com/")
                 //通过线程池获取一个线程，指定callback在子线程中运行。
                 .callbackExecutor(Executors.newSingleThreadExecutor())
                 .build();
 
         Apiservice service = retrofit.create(Apiservice.class);
 
-        Call<ResponseBody> call = service.download(url);
+        Call<ResponseBody> call = service.download("update.zip");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull final Response<ResponseBody> response) {
