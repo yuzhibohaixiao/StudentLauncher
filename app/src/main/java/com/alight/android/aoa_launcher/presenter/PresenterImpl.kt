@@ -18,6 +18,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.startActivity
 import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.LauncherActivity
@@ -46,6 +47,7 @@ import com.qweather.sdk.view.QWeather
 import com.qweather.sdk.view.QWeather.OnResultGeoListener
 import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
 import com.viewpagerindicator.CirclePageIndicator
+import com.xuexiang.xupdate.XUpdate
 import com.xuexiang.xupdate.aria.AriaDownloader
 import com.xuexiang.xupdate.easy.EasyUpdate
 import com.xuexiang.xupdate.entity.UpdateEntity
@@ -452,6 +454,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             .updateHttpService(AriaDownloader.getUpdateHttpService(activity))
             .updateParser(CustomUpdateParser(activity))
             .update()
+
     }
 
 
@@ -480,7 +483,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     .setHasUpdate(launcherApp.is_active)
                     .setSize(launcherApp.apk_size)
                     .setIsAutoInstall(true)
-                    .setMd5(launcherApp.apk_md5)
+//                    .setMd5(launcherApp.apk_md5.replace(":", ""))
                     .setIsIgnorable(true)
 //                    .setForce(launcherApp.app_force_upgrade == 1)
                     .setVersionCode(launcherApp.version_code)
@@ -498,7 +501,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
                 override fun onProgress(progress: Int) {
                     //运行在子线程
-                    Log.i("TAG", "onProgress: $progress")
+//                    Log.i("TAG", "onProgress: $progress")
                 }
 
                 override fun onFinish(path: String?) {
