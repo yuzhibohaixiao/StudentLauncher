@@ -1,13 +1,9 @@
 package com.alight.android.aoa_launcher
 
-import Data
-import UpdateBean
 import android.Manifest
-import android.content.ComponentName
 import android.content.Intent
 import android.database.ContentObserver
 import android.net.Uri
-import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
@@ -15,28 +11,19 @@ import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenMessage
 import com.alight.android.aoa_launcher.constants.AppConstants
-import com.alight.android.aoa_launcher.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
-import com.alight.android.aoa_launcher.constants.AppConstants.Companion.SYSTEM_ZIP_PATH
 import com.alight.android.aoa_launcher.i.LauncherListener
-import com.alight.android.aoa_launcher.listener.DownloadListener
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
-import com.alight.android.aoa_launcher.utils.DownloadUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
-import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
 import com.qweather.sdk.bean.weather.WeatherNowBean
-import com.xuexiang.xupdate.entity.UpdateEntity
-import com.xuexiang.xupdate.listener.IUpdateParseCallback
-import com.xuexiang.xupdate.proxy.IUpdateParser
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
 import java.util.*
 
 
@@ -147,91 +134,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             }
     }
 
-    /**
-     * 更新解析器
-     */
-    inner class CustomUpdateParser : IUpdateParser {
-        override fun parseJson(json: String): UpdateEntity? {
-            /*  val updateBean = Gson().fromJson(json, UpdateBean::class.java)
-              val data = updateBean.data
-              var updateData: Any
-              for (position in updateBean.data.indices) {
-                  if (updateData(position))
-              }
-              if (data != null) {
-                  return UpdateEntity()
-                      .setHasUpdate(data.is_active)
-                      .setSize(data.apk_size)
-                      .setIsAutoInstall(true)
-                      .setMd5(data.apk_md5)
-                      .setIsIgnorable(true)
-  //                .setForce(data.app_force_upgrade == 1)
-                      .setVersionCode(data.version_code)
-                      .setVersionName(data.version_name)
-                      .setUpdateContent(data.content)
-                      .setDownloadUrl(data.app_url)
-              }*/
-            return null
-        }
-
-        override fun parseJson(json: String, callback: IUpdateParseCallback) {
-            val result: UpdateBean = Gson().fromJson(json, UpdateBean::class.java)
-            val data = result.data
-            var systemApp: Data? = null
-            var launcherApp: Data? = null
-            for (position in data.indices) {
-                when (data[position].app_name) {
-                    //系统升级
-                    "system" -> systemApp = data[position]
-                    "test2_apk" -> launcherApp = data[position]
-                }
-            }
-            launcherApp?.let {
-                var launcherEntity = UpdateEntity()
-                    .setHasUpdate(launcherApp.is_active)
-                    .setSize(launcherApp.apk_size)
-                    .setIsAutoInstall(true)
-                    .setMd5(launcherApp.apk_md5)
-                    .setIsIgnorable(true)
-//                    .setForce(launcherApp.app_force_upgrade == 1)
-                    .setVersionCode(launcherApp.version_code)
-                    .setVersionName(launcherApp.version_name)
-                    .setUpdateContent(launcherApp.content)
-                    .setDownloadUrl(launcherApp.app_url)
-                Log.i("XUpdate", "parseJson: $launcherApp")
-                callback.onParseResult(launcherEntity)
-            }
-            DownloadUtil.download(systemApp?.app_url, SYSTEM_ZIP_PATH, object : DownloadListener {
-
-                override fun onStart() {
-                    //运行在子线程
-                }
-
-                override fun onProgress(progress: Int) {
-                    //运行在子线程
-                    Log.i("TAG", "onProgress: $progress")
-                }
-
-                override fun onFinish(path: String?) {
-                    Log.i("TAG", "onProgress: 下载完成，尝试提示安装")
-                    //运行在子线程
-                    checkSystemUpdate()
-                }
-
-                override fun onFail(errorInfo: String?) {
-                    //运行在子线程
-                }
-            })
-
-            //todo 可设置多个回调 从而处理多个应用更新
-//            callback.onParseResult(updateEntity)
-        }
-
-        override fun isAsyncParser(): Boolean {
-            return true
-        }
-
-    }
 
     private fun initAccountUtil() {
         AccountUtil.register(this)
@@ -260,46 +162,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         iv_app_store.setOnClickListener(this)
         iv_aoa_launcher.setOnClickListener(this)
     }
-
-
-    /**
-     * 获取升级包
-     *
-     * @return 升级包file
-     */
-    private fun getUpdateFile(): File? {
-        var updateFile: File? = null
-        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-            val updatePath: String =
-                (Environment.getExternalStorageDirectory().absolutePath
-                        + File.separator) + "update.zip"
-            updateFile = File(updatePath)
-            val isExists: Boolean = updateFile.exists()
-            Log.i(TAG, "\"是否存在升级包：$isExists")
-            if (isExists) {
-                return updateFile
-            }
-        }
-        return null
-    }
-
-    /**
-     * 检测系统升级
-     */
-    private fun checkSystemUpdate() {
-        val intent = Intent()
-        intent.component = ComponentName(
-            "android.rockchip.update.service",
-            "android.rockchip.update.service.FirmwareUpdatingActivity"
-        )
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.putExtra(
-            EXTRA_IMAGE_PATH,
-            SYSTEM_ZIP_PATH
-        )
-        startActivity(intent)
-    }
-
 
     /**
      *  初始化天气控件的日期和时间 异步获取天气和时间 每10秒刷新一次
@@ -382,48 +244,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 getPresenter().showAOA()
 //                queryUserInfo()
 
-        }
-    }
-
-    private fun queryUserInfo() {
-        val boyCursor = contentResolver.query(
-            LauncherContentProvider.URI,
-            arrayOf(
-                "_id",
-                AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
-                AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR,
-                AppConstants.AOA_LAUNCHER_USER_INFO_NAME,
-                AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID,
-                AppConstants.AOA_LAUNCHER_USER_INFO_GENDER,
-                AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME
-            ),
-            null,
-            null,
-            null
-        )
-        if (boyCursor != null) {
-            while (boyCursor.moveToNext()) {
-                Log.e(
-                    "childInfo",
-                    "ID:" + boyCursor.getInt(boyCursor.getColumnIndex("_id")) + "  token:" +
-                            boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN)) + "  token:" + boyCursor.getString(
-                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR)
-                    )
-                            + "  name:" + boyCursor.getString(
-                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_NAME)
-                    )
-                            + "  userId:" + boyCursor.getInt(
-                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID)
-                    )
-                            + "  gender:" + boyCursor.getInt(
-                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER)
-                    )
-                            + "  expireTime:" + boyCursor.getDouble(
-                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME)
-                    )
-                )
-            }
-            boyCursor.close()
         }
     }
 
