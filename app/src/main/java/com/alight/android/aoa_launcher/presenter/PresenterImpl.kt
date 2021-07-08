@@ -493,6 +493,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 Log.i("XUpdate", "parseJson: $launcherApp")
                 callback.onParseResult(launcherEntity)
             }
+/*
             DownloadUtil.download(systemApp?.app_url, SYSTEM_ZIP_PATH, object : DownloadListener {
 
                 override fun onStart() {
@@ -508,9 +509,11 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     Log.i("TAG", "onProgress: 下载完成，尝试提示安装")
                     //运行在子线程
 
-                    /**
+                    */
+/**
                      * 检测系统升级
-                     */
+                     *//*
+
                     val intent = Intent()
                     intent.component = ComponentName(
                         "android.rockchip.update.service",
@@ -528,6 +531,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     //运行在子线程
                 }
             })
+*/
 
             //todo 可设置多个回调 从而处理多个应用更新
 //            callback.onParseResult(updateEntity)
