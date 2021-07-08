@@ -10,6 +10,7 @@
     <color name="launcher_cambridge_blue">#4183D7</color>
     <color name="launcher_dark_blue">#3367AB</color>
     <color name="launcher_dialog_bg">#50CCCCCC</color>
+    <color name="launcher_trans_white">#19ffffff</color>
     <color name="launcher_transparent">#00000000</color>
     <color name="launcher_purple">#545492</color>
 

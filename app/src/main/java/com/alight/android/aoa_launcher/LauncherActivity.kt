@@ -161,6 +161,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         iv_setting_launcher.setOnClickListener(this)
         iv_app_store.setOnClickListener(this)
         iv_aoa_launcher.setOnClickListener(this)
+        ll_personal_center.setOnClickListener(this)
     }
 
     /**
@@ -222,7 +223,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     ) {
         tv_temperature_launcher.text = weatherNowBean.now.temp + "°C"
         iv_weather_launcher.setImageResource(weatherIcon)
-
     }
 
     override fun onClick(view: View) {
@@ -243,6 +243,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             R.id.iv_aoa_launcher ->
                 getPresenter().showAOA()
 //                queryUserInfo()
+            //个人中心
+            R.id.ll_personal_center ->
+                Log.i(TAG, "onClick: 个人中心")
 
         }
     }
