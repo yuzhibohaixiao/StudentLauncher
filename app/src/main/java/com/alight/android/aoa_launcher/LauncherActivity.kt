@@ -9,8 +9,11 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
+import com.alight.android.aoa_launcher.bean.BannerBean
 import com.alight.android.aoa_launcher.bean.TokenMessage
+import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.constants.AppConstants
+import com.alight.android.aoa_launcher.data.UserInfo
 import com.alight.android.aoa_launcher.i.LauncherListener
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
@@ -146,8 +149,10 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                         AccountUtil.selectUser(it.userId)
                     }
                 }
-
+                //设置用户信息
+                getPresenter().setPersonInfo(this@LauncherActivity)
             }
+
         }
     }
 
@@ -201,11 +206,13 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     }
 
     override fun onSuccess(any: Any) {
-        /*   //网络请求成功后的结果 让对应视图进行刷新
-           if (any is BannerBean) {
-               mAdapter.setBannerData(any.result)
-           }
-        */
+        GlobalScope.launch(Dispatchers.Main) {
+            //网络请求成功后的结果 让对应视图进行刷新
+            if (any is TokenPair) {
+                iv_user_icon_launcher.setImageResource(if (any.gender == 0 || any.gender == 1) R.drawable.splash_girl else R.drawable.splash_boy)
+                tv_user_name_launcher.text = any.name
+            }
+        }
     }
 
 
@@ -242,7 +249,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             //打开aoa星仔伴学
             R.id.iv_aoa_launcher ->
                 getPresenter().showAOA()
-//                queryUserInfo()
             //个人中心
             R.id.ll_personal_center ->
                 Log.i(TAG, "onClick: 个人中心")

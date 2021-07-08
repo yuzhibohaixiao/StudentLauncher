@@ -4,7 +4,6 @@ import Data
 import UpdateBean
 import android.Manifest
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -17,22 +16,18 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getColor
-import androidx.core.content.ContextCompat.startActivity
 import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.LauncherActivity
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.base.BasePresenter
 import com.alight.android.aoa_launcher.bean.AppBean
+import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.constants.AppConstants
-import com.alight.android.aoa_launcher.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
-import com.alight.android.aoa_launcher.constants.AppConstants.Companion.SYSTEM_ZIP_PATH
 import com.alight.android.aoa_launcher.contract.IContract
-import com.alight.android.aoa_launcher.listener.DownloadListener
+import com.alight.android.aoa_launcher.data.UserInfo
+import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.urls.Urls
-import com.alight.android.aoa_launcher.utils.DownloadUtil
 import com.alight.android.aoa_launcher.utils.NetUtils
 import com.alight.android.aoa_launcher.utils.ProperTiesUtil
 import com.alight.android.aoa_launcher.view.CustomDialog
@@ -47,7 +42,6 @@ import com.qweather.sdk.view.QWeather
 import com.qweather.sdk.view.QWeather.OnResultGeoListener
 import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
 import com.viewpagerindicator.CirclePageIndicator
-import com.xuexiang.xupdate.XUpdate
 import com.xuexiang.xupdate.aria.AriaDownloader
 import com.xuexiang.xupdate.easy.EasyUpdate
 import com.xuexiang.xupdate.entity.UpdateEntity
@@ -457,6 +451,62 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     }
 
+    fun setPersonInfo(activity: Activity) {
+        queryUserInfo(activity)
+    }
+
+    private fun queryUserInfo(activity: Activity) {
+        val boyCursor = activity.contentResolver.query(
+            LauncherContentProvider.URI,
+            arrayOf(
+                "_id",
+                AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
+                AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR,
+                AppConstants.AOA_LAUNCHER_USER_INFO_NAME,
+                AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID,
+                AppConstants.AOA_LAUNCHER_USER_INFO_GENDER,
+                AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME
+            ),
+            null,
+            null,
+            null
+        )
+        if (boyCursor != null) {
+            while (boyCursor.moveToNext()) {
+                Log.e(
+                    "childInfo",
+                    "ID:" + boyCursor.getInt(boyCursor.getColumnIndex("_id")) + "  token:" +
+                            boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN)) + "  token:" + boyCursor.getString(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR)
+                    )
+                            + "  name:" + boyCursor.getString(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_NAME)
+                    )
+                            + "  userId:" + boyCursor.getInt(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID)
+                    )
+                            + "  gender:" + boyCursor.getInt(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER)
+                    )
+                            + "  expireTime:" + boyCursor.getDouble(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME)
+                    )
+                )
+                getView().onSuccess(
+                    TokenPair(
+                        boyCursor.getInt(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID)),
+                        boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN)),
+                        boyCursor.getDouble(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME)),
+                        boyCursor.getInt(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER)),
+                        boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR)),
+                        boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_NAME))
+                    )
+                )
+            }
+            boyCursor.close()
+        }
+    }
+
 
     /**
      * 更新解析器
@@ -510,9 +560,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     //运行在子线程
 
                     */
-/**
-                     * 检测系统升级
-                     *//*
+            /**
+             * 检测系统升级
+             *//*
 
                     val intent = Intent()
                     intent.component = ComponentName(
