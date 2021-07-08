@@ -9,11 +9,9 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import com.alight.android.aoa_launcher.base.BaseActivity
-import com.alight.android.aoa_launcher.bean.BannerBean
 import com.alight.android.aoa_launcher.bean.TokenMessage
 import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.constants.AppConstants
-import com.alight.android.aoa_launcher.data.UserInfo
 import com.alight.android.aoa_launcher.i.LauncherListener
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
