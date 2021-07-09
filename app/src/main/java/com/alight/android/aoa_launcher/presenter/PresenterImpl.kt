@@ -25,7 +25,6 @@ import com.alight.android.aoa_launcher.bean.AppBean
 import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.contract.IContract
-import com.alight.android.aoa_launcher.data.UserInfo
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.urls.Urls
 import com.alight.android.aoa_launcher.utils.NetUtils

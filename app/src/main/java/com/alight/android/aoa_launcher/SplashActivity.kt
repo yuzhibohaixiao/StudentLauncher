@@ -2,12 +2,15 @@ package com.alight.android.aoa_launcher
 
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.adapter.SplashUserAdapter
@@ -18,6 +21,9 @@ import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.utils.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -76,8 +82,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 try {
                     val qrCode = AccountUtil.getQrCode()
                     GlobalScope.launch(Dispatchers.Main) {
-                        val bitmap = BitmapFactory.decodeByteArray(qrCode, 0, qrCode.size)
-                        iv_qr_splash.setImageBitmap(bitmap)
+                        Glide.with(this@SplashActivity).load(qrCode).into(iv_qr_splash);
+//                        val bitmap = BitmapFactory.decodeByteArray(qrCode, 0, qrCode.size)
+//                        iv_qr_splash.setImageBitmap(bitmap)
+//                        loadBitmapImage(iv_qr_splash, bitmap)
                     }
                 } catch (e: SocketTimeoutException) {
                     e.printStackTrace()

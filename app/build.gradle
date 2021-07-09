@@ -133,4 +133,7 @@ dependencies {
 
     //动态权限获取库
     implementation 'com.permissionx.guolindev:permissionx:1.4.0'
+
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }
