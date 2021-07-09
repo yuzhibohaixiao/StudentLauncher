@@ -17,7 +17,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
-import com.alight.android.aoa_launcher.LauncherActivity
+import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.base.BasePresenter

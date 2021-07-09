@@ -1,4 +1,4 @@
-package com.alight.android.aoa_launcher
+package com.alight.android.aoa_launcher.activity
 
 import android.Manifest
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenMessage
 import com.alight.android.aoa_launcher.bean.TokenPair
@@ -48,7 +49,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         )
         //如果是新用户则打开Splash
         val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
-        if (true) {
+        if (isNewUser) {
             startActivity(Intent(this, SplashActivity::class.java))
         }
         //初始化天气控件日期
@@ -249,8 +250,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 getPresenter().showAOA()
             //个人中心
             R.id.ll_personal_center ->
-                Log.i(TAG, "onClick: 个人中心")
-
+                startActivity(Intent(this, PersonCenterActivity::class.java))
         }
     }
 

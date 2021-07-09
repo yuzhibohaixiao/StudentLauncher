@@ -1,18 +1,14 @@
-package com.alight.android.aoa_launcher
+package com.alight.android.aoa_launcher.activity
 
 import android.content.ContentValues
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.adapter.SplashUserAdapter
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenManagerException
@@ -22,8 +18,6 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
