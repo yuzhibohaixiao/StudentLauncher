@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.alight.android.aoa_launcher"
-    android:sharedUserId="android.uid.system"
-    >
+    package="com.alight.android.aoa_launcher">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -20,6 +18,8 @@
     <!--使用可视化操作命名功能需配置悬浮窗权限(选配)-->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <!--非必要权限，用以获取当前移动网络连接的基站信息-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -34,7 +34,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.WindowFullscreen">
-        <activity android:name=".LauncherActivity">
+        <activity android:name=".activity.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,8 +42,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!--请添加这里的整个intent-filter区块，并确保其中只有一个data字段-->
+            <intent-filter>
+                <data android:scheme="tingyun.101148" />
+                <!--请将 scheme 中的“tingyun.xxxx”替换为听云报表设置页面中的 URL Scheme-->
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+
         </activity>
-        <activity android:name=".SplashActivity" />
+        <activity android:name=".activity.SplashActivity" />
+        <activity android:name=".activity.PersonCenterActivity" />
 
         <!-- android:exported设置为true，表示其他应用可以访问，否则不可以访问 -->
         <provider
