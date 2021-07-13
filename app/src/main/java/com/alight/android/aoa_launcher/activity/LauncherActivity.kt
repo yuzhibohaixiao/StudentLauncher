@@ -44,6 +44,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     }
 
     override fun initData() {
+        //获取用户信息之前必须调用的初始化方法
+        AccountUtil.run()
         //初始化权限
         initPermission()
         //监听contentProvider是否被操作
@@ -63,6 +65,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         getPresenter().getLocationAndWeather()
         //获取App和系统固件更新
         getPresenter().updateAppAndSystem()
+        SPUtils.asyncPutData("onlyShowSelectChild", false)
     }
 
     private var uri: Uri? = null
@@ -143,6 +146,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
 
     private fun initAccountUtil() {
+
         AccountUtil.register(this)
         val userId = SPUtils.getData(AppConstants.USER_ID, -1) as Int
         if (userId != -1) {

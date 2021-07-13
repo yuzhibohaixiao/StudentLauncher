@@ -4,10 +4,12 @@ import android.content.Intent
 import android.provider.Settings
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.view.CustomDialog
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_personal_center.*
@@ -70,8 +72,12 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         when (v.id) {
             R.id.ll_back_personal_center ->
                 finish()
-            R.id.ll_exit_personal_center ->
+            //用户登出
+            R.id.ll_exit_personal_center -> {
                 finish()
+                SPUtils.syncPutData("onlyShowSelectChild", true)
+                startActivity(Intent(this, SplashActivity::class.java))
+            }
             R.id.tv_focus ->
                 finish()
             R.id.tv_wifi ->
@@ -81,9 +87,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 val updateDialog = CustomDialog(this, R.layout.dialog_update)
                 updateDialog.show()
                 val update = updateDialog.findViewById<FrameLayout>(R.id.fl_update)
+                val close = updateDialog.findViewById<ImageView>(R.id.iv_close_update)
                 update.setOnClickListener {
                     //获取App和系统固件更新
                     getPresenter().updateAppAndSystem()
+                }
+                close.setOnClickListener {
+                    updateDialog.dismiss()
                 }
             }
             R.id.tv_splash -> {

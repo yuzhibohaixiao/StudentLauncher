@@ -51,6 +51,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     //初始化控件
     override fun initView() {
+
     }
 
     override fun setListener() {
@@ -63,14 +64,20 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
+        val onlyShowSelectChild = SPUtils.getData("onlyShowSelectChild", false) as Boolean
         val openUserSplash = intent.getBooleanExtra("openUserSplash", false)
-        if (openUserSplash) {
-            fl_splash1.visibility = View.GONE
-            openUserSplash()
-        } else {
-            getSystemDate()
-            //获取用户信息之前必须调用的初始化方法
-            AccountUtil.run()
+        when {
+            openUserSplash -> {   //直接跳转到用户引导
+                fl_splash1.visibility = View.GONE
+                openUserSplash()
+            }
+            onlyShowSelectChild -> {
+                showChildUser()
+                getSystemDate()
+            }
+            else -> {
+                getSystemDate()
+            }
         }
     }
 
@@ -103,6 +110,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun showChildUser() {
+        fl_splash1.visibility = View.GONE
+        ll_splash2.visibility = View.GONE
+        fl_splash3.visibility = View.VISIBLE
         try {
             GlobalScope.launch(Dispatchers.IO) {
                 try {
@@ -130,7 +140,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                         GlobalScope.launch(Dispatchers.Main) {
                                             //保存用户信息
                                             writeUserInfo(tokenPair)
-                                            openUserSplash()
+                                            val onlyShowSelectChild =
+                                                SPUtils.getData(
+                                                    "onlyShowSelectChild",
+                                                    false
+                                                ) as Boolean
+                                            if (onlyShowSelectChild) {
+                                                //仅展示用户选择
+                                                finish()
+                                            } else {
+                                                openUserSplash()
+                                            }
 
                                         }
                                     }
@@ -295,14 +315,12 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 }
             }
             R.id.ll_splash2 -> {
-                ll_splash2.visibility = View.GONE
-                fl_splash3.visibility = View.VISIBLE
                 showChildUser()
             }
-            R.id.fl_splash3 -> {
-                //系统引导设置完毕，关闭引导页
+//            R.id.fl_splash3 -> {
+            //系统引导设置完毕，关闭引导页
 //                closeSplash()
-            }
+//            }
             R.id.tv_next_launcher_splash -> {
                 openUserSplash()
             }
