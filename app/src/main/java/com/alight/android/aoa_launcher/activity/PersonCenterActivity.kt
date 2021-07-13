@@ -3,11 +3,13 @@ package com.alight.android.aoa_launcher.activity
 import android.content.Intent
 import android.provider.Settings
 import android.view.View
+import android.widget.FrameLayout
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
-import kotlinx.android.synthetic.main.activity_main.*
+import com.alight.android.aoa_launcher.view.CustomDialog
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_personal_center.*
 
 class PersonCenterActivity : BaseActivity(), View.OnClickListener {
@@ -22,7 +24,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             tokenPair = userInfo as TokenPair
         }
         tokenPair?.apply {
-            iv_icon_personal_center.setImageResource(if (gender == 0 || gender == 1) R.drawable.splash_girl else R.drawable.splash_boy)
+            Glide.with(this@PersonCenterActivity)
+                .load(if (gender == 0 || gender == 1) R.drawable.splash_girl else R.drawable.splash_boy)
+                .into(iv_icon_personal_center)
             tv_name_personal_center.text = name
             tv_grade_personal_center.text = "一年级"
             tv_gender_center.text = when (gender) {
@@ -72,8 +76,16 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 finish()
             R.id.tv_wifi ->
                 startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
-            R.id.tv_set ->
-                getPresenter().showSystemSetting()
+            R.id.tv_set -> {
+                //系统升级和解绑
+                val updateDialog = CustomDialog(this, R.layout.dialog_update)
+                updateDialog.show()
+                val update = updateDialog.findViewById<FrameLayout>(R.id.fl_update)
+                update.setOnClickListener {
+                    //获取App和系统固件更新
+                    getPresenter().updateAppAndSystem()
+                }
+            }
             R.id.tv_splash -> {
                 //直接打开用户引导
                 val intent = Intent(this, SplashActivity::class.java)

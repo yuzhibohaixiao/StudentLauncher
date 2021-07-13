@@ -37,11 +37,15 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     private var tokenPair: TokenPair? = null
     private var TAG = "LauncherActivity"
 
+    override fun onResume() {
+        super.onResume()
+        //初始化用户工具及展示用户数据
+        initAccountUtil()
+    }
+
     override fun initData() {
         //初始化权限
         initPermission()
-        //初始化用户获取工具
-        initAccountUtil()
         //监听contentProvider是否被操作
         contentResolver.registerContentObserver(
             LauncherContentProvider.URI,

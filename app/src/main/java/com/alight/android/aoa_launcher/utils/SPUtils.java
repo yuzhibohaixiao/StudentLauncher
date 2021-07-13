@@ -13,8 +13,7 @@ import com.alight.android.aoa_launcher.application.LauncherApplication;
 public class SPUtils {
 
     //存储的sharedpreferences文件名
-    private static final String SP_NAME = "SP_NAME";    //登出时被清除的存储数据
-    private static final String SP_PERPETUAL = "SP_PERPETUAL";      //登出时不被清除
+    private static final String SP_NAME = "SP_NAME";
 
     /**
      * 异步保存数据到文件
@@ -44,12 +43,18 @@ public class SPUtils {
         editor.apply();
     }
 
-/*
-    public static boolean putData(String key, Object data) {
+    /**
+     * 同步保存数据到文件
+     *
+     * @param key
+     * @param data
+     * @return
+     */
+    public static boolean syncPutData(String key, Object data) {
 
         String type = data.getClass().getSimpleName();
         SharedPreferences sharedPreferences = LauncherApplication.Companion.getContext()
-                .getSharedPreferences(SP_PERPETUAL, Context.MODE_PRIVATE);
+                .getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if ("Integer".equals(type)) {
@@ -66,7 +71,6 @@ public class SPUtils {
 
         return editor.commit();
     }
-*/
 
     /**
      * 从文件中读取数据

@@ -4,6 +4,7 @@ import Data
 import UpdateBean
 import android.Manifest
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -24,9 +25,13 @@ import com.alight.android.aoa_launcher.base.BasePresenter
 import com.alight.android.aoa_launcher.bean.AppBean
 import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.constants.AppConstants
+import com.alight.android.aoa_launcher.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
+import com.alight.android.aoa_launcher.constants.AppConstants.Companion.SYSTEM_ZIP_PATH
 import com.alight.android.aoa_launcher.contract.IContract
+import com.alight.android.aoa_launcher.listener.DownloadListener
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.urls.Urls
+import com.alight.android.aoa_launcher.utils.DownloadUtil
 import com.alight.android.aoa_launcher.utils.NetUtils
 import com.alight.android.aoa_launcher.utils.ProperTiesUtil
 import com.alight.android.aoa_launcher.view.CustomDialog
@@ -543,6 +548,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 callback.onParseResult(launcherEntity)
             }
 /*
+            //系统固件升级包下载
             DownloadUtil.download(systemApp?.app_url, SYSTEM_ZIP_PATH, object : DownloadListener {
 
                 override fun onStart() {
@@ -551,18 +557,12 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
                 override fun onProgress(progress: Int) {
                     //运行在子线程
-//                    Log.i("TAG", "onProgress: $progress")
+                    Log.i("TAG", "onProgress: $progress")
                 }
 
                 override fun onFinish(path: String?) {
                     Log.i("TAG", "onProgress: 下载完成，尝试提示安装")
                     //运行在子线程
-
-                    */
-            /**
-             * 检测系统升级
-             *//*
-
                     val intent = Intent()
                     intent.component = ComponentName(
                         "android.rockchip.update.service",

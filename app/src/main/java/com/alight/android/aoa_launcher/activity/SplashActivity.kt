@@ -122,7 +122,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                 try {
                                     GlobalScope.launch(Dispatchers.IO) {
                                         val tokenPair = allUser[position]
-                                        SPUtils.asyncPutData(AppConstants.USER_ID, tokenPair.userId)
+                                        val syncPutData = SPUtils.syncPutData(
+                                            AppConstants.USER_ID,
+                                            tokenPair.userId
+                                        )
                                         AccountUtil.selectUser(tokenPair.userId)
                                         GlobalScope.launch(Dispatchers.Main) {
                                             //保存用户信息
