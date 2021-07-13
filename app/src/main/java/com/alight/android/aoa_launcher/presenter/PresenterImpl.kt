@@ -405,9 +405,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      * 打开系统设置
      */
     fun showSystemSetting() {
-        val launcherActivity = getView() as LauncherActivity
+        val activity = getView() as Activity
         val intent = Intent(Settings.ACTION_SETTINGS)
-        launcherActivity.startActivity(intent)
+        activity.startActivity(intent)
     }
 
     /**

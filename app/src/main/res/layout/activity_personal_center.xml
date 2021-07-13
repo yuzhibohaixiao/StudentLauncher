@@ -88,13 +88,15 @@
                 android:textSize="12sp" />
 
             <ImageView
+                android:id="@+id/iv_icon_personal_center"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_height="85dp"
                 android:layout_marginTop="23dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/splash_boy" />
 
             <TextView
+                android:id="@+id/tv_name_personal_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -103,14 +105,17 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/tv_grade_personal_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="一年级"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="gone" />
 
             <TextView
+                android:id="@+id/tv_gender_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

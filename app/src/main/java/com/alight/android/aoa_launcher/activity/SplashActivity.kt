@@ -2,6 +2,7 @@ package com.alight.android.aoa_launcher.activity
 
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
@@ -18,6 +19,8 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -60,9 +63,15 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
-        getSystemDate()
-        //获取用户信息之前必须调用的初始化方法
-        AccountUtil.run()
+        val openUserSplash = intent.getBooleanExtra("openUserSplash", false)
+        if (openUserSplash) {
+            fl_splash1.visibility = View.GONE
+            openUserSplash()
+        } else {
+            getSystemDate()
+            //获取用户信息之前必须调用的初始化方法
+            AccountUtil.run()
+        }
     }
 
     private fun showQRCode() {
@@ -161,7 +170,16 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         } else {
             tv_next_launcher_splash.text = "下一步"
         }
-        fl_splash.setBackgroundResource(userSplashBgList[userSplashNumber])
+        Glide.with(this)
+            .load(userSplashBgList[userSplashNumber])
+            .into(object : SimpleTarget<Drawable?>() {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: Transition<in Drawable?>?
+                ) {
+                    fl_splash.background = resource
+                }
+            })
         userSplashNumber++
         if (userSplashNumber == userSplashBgList.size) {
             tv_next_launcher_splash.text = "开始学习"

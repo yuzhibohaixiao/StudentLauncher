@@ -34,6 +34,7 @@ import java.util.*
  */
 class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener {
 
+    private var tokenPair: TokenPair? = null
     private var TAG = "LauncherActivity"
 
     override fun initData() {
@@ -208,6 +209,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         GlobalScope.launch(Dispatchers.Main) {
             //网络请求成功后的结果 让对应视图进行刷新
             if (any is TokenPair) {
+                tokenPair = any
                 iv_user_icon_launcher.setImageResource(if (any.gender == 0 || any.gender == 1) R.drawable.splash_girl else R.drawable.splash_boy)
                 tv_user_name_launcher.text = any.name
             }
@@ -249,8 +251,11 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             R.id.iv_aoa_launcher ->
                 getPresenter().showAOA()
             //个人中心
-            R.id.ll_personal_center ->
-                startActivity(Intent(this, PersonCenterActivity::class.java))
+            R.id.ll_personal_center -> {
+                var intent = Intent(this, PersonCenterActivity::class.java)
+                intent.putExtra("userInfo", tokenPair)
+                startActivity(intent)
+            }
         }
     }
 
