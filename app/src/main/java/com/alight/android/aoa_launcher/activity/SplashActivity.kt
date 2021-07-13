@@ -334,6 +334,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private fun closeSplash() {
         //新用户的状态设为false
         SPUtils.asyncPutData(AppConstants.NEW_USER, false)
+        SPUtils.asyncPutData("onlyShowSelectChild", true)
         finish()
     }
 

@@ -37,7 +37,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 else -> "男孩"
             }
             tv_gender_center.setCompoundDrawablesWithIntrinsicBounds(
-                resources.getDrawable(R.drawable.boy),
+                when (gender) {
+                    1 -> resources.getDrawable(R.drawable.girl)
+                    2 -> resources.getDrawable(R.drawable.boy)
+                    else -> null
+                },
                 null,
                 null,
                 null

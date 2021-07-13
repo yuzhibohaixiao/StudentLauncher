@@ -55,17 +55,16 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             contentObserver
         )
         //如果是新用户则打开Splash
-        val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
-        if (isNewUser) {
-            startActivity(Intent(this, SplashActivity::class.java))
-        }
+//        val isNewUser = SPUtils.getData(AppConstants.NEW_USER, true) as Boolean
+//        if (isNewUser) {
+        startActivity(Intent(this, SplashActivity::class.java))
+//        }
         //初始化天气控件日期
         initWeatherDate()
         //定位后获取天气
         getPresenter().getLocationAndWeather()
         //获取App和系统固件更新
         getPresenter().updateAppAndSystem()
-        SPUtils.asyncPutData("onlyShowSelectChild", false)
     }
 
     private var uri: Uri? = null
