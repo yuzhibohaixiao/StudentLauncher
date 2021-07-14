@@ -15,5 +15,5 @@ object Urls {
     const val UPDATE = "/device/v1/app-version"
 
     //获取家长id
-    const val FAMILY_ID = "/family/v1/get_family_id/"
+    const val FAMILY_ID = "/family/v1/student/families"
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/launcher_white_round_rectangle_bg"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_back_unbind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/gray_back" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="解除绑定"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/iv_close_unbind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/gray_close" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="46.5dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="如何解绑设备"
+            android:textColor="@color/black"
+            android:textSize="9sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14.5dp"
+            android:text="1.在设备上确定解绑设备；\n2.在小程序-消息列表中查看验证码；\n3.输入验证码，解绑成功（家长端家庭成员都会收到验证码、解绑反馈信息）；\n4.设备回到绑定扫码页面；"
+            android:textColor="@color/black"
+            android:textSize="9sp" />
+
+        <TextView
+            android:id="@+id/tv_unbind_dialog"
+            android:layout_width="218dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="27dp"
+            android:background="@drawable/launcher_unbind_dialog"
+            android:gravity="center"
+            android:text="解除绑定"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+</FrameLayout>

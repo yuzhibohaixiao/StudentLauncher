@@ -13,6 +13,7 @@
     <color name="launcher_trans_white">#33ffffff</color>
     <color name="launcher_transparent">#00000000</color>
     <color name="launcher_purple">#545492</color>
+    <color name="gray_bg">#1a000000</color>
 
 
 </resources>
