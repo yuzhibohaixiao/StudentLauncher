@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher.utils
 
 import com.alight.android.aoa_launcher.apiservice.Apiservice
+import com.alight.android.aoa_launcher.urls.HeaderInterceptor
 import com.alight.android.aoa_launcher.urls.Urls
 import com.google.gson.Gson
 import io.reactivex.Observer
@@ -44,6 +45,7 @@ class NetUtils private constructor() {
             .addInterceptor(log)
             .readTimeout(10, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS)
+            .addInterceptor(HeaderInterceptor())
             .build()
         var retro = Retrofit.Builder()
             .baseUrl(Urls.BASEURL_TEST)
@@ -155,6 +157,7 @@ class NetUtils private constructor() {
     }
 
 }
+
 inline fun <reified T : Any> T.toJson(): String {
     return Gson().toJson(this)
 

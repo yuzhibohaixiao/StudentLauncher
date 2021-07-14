@@ -132,9 +132,13 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                 try {
                                     GlobalScope.launch(Dispatchers.IO) {
                                         val tokenPair = allUser[position]
-                                        val syncPutData = SPUtils.syncPutData(
+                                        SPUtils.syncPutData(
                                             AppConstants.USER_ID,
                                             tokenPair.userId
+                                        )
+                                        SPUtils.syncPutData(
+                                            AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
+                                            tokenPair.token
                                         )
                                         AccountUtil.selectUser(tokenPair.userId)
                                         GlobalScope.launch(Dispatchers.Main) {
