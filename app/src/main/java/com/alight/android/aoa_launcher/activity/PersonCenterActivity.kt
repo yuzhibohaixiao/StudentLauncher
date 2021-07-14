@@ -6,9 +6,11 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.adapter.PersonalCenterFamilyAdapter
 import com.alight.android.aoa_launcher.base.BaseActivity
-import com.alight.android.aoa_launcher.bean.FamilyIdBean
+import com.alight.android.aoa_launcher.bean.FamilyInfoBean
 import com.alight.android.aoa_launcher.bean.TokenPair
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.urls.Urls
@@ -16,12 +18,18 @@ import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.view.CustomDialog
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_personal_center.*
-import kotlinx.android.synthetic.main.dialog_update.*
 
 class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
     private var tokenPair: TokenPair? = null
+    private lateinit var familyAdapter: PersonalCenterFamilyAdapter
+
     override fun initView() {
+        familyAdapter = PersonalCenterFamilyAdapter()
+        rv_family_info.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rv_family_info.adapter = familyAdapter
+
     }
 
     override fun initData() {
@@ -51,15 +59,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 null
             )
         }
-        //        getPresenter().getModel(MyUrls.BANNER, map, BannerBean::class.java)
-//        map.put("page", 1)
-//        map.put("count", 10)
-//        getPresenter().getModel(MyUrls.ZZ_MOVIE, map, ZZBean::class.java)
-        val hashMap = HashMap<String, Any>()
         getPresenter().getModel(
-            Urls.FAMILY_ID + tokenPair?.userId!!,
-            hashMap,
-            FamilyIdBean::class.java
+            Urls.FAMILY_INFO,
+            HashMap(),
+            FamilyInfoBean::class.java
         )
     }
 
@@ -81,6 +84,20 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onSuccess(any: Any) {
+        when (any) {
+            any as FamilyInfoBean -> {
+                familyAdapter.addData(any.data.parents)
+/*
+                any.data.parents.forEach {
+                    getPresenter().getModel(
+                        Urls.PARENT_ONLINE_STATE,
+                        hashMapOf<String, Any>("user_id" to it.user_id),
+                        String::class.java
+                    )
+                }
+*/
+            }
+        }
     }
 
     override fun onError(error: String) {

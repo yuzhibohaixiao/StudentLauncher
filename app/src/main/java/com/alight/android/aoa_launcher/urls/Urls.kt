@@ -14,6 +14,8 @@ object Urls {
     const val BANNER2 = "tool/v2/banne"
     const val UPDATE = "/device/v1/app-version"
 
-    //获取家长id
-    const val FAMILY_ID = "/family/v1/student/families"
+    //家庭信息
+    const val FAMILY_INFO = "/family/v1/student/families"
+
+    const val PARENT_ONLINE_STATE = "/state/v1/state/online"
 }

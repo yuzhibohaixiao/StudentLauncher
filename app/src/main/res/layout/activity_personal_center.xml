@@ -90,9 +90,8 @@
             <ImageView
                 android:id="@+id/iv_icon_personal_center"
                 android:layout_width="80dp"
-                android:layout_height="85dp"
+                android:layout_height="80dp"
                 android:layout_marginTop="23dp"
-                android:scaleType="centerCrop"
                 android:src="@drawable/splash_boy" />
 
             <TextView
@@ -141,10 +140,12 @@
                 android:textColor="@color/white" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_family_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="26dp"
-                android:layout_marginTop="23dp" />
+                android:layout_marginTop="51.5dp"
+                android:clipToPadding="false"
+                android:paddingStart="26dp" />
         </FrameLayout>
 
         <FrameLayout

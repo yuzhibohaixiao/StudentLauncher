@@ -77,9 +77,9 @@ class NetUtils private constructor() {
                 override fun onNext(t: ResponseBody) {
                     var gson = Gson()
                     var any = gson.fromJson(t.string(), cls)
-                    if (callback != null) {
+                    if (callback != null && any != null) {
                         //回调到model层
-                        callback.onSuccess(any!!)
+                        callback.onSuccess(any)
                     }
                 }
 
