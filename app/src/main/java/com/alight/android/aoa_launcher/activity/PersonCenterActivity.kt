@@ -1,5 +1,6 @@
 package com.alight.android.aoa_launcher.activity
 
+import com.alight.android.aoa_launcher.bean.ParentOnlineState
 import android.content.Intent
 import android.provider.Settings
 import android.view.View
@@ -39,7 +40,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         }
         tokenPair?.apply {
             Glide.with(this@PersonCenterActivity)
-                .load(if (gender == 0 || gender == 1) R.drawable.splash_girl else R.drawable.splash_boy)
+                .load(if (tokenPair?.gender == 2) R.drawable.splash_boy else R.drawable.splash_girl)
+//                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+//                .error()
                 .into(iv_icon_personal_center)
             tv_name_personal_center.text = name
             tv_grade_personal_center.text = "一年级"
@@ -85,17 +88,18 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
     override fun onSuccess(any: Any) {
         when (any) {
-            any as FamilyInfoBean -> {
+            is FamilyInfoBean -> {
                 familyAdapter.addData(any.data.parents)
-/*
                 any.data.parents.forEach {
                     getPresenter().getModel(
                         Urls.PARENT_ONLINE_STATE,
                         hashMapOf<String, Any>("user_id" to it.user_id),
-                        String::class.java
+                        ParentOnlineState::class.java
                     )
                 }
-*/
+            }
+            is ParentOnlineState -> {
+                familyAdapter.setOnlineState(any.data)
             }
         }
     }

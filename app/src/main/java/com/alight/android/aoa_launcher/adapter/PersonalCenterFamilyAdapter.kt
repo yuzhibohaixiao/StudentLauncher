@@ -1,7 +1,8 @@
 package com.alight.android.aoa_launcher.adapter
 
-import android.content.Context
+import android.widget.ImageView
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.bean.Data2
 import com.alight.android.aoa_launcher.bean.Parent
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -29,5 +30,21 @@ class PersonalCenterFamilyAdapter :
                 else -> ""
             }
         )
+    }
+
+    /**
+     * 刷新家长的在线状态
+     */
+    fun setOnlineState(data: Data2?) {
+        if (data == null) return
+        for (position in this.data.indices) {
+            if (this.data[position].user_id == data.user_id) {
+                var onlineState =
+                    getViewByPosition(position, R.id.iv_online_state_family_item) as ImageView
+                onlineState.setImageResource(
+                    if (data.value) R.drawable.online_state_green else R.drawable.online_state_gray
+                )
+            }
+        }
     }
 }

@@ -19,9 +19,13 @@ import com.alight.android.aoa_launcher.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.permissionx.guolindev.PermissionX
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.item_family.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -217,7 +221,11 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             //网络请求成功后的结果 让对应视图进行刷新
             if (any is TokenPair) {
                 tokenPair = any
-                iv_user_icon_launcher.setImageResource(if (any.gender == 0 || any.gender == 1) R.drawable.splash_girl else R.drawable.splash_boy)
+                Glide.with(this@LauncherActivity)
+                    .load(if (tokenPair?.gender == 2) R.drawable.splash_boy else R.drawable.splash_girl)
+//                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+//                    .error()
+                    .into(iv_user_icon_launcher)
                 tv_user_name_launcher.text = any.name
             }
         }

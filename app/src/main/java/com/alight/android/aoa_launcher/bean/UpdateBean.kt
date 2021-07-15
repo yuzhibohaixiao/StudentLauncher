@@ -1,3 +1,4 @@
+
 data class UpdateBean(
     val code: Int,
     val data: List<Data>,
