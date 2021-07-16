@@ -6,9 +6,11 @@ import android.view.View
 import android.widget.TextView
 import com.alight.android.aoa_launcher.R
 
+/**
+ * 二次确认弹窗
+ */
 class ConfirmDialog(context: Context) :
     Dialog(context, R.style.custom_dialog) {
-
     private var view: View = View.inflate(context, R.layout.dialog_confirm, null)
 
     init {

@@ -1,20 +1,18 @@
 package com.alight.android.aoa_launcher.activity
 
-import com.alight.android.aoa_launcher.bean.ParentOnlineState
 import android.content.Intent
 import android.provider.Settings
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.adapter.PersonalCenterFamilyAdapter
 import com.alight.android.aoa_launcher.base.BaseActivity
 import com.alight.android.aoa_launcher.bean.DeviceRelationBean
 import com.alight.android.aoa_launcher.bean.FamilyInfoBean
+import com.alight.android.aoa_launcher.bean.ParentOnlineState
 import com.alight.android.aoa_launcher.bean.TokenPair
-import com.alight.android.aoa_launcher.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.urls.Urls
 import com.alight.android.aoa_launcher.utils.AccountUtil
@@ -115,6 +113,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onError(error: String) {
+        ToastUtils.showShort(this, error)
     }
 
     override fun onClick(v: View) {
@@ -157,6 +156,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                                 ),
                                 DeviceRelationBean::class.java
                             )
+                            confirmDialog.dismiss()
                         }
                     })
                     confirmDialog.show()
