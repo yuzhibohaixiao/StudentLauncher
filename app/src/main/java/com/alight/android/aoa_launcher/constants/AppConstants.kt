@@ -8,6 +8,9 @@ class AppConstants {
         const val OTHER_APP = "other_app"
         const val NEW_USER = "new_user"
 
+        //家庭id
+        const val FAMILY_ID = "family_id"
+
         const val USER_ID = "user_id"
 
         //AOA星仔伴学包名

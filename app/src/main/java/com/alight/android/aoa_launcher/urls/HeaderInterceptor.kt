@@ -5,6 +5,7 @@ import com.alight.android.aoa_launcher.utils.SPUtils
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
+import java.io.IOException
 
 /**
  * @author wangzhe

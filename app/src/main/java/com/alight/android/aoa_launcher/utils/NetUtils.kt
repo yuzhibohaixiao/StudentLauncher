@@ -1,5 +1,7 @@
 package com.alight.android.aoa_launcher.utils
 
+import android.net.MacAddress.fromString
+import android.os.ParcelUuid.fromString
 import com.alight.android.aoa_launcher.apiservice.Apiservice
 import com.alight.android.aoa_launcher.urls.HeaderInterceptor
 import com.alight.android.aoa_launcher.urls.Urls
@@ -11,6 +13,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,6 +25,8 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLConnection
+import java.nio.file.attribute.PosixFilePermissions.fromString
+import java.util.UUID.fromString
 import java.util.concurrent.TimeUnit
 import java.util.regex.Matcher
 import java.util.regex.Pattern

@@ -17,5 +17,9 @@ object Urls {
     //家庭信息
     const val FAMILY_INFO = "/family/v1/student/families"
 
+    //家长在线状态
     const val PARENT_ONLINE_STATE = "/state/v1/state/online"
+
+    //设备解绑
+    const val DEVICE_RELATION = "/device_relation"
 }
