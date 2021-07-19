@@ -21,6 +21,7 @@ import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.networkbench.agent.impl.NBSAppAgent
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -132,6 +133,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                 try {
                                     GlobalScope.launch(Dispatchers.IO) {
                                         val tokenPair = allUser[position]
+                                        NBSAppAgent.setUserIdentifier(tokenPair.userId.toString())
                                         SPUtils.syncPutData(
                                             AppConstants.USER_ID,
                                             tokenPair.userId

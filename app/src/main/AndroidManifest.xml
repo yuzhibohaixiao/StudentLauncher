@@ -46,7 +46,7 @@
             </intent-filter>
             <!--请添加这里的整个intent-filter区块，并确保其中只有一个data字段-->
             <intent-filter>
-                <data android:scheme="tingyun.101148" />
+                <data android:scheme="tingyun.42759" />
                 <!--请将 scheme 中的“tingyun.xxxx”替换为听云报表设置页面中的 URL Scheme-->
                 <action android:name="android.intent.action.VIEW" />
 

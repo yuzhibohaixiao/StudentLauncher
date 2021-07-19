@@ -22,8 +22,15 @@ class LauncherApplication : Application() {
 
     private fun init() {
         //初始化听云sdk
-        NBSAppAgent.setLicenseKey("32c1f7c04eb64c3c95e1c4cd9625aa65")
-            .start(this);//Appkey 请从官网获取
+//        NBSAppAgent.setLicenseKey("32c1f7c04eb64c3c95e1c4cd9625aa65")
+//            .start(this);//Appkey 请从官网获取
+//        NBSAppAgent.setLicenseKey("32c1f7c04eb64c3c95e1c4cd9625aa65").setStartOption(511)
+//            .start(applicationContext);//首次初始化开启全部功能
+        NBSAppAgent.setLicenseKey("3fb997c80057422098756e2ec4303bb5")
+            .withLocationServiceEnabled(true).enableLogging(true).setStartOption(511)
+            .start(applicationContext);//首次初始化开启全部功能
+//        NBSAppAgent.setLicenseKey("32c1f7c04eb64c3c95e1c4cd9625aa65").setHttpEnabled(true)
+//            .startInApplication(this.applicationContext);
         //XUpdate全局初始化
         XUpdate.get()
             .debug(true)
