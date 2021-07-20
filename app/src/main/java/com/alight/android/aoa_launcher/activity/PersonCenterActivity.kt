@@ -118,6 +118,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             is DeviceRelationBean -> {
                 ToastUtils.showShort(this, any.data)
+                //重新绑定
+                var intent = Intent(this, SplashActivity::class.java)
+                intent.putExtra("rebinding", true)
+                startActivity(intent)
             }
         }
     }

@@ -62,12 +62,21 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         tv_next_launcher_splash.setOnClickListener(this)
         tv_next_launcher_splash2.setOnClickListener(this)
         tv_skip_splash.setOnClickListener(this)
+        ll_no_child_splash.setOnClickListener(this)
     }
 
     override fun initData() {
+        //仅重选用户
         val onlyShowSelectChild = SPUtils.getData("onlyShowSelectChild", false) as Boolean
+        //开启用户引导
         val openUserSplash = intent.getBooleanExtra("openUserSplash", false)
+        //重新绑定
+        val isRebinding = intent.getBooleanExtra("rebinding", false)
         when {
+            isRebinding -> {
+                fl_splash1.visibility = View.GONE
+                ll_splash2.visibility = View.GONE
+            }
             openUserSplash -> {   //直接跳转到用户引导
                 fl_splash1.visibility = View.GONE
                 openUserSplash()
@@ -332,6 +341,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_next_launcher_splash2, R.id.tv_skip_splash -> {
                 closeSplash()
+            }
+            R.id.ll_no_child_splash -> {
+                showChildUser()
             }
         }
     }
