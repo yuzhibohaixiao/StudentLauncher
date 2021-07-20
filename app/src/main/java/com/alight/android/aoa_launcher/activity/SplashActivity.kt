@@ -47,7 +47,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        showQRCode()
+//        showQRCode()
     }
 
     //初始化控件
@@ -74,8 +74,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         val isRebinding = intent.getBooleanExtra("rebinding", false)
         when {
             isRebinding -> {
-                fl_splash1.visibility = View.GONE
-                ll_splash2.visibility = View.GONE
+                showQRCode()
             }
             openUserSplash -> {   //直接跳转到用户引导
                 fl_splash1.visibility = View.GONE
@@ -132,6 +131,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                             ll_no_child_splash.visibility = View.VISIBLE
                             rv_select_child_splash.visibility = View.GONE
                         } else {
+                            ll_no_child_splash.visibility = View.GONE
+                            rv_select_child_splash.visibility = View.VISIBLE
                             rv_select_child_splash.layoutManager = LinearLayoutManager(
                                 this@SplashActivity,
                                 RecyclerView.HORIZONTAL, false

@@ -8,6 +8,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.text.TextUtils
+import com.alight.android.aoa_launcher.common.bean.TokenManagerException
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.db.DbOpenHelper
 import com.alight.android.aoa_launcher.utils.AccountUtil
@@ -89,19 +90,23 @@ class LauncherContentProvider : ContentProvider() {
         val uri2 = runBlocking {
             delete(URI, null, null)
             GlobalScope.async(Dispatchers.IO) {
-                val tokenPair = AccountUtil.getToken()
-                val contentValues = ContentValues()
-                contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN, tokenPair.token)
-                contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR, tokenPair.avatar)
-                contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_NAME, tokenPair.name)
-                contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID, tokenPair.userId)
-                contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER, tokenPair.gender)
-                contentValues.put(
-                    AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME,
-                    tokenPair.expireTime
-                )
-                //将登陆的用户数据插入保存
-                insert(URI, contentValues)
+                try {
+                    val tokenPair = AccountUtil.getToken()
+                    val contentValues = ContentValues()
+                    contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN, tokenPair.token)
+                    contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR, tokenPair.avatar)
+                    contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_NAME, tokenPair.name)
+                    contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID, tokenPair.userId)
+                    contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER, tokenPair.gender)
+                    contentValues.put(
+                        AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME,
+                        tokenPair.expireTime
+                    )
+                    //将登陆的用户数据插入保存
+                    insert(URI, contentValues)
+                } catch (e: TokenManagerException) {
+                    e.printStackTrace()
+                }
             }.await()
         }
         require(!TextUtils.isEmpty(tableName)) { "Unsupported URI:$uri" }
