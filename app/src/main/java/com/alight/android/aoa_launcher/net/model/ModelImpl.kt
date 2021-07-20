@@ -2,6 +2,7 @@ package com.alight.android.aoa_launcher.net.model
 
 import com.alight.android.aoa_launcher.net.contract.IContract
 import com.alight.android.aoa_launcher.utils.NetUtils
+import okhttp3.RequestBody
 
 /**
  * model层的实现
@@ -11,7 +12,12 @@ import com.alight.android.aoa_launcher.utils.NetUtils
 class ModelImpl : IContract.IModel {
 
     //不实现接口的话可以自己来写
-    override fun <T> getNetInfo(url: String, map: HashMap<String, Any>, cls: Class<T>, callback: NetUtils.NetCallback) {
+    override fun <T> getNetInfo(
+        url: String,
+        map: HashMap<String, Any>,
+        cls: Class<T>,
+        callback: NetUtils.NetCallback
+    ) {
         //调用NetUtil中的网络请求
         NetUtils.intance.getInfo(url, map, cls, object : NetUtils.NetCallback {
             override fun onSuccess(any: Any) {
@@ -26,9 +32,13 @@ class ModelImpl : IContract.IModel {
     }
 
     //不实现接口的话可以自己来写
-    override fun <T> deleteNetInfo(url: String, map: HashMap<String, Any>, cls: Class<T>, callback: NetUtils.NetCallback) {
+    override fun <T> deleteNetInfo(
+        requestBody: RequestBody,
+        cls: Class<T>,
+        callback: NetUtils.NetCallback
+    ) {
         //调用NetUtil中的网络请求
-        NetUtils.intance.deleteInfo(url, map, cls, object : NetUtils.NetCallback {
+        NetUtils.intance.deleteInfo(requestBody, cls, object : NetUtils.NetCallback {
             override fun onSuccess(any: Any) {
                 //回调到Presenter层
                 callback.onSuccess(any)

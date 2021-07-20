@@ -9,6 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -94,12 +95,11 @@ class NetUtils private constructor() {
 
     //具体的网络请求实现类
     fun <T> deleteInfo(
-        url: String,
-        map: HashMap<String, Any>,
+        requestBody: RequestBody,
         cls: Class<T>,
         callback: NetCallback
     ) {
-        apiService.deleteAllInfo(url, map).subscribeOn(Schedulers.io())
+        apiService.deleteAllInfo(requestBody).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<ResponseBody> {
                 override fun onComplete() {

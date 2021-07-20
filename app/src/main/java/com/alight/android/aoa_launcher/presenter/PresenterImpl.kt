@@ -46,6 +46,7 @@ import com.xuexiang.xupdate.easy.EasyUpdate
 import com.xuexiang.xupdate.entity.UpdateEntity
 import com.xuexiang.xupdate.listener.IUpdateParseCallback
 import com.xuexiang.xupdate.proxy.IUpdateParser
+import okhttp3.RequestBody
 import java.util.*
 
 /**
@@ -71,9 +72,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         })
     }
 
-    fun <T> deleteModel(url: String, map: HashMap<String, Any>, cls: Class<T>) {
+    fun <T> deleteModel(requestBody: RequestBody, cls: Class<T>) {
         //调用model
-        getModel().deleteNetInfo(url, map, cls, object : NetUtils.NetCallback {
+        getModel().deleteNetInfo(requestBody, cls, object : NetUtils.NetCallback {
             //model层回调给Presenter层级
             override fun onSuccess(any: Any) {
                 //希望在View层进行视图的刷新

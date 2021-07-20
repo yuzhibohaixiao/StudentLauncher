@@ -21,8 +21,11 @@ import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
+import com.alight.android.aoa_launcher.utils.toJson
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_personal_center.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 
 class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
@@ -169,10 +172,12 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                         //点击确认
                         override fun onConfirmClick() {
                             getPresenter().deleteModel(
-                                Urls.DEVICE_RELATION,
-                                hashMapOf<String, Any>(
-                                    "family_id" to familyId!!,
-                                    "dsn" to AccountUtil.getDSN()
+                                RequestBody.create(
+                                    MediaType.get("application/json; charset=utf-8"),
+                                    mapOf(
+                                        "family_id" to familyId,
+                                        "dsn" to AccountUtil.DSN
+                                    ).toJson()
                                 ),
                                 DeviceRelationBean::class.java
                             )

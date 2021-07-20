@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher.net.contract
 
 import com.alight.android.aoa_launcher.utils.NetUtils
+import okhttp3.RequestBody
 
 /**
  * @author wangzhe
@@ -19,8 +20,7 @@ interface IContract {
         )
 
         fun <T> deleteNetInfo(
-            url: String,
-            map: HashMap<String, Any>,
+            requestBody: RequestBody,
             cls: Class<T>,
             callback: NetUtils.NetCallback
         )
