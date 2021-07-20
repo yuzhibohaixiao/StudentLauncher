@@ -7,8 +7,6 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.alight.ahwcx.ahwsdk.AbilityManager
-import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.ui.adapter.PersonalCenterFamilyAdapter
 import com.alight.android.aoa_launcher.common.base.BaseActivity
@@ -32,8 +30,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private lateinit var familyAdapter: PersonalCenterFamilyAdapter
     private var familyId: Int? = null
     private val USER_LOGOUT_ACTION = "com.alight.android.user_logout" // 自定义ACTION
-    private val abilityManager = AbilityManager("launcher", "3", "123")
-    private var calibrationAbility: CalibrationAbility? = null
+//    private val abilityManager = AbilityManager("launcher", "3", "123")
+//    private var calibrationAbility: CalibrationAbility? = null
 
     override fun initView() {
         familyAdapter = PersonalCenterFamilyAdapter()
@@ -77,9 +75,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             HashMap(),
             FamilyInfoBean::class.java
         )
-        calibrationAbility =
-            abilityManager.getAbility(CalibrationAbility::class.java, true, applicationContext)
-        calibrationAbility?.bindLooper(Looper.myLooper()!!)
+//        calibrationAbility =
+//            abilityManager.getAbility(CalibrationAbility::class.java, true, applicationContext)
+//        calibrationAbility?.bindLooper(Looper.myLooper()!!)
     }
 
     override fun setListener() {
@@ -147,8 +145,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 SPUtils.syncPutData("onlyShowSelectChild", true)
                 startActivity(Intent(this, SplashActivity::class.java))
             }
-            R.id.tv_focus ->
-                calibrationAbility?.startCalibration()
+            R.id.tv_focus -> {
+//                calibrationAbility?.startCalibration()
+            }
             R.id.tv_wifi ->
                 startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
             R.id.tv_set -> {
@@ -226,6 +225,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        abilityManager.onStop()
+//        abilityManager.onStop()
     }
 }

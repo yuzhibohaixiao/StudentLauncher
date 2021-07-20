@@ -62,11 +62,11 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             //model层回调给Presenter层级
             override fun onSuccess(any: Any) {
                 //希望在View层进行视图的刷新
-                getView().onSuccess(any)
+                getView()?.onSuccess(any)
             }
 
             override fun onError(error: String) {
-                getView().onError(error)
+                getView()?.onError(error)
             }
         })
     }
@@ -77,11 +77,11 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             //model层回调给Presenter层级
             override fun onSuccess(any: Any) {
                 //希望在View层进行视图的刷新
-                getView().onSuccess(any)
+                getView()?.onSuccess(any)
             }
 
             override fun onError(error: String) {
-                getView().onError(error)
+                getView()?.onError(error)
             }
         })
     }
@@ -502,7 +502,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                         boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME)
                     )
                 )
-                getView().onSuccess(
+                getView()?.onSuccess(
                     TokenPair(
                         boyCursor.getInt(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID)),
                         boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN)),

@@ -35,8 +35,10 @@ abstract class BasePresenter<V : IContract.IView> : IContract.IPresenter {
     }
 
     //返回一个View的引用
-    fun getView(): V {
-        return weakReference.get()!!
+    fun getView(): V? {
+        return if (weakReference.get() != null) {
+            weakReference.get()!!
+        } else null
     }
 
 }
