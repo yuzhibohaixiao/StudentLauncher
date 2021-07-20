@@ -1,9 +1,5 @@
 package com.alight.android.aoa_launcher.utils
 
-import android.util.Log
-import com.qweather.sdk.c.c
-import java.lang.reflect.Array.get
-import java.nio.file.Paths.get
 import java.util.*
 
 /**

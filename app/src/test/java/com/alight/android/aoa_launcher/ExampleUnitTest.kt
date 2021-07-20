@@ -1,10 +1,8 @@
 package com.alight.android.aoa_launcher
 
-import com.alight.android.aoa_launcher.utils.AccountUtil
 import org.junit.Test
 
 import org.junit.Assert.*
-import java.lang.Thread.sleep
 
 /**
  * Example local unit test, which will execute on the development machine (host).

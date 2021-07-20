@@ -1,13 +1,11 @@
 package com.alight.android.aoa_launcher.utils;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.alight.android.aoa_launcher.apiservice.Apiservice;
-import com.alight.android.aoa_launcher.listener.DownloadListener;
-import com.alight.android.aoa_launcher.urls.Urls;
+import com.alight.android.aoa_launcher.net.apiservice.Apiservice;
+import com.alight.android.aoa_launcher.common.listener.DownloadListener;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

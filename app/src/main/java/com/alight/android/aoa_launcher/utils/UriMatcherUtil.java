@@ -9,7 +9,7 @@ public class UriMatcherUtil {
      */
     public static final int CODE_ID_1 = 1;
     public static final int CODE_ID_2 = 2;
-    public static final String HOST = "com.alight.android.aoa_launcher.provider.LauncherContentProvider";
+    public static final String HOST = "com.alight.android.aoa_launcher.common.provider.LauncherContentProvider";
     /**
      * 路径
      */

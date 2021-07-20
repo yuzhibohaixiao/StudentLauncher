@@ -60,9 +60,14 @@
 
         <!-- android:exported设置为true，表示其他应用可以访问，否则不可以访问 -->
         <provider
-            android:name=".provider.LauncherContentProvider"
-            android:authorities="com.alight.android.aoa_launcher.provider.LauncherContentProvider"
+            android:name="com.alight.android.aoa_launcher.common.provider.LauncherContentProvider"
+            android:authorities="com.alight.android.aoa_launcher.common.provider.LauncherContentProvider"
             android:exported="true" />
+        <receiver android:name=".common.broadcast.LogoutBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.alight.android.user_logout" />
+            </intent-filter>
+        </receiver>
     </application>
 
 

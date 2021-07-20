@@ -1,28 +1,24 @@
 package com.alight.android.aoa_launcher.utils
 
 import android.util.Log
-import com.alight.android.aoa_launcher.apiservice.AccountService
-import com.alight.android.aoa_launcher.bean.TokenManagerException
-import com.alight.android.aoa_launcher.bean.TokenMessage
-import com.alight.android.aoa_launcher.bean.TokenPair
-import com.alight.android.aoa_launcher.i.LauncherListener
-import com.alight.android.aoa_launcher.i.LauncherProvider
-import com.alight.android.aoa_launcher.urls.Urls
+import com.alight.android.aoa_launcher.net.apiservice.AccountService
+import com.alight.android.aoa_launcher.common.bean.TokenManagerException
+import com.alight.android.aoa_launcher.common.bean.TokenMessage
+import com.alight.android.aoa_launcher.common.bean.TokenPair
+import com.alight.android.aoa_launcher.common.i.LauncherListener
+import com.alight.android.aoa_launcher.common.i.LauncherProvider
+import com.alight.android.aoa_launcher.net.urls.Urls
 import com.google.gson.Gson
 import com.google.gson.JsonParser
-import com.google.gson.reflect.TypeToken
 import io.socket.client.IO
 import io.socket.client.Manager
 import io.socket.client.Socket
 import okhttp3.MediaType
 import okhttp3.RequestBody
-import okhttp3.Response
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 import java.net.URI
 

@@ -7,19 +7,19 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.android.aoa_launcher.R
-import com.alight.android.aoa_launcher.adapter.PersonalCenterFamilyAdapter
-import com.alight.android.aoa_launcher.base.BaseActivity
-import com.alight.android.aoa_launcher.bean.DeviceRelationBean
-import com.alight.android.aoa_launcher.bean.FamilyInfoBean
-import com.alight.android.aoa_launcher.bean.ParentOnlineState
-import com.alight.android.aoa_launcher.bean.TokenPair
+import com.alight.android.aoa_launcher.ui.adapter.PersonalCenterFamilyAdapter
+import com.alight.android.aoa_launcher.common.base.BaseActivity
+import com.alight.android.aoa_launcher.common.bean.DeviceRelationBean
+import com.alight.android.aoa_launcher.common.bean.FamilyInfoBean
+import com.alight.android.aoa_launcher.common.bean.ParentOnlineState
+import com.alight.android.aoa_launcher.common.bean.TokenPair
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
-import com.alight.android.aoa_launcher.urls.Urls
+import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
-import com.alight.android.aoa_launcher.view.ConfirmDialog
-import com.alight.android.aoa_launcher.view.CustomDialog
+import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
+import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_personal_center.*
 
@@ -28,6 +28,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private var tokenPair: TokenPair? = null
     private lateinit var familyAdapter: PersonalCenterFamilyAdapter
     private var familyId: Int? = null
+    private val USER_LOGOUT_ACTION = "com.alight.android.user_logout" // 自定义ACTION
+
 
     override fun initView() {
         familyAdapter = PersonalCenterFamilyAdapter()
@@ -116,12 +118,24 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         ToastUtils.showShort(this, error)
     }
 
+    /**
+     * 发送用户登出的广播
+     */
+    private fun sendSendUserLogoutBroadcast() {
+        val intent = Intent()
+        intent.action = USER_LOGOUT_ACTION
+        intent.putExtra("message", "用户登出！") // 设置广播的消息
+        sendBroadcast(intent)
+
+    }
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.ll_back_personal_center ->
                 finish()
             //用户登出
             R.id.ll_exit_personal_center -> {
+                sendSendUserLogoutBroadcast()
                 finish()
                 SPUtils.syncPutData("onlyShowSelectChild", true)
                 startActivity(Intent(this, SplashActivity::class.java))

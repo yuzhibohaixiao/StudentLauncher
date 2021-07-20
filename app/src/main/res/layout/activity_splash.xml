@@ -136,7 +136,7 @@
         android:layout_marginStart="98dp"
         android:orientation="horizontal">
 
-        <com.alight.android.aoa_launcher.view.ShadowContainer
+        <com.alight.android.aoa_launcher.ui.view.ShadowContainer
             android:id="@+id/sc_next_launcher_splash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -158,9 +158,9 @@
                 android:textColor="@color/launcher_purple"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-        </com.alight.android.aoa_launcher.view.ShadowContainer>
+        </com.alight.android.aoa_launcher.ui.view.ShadowContainer>
 
-        <com.alight.android.aoa_launcher.view.ShadowContainer
+        <com.alight.android.aoa_launcher.ui.view.ShadowContainer
             android:id="@+id/sc_next_launcher_splash2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                 android:textColor="@color/launcher_purple"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-        </com.alight.android.aoa_launcher.view.ShadowContainer>
+        </com.alight.android.aoa_launcher.ui.view.ShadowContainer>
 
     </LinearLayout>
 
