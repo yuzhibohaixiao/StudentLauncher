@@ -92,6 +92,42 @@ class NetUtils private constructor() {
             })
     }
 
+    //具体的网络请求实现类
+    fun <T> deleteInfo(
+        url: String,
+        map: HashMap<String, Any>,
+        cls: Class<T>,
+        callback: NetCallback
+    ) {
+        apiService.deleteAllInfo(url, map).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ResponseBody> {
+                override fun onComplete() {
+
+                }
+
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onNext(t: ResponseBody) {
+                    var gson = Gson()
+                    var any = gson.fromJson(t.string(), cls)
+                    if (callback != null && any != null) {
+                        //回调到model层
+                        callback.onSuccess(any)
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    if (callback != null) {
+                        callback.onError(e.message!!)
+                    }
+                }
+
+            })
+    }
+
     fun isNet(): Boolean {
         return false
     }

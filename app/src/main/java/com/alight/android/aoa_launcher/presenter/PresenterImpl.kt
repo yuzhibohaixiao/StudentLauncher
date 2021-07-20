@@ -71,6 +71,21 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         })
     }
 
+    fun <T> deleteModel(url: String, map: HashMap<String, Any>, cls: Class<T>) {
+        //调用model
+        getModel().deleteNetInfo(url, map, cls, object : NetUtils.NetCallback {
+            //model层回调给Presenter层级
+            override fun onSuccess(any: Any) {
+                //希望在View层进行视图的刷新
+                getView().onSuccess(any)
+            }
+
+            override fun onError(error: String) {
+                getView().onError(error)
+            }
+        })
+    }
+
     /**
      *  初始化天气服务
      */
@@ -311,8 +326,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 appType == AppConstants.MEDIA_APP && mediaAppPackageNames.contains(packageName) -> {
                     datas.add(
                         AppBean(
-                            resolveInfo.loadLabel(packageManager)
-                            , packageName,
+                            resolveInfo.loadLabel(packageManager), packageName,
                             resolveInfo.loadIcon(packageManager)
                         )
                     )
@@ -320,8 +334,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 appType == AppConstants.GAME_APP && gameAppPackageNames.contains(packageName) -> {
                     datas.add(
                         AppBean(
-                            resolveInfo.loadLabel(packageManager)
-                            , packageName,
+                            resolveInfo.loadLabel(packageManager), packageName,
                             resolveInfo.loadIcon(packageManager)
                         )
                     )
@@ -331,8 +344,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 ) -> {
                     datas.add(
                         AppBean(
-                            resolveInfo.loadLabel(packageManager)
-                            , packageName,
+                            resolveInfo.loadLabel(packageManager), packageName,
                             resolveInfo.loadIcon(packageManager)
                         )
                     )
@@ -345,8 +357,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 -> {
                     datas.add(
                         AppBean(
-                            resolveInfo.loadLabel(packageManager)
-                            , packageName,
+                            resolveInfo.loadLabel(packageManager), packageName,
                             resolveInfo.loadIcon(packageManager)
                         )
                     )

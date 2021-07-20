@@ -66,7 +66,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         //定位后获取天气
         getPresenter().getLocationAndWeather()
         //获取App和系统固件更新
-        getPresenter().updateAppAndSystem()
+//        getPresenter().updateAppAndSystem()
     }
 
     private var uri: Uri? = null

@@ -178,7 +178,7 @@
                     android:drawablePadding="8dp"
                     android:gravity="center_horizontal"
                     android:paddingTop="14.5dp"
-                    android:text="光机对焦"
+                    android:text="镜头校准"
                     android:textColor="@color/white"
                     android:textSize="8sp" />
 

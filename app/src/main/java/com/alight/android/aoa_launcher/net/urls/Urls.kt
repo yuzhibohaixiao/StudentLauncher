@@ -21,5 +21,5 @@ object Urls {
     const val PARENT_ONLINE_STATE = "/state/v1/state/online"
 
     //设备解绑
-    const val DEVICE_RELATION = "/device_relation"
+    const val DEVICE_RELATION = "/family/v1/device_relation"
 }

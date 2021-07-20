@@ -17,6 +17,13 @@ interface IContract {
             cls: Class<T>,
             callback: NetUtils.NetCallback
         )
+
+        fun <T> deleteNetInfo(
+            url: String,
+            map: HashMap<String, Any>,
+            cls: Class<T>,
+            callback: NetUtils.NetCallback
+        )
     }
 
     //View视图层

@@ -29,7 +29,7 @@ android {
     }
     defaultConfig {
         applicationId "com.alight.android.aoa_launcher"
-        minSdkVersion 17
+        minSdkVersion 25
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -64,6 +64,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation files('libs/QWeather_Public_Android_V4.5.jar')
+    implementation files('libs/bridge-release-v0.1.0-20210720.aar')
+    implementation files('libs/ahwsdk-release-v0.1.0-20210720.aar')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
