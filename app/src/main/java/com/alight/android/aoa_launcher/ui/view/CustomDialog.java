@@ -3,6 +3,8 @@ package com.alight.android.aoa_launcher.ui.view;
 import android.app.Dialog;
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import com.alight.android.aoa_launcher.R;
 
 public class CustomDialog extends Dialog {
@@ -18,4 +20,11 @@ public class CustomDialog extends Dialog {
         //点击外部不可消失
         //setCancelable(false);
     }
+
+    @Override
+    public void setOnKeyListener(@Nullable OnKeyListener onKeyListener) {
+        super.setOnKeyListener(onKeyListener);
+        dismiss();
+    }
+
 }

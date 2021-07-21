@@ -323,6 +323,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         for (position in apps.indices) {
             val resolveInfo = apps[position]
             val packageName = resolveInfo.activityInfo.applicationInfo.packageName
+            Log.i(TAG, "getAppData: ${resolveInfo.loadLabel(packageManager)} packageName${packageName} ")
             when {
                 appType == AppConstants.MEDIA_APP && mediaAppPackageNames.contains(packageName) -> {
                     datas.add(
@@ -379,7 +380,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         //根据实际页数对数据进行封装
         for (pageNumber in 1..totalPageSize) {
             pageItems = if (pageNumber >= totalPageSize) {
-                datas.subList(startPage, if (datas.size - 1 <= 1) 1 else datas.size)
+                datas.subList(startPage, if (datas.size - 1 < 1) 1 else datas.size)
             } else {
                 datas.subList(startPage, pageNumber * pageSize)
             }
@@ -389,7 +390,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         return maps
     }
 
-    fun showDialog(appType: String) {
+    fun showDialog(dialog: CustomDialog, appType: String) {
         val activity = getView() as LauncherActivity
         val appBeans: List<List<AppBean>> = getAppData(appType, activity)
         if (appBeans.isEmpty()) {
@@ -403,8 +404,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             )
 
         val launcherActivity = getView() as LauncherActivity
-        //弹出自定义dialog
-        var dialog = CustomDialog(launcherActivity, R.layout.dialog_app_launcher)
+
         val viewPager = dialog.findViewById<ViewPager>(R.id.horizontalScrollView)
         val circlePageIndicator = dialog.findViewById<CirclePageIndicator>(R.id.circleIndicator)
         viewPager.adapter = scrollAdapter

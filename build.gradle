@@ -9,6 +9,8 @@ buildscript {
     ext.room_version = "2.2.5"
     ext.camerax_version = "1.0.0-beta07"
     ext.rxandroid_version = "2.0.2"
+    ext.tingyun_sdk_version = '2.15.6'//听云SDK版本
+    ext.tingyun_ndk_version = '2.0.3'//听云NDK版本
 
     repositories {
         mavenCentral()
@@ -20,7 +22,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.networkbench.newlens.agent.android:agent-gradle-plugin:2.14.10'
+        classpath "com.networkbench:tingyun-ea-agent-android-gradle-plugin:$tingyun_sdk_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -31,7 +33,7 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
-        maven { url "http://nexus2.tingyun.com/nexus/content/repositories/snapshots/" }
+        maven { url "http://nexus2.tingyun.com/nexus/content/repositories/snapshots/"}
     }
 }
 

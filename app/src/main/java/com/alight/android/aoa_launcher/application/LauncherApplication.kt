@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.networkbench.agent.impl.NBSAppAgent
+import com.networkbench.nbslens.nbsnativecrashlib.NBSNativeCrash
 import com.tencent.mmkv.MMKV
 import com.xuexiang.xupdate.XUpdate
 import com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION
@@ -22,15 +23,12 @@ class LauncherApplication : Application() {
 
     private fun init() {
         //初始化听云sdk
-//        NBSAppAgent.setLicenseKey("32c1f7c04eb64c3c95e1c4cd9625aa65")
-//            .start(this);//Appkey 请从官网获取
-//        NBSAppAgent.setLicenseKey("32c1f7c04eb64c3c95e1c4cd9625aa65").setStartOption(511)
-//            .start(applicationContext);//首次初始化开启全部功能
-        NBSAppAgent.setLicenseKey("3fb997c80057422098756e2ec4303bb5")
+        //"Host" 为听云平台「Redirect」服务器地址，无需添加协议头
+        NBSAppAgent.setLicenseKey("32c1f7c04eb64c3c95e1c4cd9625aa65")
+            .setRedirectHost("wkrd.tingyun.com")
             .withLocationServiceEnabled(true).enableLogging(true).setStartOption(511)
-            .start(applicationContext);//首次初始化开启全部功能
-//        NBSAppAgent.setLicenseKey("32c1f7c04eb64c3c95e1c4cd9625aa65").setHttpEnabled(true)
-//            .startInApplication(this.applicationContext);
+//            .setHttpEnabled(true)
+            .startInApplication(applicationContext);//首次初始化开启全部功能
         //XUpdate全局初始化
         XUpdate.get()
             .debug(true)

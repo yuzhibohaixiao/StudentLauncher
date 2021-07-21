@@ -16,6 +16,7 @@ import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.i.LauncherListener
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
+import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
@@ -28,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.util.*
 
 
@@ -38,6 +40,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
     private var tokenPair: TokenPair? = null
     private var TAG = "LauncherActivity"
+    private var dialog: CustomDialog? = null
 
     override fun onResume() {
         super.onResume()
@@ -147,19 +150,22 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
 
     private fun initAccountUtil() {
-
         AccountUtil.register(this)
         val userId = SPUtils.getData(AppConstants.USER_ID, -1) as Int
         if (userId != -1) {
             GlobalScope.launch(Dispatchers.IO) {
-                val allToken = AccountUtil.getAllToken()
-                allToken.forEach {
-                    if (it.userId == userId) {
-                        AccountUtil.selectUser(it.userId)
+                try {
+                    val allToken = AccountUtil.getAllToken()
+                    allToken.forEach {
+                        if (it.userId == userId) {
+                            AccountUtil.selectUser(it.userId)
+                        }
                     }
+                    //设置用户信息
+                    getPresenter().setPersonInfo(this@LauncherActivity)
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-                //设置用户信息
-                getPresenter().setPersonInfo(this@LauncherActivity)
             }
 
         }
@@ -246,16 +252,21 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         iv_weather_launcher.setImageResource(weatherIcon)
     }
 
-    override fun onClick(view: View) {
+    override fun onClick(view: View) {    //弹出自定义dialog
+        if (dialog == null)
+            dialog = CustomDialog(this, R.layout.dialog_app_launcher)
         when (view.id) {
             //教育
-            R.id.iv_education_launcher -> getPresenter().showDialog(AppConstants.EDUCATION_APP)
+            R.id.iv_education_launcher -> getPresenter().showDialog(
+                dialog!!,
+                AppConstants.EDUCATION_APP
+            )
             //游戏
-            R.id.iv_game_launcher -> getPresenter().showDialog(AppConstants.GAME_APP)
+            R.id.iv_game_launcher -> getPresenter().showDialog(dialog!!, AppConstants.GAME_APP)
             //其他
-            R.id.iv_other_launcher -> getPresenter().showDialog(AppConstants.OTHER_APP)
+            R.id.iv_other_launcher -> getPresenter().showDialog(dialog!!, AppConstants.OTHER_APP)
             //音视频
-            R.id.iv_video_launcher -> getPresenter().showDialog(AppConstants.MEDIA_APP)
+            R.id.iv_video_launcher -> getPresenter().showDialog(dialog!!, AppConstants.MEDIA_APP)
             //设置
             R.id.iv_setting_launcher -> getPresenter().showSystemSetting()
             // 打开应用市场（安智）
@@ -298,5 +309,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        dialog?.dismiss();
+    }
 
 }
