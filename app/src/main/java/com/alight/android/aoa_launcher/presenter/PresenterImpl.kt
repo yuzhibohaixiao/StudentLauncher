@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.activity.MoreDownloadActivity
 import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.common.base.BasePresenter
 import com.alight.android.aoa_launcher.common.bean.AppBean
@@ -323,7 +324,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         for (position in apps.indices) {
             val resolveInfo = apps[position]
             val packageName = resolveInfo.activityInfo.applicationInfo.packageName
-            Log.i(TAG, "getAppData: ${resolveInfo.loadLabel(packageManager)} packageName${packageName} ")
+            Log.i(
+                TAG,
+                "getAppData: ${resolveInfo.loadLabel(packageManager)} packageName${packageName} "
+            )
             when {
                 appType == AppConstants.MEDIA_APP && mediaAppPackageNames.contains(packageName) -> {
                     datas.add(
@@ -454,11 +458,14 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     fun updateAppAndSystem() {
         var activity = getView() as Activity
+        var intent = Intent(activity, MoreDownloadActivity::class.java)
+        activity.startActivity(intent)
+
         //XUpdate 更新
-        EasyUpdate.create(activity, Urls.BASEURL_TEST + Urls.UPDATE)
+        /* EasyUpdate.create(activity, Urls.BASEURL_TEST + Urls.UPDATE)
             .updateHttpService(AriaDownloader.getUpdateHttpService(activity))
             .updateParser(CustomUpdateParser(activity))
-            .update()
+            .update()*/
 
     }
 

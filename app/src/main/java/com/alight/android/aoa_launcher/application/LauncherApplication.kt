@@ -3,23 +3,38 @@ package com.alight.android.aoa_launcher.application
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import com.liulishuo.okdownload.DownloadTask
 import com.networkbench.agent.impl.NBSAppAgent
-import com.networkbench.nbslens.nbsnativecrashlib.NBSNativeCrash
 import com.tencent.mmkv.MMKV
 import com.xuexiang.xupdate.XUpdate
 import com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION
 import com.xuexiang.xupdate.utils.UpdateUtils
+import org.xutils.x
+import java.util.*
 
 
 class LauncherApplication : Application() {
     var TAG = "LauncherApplication"
+
+    companion object {
+        var downloadTaskHashMap = HashMap<String, DownloadTask>()
+            private set
+        private var context: Application? = null
+        fun getContext(): Context {
+            return context!!
+        }
+
+    }
+
     override fun onCreate() {
         super.onCreate()
         context = this
+        x.Ext.init(this)
         val rootDir = MMKV.initialize(this)
         Log.i(TAG, "mmkv root: $rootDir")
         init()
     }
+
 
     private fun init() {
         //初始化听云sdk
@@ -90,8 +105,4 @@ class LauncherApplication : Application() {
 
     }
 
-    companion object {
-        var context: Context? = null
-            private set
-    }
 }

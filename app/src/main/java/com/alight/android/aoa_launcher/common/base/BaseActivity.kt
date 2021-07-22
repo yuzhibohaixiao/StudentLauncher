@@ -20,7 +20,7 @@ abstract class BaseActivity : AppCompatActivity(), IContract.IView {
             setContentView(getLayout())
             //Presenter的初始化 希望父类实现
             mPresenter = initPresenter()
-            mPresenter!!.onAttach(this)
+            mPresenter?.onAttach(this)
             initView()
             setListener()
             initData()

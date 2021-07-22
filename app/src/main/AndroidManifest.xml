@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.alight.android.aoa_launcher"
-    android:sharedUserId="android.uid.system"
     >
 
     <!--   android:sharedUserId="android.uid.system"-->
@@ -70,6 +69,10 @@
                 <action android:name="com.alight.android.user_logout" />
             </intent-filter>
         </receiver>
+        <service android:name=".service.DownloadService" />
+        <activity
+            android:name=".activity.MoreDownloadActivity"
+            android:theme="@style/transparentStyle" />
     </application>
 
 

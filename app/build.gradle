@@ -138,4 +138,24 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    // okdownload多任务下载库core
+    implementation 'com.liulishuo.okdownload:okdownload:1.0.7-SNAPSHOT'
+    // provide sqlite to store breakpoints
+    implementation 'com.liulishuo.okdownload:sqlite:1.0.7-SNAPSHOT'
+    // provide okhttp to connect to backend
+    implementation 'com.liulishuo.okdownload:okhttp:1.0.7-SNAPSHOT'
+
+    // core
+    implementation "com.liulishuo.okdownload:okdownload:$okdownload_version"
+// provide sqlite to store breakpoints
+    implementation "com.liulishuo.okdownload:sqlite:$okdownload_version"
+// provide okhttp to connect to backend
+// and then please import okhttp dependencies by yourself
+    implementation "com.liulishuo.okdownload:okhttp:$okdownload_version"
+// provide interface to match filedownloader
+    implementation "com.liulishuo.okdownload:filedownloader:$okdownload_version"
+// provide interface for kotlin extension
+//    implementation "com.liulishuo.okdownload:ktx$okdownload_version"
+    implementation 'org.xutils:xutils:3.8.2'
 }

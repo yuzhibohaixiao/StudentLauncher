@@ -11,6 +11,7 @@ buildscript {
     ext.rxandroid_version = "2.0.2"
     ext.tingyun_sdk_version = '2.15.6'//听云SDK版本
     ext.tingyun_ndk_version = '2.0.3'//听云NDK版本
+    ext.okdownload_version = '1.0.7'//
 
     repositories {
         mavenCentral()
@@ -18,6 +19,7 @@ buildscript {
         jcenter()
         maven { url 'https://jitpack.io' }
         maven { url "http://nexus2.tingyun.com/nexus/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"
