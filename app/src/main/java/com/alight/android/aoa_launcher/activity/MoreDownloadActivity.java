@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alight.android.aoa_launcher.R;
 import com.alight.android.aoa_launcher.application.LauncherApplication;
 import com.alight.android.aoa_launcher.common.base.BaseActivity;
+import com.alight.android.aoa_launcher.common.bean.UpdateBean;
+import com.alight.android.aoa_launcher.common.bean.UpdateBeanData;
 import com.alight.android.aoa_launcher.common.db.DbHelper;
 import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
@@ -52,15 +54,21 @@ public class MoreDownloadActivity extends BaseActivity {
 
     private HashMap<String, DownloadReceiver> downloadReceiverMap = new HashMap<>();
     private List<File> list = new ArrayList<>();
-    private List<String> urlList = new ArrayList<>();
+    private List<UpdateBeanData> urlList = new ArrayList<>();
 
     @Override
     public void initData() {
-//        urlList.add("https://alight-apk.oss-cn-beijing.aliyuncs.com/update.zip");
-//        urlList.add("https://alight-apk.oss-cn-beijing.aliyuncs.com/update.zip");
-        urlList.add("https://alight-apk.oss-cn-beijing.aliyuncs.com/app-release.apk");
-        urlList.add("https://alight-apk.oss-cn-beijing.aliyuncs.com/app-debug.apk");
-//        initToolbar();
+
+        UpdateBeanData systemApp = (UpdateBeanData) getIntent().getSerializableExtra("system");
+        UpdateBeanData test_apk = (UpdateBeanData) getIntent().getSerializableExtra("test_apk");
+        UpdateBeanData aoa = (UpdateBeanData) getIntent().getSerializableExtra("aoa");
+        UpdateBeanData ahwc = (UpdateBeanData) getIntent().getSerializableExtra("ahwc");
+
+        urlList.add(systemApp);
+        urlList.add(test_apk);
+        urlList.add(aoa);
+        urlList.add(ahwc);
+
         checkExtrnalStorage();
         getData();
         recyclerView = findViewById(R.id.recyclerView);
@@ -123,7 +131,7 @@ public class MoreDownloadActivity extends BaseActivity {
             File file = new File();
             file.setId("" + i);
             file.setSeq(i);
-            file.setFileName(i + ".apk");
+            file.setFileName(urlList.get(i).getApp_name() + "升级包");
             if (downloadedFileIds.contains(file.getId())) {
                 File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
                 System.out.println(file1);
@@ -136,7 +144,7 @@ public class MoreDownloadActivity extends BaseActivity {
                 file.setCreateTime(new Date());
             }
             file.setFileType(".apk");
-            file.setUrl(urlList.get(i));
+            file.setUrl(urlList.get(i).getApp_url());
             list.add(file);
             IntentFilter filter = new IntentFilter();
             DownloadReceiver receiver = new DownloadReceiver();

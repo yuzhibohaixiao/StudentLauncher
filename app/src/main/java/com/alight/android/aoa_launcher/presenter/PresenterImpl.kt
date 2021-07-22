@@ -1,7 +1,5 @@
 package com.alight.android.aoa_launcher.presenter
 
-import Data
-import UpdateBean
 import android.Manifest
 import android.app.Activity
 import android.content.Context
@@ -14,23 +12,26 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
-import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.activity.MoreDownloadActivity
-import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.common.base.BasePresenter
-import com.alight.android.aoa_launcher.common.bean.AppBean
-import com.alight.android.aoa_launcher.common.bean.TokenPair
+import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
-import com.alight.android.aoa_launcher.net.contract.IContract
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
-import com.alight.android.aoa_launcher.net.urls.Urls
+import com.alight.android.aoa_launcher.net.contract.IContract
+import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
+import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
+import com.alight.android.aoa_launcher.ui.view.CustomDialog
+import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.NetUtils
 import com.alight.android.aoa_launcher.utils.ProperTiesUtil
-import com.alight.android.aoa_launcher.ui.view.CustomDialog
+import com.alight.android.aoa_launcher.utils.toJson
 import com.google.gson.Gson
 import com.qweather.sdk.bean.base.Code
 import com.qweather.sdk.bean.base.Lang
@@ -42,11 +43,11 @@ import com.qweather.sdk.view.QWeather
 import com.qweather.sdk.view.QWeather.OnResultGeoListener
 import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
 import com.viewpagerindicator.CirclePageIndicator
-import com.xuexiang.xupdate.aria.AriaDownloader
-import com.xuexiang.xupdate.easy.EasyUpdate
 import com.xuexiang.xupdate.entity.UpdateEntity
 import com.xuexiang.xupdate.listener.IUpdateParseCallback
 import com.xuexiang.xupdate.proxy.IUpdateParser
+import kotlinx.android.synthetic.main.dialog_update.*
+import okhttp3.MediaType
 import okhttp3.RequestBody
 import java.util.*
 
@@ -457,10 +458,6 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     fun updateAppAndSystem() {
-        var activity = getView() as Activity
-        var intent = Intent(activity, MoreDownloadActivity::class.java)
-        activity.startActivity(intent)
-
         //XUpdate 更新
         /* EasyUpdate.create(activity, Urls.BASEURL_TEST + Urls.UPDATE)
             .updateHttpService(AriaDownloader.getUpdateHttpService(activity))
@@ -525,6 +522,75 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
+    fun showUpdateDialog(
+        any: UpdateBean,
+        familyId: Int,
+        activity: Activity
+    ) {
+        //系统升级和解绑
+        val updateDialog = CustomDialog(activity, R.layout.dialog_update)
+
+        val update = updateDialog.findViewById<FrameLayout>(R.id.fl_update)
+        val close = updateDialog.findViewById<ImageView>(R.id.iv_close_update)
+        val unbind = updateDialog.findViewById<FrameLayout>(R.id.fl_unbind)
+
+        var systemApp: UpdateBeanData? = null //系统固件
+        var launcherApp: UpdateBeanData? = null   //launcher
+        var aoaApp: UpdateBeanData? = null    //aoa
+        var hardwareApp: UpdateBeanData? = null   //硬件
+
+        for (position in any.data.indices) {
+            when (any.data[position].app_name) {
+                //系统升级
+                "system" -> systemApp = any.data[position]
+                "test_apk" -> launcherApp = any.data[position]
+                "aoa" -> aoaApp = any.data[position]
+                "ahwc" -> hardwareApp = any.data[position]
+            }
+        }
+        updateDialog.tv_hardware_version.text = hardwareApp?.version_name
+        updateDialog.tv_launcher_version.text = launcherApp?.version_name
+        updateDialog.tv_aoa_version.text = aoaApp?.version_name
+        updateDialog.tv_system_version.text = systemApp?.version_name
+
+        updateDialog.show()
+
+        update.setOnClickListener {
+            //获取App和系统固件更新
+            var activity = getView() as Activity
+            var intent = Intent(activity, MoreDownloadActivity::class.java)
+            intent.putExtra("system", systemApp)
+            intent.putExtra("test_apk", launcherApp)
+            intent.putExtra("aoa", aoaApp)
+            intent.putExtra("ahwc", hardwareApp)
+            activity.startActivity(intent)
+        }
+        unbind.setOnClickListener {
+            //解绑二次确认弹窗
+            val confirmDialog = ConfirmDialog(activity)
+            confirmDialog.setOnItemClickListener(object :
+                ConfirmDialog.OnItemClickListener {
+                //点击确认
+                override fun onConfirmClick() {
+                    deleteModel(
+                        RequestBody.create(
+                            MediaType.get("application/json; charset=utf-8"),
+                            mapOf(
+                                "family_id" to familyId,
+                                "dsn" to AccountUtil.DSN
+                            ).toJson()
+                        ),
+                        DeviceRelationBean::class.java
+                    )
+                    confirmDialog.dismiss()
+                }
+            })
+            confirmDialog.show()
+        }
+        close.setOnClickListener {
+            updateDialog.dismiss()
+        }
+    }
 
     /**
      * 更新解析器
@@ -537,8 +603,8 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         override fun parseJson(json: String, callback: IUpdateParseCallback) {
             val result: UpdateBean = Gson().fromJson(json, UpdateBean::class.java)
             val data = result.data
-            var systemApp: Data? = null
-            var launcherApp: Data? = null
+            var systemApp: UpdateBeanData? = null
+            var launcherApp: UpdateBeanData? = null
             for (position in data.indices) {
                 when (data[position].app_name) {
                     //系统升级

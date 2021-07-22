@@ -3,28 +3,17 @@ package com.alight.android.aoa_launcher.activity
 import android.content.Intent
 import android.provider.Settings
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
-import com.alight.android.aoa_launcher.common.bean.DeviceRelationBean
-import com.alight.android.aoa_launcher.common.bean.FamilyInfoBean
-import com.alight.android.aoa_launcher.common.bean.ParentOnlineState
-import com.alight.android.aoa_launcher.common.bean.TokenPair
+import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.PersonalCenterFamilyAdapter
-import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
-import com.alight.android.aoa_launcher.ui.view.CustomDialog
-import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
-import com.alight.android.aoa_launcher.utils.toJson
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_personal_center.*
-import okhttp3.MediaType
-import okhttp3.RequestBody
 
 class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
@@ -107,7 +96,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 any.data.parents.forEach {
                     getPresenter().getModel(
                         Urls.PARENT_ONLINE_STATE,
-                        hashMapOf<String, Any>("user_id" to it.user_id),
+                        hashMapOf("user_id" to it.user_id),
                         ParentOnlineState::class.java
                     )
                 }
@@ -121,6 +110,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 var intent = Intent(this, SplashActivity::class.java)
                 intent.putExtra("rebinding", true)
                 startActivity(intent)
+            }
+            is UpdateBean -> {
+                if (familyId!=null)
+                getPresenter().showUpdateDialog(any, familyId!!, this)
             }
         }
     }
@@ -157,70 +150,37 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_wifi ->
                 startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
             R.id.tv_set -> {
-                //系统升级和解绑
-                val updateDialog = CustomDialog(this, R.layout.dialog_update)
-                updateDialog.show()
-                val update = updateDialog.findViewById<FrameLayout>(R.id.fl_update)
-                val close = updateDialog.findViewById<ImageView>(R.id.iv_close_update)
-                val unbind = updateDialog.findViewById<FrameLayout>(R.id.fl_unbind)
-                update.setOnClickListener {
-                    //获取App和系统固件更新
-                    getPresenter().updateAppAndSystem()
-                }
-                unbind.setOnClickListener {
-                    //解绑二次确认弹窗
-                    val confirmDialog = ConfirmDialog(this)
-                    confirmDialog.setOnItemClickListener(object :
-                        ConfirmDialog.OnItemClickListener {
-                        //点击确认
-                        override fun onConfirmClick() {
-                            getPresenter().deleteModel(
-                                RequestBody.create(
-                                    MediaType.get("application/json; charset=utf-8"),
-                                    mapOf(
-                                        "family_id" to familyId,
-                                        "dsn" to AccountUtil.DSN
-                                    ).toJson()
-                                ),
-                                DeviceRelationBean::class.java
-                            )
-                            confirmDialog.dismiss()
-                        }
-                    })
-                    confirmDialog.show()
-                    /*
-                    //todo 待解绑验证码接口完善后完成
-                    val unbindDialog = CustomDialog(this, R.layout.dialog_unbind)
-                     unbindDialog.show()
-                     val tvUnbind = unbindDialog.findViewById<TextView>(R.id.tv_unbind_dialog)
-                     val tvBack = unbindDialog.findViewById<ImageView>(R.id.iv_back_unbind)
-                     val tvClose = unbindDialog.findViewById<ImageView>(R.id.iv_close_unbind)
-                     tvUnbind.setOnClickListener {
-                         val verifyDialog =
-                             CustomDialog(this, R.layout.dialog_unbind_verification)
-                         verifyDialog.show()
-                         val back = verifyDialog.findViewById<ImageView>(R.id.iv_back_verify)
-                         val close = verifyDialog.findViewById<ImageView>(R.id.iv_close_verify)
-                         back.setOnClickListener {
-                             verifyDialog.dismiss()
-                         }
-                         close.setOnClickListener {
-                             verifyDialog.dismiss()
-                             updateDialog.dismiss()
-                             unbindDialog.dismiss()
-                         }
+                getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+                /*
+                //todo 待解绑验证码接口完善后完成
+                val unbindDialog = CustomDialog(this, R.layout.dialog_unbind)
+                 unbindDialog.show()
+                 val tvUnbind = unbindDialog.findViewById<TextView>(R.id.tv_unbind_dialog)
+                 val tvBack = unbindDialog.findViewById<ImageView>(R.id.iv_back_unbind)
+                 val tvClose = unbindDialog.findViewById<ImageView>(R.id.iv_close_unbind)
+                 tvUnbind.setOnClickListener {
+                     val verifyDialog =
+                         CustomDialog(this, R.layout.dialog_unbind_verification)
+                     verifyDialog.show()
+                     val back = verifyDialog.findViewById<ImageView>(R.id.iv_back_verify)
+                     val close = verifyDialog.findViewById<ImageView>(R.id.iv_close_verify)
+                     back.setOnClickListener {
+                         verifyDialog.dismiss()
                      }
-                     tvBack.setOnClickListener {
-                         unbindDialog.dismiss()
-                     }
-                     tvClose.setOnClickListener {
-                         unbindDialog.dismiss()
+                     close.setOnClickListener {
+                         verifyDialog.dismiss()
                          updateDialog.dismiss()
-                     }*/
-                }
-                close.setOnClickListener {
-                    updateDialog.dismiss()
-                }
+                         unbindDialog.dismiss()
+                     }
+                 }
+                 tvBack.setOnClickListener {
+                     unbindDialog.dismiss()
+                 }
+                 tvClose.setOnClickListener {
+                     unbindDialog.dismiss()
+                     updateDialog.dismiss()
+                 }*/
+
             }
             R.id.tv_splash -> {
                 //直接打开用户引导

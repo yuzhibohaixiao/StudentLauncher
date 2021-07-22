@@ -66,7 +66,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
                 viewHolder.start.setVisibility(View.VISIBLE);
                 viewHolder.download.setVisibility(View.GONE);
                 viewHolder.refresh.setVisibility(View.GONE);
-                viewHolder.pause.setVisibility(View.GONE);
+//                viewHolder.pause.setVisibility(View.GONE);
                 viewHolder.progressBar.setVisibility(View.VISIBLE);
                 viewHolder.speed.setVisibility(View.GONE);
                 viewHolder.progressBar.setProgress(file.getProgress());
@@ -77,7 +77,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
                 viewHolder.start.setVisibility(View.GONE);
                 viewHolder.download.setVisibility(View.GONE);
                 viewHolder.refresh.setVisibility(View.GONE);
-                viewHolder.pause.setVisibility(View.VISIBLE);
                 viewHolder.progressBar.setVisibility(View.VISIBLE);
                 viewHolder.progressBar.setProgress(file.getProgress());
                 viewHolder.progressBar.setVisibility(View.VISIBLE);
@@ -90,7 +89,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
                 viewHolder.start.setVisibility(View.GONE);
                 viewHolder.download.setVisibility(View.GONE);
                 viewHolder.refresh.setVisibility(View.VISIBLE);
-                viewHolder.pause.setVisibility(View.GONE);
                 viewHolder.progressBar.setVisibility(View.GONE);
                 viewHolder.speed.setVisibility(View.GONE);
                 viewHolder.size.setVisibility(View.GONE);
@@ -106,7 +104,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
                 viewHolder.start.setVisibility(View.GONE);
                 viewHolder.download.setVisibility(View.GONE);
                 viewHolder.refresh.setVisibility(View.GONE);
-                viewHolder.pause.setVisibility(View.GONE);
                 viewHolder.speed.setVisibility(View.GONE);
                 viewHolder.size.setVisibility(View.GONE);
                 viewHolder.size_str.setVisibility(View.VISIBLE);
@@ -119,7 +116,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
                 viewHolder.start.setVisibility(View.GONE);
                 viewHolder.download.setVisibility(View.VISIBLE);
                 viewHolder.refresh.setVisibility(View.GONE);
-                viewHolder.pause.setVisibility(View.GONE);
                 viewHolder.progressBar.setVisibility(View.GONE);
                 viewHolder.speed.setVisibility(View.GONE);
                 viewHolder.size.setVisibility(View.GONE);
@@ -152,7 +148,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView img, start, pause, download;
+        private ImageView img, start, download;
         private TextView speed, size, space, size_str, create_time, file_name;
         private ProgressBar progressBar;
         private TextView refresh;
@@ -165,7 +161,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
             speed = itemView.findViewById(R.id.speed);
             size = itemView.findViewById(R.id.size);
             start = itemView.findViewById(R.id.start);
-            pause = itemView.findViewById(R.id.pause);
             download = itemView.findViewById(R.id.download);
             create_time = itemView.findViewById(R.id.create_time);
             space = itemView.findViewById(R.id.space);

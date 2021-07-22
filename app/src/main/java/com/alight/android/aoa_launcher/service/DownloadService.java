@@ -35,6 +35,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_PATH;
+
 public class DownloadService extends Service {
     private static final String TAG = "DownloadService";
     private DownloadTask task;
@@ -74,7 +76,7 @@ public class DownloadService extends Service {
         file.setCreateTime(new Date());
         file.setUrl(url);
         file.setFileName(filename);
-        file.setPath(parentFile.getPath() + "/" + filename);
+        file.setPath(SYSTEM_ZIP_PATH + "/" + filename);
         System.out.println(file.getPath());
         String fileType = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
         file.setFileType(fileType);
