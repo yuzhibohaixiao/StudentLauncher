@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.alight.android.aoa_launcher.R;
 import com.alight.android.aoa_launcher.activity.MoreDownloadActivity;
 import com.alight.android.aoa_launcher.application.LauncherApplication;
+import com.alight.android.aoa_launcher.common.constants.AppConstants;
 import com.alight.android.aoa_launcher.common.db.DbHelper;
 import com.alight.android.aoa_launcher.utils.NotifyUtils;
 import com.liulishuo.okdownload.DownloadTask;
@@ -76,12 +77,12 @@ public class DownloadService extends Service {
         file.setCreateTime(new Date());
         file.setUrl(url);
         file.setFileName(filename);
-        file.setPath(SYSTEM_ZIP_PATH + "/" + filename);
+        file.setPath(SYSTEM_ZIP_PATH + filename);
         System.out.println(file.getPath());
         String fileType = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
         file.setFileType(fileType);
         Log.d(TAG, "download: 下载" + filename);
-        final Intent intent = new Intent("com.hzhh123.download" + id);
+        final Intent intent = new Intent(AppConstants.LAUNCHER_PACKAGE_NAME + id);
         intent.setPackage(getPackageName());
 
         Log.d(TAG, "parentFile: " + parentFile.getPath());

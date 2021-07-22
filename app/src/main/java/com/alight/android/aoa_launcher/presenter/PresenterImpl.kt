@@ -556,6 +556,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         updateDialog.show()
 
         update.setOnClickListener {
+            updateDialog.dismiss()
             //获取App和系统固件更新
             var activity = getView() as Activity
             var intent = Intent(activity, MoreDownloadActivity::class.java)

@@ -21,5 +21,6 @@ data class UpdateBeanData(
     val is_active: Boolean,
     val update_time: String,
     val version_code: Int,
-    val version_name: String
+    val version_name: String,
+    var type: String
 ) : Serializable

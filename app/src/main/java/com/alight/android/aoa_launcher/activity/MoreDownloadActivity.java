@@ -2,13 +2,16 @@ package com.alight.android.aoa_launcher.activity;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,8 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alight.android.aoa_launcher.R;
 import com.alight.android.aoa_launcher.application.LauncherApplication;
 import com.alight.android.aoa_launcher.common.base.BaseActivity;
-import com.alight.android.aoa_launcher.common.bean.UpdateBean;
 import com.alight.android.aoa_launcher.common.bean.UpdateBeanData;
+import com.alight.android.aoa_launcher.common.constants.AppConstants;
 import com.alight.android.aoa_launcher.common.db.DbHelper;
 import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
@@ -39,6 +42,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
 
 /**
  * 多文件列表下载
@@ -60,12 +66,16 @@ public class MoreDownloadActivity extends BaseActivity {
     public void initData() {
 
         UpdateBeanData systemApp = (UpdateBeanData) getIntent().getSerializableExtra("system");
-        UpdateBeanData test_apk = (UpdateBeanData) getIntent().getSerializableExtra("test_apk");
+        systemApp.setType(".zip");
+        UpdateBeanData launcherApp = (UpdateBeanData) getIntent().getSerializableExtra("test_apk");
+        launcherApp.setType(".apk");
         UpdateBeanData aoa = (UpdateBeanData) getIntent().getSerializableExtra("aoa");
+        aoa.setType(".apk");
         UpdateBeanData ahwc = (UpdateBeanData) getIntent().getSerializableExtra("ahwc");
+        ahwc.setType(".apk");
 
         urlList.add(systemApp);
-        urlList.add(test_apk);
+        urlList.add(launcherApp);
         urlList.add(aoa);
         urlList.add(ahwc);
 
@@ -131,7 +141,7 @@ public class MoreDownloadActivity extends BaseActivity {
             File file = new File();
             file.setId("" + i);
             file.setSeq(i);
-            file.setFileName(urlList.get(i).getApp_name() + "升级包");
+            file.setFileName(urlList.get(i).getApp_name() + urlList.get(i).getType());
             if (downloadedFileIds.contains(file.getId())) {
                 File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
                 System.out.println(file1);
@@ -148,10 +158,24 @@ public class MoreDownloadActivity extends BaseActivity {
             list.add(file);
             IntentFilter filter = new IntentFilter();
             DownloadReceiver receiver = new DownloadReceiver();
-            filter.addAction("com.hzhh123.download" + file.getId());
+            filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId());
             registerReceiver(receiver, filter);
             downloadReceiverMap.put(file.getId(), receiver);
         }
+    }
+
+    private void installSystem(Context context) {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName(
+                "android.rockchip.update.service",
+                "android.rockchip.update.service.FirmwareUpdatingActivity"
+        ));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(
+                EXTRA_IMAGE_PATH,
+                SYSTEM_ZIP_FULL_PATH
+        );
+        context.startActivity(intent);
     }
 
     @Override
@@ -178,7 +202,7 @@ public class MoreDownloadActivity extends BaseActivity {
     @Nullable
     @Override
     public PresenterImpl initPresenter() {
-        return null;
+        return new PresenterImpl();
     }
 
     @Override
@@ -202,7 +226,7 @@ public class MoreDownloadActivity extends BaseActivity {
         public void onReceive(Context context, Intent intent) {
             for (int i = 0; i < list.size(); i++) {
                 File file = list.get(i);
-                if (intent.getAction().equals("com.hzhh123.download" + file.getId())) {
+                if (intent.getAction().equals(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId())) {
                     String speedS = intent.getStringExtra("speed");
                     String sizeS = intent.getStringExtra("size");
                     String totalSize = intent.getStringExtra("totalSize");
@@ -224,7 +248,11 @@ public class MoreDownloadActivity extends BaseActivity {
                         Log.i(TAG, "已下载数量: " + files.size());
                         if (list.size() == files.size()) {
                             for (int j = 0; j < files.size(); j++) {
-                                installAPK(MoreDownloadActivity.this, new java.io.File(files.get(j).getPath()), false);
+                                if (files.get(j).getFileName().equals("system.zip")) {
+                                    installSystem(context);
+                                    continue;
+                                }
+                                installAPK(MoreDownloadActivity.this, new java.io.File(Environment.getExternalStorageDirectory().getPath() +"/" +files.get(j).getFileName()), false);
                             }
                         }
                     }
@@ -245,7 +273,7 @@ public class MoreDownloadActivity extends BaseActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
         if (Build.VERSION.SDK_INT >= 24) {
-            Uri apkUri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", apkFile);
+            Uri apkUri = FileProvider.getUriForFile(this, "com.alight.android.aoa_launcher.fileprovider", apkFile);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
             Log.e("TAG", "installAPK: ................uri=" + apkUri);
@@ -323,6 +351,15 @@ public class MoreDownloadActivity extends BaseActivity {
             }
         }
         return ids;
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            return true;//系统层不做处理 就可以了
+        } else {
+            return super.dispatchKeyEvent(event);
+        }
     }
 
 }
