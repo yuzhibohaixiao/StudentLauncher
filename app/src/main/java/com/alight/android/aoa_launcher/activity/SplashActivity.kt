@@ -107,9 +107,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 //                        loadBitmapImage(iv_qr_splash, bitmap)
                     }
                 } catch (e: SocketTimeoutException) {
+                    delay(2000L)
                     showQRCode()
                     e.printStackTrace()
                 } catch (e: Exception) {
+                    delay(2000L)
                     showQRCode()
                     e.printStackTrace()
                 }
@@ -182,9 +184,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                         }
                     }
                 } catch (e: SocketTimeoutException) {
+                    delay(2000L)
                     showChildUser()
                     e.printStackTrace()
                 } catch (e: Exception) {
+                    delay(2000L)
                     showChildUser()
                     e.printStackTrace()
                 }

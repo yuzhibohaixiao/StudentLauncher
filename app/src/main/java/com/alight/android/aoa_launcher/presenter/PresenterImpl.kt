@@ -575,7 +575,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                             MediaType.get("application/json; charset=utf-8"),
                             mapOf(
                                 "family_id" to familyId,
-                                "dsn" to SerialUtils.getCPUSerial()
+                                "dsn" to AccountUtil.getDSN()
                             ).toJson()
                         ),
                         DeviceRelationBean::class.java

@@ -29,7 +29,7 @@ object AccountUtil : LauncherProvider {
     var currentUserId: Int? = null
     var tokenMap: MutableMap<Int, TokenPair> = HashMap()
     var retrofit = Retrofit.Builder()
-        .baseUrl(Urls.BASEURL_TEST)
+        .baseUrl(Urls.BASEURL)
 //        .addConverterFactory(GsonConverterFactory.create())
         .build()
 

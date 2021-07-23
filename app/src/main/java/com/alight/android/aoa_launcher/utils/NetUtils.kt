@@ -49,7 +49,7 @@ class NetUtils private constructor() {
             .addInterceptor(HeaderInterceptor())
             .build()
         var retro = Retrofit.Builder()
-            .baseUrl(Urls.BASEURL_TEST)
+            .baseUrl(Urls.BASEURL)
             .client(ok)
             //1 替换Factory CoroutineCallAdapterFactory()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
