@@ -28,10 +28,7 @@ import com.alight.android.aoa_launcher.net.contract.IContract
 import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
-import com.alight.android.aoa_launcher.utils.AccountUtil
-import com.alight.android.aoa_launcher.utils.NetUtils
-import com.alight.android.aoa_launcher.utils.ProperTiesUtil
-import com.alight.android.aoa_launcher.utils.toJson
+import com.alight.android.aoa_launcher.utils.*
 import com.google.gson.Gson
 import com.qweather.sdk.bean.base.Code
 import com.qweather.sdk.bean.base.Lang
@@ -578,7 +575,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                             MediaType.get("application/json; charset=utf-8"),
                             mapOf(
                                 "family_id" to familyId,
-                                "dsn" to AccountUtil.DSN
+                                "dsn" to SerialUtils.getCPUSerial()
                             ).toJson()
                         ),
                         DeviceRelationBean::class.java

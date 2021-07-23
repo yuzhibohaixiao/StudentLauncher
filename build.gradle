@@ -20,6 +20,13 @@ buildscript {
         maven { url 'https://jitpack.io' }
         maven { url "http://nexus2.tingyun.com/nexus/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+//        maven {
+//            url "https://alight-maven.pkg.coding.net/repository/aoa/maven/"
+//            credentials {
+//                username = codingArtifactsGradleUsername
+//                password = codingArtifactsGradlePassword
+//            }
+//        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"
@@ -35,7 +42,14 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
-        maven { url "http://nexus2.tingyun.com/nexus/content/repositories/snapshots/"}
+        maven { url "http://nexus2.tingyun.com/nexus/content/repositories/snapshots/" }
+        maven {
+            url "https://alight-maven.pkg.coding.net/repository/aoa/maven/"
+            credentials {
+                username = codingArtifactsGradleUsername
+                password = codingArtifactsGradlePassword
+            }
+        }
     }
 }
 

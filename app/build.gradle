@@ -29,7 +29,7 @@ android {
     }
     defaultConfig {
         applicationId "com.alight.android.aoa_launcher"
-        minSdkVersion 23
+        minSdkVersion 25
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -151,4 +151,7 @@ dependencies {
 // provide interface for kotlin extension
 //    implementation "com.liulishuo.okdownload:ktx$okdownload_version"
     implementation 'org.xutils:xutils:3.8.2'
+
+    implementation 'com.alight.ahwcx:bridge:0.2.2'
+    implementation 'com.alight.ahwcx:ahwsdk:0.2.2'
 }

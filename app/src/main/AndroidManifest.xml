@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.alight.android.aoa_launcher"
-    android:sharedUserId="android.uid.system"
-    >
+    android:sharedUserId="android.uid.system">
 
     <!--   android:sharedUserId="android.uid.system"-->
 
@@ -25,6 +24,7 @@
     <!--非必要权限，用以获取当前移动网络连接的基站信息-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -40,6 +40,8 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.WindowFullscreen">
         <activity
             android:name=".activity.LauncherActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,9 +63,11 @@
         </activity>
         <activity
             android:name=".activity.SplashActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".activity.PersonCenterActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" />
 
         <!-- android:exported设置为true，表示其他应用可以访问，否则不可以访问 -->
@@ -84,8 +88,8 @@
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.alight.android.aoa_launcher.fileprovider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
