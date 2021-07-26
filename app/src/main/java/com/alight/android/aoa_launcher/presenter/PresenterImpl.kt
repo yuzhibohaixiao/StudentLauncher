@@ -536,6 +536,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         var aoaApp: UpdateBeanData? = null    //aoa
         var hardwareApp: UpdateBeanData? = null   //硬件
 
+        if (any.data == null) return
         for (position in any.data.indices) {
             when (any.data[position].app_name) {
                 //系统升级
