@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.alight.android.aoa_launcher"
-    >
+    android:sharedUserId="android.uid.system">
 
     <!--   android:sharedUserId="android.uid.system"-->
     <uses-sdk tools:overrideLibrary="com.alight.ahwcx.ahwsdk,com.common.bridge" />
@@ -76,11 +76,13 @@
             android:name="com.alight.android.aoa_launcher.common.provider.LauncherContentProvider"
             android:authorities="com.alight.android.aoa_launcher.common.provider.LauncherContentProvider"
             android:exported="true" />
+
         <receiver android:name=".common.broadcast.LogoutBroadcastReceiver">
             <intent-filter>
                 <action android:name="com.alight.android.user_logout" />
             </intent-filter>
         </receiver>
+
         <service android:name=".service.DownloadService" />
         <activity
             android:name=".activity.MoreDownloadActivity"

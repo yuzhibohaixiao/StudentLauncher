@@ -32,6 +32,8 @@ import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
 import com.alight.android.aoa_launcher.service.DownloadService;
 import com.alight.android.aoa_launcher.ui.adapter.FileAdapter;
+import com.alight.android.aoa_launcher.utils.AppUtils;
+import com.alight.android.aoa_launcher.utils.ToastUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,7 +66,11 @@ public class MoreDownloadActivity extends BaseActivity {
 
     @Override
     public void initData() {
-
+        int newLauncherVersionCode =
+                AppUtils.getVersionCode(this, AppConstants.LAUNCHER_PACKAGE_NAME);
+        int newAoaVersionCode = AppUtils.getVersionCode(this, AppConstants.AOA_PACKAGE_NAME);
+        int newAhwcxVersionCode = AppUtils.getVersionCode(this, AppConstants.AHWCX_PACKAGE_NAME);
+        String newSystemVersionName = Build.VERSION.RELEASE;
         UpdateBeanData systemApp = (UpdateBeanData) getIntent().getSerializableExtra("system");
         systemApp.setType(".zip");
         UpdateBeanData launcherApp = (UpdateBeanData) getIntent().getSerializableExtra("test_apk");
@@ -73,11 +79,28 @@ public class MoreDownloadActivity extends BaseActivity {
         aoa.setType(".apk");
         UpdateBeanData ahwc = (UpdateBeanData) getIntent().getSerializableExtra("ahwc");
         ahwc.setType(".apk");
-
-        urlList.add(systemApp);
-        urlList.add(launcherApp);
-        urlList.add(aoa);
-        urlList.add(ahwc);
+        if (newLauncherVersionCode < launcherApp.getVersion_code()) {
+            urlList.add(launcherApp);
+        }
+        //系统对比VersionName不同则升级
+        if (!newSystemVersionName.equals(systemApp.getVersion_name())) {
+            urlList.add(systemApp);
+        }
+        if (newAoaVersionCode < aoa.getVersion_code()) {
+            urlList.add(aoa);
+        }
+        if (newAhwcxVersionCode < ahwc.getVersion_code()) {
+            urlList.add(ahwc);
+        }
+        if (urlList.size() == 0) {
+            ToastUtils.showLong(this, "暂无升级");
+            finish();
+        }
+        //默认全升级
+//        urlList.add(systemApp);
+//        urlList.add(launcherApp);
+//        urlList.add(aoa);
+//        urlList.add(ahwc);
 
         checkExtrnalStorage();
         getData();
@@ -252,7 +275,7 @@ public class MoreDownloadActivity extends BaseActivity {
                                     installSystem(context);
                                     continue;
                                 }
-                                installAPK(MoreDownloadActivity.this, new java.io.File(Environment.getExternalStorageDirectory().getPath() +"/" +files.get(j).getFileName()), false);
+                                installAPK(MoreDownloadActivity.this, new java.io.File(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName()), false);
                             }
                         }
                     }

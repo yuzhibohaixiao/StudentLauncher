@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.content.Intent
+import android.os.Build
 import android.os.Looper
 import android.provider.Settings
 import android.view.View
@@ -36,6 +37,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
+//        var systemVersionName = Build.VERSION.RELEASE
+//        Build.VERSION.RELEASE_OR_CODENAME
+//        Build.VERSION.SECURITY_PATCH
         val userInfo = intent.getSerializableExtra("userInfo")
         if (userInfo != null) {
             tokenPair = userInfo as TokenPair
@@ -115,8 +119,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 startActivity(intent)
             }
             is UpdateBean -> {
-                if (familyId!=null)
-                getPresenter().showUpdateDialog(any, familyId!!, this)
+                //todo 待有家庭信息时去除
+                familyId = 110
+                if (familyId != null)
+                    getPresenter().showUpdateDialog(any, familyId!!, this)
             }
         }
     }

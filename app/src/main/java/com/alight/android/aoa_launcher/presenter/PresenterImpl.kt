@@ -9,6 +9,7 @@ import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -541,29 +542,63 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             when (any.data[position].app_name) {
                 //系统升级
                 "system" -> systemApp = any.data[position]
-                "test_apk" -> launcherApp = any.data[position]
+                "launcher" -> launcherApp = any.data[position]
                 "aoa" -> aoaApp = any.data[position]
                 "ahwc" -> hardwareApp = any.data[position]
             }
         }
-        updateDialog.tv_hardware_version.text = hardwareApp?.version_name
-        updateDialog.tv_launcher_version.text = launcherApp?.version_name
-        updateDialog.tv_aoa_version.text = aoaApp?.version_name
-        updateDialog.tv_system_version.text = systemApp?.version_name
+
+        //当前版本名
+        val launcherVersionName =
+            AppUtils.getVersionName(activity, AppConstants.LAUNCHER_PACKAGE_NAME)
+        val aoaVersionName = AppUtils.getVersionName(activity, AppConstants.AOA_PACKAGE_NAME)
+        val ahwcxVersionName = AppUtils.getVersionName(activity, AppConstants.AHWCX_PACKAGE_NAME)
+        var systemVersionName = Build.VERSION.RELEASE
+
+        updateDialog.tv_hardware_version.text = ahwcxVersionName
+        updateDialog.tv_launcher_version.text = launcherVersionName
+        updateDialog.tv_aoa_version.text = aoaVersionName
+        updateDialog.tv_system_version.text = systemVersionName
+
+        val launcherVersionCode =
+            AppUtils.getVersionCode(activity, AppConstants.LAUNCHER_PACKAGE_NAME)
+        val aoaVersionCode = AppUtils.getVersionCode(activity, AppConstants.AOA_PACKAGE_NAME)
+        val ahwcxVersionCode = AppUtils.getVersionCode(activity, AppConstants.AHWCX_PACKAGE_NAME)
+
+        var updateNumber = 0
+        if (launcherApp?.version_code!! > launcherVersionCode) {
+            updateNumber++
+        }
+        if (aoaApp?.version_code!! > aoaVersionCode) {
+            updateNumber++
+        }
+        if (hardwareApp?.version_code!! > ahwcxVersionCode) {
+            updateNumber++
+        }
+        //系统版本名不同表示有升级
+        if (systemApp?.version_name!! != systemVersionName) {
+            updateNumber++
+        }
+        if (updateNumber != 0) {
+            updateDialog.tv_update_number.text = updateNumber.toString()
+            //表示有升级
+            update.setOnClickListener {
+                updateDialog.dismiss()
+                //获取App和系统固件更新
+                var activity = getView() as Activity
+                var intent = Intent(activity, MoreDownloadActivity::class.java)
+                intent.putExtra("system", systemApp)
+                intent.putExtra("test_apk", launcherApp)
+                intent.putExtra("aoa", aoaApp)
+                intent.putExtra("ahwc", hardwareApp)
+                activity.startActivity(intent)
+            }
+        }
+
 
         updateDialog.show()
 
-        update.setOnClickListener {
-            updateDialog.dismiss()
-            //获取App和系统固件更新
-            var activity = getView() as Activity
-            var intent = Intent(activity, MoreDownloadActivity::class.java)
-            intent.putExtra("system", systemApp)
-            intent.putExtra("test_apk", launcherApp)
-            intent.putExtra("aoa", aoaApp)
-            intent.putExtra("ahwc", hardwareApp)
-            activity.startActivity(intent)
-        }
+
         unbind.setOnClickListener {
             //解绑二次确认弹窗
             val confirmDialog = ConfirmDialog(activity)
