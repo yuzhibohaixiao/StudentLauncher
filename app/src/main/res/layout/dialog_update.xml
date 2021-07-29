@@ -130,6 +130,7 @@
             android:layout_marginTop="16dp">
 
             <TextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="解绑新设备"
@@ -139,7 +140,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:src="@drawable/enter" />
         </FrameLayout>
 
@@ -160,7 +161,7 @@
                 android:id="@+id/tv_update_number"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:background="@drawable/update_oval_red"
                 android:gravity="center"
                 android:textColor="@color/white"

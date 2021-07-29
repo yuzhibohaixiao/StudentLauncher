@@ -84,6 +84,7 @@ public class MoreDownloadActivity extends BaseActivity {
         }
         //系统对比VersionName不同则升级
         if (!newSystemVersionName.equals(systemApp.getVersion_name())) {
+            systemApp.setApp_name("update");
             urlList.add(systemApp);
         }
         if (newAoaVersionCode < aoa.getVersion_code()) {
@@ -271,7 +272,7 @@ public class MoreDownloadActivity extends BaseActivity {
                         Log.i(TAG, "已下载数量: " + files.size());
                         if (list.size() == files.size()) {
                             for (int j = 0; j < files.size(); j++) {
-                                if (files.get(j).getFileName().equals("system.zip")) {
+                                if (files.get(j).getFileName().equals("update.zip")) {
                                     installSystem(context);
                                     continue;
                                 }

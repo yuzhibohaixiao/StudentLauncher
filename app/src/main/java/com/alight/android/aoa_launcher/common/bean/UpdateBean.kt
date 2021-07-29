@@ -13,7 +13,7 @@ data class UpdateBeanData(
     val apk_md5: String,
     val apk_size: Long,
     val app_force_upgrade: Int,
-    val app_name: String,
+    var app_name: String,
     val app_url: String,
     val content: String,
     val create_time: String,

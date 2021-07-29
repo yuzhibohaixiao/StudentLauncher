@@ -547,7 +547,6 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 "ahwc" -> hardwareApp = any.data[position]
             }
         }
-
         //当前版本名
         val launcherVersionName =
             AppUtils.getVersionName(activity, AppConstants.LAUNCHER_PACKAGE_NAME)
