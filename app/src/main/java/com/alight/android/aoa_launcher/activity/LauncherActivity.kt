@@ -235,7 +235,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             if (any is TokenPair) {
                 tokenPair = any
                 Glide.with(this@LauncherActivity)
-                    .load(if (tokenPair?.gender == 2) R.drawable.splash_boy else R.drawable.splash_girl)
+                    .load(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
 //                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
 //                    .error()
                     .into(iv_user_icon_launcher)

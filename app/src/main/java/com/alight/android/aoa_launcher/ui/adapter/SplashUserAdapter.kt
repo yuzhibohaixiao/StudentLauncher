@@ -16,7 +16,7 @@ class SplashUserAdapter : BaseQuickAdapter<TokenPair, BaseViewHolder>(R.layout.i
         val childName = holder.getView<TextView>(R.id.tv_child_name_splash)
 //        "gender": 0, // 0 -> 未知， 1 -> male 2-> female
         //未知和女性都使用女性头像，否则使用男头像
-        childIcon.setImageResource(if (tokenPair.gender == 0 || tokenPair.gender == 1) R.drawable.splash_girl else R.drawable.splash_boy)
+        childIcon.setImageResource(if (tokenPair.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
         childName.text = tokenPair.name
     }
 

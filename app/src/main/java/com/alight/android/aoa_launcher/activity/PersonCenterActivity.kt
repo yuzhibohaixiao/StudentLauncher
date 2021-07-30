@@ -46,7 +46,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         }
         tokenPair?.apply {
             Glide.with(this@PersonCenterActivity)
-                .load(if (tokenPair?.gender == 2) R.drawable.splash_boy else R.drawable.splash_girl)
+                .load(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
 //                .apply(RequestOptions.bitmapTransform(CircleCrop()))
 //                .error()
                 .into(iv_icon_personal_center)
@@ -54,13 +54,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             tv_grade_personal_center.text = "一年级"
             tv_gender_center.text = when (gender) {
                 0 -> "未知性别"
-                1 -> "女孩"
-                else -> "男孩"
+                1 -> "男孩"
+                else -> "女孩"
             }
             tv_gender_center.setCompoundDrawablesWithIntrinsicBounds(
                 when (gender) {
-                    1 -> resources.getDrawable(R.drawable.girl)
-                    2 -> resources.getDrawable(R.drawable.boy)
+                    1 -> resources.getDrawable(R.drawable.boy)
+                    2 -> resources.getDrawable(R.drawable.girl)
                     else -> null
                 },
                 null,
