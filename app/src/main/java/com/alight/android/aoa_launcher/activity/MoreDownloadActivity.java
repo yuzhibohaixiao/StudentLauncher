@@ -86,7 +86,7 @@ public class MoreDownloadActivity extends BaseActivity {
             urlList.add(systemApp);
         }
         if (newAoaVersionCode < aoa.getVersion_code()) {
-//            urlList.add(aoa);
+            urlList.add(aoa);
         }
         if (newAhwcxVersionCode < ahwc.getVersion_code()) {
             urlList.add(ahwc);
