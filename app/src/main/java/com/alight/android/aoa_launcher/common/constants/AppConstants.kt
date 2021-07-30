@@ -19,6 +19,8 @@ class AppConstants {
         //硬件控制包名
         const val AHWCX_PACKAGE_NAME = "com.alight.ahwcx"
 
+        const val AHWCX_SERVICE_NAME = "com.alight.ahwcx.startup.services.StartupService"
+
         //Launcher 包名
         const val LAUNCHER_PACKAGE_NAME = "com.alight.android.aoa_launcher"
 

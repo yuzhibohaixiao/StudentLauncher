@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Intent
 import android.database.ContentObserver
 import android.net.Uri
@@ -14,8 +15,8 @@ import com.alight.android.aoa_launcher.common.bean.TokenMessage
 import com.alight.android.aoa_launcher.common.bean.TokenPair
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.i.LauncherListener
-import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
+import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
@@ -29,7 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.util.*
 
 
@@ -67,6 +67,18 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         getPresenter().getLocationAndWeather()
         //获取App和系统固件更新
 //        getPresenter().updateAppAndSystem()
+        startHardwareControl()
+    }
+
+    /**
+     * 开启硬件控制
+     */
+    private fun startHardwareControl() {
+        val intent = Intent()
+        val componentName =
+            ComponentName(AppConstants.AHWCX_PACKAGE_NAME, AppConstants.AHWCX_SERVICE_NAME)
+        intent.component = componentName
+        startService(intent)
     }
 
     private var uri: Uri? = null

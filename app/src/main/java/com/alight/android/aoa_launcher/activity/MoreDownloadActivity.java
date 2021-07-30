@@ -32,6 +32,7 @@ import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
 import com.alight.android.aoa_launcher.service.DownloadService;
 import com.alight.android.aoa_launcher.ui.adapter.FileAdapter;
+import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
 import com.alight.android.aoa_launcher.utils.ToastUtils;
 
@@ -79,19 +80,19 @@ public class MoreDownloadActivity extends BaseActivity {
         aoa.setType(".apk");
         UpdateBeanData ahwc = (UpdateBeanData) getIntent().getSerializableExtra("ahwc");
         ahwc.setType(".apk");
-        if (newLauncherVersionCode < launcherApp.getVersion_code()) {
-            urlList.add(launcherApp);
-        }
         //系统对比VersionName不同则升级
         if (!newSystemVersionName.equals(systemApp.getVersion_name())) {
             systemApp.setApp_name("update");
             urlList.add(systemApp);
         }
         if (newAoaVersionCode < aoa.getVersion_code()) {
-            urlList.add(aoa);
+//            urlList.add(aoa);
         }
         if (newAhwcxVersionCode < ahwc.getVersion_code()) {
             urlList.add(ahwc);
+        }
+        if (newLauncherVersionCode < launcherApp.getVersion_code()) {
+            urlList.add(launcherApp);
         }
         if (urlList.size() == 0) {
             ToastUtils.showLong(this, "暂无升级");
@@ -276,7 +277,10 @@ public class MoreDownloadActivity extends BaseActivity {
                                     installSystem(context);
                                     continue;
                                 }
-                                installAPK(MoreDownloadActivity.this, new java.io.File(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName()), false);
+                                String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName();
+                                ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+//                                ApkController.install(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName(), MoreDownloadActivity.this);
+//                                installAPK(MoreDownloadActivity.this, new java.io.File(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName()), false);
                             }
                         }
                     }
