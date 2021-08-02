@@ -23,7 +23,9 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             + AppConstants.AOA_LAUNCHER_USER_INFO_NAME + " TEXT,"
             + AppConstants.AOA_LAUNCHER_USER_INFO_GENDER + " INTEGER,"
             + AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID + " INTEGER,"
-            + AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME + " REAL)";
+            + AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME + " REAL,"
+            + AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE + " INTEGER)"
+            ;
 
     public DbOpenHelper(Context context) {
         super(context, DATA_BASE_NAME, null, DATE_BASE_VERSION);

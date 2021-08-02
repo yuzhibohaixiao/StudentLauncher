@@ -478,7 +478,8 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 AppConstants.AOA_LAUNCHER_USER_INFO_NAME,
                 AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID,
                 AppConstants.AOA_LAUNCHER_USER_INFO_GENDER,
-                AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME
+                AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME,
+                AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE
             ),
             null,
             null,
@@ -503,6 +504,8 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     )
                             + "  expireTime:" + boyCursor.getDouble(
                         boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME)
+                    ) + "  grade:" + boyCursor.getInt(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE)
                     )
                 )
                 getView()?.onSuccess(
@@ -510,6 +513,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                         boyCursor.getInt(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID)),
                         boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN)),
                         boyCursor.getDouble(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME)),
+                        boyCursor.getInt(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE)),
                         boyCursor.getInt(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER)),
                         boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR)),
                         boyCursor.getString(boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_NAME))

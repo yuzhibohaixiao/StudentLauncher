@@ -11,6 +11,8 @@ data class TokenPair(
     var token: String? = null,
     @SerializedName("expire_time")
     var expireTime: Double? = null,
+    @SerializedName("grade_type")
+    var gradeType: Int? = null,
     var gender: Int? = null,
     var avatar: String? = null,
     var name: String? = null

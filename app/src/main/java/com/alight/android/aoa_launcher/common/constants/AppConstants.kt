@@ -34,6 +34,7 @@ class AppConstants {
         const val AOA_LAUNCHER_USER_INFO_USER_ID = "aoa_launcher_user_info_user_id"
         const val AOA_LAUNCHER_USER_INFO_GENDER = "aoa_launcher_user_info_gender"
         const val AOA_LAUNCHER_USER_INFO_EXPIRE_TIME = "aoa_launcher_user_info_expire_time"
+        const val AOA_LAUNCHER_USER_INFO_GRADE_TYPE = "aoa_launcher_user_info_grade_type"
 
         const val EXTRA_IMAGE_PATH = "android.rockchip.update.extra.IMAGE_PATH"
 

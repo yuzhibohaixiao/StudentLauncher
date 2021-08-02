@@ -102,6 +102,10 @@ class LauncherContentProvider : ContentProvider() {
                         AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME,
                         tokenPair.expireTime
                     )
+                    contentValues.put(
+                        AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE,
+                        tokenPair.gradeType
+                    )
                     //将登陆的用户数据插入保存
                     insert(URI, contentValues)
                 } catch (e: TokenManagerException) {

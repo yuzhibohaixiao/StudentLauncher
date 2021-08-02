@@ -247,6 +247,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID, tokenPair.userId)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER, tokenPair.gender)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME, tokenPair.expireTime)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE, tokenPair.gradeType)
         //将登陆的用户数据插入保存
         contentResolver.insert(LauncherContentProvider.URI, contentValues)
         val boyCursor = contentResolver.query(
@@ -258,7 +259,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 AppConstants.AOA_LAUNCHER_USER_INFO_NAME,
                 AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID,
                 AppConstants.AOA_LAUNCHER_USER_INFO_GENDER,
-                AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME
+                AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME,
+                AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE
             ),
             null,
             null,
@@ -283,6 +285,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                     )
                             + "  expireTime:" + boyCursor.getDouble(
                         boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME)
+                    )          + "  grade:" + boyCursor.getInt(
+                        boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE)
                     )
                 )
             }
