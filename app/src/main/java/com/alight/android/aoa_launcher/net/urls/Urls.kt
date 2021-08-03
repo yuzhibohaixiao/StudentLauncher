@@ -20,4 +20,7 @@ object Urls {
 
     //设备解绑
     const val DEVICE_RELATION = "/family/v1/device_relation"
+
+    //查看设备绑定家庭 （二维码是否绑定）
+    const val DEVICE_BIND = "/family/v1/student/device/check"
 }

@@ -12,14 +12,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.ui.adapter.SplashUserAdapter
 import com.alight.android.aoa_launcher.common.base.BaseActivity
-import com.alight.android.aoa_launcher.common.bean.TokenManagerException
-import com.alight.android.aoa_launcher.common.bean.TokenPair
+import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
+import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.networkbench.agent.impl.NBSAppAgent
 import kotlinx.android.synthetic.main.activity_splash.*
@@ -71,10 +75,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         //开启用户引导
         val openUserSplash = intent.getBooleanExtra("openUserSplash", false)
         //重新绑定
-        val isRebinding = intent.getBooleanExtra("rebinding", false)
+        var isRebinding = SPUtils.getData("rebinding", false) as Boolean
         when {
             isRebinding -> {
-                showQRCode()
+                showQRCode(isRebinding)
             }
             openUserSplash -> {   //直接跳转到用户引导
                 fl_splash1.visibility = View.GONE
@@ -90,29 +94,58 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun showQRCode() {
-        if (!wifiFlag) return
+    private fun showQRCode(isRebinding: Boolean) {
+        if (!isRebinding && !wifiFlag) {
+            return
+        }
         //判断网络是否连接
         if (InternetUtil.isNetworkAvalible(this)) {
             fl_splash1.visibility = View.GONE
             ll_splash2.visibility = View.VISIBLE
-
+            getPresenter().getModel()
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val qrCode = AccountUtil.getQrCode()
                     GlobalScope.launch(Dispatchers.Main) {
-                        Glide.with(this@SplashActivity).load(qrCode).into(iv_qr_splash);
+                        Glide.with(this@SplashActivity).load(qrCode)
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any,
+                                    target: Target<Drawable>,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    //加载失败
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    model: Any,
+                                    target: Target<Drawable>,
+                                    dataSource: DataSource,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    //加载成功
+                                    getPresenter().getModel(
+                                        Urls.DEVICE_BIND,
+                                        hashMapOf("dsn" to AccountUtil.getDSN()),
+                                        DeviceBindBean::class.java
+                                    )
+                                    return false
+                                }
+                            }).into(iv_qr_splash)
 //                        val bitmap = BitmapFactory.decodeByteArray(qrCode, 0, qrCode.size)
 //                        iv_qr_splash.setImageBitmap(bitmap)
 //                        loadBitmapImage(iv_qr_splash, bitmap)
                     }
                 } catch (e: SocketTimeoutException) {
                     delay(2000L)
-                    showQRCode()
+                    showQRCode(isRebinding)
                     e.printStackTrace()
                 } catch (e: Exception) {
                     delay(2000L)
-                    showQRCode()
+                    showQRCode(isRebinding)
                     e.printStackTrace()
                 }
             }
@@ -285,7 +318,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                     )
                             + "  expireTime:" + boyCursor.getDouble(
                         boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME)
-                    )          + "  grade:" + boyCursor.getInt(
+                    ) + "  grade:" + boyCursor.getInt(
                         boyCursor.getColumnIndex(AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE)
                     )
                 )
@@ -322,7 +355,22 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onSuccess(any: Any) {
-
+        when (any) {
+            is DeviceBindBean -> {
+                if (any.data.exists) {
+                    showChildUser()
+                } else {
+                    GlobalScope.launch {
+                        delay(2000)
+                        getPresenter().getModel(
+                            Urls.DEVICE_BIND,
+                            hashMapOf("dsn" to AccountUtil.getDSN()),
+                            DeviceBindBean::class.java
+                        )
+                    }
+                }
+            }
+        }
     }
 
 
@@ -333,17 +381,18 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             R.id.fl_splash1 -> {
-                //开始判断网络状态
                 wifiFlag = true
+                //开始判断网络状态
                 if (InternetUtil.isNetworkAvalible(this)) {
-                    showQRCode()
+                    showQRCode(true)
                 } else {
                     ToastUtils.showLong(this, getString(R.string.splash_network_connections))
                     startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
                 }
             }
             R.id.ll_splash2 -> {
-                showChildUser()
+                //跳过二维码后门
+//                showChildUser()
             }
 //            R.id.fl_splash3 -> {
             //系统引导设置完毕，关闭引导页
@@ -356,6 +405,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 closeSplash()
             }
             R.id.ll_no_child_splash -> {
+                ll_no_child_splash.visibility = View.GONE
                 showChildUser()
             }
         }

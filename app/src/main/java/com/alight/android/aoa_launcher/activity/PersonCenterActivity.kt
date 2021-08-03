@@ -114,13 +114,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             is DeviceRelationBean -> {
                 ToastUtils.showShort(this, any.data)
                 //重新绑定
+                SPUtils.syncPutData("rebinding", true)
                 var intent = Intent(this, SplashActivity::class.java)
-                intent.putExtra("rebinding", true)
                 startActivity(intent)
             }
             is UpdateBean -> {
-                //todo 待有家庭信息时去除
-                familyId = 110
                 if (familyId != null)
                     getPresenter().showUpdateDialog(any, familyId!!, this)
             }

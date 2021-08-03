@@ -282,6 +282,7 @@ public class MoreDownloadActivity extends BaseActivity {
 //                                ApkController.install(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName(), MoreDownloadActivity.this);
 //                                installAPK(MoreDownloadActivity.this, new java.io.File(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName()), false);
                             }
+                            finish();
                         }
                     }
                     if (status == File.DOWNLOAD_ERROR) {
