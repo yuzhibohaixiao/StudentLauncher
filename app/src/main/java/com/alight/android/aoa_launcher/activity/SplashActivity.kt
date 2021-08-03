@@ -358,6 +358,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         when (any) {
             is DeviceBindBean -> {
                 if (any.data.exists) {
+                    SPUtils.syncPutData("rebinding", false)
                     showChildUser()
                 } else {
                     GlobalScope.launch {

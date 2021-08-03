@@ -24,7 +24,13 @@ import java.net.URI
 
 
 object AccountUtil : LauncherProvider {
-    const val DSN = "d7f0c2f9-3b2f-4193-9e7d-7fea378d5932" // #todo get dsn m cpu
+    //    const val DSN = "d7f0c2f9-3b2f-4193-9e7d-7fea378d5932" // #todo get dsn m cpu
+    private var DSN: String = SerialUtils.getCPUSerial()
+
+    override fun getDSN(): String {
+        return DSN
+    }
+
     const val LOG_TAG = "token manager"
     var currentUserId: Int? = null
     var tokenMap: MutableMap<Int, TokenPair> = HashMap()
@@ -32,6 +38,7 @@ object AccountUtil : LauncherProvider {
         .baseUrl(Urls.BASEURL)
 //        .addConverterFactory(GsonConverterFactory.create())
         .build()
+
 
     var service: AccountService = retrofit.create(AccountService::class.java)
 
@@ -175,10 +182,6 @@ object AccountUtil : LauncherProvider {
 
     override fun getToken(): TokenPair {
         return getValidToken()
-    }
-
-    override fun getDSN(): String {
-        return DSN
     }
 
     override fun run() {
