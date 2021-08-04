@@ -24,7 +24,7 @@ import java.net.URI
 
 
 object AccountUtil : LauncherProvider {
-    //    const val DSN = "d7f0c2f9-3b2f-4193-9e7d-7fea378d5932" // #todo get dsn m cpu
+    //    const val DSN = "d7f0c2f9-3b2f-4193-9e7d-7fea378d5932"
     private var DSN: String = SerialUtils.getCPUSerial()
 
     override fun getDSN(): String {
@@ -185,6 +185,7 @@ object AccountUtil : LauncherProvider {
     }
 
     override fun run() {
+        Log.i(LOG_TAG, "asf run")
         SocketIOHandler.initSocketIo()
     }
 
@@ -231,19 +232,22 @@ object AccountUtil : LauncherProvider {
 
     object SocketIOHandler {
         const val LOG_TAG = "asf socketio"
-        private val asfUrl = "https://test.api.alight-sys.com:46002" //todo get it from config
+
+        private val asfUrl = "https://api.alight-sys.com"
+//        private val asfUrl = "http://192.168.4.92:48001"
         private lateinit var socket: Socket
         private var handler: LauncherListener? = null
         fun initSocketIo() {
-
+            Log.i(LOG_TAG, "ws init")
             val opts = IO.Options()
             opts.transports = arrayOf("websocket")
             opts.reconnectionAttempts = 5
             opts.reconnectionDelay = 5
+            opts.path = "/socket.io/asf/"
             val uri = URI(asfUrl)
             try {
                 socket = IO.socket(uri, opts)
-                socket.on(Manager.EVENT_RECONNECT_FAILED) {
+                socket.on(Socket.EVENT_DISCONNECT) {
                     onConnectFail()
 
                 }
@@ -268,21 +272,24 @@ object AccountUtil : LauncherProvider {
 
         fun onConnectFail() {
             handler?.onDisconnect()
-//            Log.e(LOG_TAG,"disconnect")
+            Log.e(LOG_TAG, "disconnect")
             initSocketIo()
         }
 
         fun onConnect() {
 //            Log.e(LOG_TAG,"connect")
+
             socket.emit(
-                "ASF.AOSBindDSN", mapOf(
+                "ASF.AOSBindDSN",
+                Gson().toJson(mapOf(
                     "title" to "ASF.AOSBindDSN",
                     "message" to getDSN(),
                     "intent_url" to "",
                     "type" to -1,
                     "extras" to ""
-                )
+                ))
             )
+
             handler?.onConnect()
         }
 

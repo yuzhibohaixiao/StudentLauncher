@@ -115,7 +115,7 @@ dependencies {
 
     //socketio
     // socketio
-    implementation('io.socket:socket.io-client:2.0.0')
+    implementation('io.socket:socket.io-client:2.0.1')
 
     //BRVAH
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'

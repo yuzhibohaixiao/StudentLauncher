@@ -49,6 +49,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     }
 
     override fun initData() {
+        Log.i(TAG, "initData: run")
         //获取用户信息之前必须调用的初始化方法
         AccountUtil.run()
         //初始化权限
