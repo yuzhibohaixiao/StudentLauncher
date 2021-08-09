@@ -277,7 +277,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             R.id.iv_other_launcher -> getPresenter().showDialog(dialog!!, AppConstants.OTHER_APP)
             //音视频
             R.id.iv_video_launcher -> getPresenter().showDialog(dialog!!, AppConstants.MEDIA_APP)
-            //设置
+            //设置　
             R.id.iv_setting_launcher -> getPresenter().showSystemSetting()
             // 打开应用市场（安智）
             R.id.iv_app_store -> getPresenter().showAZMarket()
@@ -306,6 +306,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     }
 
     override fun onReceive(message: TokenMessage) {
+        Log.i(TAG, "onReceive message: ${message.message}")
         // todo 1 服务端发给我消息 发一个广播给其他的应用接收
 
         // todo 2 其他应用给我发消息 我需要调用AccountUtil.postMessage()发给服务端

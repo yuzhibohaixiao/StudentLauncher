@@ -18,6 +18,7 @@ import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_personal_center.*
+import java.util.*
 
 class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
@@ -200,6 +201,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-//        abilityManager.onStop()
+        abilityManager.onStop()
     }
 }

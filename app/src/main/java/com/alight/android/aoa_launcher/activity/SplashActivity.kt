@@ -31,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.NullPointerException
 import java.net.SocketTimeoutException
 import java.util.*
 
@@ -362,12 +363,19 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                     showChildUser()
                 } else {
                     GlobalScope.launch {
-                        delay(2000)
-                        getPresenter().getModel(
-                            Urls.DEVICE_BIND,
-                            hashMapOf("dsn" to AccountUtil.getDSN()),
-                            DeviceBindBean::class.java
-                        )
+                        try {
+                            delay(2000)
+                            getPresenter().getModel(
+                                Urls.DEVICE_BIND,
+                                hashMapOf("dsn" to AccountUtil.getDSN()),
+                                DeviceBindBean::class.java
+                            )
+                        }catch (e: NullPointerException){
+                            Log.e("SplashActivity", e.stackTraceToString())
+                        }catch (e: Exception){
+                            Log.e("SplashActivity",e.stackTraceToString())
+                        }
+
                     }
                 }
             }

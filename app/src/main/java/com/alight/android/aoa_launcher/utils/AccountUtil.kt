@@ -8,6 +8,7 @@ import com.alight.android.aoa_launcher.common.bean.TokenPair
 import com.alight.android.aoa_launcher.common.i.LauncherListener
 import com.alight.android.aoa_launcher.common.i.LauncherProvider
 import com.alight.android.aoa_launcher.net.urls.Urls
+import com.alight.android.aoa_launcher.net.urls.Urls.BASEURL
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import io.socket.client.IO
@@ -233,7 +234,8 @@ object AccountUtil : LauncherProvider {
     object SocketIOHandler {
         const val LOG_TAG = "asf socketio"
 
-        private val asfUrl = "https://api.alight-sys.com"
+//        private val asfUrl = "https://api.alight-sys.com"
+        private val asfUrl = BASEURL
 //        private val asfUrl = "http://192.168.4.92:48001"
         private lateinit var socket: Socket
         private var handler: LauncherListener? = null
