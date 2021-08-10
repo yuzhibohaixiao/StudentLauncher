@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
@@ -370,10 +371,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                 hashMapOf("dsn" to AccountUtil.getDSN()),
                                 DeviceBindBean::class.java
                             )
-                        }catch (e: NullPointerException){
+                        } catch (e: NullPointerException) {
                             Log.e("SplashActivity", e.stackTraceToString())
-                        }catch (e: Exception){
-                            Log.e("SplashActivity",e.stackTraceToString())
+                        } catch (e: Exception) {
+                            Log.e("SplashActivity", e.stackTraceToString())
                         }
 
                     }
@@ -432,11 +433,18 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
      * 屏蔽系统返回按钮
      */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        return if (event.keyCode == KeyEvent.KEYCODE_BACK) {
-            //do something.
-            true;//系统层不做处理 就可以了
-        } else {
-            super.dispatchKeyEvent(event);
+        return when (event.keyCode) {
+            KeyEvent.KEYCODE_BACK -> {
+                //do something.
+                true;//系统层不做处理 就可以了
+            }
+            KeyEvent.KEYCODE_MENU -> {//MENU键
+                //监控/拦截菜单键
+                return true;
+            }
+            else -> {
+                super.dispatchKeyEvent(event);
+            }
         }
     }
 

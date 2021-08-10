@@ -32,6 +32,12 @@ abstract class BaseActivity : AppCompatActivity(), IContract.IView {
     //设置监听器
     abstract fun setListener()
 
+    override fun onResume() {
+        super.onResume()
+        if (mPresenter == null)
+            mPresenter = initPresenter()
+    }
+
     //初始化数据 调用网络请求
     abstract fun initData()
 

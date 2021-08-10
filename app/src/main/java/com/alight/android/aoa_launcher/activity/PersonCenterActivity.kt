@@ -99,14 +99,18 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     override fun onSuccess(any: Any) {
         when (any) {
             is FamilyInfoBean -> {
-                familyId = any.data.id
-                familyAdapter.addData(any.data.parents)
-                any.data.parents.forEach {
-                    getPresenter().getModel(
-                        Urls.PARENT_ONLINE_STATE,
-                        hashMapOf("user_id" to it.user_id),
-                        ParentOnlineState::class.java
-                    )
+                if (any.data == null) {
+                    ToastUtils.showShort(this, "没有获取到家庭信息")
+                } else {
+                    familyId = any.data.id
+                    familyAdapter.addData(any.data.parents)
+                    any.data.parents.forEach {
+                        getPresenter().getModel(
+                            Urls.PARENT_ONLINE_STATE,
+                            hashMapOf("user_id" to it.user_id),
+                            ParentOnlineState::class.java
+                        )
+                    }
                 }
             }
             is ParentOnlineState -> {

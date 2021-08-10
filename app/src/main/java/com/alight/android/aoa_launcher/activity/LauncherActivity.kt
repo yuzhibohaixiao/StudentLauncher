@@ -48,7 +48,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         initAccountUtil()
     }
 
-    override fun initData() {
+    override fun onStart() {
+        super.onStart()
         Log.i(TAG, "initData: run")
         //获取用户信息之前必须调用的初始化方法
         AccountUtil.run()
@@ -69,6 +70,10 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         //获取App和系统固件更新
 //        getPresenter().updateAppAndSystem()
         startHardwareControl()
+    }
+
+    override fun initData() {
+
     }
 
     /**
