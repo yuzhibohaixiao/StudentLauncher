@@ -41,6 +41,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     private var tokenPair: TokenPair? = null
     private var TAG = "LauncherActivity"
     private var dialog: CustomDialog? = null
+    private var splashClose: Boolean = false
 
     override fun onResume() {
         super.onResume()
@@ -51,6 +52,21 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     override fun onStart() {
         super.onStart()
         Log.i(TAG, "initData: run")
+        if (!splashClose) {
+            //如果未展示过引导则展示引导页
+            startActivityForResult(Intent(this, SplashActivity::class.java), 100)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == 100) {
+            splashClose = data?.getBooleanExtra("splashClose", false) == true
+        }
+
+    }
+
+    override fun initData() {
         //获取用户信息之前必须调用的初始化方法
         AccountUtil.run()
         //初始化权限
@@ -61,8 +77,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             true,
             contentObserver
         )
-        //如果是新用户则打开Splash
-        startActivity(Intent(this, SplashActivity::class.java))
         //初始化天气控件日期
         initWeatherDate()
         //定位后获取天气
@@ -70,10 +84,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         //获取App和系统固件更新
 //        getPresenter().updateAppAndSystem()
         startHardwareControl()
-    }
-
-    override fun initData() {
-
     }
 
     /**

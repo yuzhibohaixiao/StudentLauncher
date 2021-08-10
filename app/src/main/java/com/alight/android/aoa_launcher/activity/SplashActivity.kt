@@ -202,7 +202,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                                 ) as Boolean
                                             if (onlyShowSelectChild) {
                                                 //仅展示用户选择
-                                                finish()
+                                                finishSplash()
                                             } else {
                                                 openUserSplash()
                                             }
@@ -233,12 +233,22 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private fun finishSplash() {
+        var intent = Intent(
+            this@SplashActivity,
+            LauncherActivity::class.java
+        )
+        intent.putExtra("splashClose", true);
+        setResult(100, intent);
+        finish()
+    }
+
     private fun openUserSplash() {
         if (userSplashNumber == userSplashBgList.size) {
             //新用户的状态设为false
             SPUtils.asyncPutData(AppConstants.NEW_USER, false)
             getPresenter().showAOA()
-            finish()
+            finishSplash()
             return
         }
         //显示launcher引导
@@ -426,7 +436,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         //新用户的状态设为false
         SPUtils.asyncPutData(AppConstants.NEW_USER, false)
         SPUtils.asyncPutData("onlyShowSelectChild", true)
-        finish()
+       finishSplash()
     }
 
     /**
