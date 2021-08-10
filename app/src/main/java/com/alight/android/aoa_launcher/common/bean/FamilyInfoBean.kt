@@ -1,11 +1,13 @@
 package com.alight.android.aoa_launcher.common.bean
 
+import java.io.Serializable
+
 data class FamilyInfoBean(
     val code: Int,
     val data: Data,
     val msg: String,
     val request: String
-)
+) : Serializable
 
 data class Data(
     val children: List<Children>,
@@ -53,4 +55,4 @@ data class Parent(
     val role_type: Int,
     val update_time: String,
     val user_id: Int
-)
+):Serializable

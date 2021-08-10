@@ -71,7 +71,7 @@ public class MoreDownloadActivity extends BaseActivity {
                 AppUtils.getVersionCode(this, AppConstants.LAUNCHER_PACKAGE_NAME);
         int newAoaVersionCode = AppUtils.getVersionCode(this, AppConstants.AOA_PACKAGE_NAME);
         int newAhwcxVersionCode = AppUtils.getVersionCode(this, AppConstants.AHWCX_PACKAGE_NAME);
-        String newSystemVersionName = Build.VERSION.RELEASE;
+        String newSystemVersionName = Build.DISPLAY;
         UpdateBeanData systemApp = (UpdateBeanData) getIntent().getSerializableExtra("system");
         systemApp.setType(".zip");
         UpdateBeanData launcherApp = (UpdateBeanData) getIntent().getSerializableExtra("test_apk");

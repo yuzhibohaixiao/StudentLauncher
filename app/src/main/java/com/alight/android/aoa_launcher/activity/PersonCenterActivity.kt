@@ -1,7 +1,6 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.content.Intent
-import android.os.Build
 import android.os.Looper
 import android.provider.Settings
 import android.view.View
@@ -14,6 +13,7 @@ import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.PersonalCenterFamilyAdapter
+import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
@@ -38,9 +38,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
-//        var systemVersionName = Build.VERSION.RELEASE
-//        Build.VERSION.RELEASE_OR_CODENAME
-//        Build.VERSION.SECURITY_PATCH
         val userInfo = intent.getSerializableExtra("userInfo")
         if (userInfo != null) {
             tokenPair = userInfo as TokenPair
@@ -86,6 +83,16 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         tv_wifi.setOnClickListener(this)
         tv_set.setOnClickListener(this)
         tv_splash.setOnClickListener(this)
+        familyAdapter.setOnItemClickListener { adapter, view, position ->
+            val intent =
+                Intent("com.alight.trtcav.WindowActivity") //要启动的actvity的java类，查找系统中所有的activity，要遍历一遍。前提是server软件安装了。设置Intent的时候只设置Action不设置category则category是用的DEFAULT,所以server处的category要加一个DEFAULT
+            val parent = familyAdapter.data[position]
+            if (parent != null) {
+                intent.putExtra("parentInfo", parent)
+                intent.putExtra("childId", AccountUtil.getCurrentUser().userId)
+            }
+            startActivity(intent)
+        }
     }
 
     override fun initPresenter(): PresenterImpl {

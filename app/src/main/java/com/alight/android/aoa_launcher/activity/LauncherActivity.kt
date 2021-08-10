@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.database.ContentObserver
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
@@ -67,6 +68,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     }
 
     override fun initData() {
+
         //获取用户信息之前必须调用的初始化方法
         AccountUtil.run()
         //初始化权限
