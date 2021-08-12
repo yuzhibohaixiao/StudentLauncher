@@ -2,8 +2,8 @@ package com.alight.android.aoa_launcher.net.urls
 
 object Urls {
 
-    const val BASEURL = "http://api.alight-sys.com"   //正式服务
-//    const val BASEURL = "http://test.api.alight-sys.com" //测试服务
+    //    const val BASEURL = "http://api.alight-sys.com"   //正式服务
+    const val BASEURL = "http://test.api.alight-sys.com" //测试服务
 
     const val HOT_MOVIE = "movie/v2/findHotMovieList"
     const val ZZ_MOVIE = "movie/v2/findReleaseMovieList"

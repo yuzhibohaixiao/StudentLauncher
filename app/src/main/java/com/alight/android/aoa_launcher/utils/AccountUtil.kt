@@ -1,5 +1,6 @@
 package com.alight.android.aoa_launcher.utils
 
+import com.alight.android.aoa_launcher.common.bean.CallVideoBean
 import android.util.Log
 import com.alight.android.aoa_launcher.net.apiservice.AccountService
 import com.alight.android.aoa_launcher.common.bean.TokenManagerException
@@ -12,7 +13,6 @@ import com.alight.android.aoa_launcher.net.urls.Urls.BASEURL
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import io.socket.client.IO
-import io.socket.client.Manager
 import io.socket.client.Socket
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -234,9 +234,10 @@ object AccountUtil : LauncherProvider {
     object SocketIOHandler {
         const val LOG_TAG = "asf socketio"
 
-//        private val asfUrl = "https://api.alight-sys.com"
+        //        private val asfUrl = "https://api.alight-sys.com"
         private val asfUrl = BASEURL
-//        private val asfUrl = "http://192.168.4.92:48001"
+
+        //        private val asfUrl = "http://192.168.4.92:48001"
         private lateinit var socket: Socket
         private var handler: LauncherListener? = null
         fun initSocketIo() {
@@ -258,7 +259,16 @@ object AccountUtil : LauncherProvider {
                 }
                 socket.on("ASF.MSG") {
                     Log.d(LOG_TAG, "Incoming message: " + it[0])
-                    onMessage(it.get(0) as TokenMessage)
+                    if (it[0] == null) return@on
+                    val callVideoBean = Gson().fromJson(it[0].toString(), CallVideoBean::class.java)
+                    val tokenMessage = TokenMessage(
+                        callVideoBean.title,
+                        callVideoBean.message,
+                        callVideoBean.intent_url,
+                        callVideoBean.type,
+                        mapOf("extra" to callVideoBean.extras)
+                    )
+                    onMessage(tokenMessage)
                 }
                 socket.connect()
             } catch (e: Exception) {
@@ -283,13 +293,15 @@ object AccountUtil : LauncherProvider {
 
             socket.emit(
                 "ASF.AOSBindDSN",
-                Gson().toJson(mapOf(
-                    "title" to "ASF.AOSBindDSN",
-                    "message" to getDSN(),
-                    "intent_url" to "",
-                    "type" to -1,
-                    "extras" to ""
-                ))
+                Gson().toJson(
+                    mapOf(
+                        "title" to "ASF.AOSBindDSN",
+                        "message" to getDSN(),
+                        "intent_url" to "",
+                        "type" to -1,
+                        "extras" to ""
+                    )
+                )
             )
 
             handler?.onConnect()

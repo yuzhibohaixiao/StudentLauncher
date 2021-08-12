@@ -3,6 +3,7 @@ package com.alight.android.aoa_launcher.activity
 import android.content.Intent
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.ahwcx.ahwsdk.AbilityManager
@@ -18,7 +19,9 @@ import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_personal_center.*
+import java.lang.Exception
 import java.util.*
+
 
 class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
@@ -84,14 +87,24 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         tv_set.setOnClickListener(this)
         tv_splash.setOnClickListener(this)
         familyAdapter.setOnItemClickListener { adapter, view, position ->
-            val intent =
-                Intent("com.alight.trtcav.WindowActivity") //要启动的actvity的java类，查找系统中所有的activity，要遍历一遍。前提是server软件安装了。设置Intent的时候只设置Action不设置category则category是用的DEFAULT,所以server处的category要加一个DEFAULT
-            val parent = familyAdapter.data[position]
-            if (parent != null) {
-                intent.putExtra("parentInfo", parent)
-                intent.putExtra("childId", AccountUtil.getCurrentUser().userId)
-            }
-            startActivity(intent)
+            startPhoneWindow(position)
+        }
+    }
+
+    private fun startPhoneWindow(position: Int) {
+        val parentInfo = familyAdapter.data[position]
+        val intent = Intent("com.alight.trtcav.WindowActivity")
+        if (parentInfo != null) {
+            intent.putExtra("parentId", parentInfo.user_id)
+            intent.putExtra("parentName", parentInfo.name)
+            intent.putExtra("parentAvatar", parentInfo.avatar)
+            intent.putExtra("childId", AccountUtil.getCurrentUser().userId)
+            intent.putExtra("token", AccountUtil.getCurrentUser().token)
+        }
+        try {
+            this.startActivity(intent)
+        } catch (e: Exception) {
+            e.stackTraceToString()
         }
     }
 

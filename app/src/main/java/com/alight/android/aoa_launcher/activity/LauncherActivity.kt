@@ -5,7 +5,6 @@ import android.content.ComponentName
 import android.content.Intent
 import android.database.ContentObserver
 import android.net.Uri
-import android.os.Build
 import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
@@ -86,6 +85,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         //获取App和系统固件更新
 //        getPresenter().updateAppAndSystem()
         startHardwareControl()
+        Log.i(TAG, "DSN: ${AccountUtil.getDSN()}")
     }
 
     /**
@@ -322,11 +322,34 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         }
     }
 
-    override fun onReceive(message: TokenMessage) {
-        Log.i(TAG, "onReceive message: ${message.message}")
+    override fun onReceive(tokenMessage: TokenMessage) {
+        Log.i(TAG, "onReceive message: ${tokenMessage.message}")
+        //家长打来视频通话
+        if (tokenMessage.message.type == "video") {
+            startCalledWindow(tokenMessage)
+        }
+
         // todo 1 服务端发给我消息 发一个广播给其他的应用接收
 
         // todo 2 其他应用给我发消息 我需要调用AccountUtil.postMessage()发给服务端
+    }
+
+    private fun startCalledWindow(tokenMessage: TokenMessage) {
+        val intent = Intent("com.alight.trtcav.WindowActivity")
+        if (tokenMessage != null) {
+            intent.putExtra("parentId", tokenMessage.message.fromUserId)
+            intent.putExtra("parentName", tokenMessage.message.fromUserInfo.name)
+            intent.putExtra("parentAvatar", tokenMessage.message.fromUserInfo.avatar)
+            intent.putExtra("roomId", tokenMessage.message.roomId)
+            intent.putExtra("childId", AccountUtil.getCurrentUser().userId.toString())
+            intent.putExtra("called", true)
+            intent.putExtra("token", AccountUtil.getCurrentUser().token)
+        }
+        try {
+            this.startActivity(intent)
+        } catch (e: java.lang.Exception) {
+            e.stackTraceToString()
+        }
     }
 
     override fun onConnect() {

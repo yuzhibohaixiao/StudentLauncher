@@ -19,6 +19,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
@@ -77,10 +78,14 @@ class NetUtils private constructor() {
 
                 override fun onNext(t: ResponseBody) {
                     var gson = Gson()
-                    var any = gson.fromJson(t.string(), cls)
-                    if (callback != null && any != null) {
-                        //回调到model层
-                        callback.onSuccess(any)
+                    try {
+                        var any = gson.fromJson(t.string(), cls)
+                        if (callback != null && any != null) {
+                            //回调到model层
+                            callback.onSuccess(any)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
 

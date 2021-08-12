@@ -47,7 +47,6 @@ data class Parent(
     val gender: Int,
     val id: Int,
     val is_active: Boolean,
-    val language: Any,
     val name: String,
     val parent_id: Int,
     val phone: String,

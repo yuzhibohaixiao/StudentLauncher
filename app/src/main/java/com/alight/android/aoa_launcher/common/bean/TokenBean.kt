@@ -31,9 +31,10 @@ class TokenManagerException(code: Int, message: String) :
 
 data class TokenMessage(
     val title: String,
-    val message: String,
+    val message: Message,
     @SerializedName("intent_url")
     val intentUrl: String? = null,
     val type: String,
     val extra: Map<String, Any>? = null
-)
+
+);
