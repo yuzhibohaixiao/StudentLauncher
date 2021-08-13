@@ -160,7 +160,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private fun sendSendUserLogoutBroadcast() {
         val intent = Intent()
         intent.action = USER_LOGOUT_ACTION
-        intent.putExtra("message", "用户登出！") // 设置广播的消息
+        intent.putExtra("message", "用户退出") // 设置广播的消息
         sendBroadcast(intent)
 
     }
