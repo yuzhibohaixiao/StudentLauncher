@@ -72,7 +72,7 @@
         android:id="@+id/iv_aoa_launcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="255dp"
+        android:layout_marginStart="256.5dp"
         android:layout_marginTop="239.5dp"
         android:src="@drawable/launcher_aoa" />
 
