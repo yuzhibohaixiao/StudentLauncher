@@ -47,11 +47,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         super.onResume()
         //初始化用户工具及展示用户数据
         initAccountUtil()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i(TAG, "initData: run")
         if (!splashClose) {
             //如果未展示过引导则展示引导页
             startActivityForResult(Intent(this, SplashActivity::class.java), 100)
@@ -303,6 +298,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 getPresenter().showAOA()
             //个人中心
             R.id.ll_personal_center -> {
+                if (tokenPair == null) return
                 var intent = Intent(this, PersonCenterActivity::class.java)
                 intent.putExtra("userInfo", tokenPair)
                 startActivity(intent)
