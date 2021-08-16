@@ -338,7 +338,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             intent.putExtra("parentAvatar", tokenMessage.message.fromUserInfo.avatar)
             intent.putExtra("roomId", tokenMessage.message.roomId)
             intent.putExtra("childId", AccountUtil.getCurrentUser().userId.toString())
-            intent.putExtra("called", true)
+            intent.putExtra("called", 2)
             intent.putExtra("token", AccountUtil.getCurrentUser().token)
         }
         try {

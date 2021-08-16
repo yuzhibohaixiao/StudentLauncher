@@ -3,7 +3,6 @@ package com.alight.android.aoa_launcher.activity
 import android.content.Intent
 import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.ahwcx.ahwsdk.AbilityManager
@@ -19,7 +18,7 @@ import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_personal_center.*
-import java.lang.Exception
+import org.json.JSONObject
 import java.util.*
 
 
@@ -95,6 +94,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         val parentInfo = familyAdapter.data[position]
         val intent = Intent("com.alight.trtcav.WindowActivity")
         if (parentInfo != null) {
+            intent.putExtra("called", 1)    //主叫
             intent.putExtra("parentId", parentInfo.user_id)
             intent.putExtra("parentName", parentInfo.name)
             intent.putExtra("parentAvatar", parentInfo.avatar)
