@@ -53,5 +53,12 @@ data class Parent(
     val province: String,
     val role_type: Int,
     val update_time: String,
-    val user_id: Int
-):Serializable
+    val user_id: Int,
+    val status: ParentStatus
+
+) : Serializable
+
+data class ParentStatus(
+    val online: Int,
+    val av: Int,
+)

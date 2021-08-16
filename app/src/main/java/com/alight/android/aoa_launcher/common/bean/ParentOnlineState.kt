@@ -8,6 +8,7 @@ data class ParentOnlineState(
 
 data class Data2(
     //在线状态 true表示在线
-    var value: Boolean,
+    var online: Int,
+    var av: Int,
     var user_id: Int
 )

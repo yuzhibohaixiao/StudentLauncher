@@ -85,7 +85,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         tv_set.setOnClickListener(this)
         tv_splash.setOnClickListener(this)
         familyAdapter.setOnItemClickListener { adapter, view, position ->
-//            startPhoneWindow(position)
+//            if (familyAdapter.data[position].) {
+//
+//            }
+            startPhoneWindow(position)
         }
     }
 
@@ -94,10 +97,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         val intent = Intent("com.alight.trtcav.WindowActivity")
         if (parentInfo != null) {
             intent.putExtra("called", 1)    //主叫
-            intent.putExtra("parentId", parentInfo.user_id)
+            intent.putExtra("parentId", parentInfo.user_id.toString())
             intent.putExtra("parentName", parentInfo.name)
             intent.putExtra("parentAvatar", parentInfo.avatar)
-            intent.putExtra("childId", AccountUtil.getCurrentUser().userId)
+            intent.putExtra("childId", AccountUtil.getCurrentUser().userId.toString())
             intent.putExtra("token", AccountUtil.getCurrentUser().token)
         }
         try {
@@ -123,6 +126,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 } else {
                     familyId = any.data.id
                     familyAdapter.addData(any.data.parents)
+/*
                     any.data.parents.forEach {
                         getPresenter().getModel(
                             Urls.PARENT_ONLINE_STATE,
@@ -130,10 +134,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                             ParentOnlineState::class.java
                         )
                     }
+*/
                 }
             }
             is ParentOnlineState -> {
-                familyAdapter.setOnlineState(any.data)
+//                familyAdapter.setOnlineState(any.data)
             }
             is DeviceRelationBean -> {
                 ToastUtils.showShort(this, any.data)

@@ -314,10 +314,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     override fun onReceive(tokenMessage: TokenMessage) {
         Log.i(TAG, "onReceive message: ${tokenMessage.message}")
         //家长打来视频通话
-        if (tokenMessage.message.type == "video") {
+        if (tokenMessage.message.type == "video" || tokenMessage.message.type == "audio") {
             startCalledWindow(tokenMessage)
         }
-
         // todo 1 服务端发给我消息 发一个广播给其他的应用接收
 
         // todo 2 其他应用给我发消息 我需要调用AccountUtil.postMessage()发给服务端
@@ -326,13 +325,14 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     private fun startCalledWindow(tokenMessage: TokenMessage) {
         val intent = Intent("com.alight.trtcav.WindowActivity")
         if (tokenMessage != null) {
-            intent.putExtra("parentId", tokenMessage.message.fromUserId)
+            intent.putExtra("parentId", tokenMessage.message.fromUserId.toString())
             intent.putExtra("parentName", tokenMessage.message.fromUserInfo.name)
             intent.putExtra("parentAvatar", tokenMessage.message.fromUserInfo.avatar)
             intent.putExtra("roomId", tokenMessage.message.roomId)
             intent.putExtra("childId", AccountUtil.getCurrentUser().userId.toString())
             intent.putExtra("called", 2)
             intent.putExtra("token", AccountUtil.getCurrentUser().token)
+            intent.putExtra("callType", tokenMessage.message.type)
         }
         try {
             this.startActivity(intent)
