@@ -18,7 +18,6 @@ import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_personal_center.*
-import org.json.JSONObject
 import java.util.*
 
 
@@ -86,7 +85,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         tv_set.setOnClickListener(this)
         tv_splash.setOnClickListener(this)
         familyAdapter.setOnItemClickListener { adapter, view, position ->
-            startPhoneWindow(position)
+//            startPhoneWindow(position)
         }
     }
 
@@ -140,6 +139,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 ToastUtils.showShort(this, any.data)
                 //重新绑定
                 SPUtils.syncPutData("rebinding", true)
+                //让引导再次开启
+                SPUtils.syncPutData("splashClose", false)
                 var intent = Intent(this, SplashActivity::class.java)
                 startActivity(intent)
             }

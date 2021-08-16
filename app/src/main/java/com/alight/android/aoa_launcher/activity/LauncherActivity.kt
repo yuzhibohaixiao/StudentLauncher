@@ -41,25 +41,18 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     private var tokenPair: TokenPair? = null
     private var TAG = "LauncherActivity"
     private var dialog: CustomDialog? = null
-    private var splashClose: Boolean = false
 
     override fun onResume() {
         super.onResume()
         //初始化用户工具及展示用户数据
         initAccountUtil()
+        val splashClose = SPUtils.getData("splashClose", false) as Boolean
         if (!splashClose) {
             //如果未展示过引导则展示引导页
-            startActivityForResult(Intent(this, SplashActivity::class.java), 100)
+            startActivity(Intent(this, SplashActivity::class.java))
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == 100) {
-            splashClose = data?.getBooleanExtra("splashClose", false) == true
-        }
-
-    }
 
     override fun initData() {
 

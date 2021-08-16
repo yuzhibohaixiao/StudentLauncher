@@ -234,12 +234,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun finishSplash() {
-        var intent = Intent(
-            this@SplashActivity,
-            LauncherActivity::class.java
-        )
-        intent.putExtra("splashClose", true);
-        setResult(100, intent);
+        SPUtils.syncPutData("splashClose", true)
         finish()
     }
 
@@ -436,7 +431,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         //新用户的状态设为false
         SPUtils.asyncPutData(AppConstants.NEW_USER, false)
         SPUtils.asyncPutData("onlyShowSelectChild", true)
-       finishSplash()
+        finishSplash()
     }
 
     /**
