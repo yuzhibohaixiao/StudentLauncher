@@ -98,6 +98,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
+                android:layout_marginStart="150dp"
+                android:singleLine="true"
                 android:text="1.02"
                 android:textSize="9sp" />
         </FrameLayout>

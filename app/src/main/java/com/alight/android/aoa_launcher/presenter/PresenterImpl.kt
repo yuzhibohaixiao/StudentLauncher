@@ -556,8 +556,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             AppUtils.getVersionName(activity, AppConstants.LAUNCHER_PACKAGE_NAME)
         val aoaVersionName = AppUtils.getVersionName(activity, AppConstants.AOA_PACKAGE_NAME)
         val ahwcxVersionName = AppUtils.getVersionName(activity, AppConstants.AHWCX_PACKAGE_NAME)
-        var systemVersionName = Build.VERSION.RELEASE
-
+        var systemVersionName = Build.DISPLAY
         updateDialog.tv_hardware_version.text = ahwcxVersionName
         updateDialog.tv_launcher_version.text = launcherVersionName
         updateDialog.tv_aoa_version.text = aoaVersionName
