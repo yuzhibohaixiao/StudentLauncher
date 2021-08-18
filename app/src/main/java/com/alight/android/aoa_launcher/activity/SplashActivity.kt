@@ -104,7 +104,6 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         if (InternetUtil.isNetworkAvalible(this)) {
             fl_splash1.visibility = View.GONE
             ll_splash2.visibility = View.VISIBLE
-            getPresenter().getModel()
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val qrCode = AccountUtil.getQrCode()

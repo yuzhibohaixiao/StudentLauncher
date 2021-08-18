@@ -1,6 +1,5 @@
 package com.alight.android.aoa_launcher.ui.adapter
 
-import android.widget.ImageView
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.bean.Parent
 import com.bumptech.glide.Glide
