@@ -55,7 +55,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
 
     override fun initData() {
-
         //获取用户信息之前必须调用的初始化方法
         AccountUtil.run()
         //初始化权限
@@ -74,6 +73,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        getPresenter().updateAppAndSystem()
         startHardwareControl()
         Log.i(TAG, "DSN: ${AccountUtil.getDSN()}")
+        SPUtils.syncPutData("splashClose", false)
+        Log.i(TAG, "splashClose initData")
     }
 
     /**
@@ -351,7 +352,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
     override fun onDestroy() {
         super.onDestroy()
-        dialog?.dismiss();
+        dialog?.dismiss()
     }
-
 }
