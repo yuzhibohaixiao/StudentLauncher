@@ -10,6 +10,7 @@ import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
+import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.PersonalCenterFamilyAdapter
@@ -183,12 +184,12 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         when (v.id) {
             R.id.ll_back_personal_center ->
                 finish()
-            //用户登出
+            //用户注销
             R.id.ll_exit_personal_center -> {
                 sendSendUserLogoutBroadcast()
-                finish()
                 SPUtils.syncPutData("onlyShowSelectChild", true)
-                startActivity(Intent(this, SplashActivity::class.java))
+                setResult(AppConstants.RESULT_CODE_LAUNCHER_START_SELECT_USER)
+                finish()
             }
             R.id.tv_focus -> {
                 calibrationAbility?.startCalibration()

@@ -8,6 +8,9 @@ class AppConstants {
         const val OTHER_APP = "other_app"
         const val NEW_USER = "new_user"
 
+        const val RESULT_CODE_SELECT_USER_BACK = 100
+        const val RESULT_CODE_LAUNCHER_START_SELECT_USER = 101
+
         //家庭id
         const val FAMILY_ID = "family_id"
 

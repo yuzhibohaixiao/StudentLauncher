@@ -9,6 +9,8 @@ import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.TokenMessage
@@ -43,15 +45,14 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     private var tokenPair: TokenPair? = null
     private var TAG = "LauncherActivity"
     private var dialog: CustomDialog? = null
+    private var activityResultLauncher: ActivityResultLauncher<Intent>? = null
 
     override fun onResume() {
         super.onResume()
-        //初始化用户工具及展示用户数据
-        initAccountUtil()
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
         if (!splashClose) {
             //如果未展示过引导则展示引导页
-            startActivity(Intent(this, SplashActivity::class.java))
+            activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         }
     }
 
@@ -77,6 +78,23 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         Log.i(TAG, "DSN: ${AccountUtil.getDSN()}")
         SPUtils.syncPutData("splashClose", false)
         Log.i(TAG, "splashClose initData")
+        //注册splash的返回数据回调
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            when (it.resultCode) {
+                //选择用户后的用户刷新逻辑
+                AppConstants.RESULT_CODE_SELECT_USER_BACK -> {
+                    //初始化用户工具及展示用户数据
+                    initAccountUtil()
+                }
+                //使用Launcher调起选择用户
+                AppConstants.RESULT_CODE_LAUNCHER_START_SELECT_USER -> {
+                    activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
+                }
+            }
+
+        }
     }
 
     /**
@@ -297,7 +315,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 if (tokenPair == null) return
                 var intent = Intent(this, PersonCenterActivity::class.java)
                 intent.putExtra("userInfo", tokenPair)
-                startActivity(intent)
+                activityResultLauncher?.launch(intent)
             }
         }
     }
@@ -356,4 +374,5 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         super.onDestroy()
         dialog?.dismiss()
     }
+
 }

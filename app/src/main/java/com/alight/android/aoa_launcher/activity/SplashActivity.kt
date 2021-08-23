@@ -234,6 +234,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     private fun finishSplash() {
         SPUtils.syncPutData("splashClose", true)
+        setResult(AppConstants.RESULT_CODE_SELECT_USER_BACK)
         finish()
     }
 
