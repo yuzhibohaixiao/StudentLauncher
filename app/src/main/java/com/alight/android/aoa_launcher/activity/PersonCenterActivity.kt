@@ -17,6 +17,8 @@ import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.activity_personal_center.*
 import java.util.*
 
@@ -44,11 +46,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             tokenPair = userInfo as TokenPair
         }
         tokenPair?.apply {
+
             Glide.with(this@PersonCenterActivity)
-                .load(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
-//                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-//                .error()
+                .load(tokenPair?.avatar)
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .error(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
                 .into(iv_icon_personal_center)
+
             tv_name_personal_center.text = name
             tv_grade_personal_center.text = "一年级"
             tv_gender_center.text = when (gender) {

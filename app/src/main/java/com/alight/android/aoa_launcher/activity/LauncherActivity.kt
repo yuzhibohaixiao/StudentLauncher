@@ -22,6 +22,8 @@ import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.DateUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.permissionx.guolindev.PermissionX
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import kotlinx.android.synthetic.main.activity_main.*
@@ -242,9 +244,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             if (any is TokenPair) {
                 tokenPair = any
                 Glide.with(this@LauncherActivity)
-                    .load(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
-//                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
-//                    .error()
+                    .load(tokenPair?.avatar)
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .error(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
                     .into(iv_user_icon_launcher)
                 tv_user_name_launcher.text = any.name
             }
