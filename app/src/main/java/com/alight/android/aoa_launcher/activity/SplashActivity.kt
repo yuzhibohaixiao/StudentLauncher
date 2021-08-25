@@ -51,11 +51,6 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     )
     private var userSplashNumber = 0
 
-    override fun onResume() {
-        super.onResume()
-//        showQRCode()
-    }
-
     //初始化控件
     override fun initView() {
 
@@ -233,11 +228,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun finishSplash() {
-        val syncPutData = SPUtils.syncPutData("splashClose", true)
-//        if (syncPutData) {
-            setResult(AppConstants.RESULT_CODE_SELECT_USER_BACK)
-            finish()
-//        }
+        setResult(AppConstants.RESULT_CODE_SELECT_USER_BACK)
+        finish()
     }
 
     private fun openUserSplash() {
