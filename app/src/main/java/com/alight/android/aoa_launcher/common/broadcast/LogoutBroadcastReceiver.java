@@ -17,6 +17,6 @@ public class LogoutBroadcastReceiver extends BroadcastReceiver {
         String str;
         str = "接收到的广播消息为：" + intent.getStringExtra("message"); // 接收消息
         Log.i("TAG", "onReceive: " + str);
-        Toast.makeText(context, intent.getStringExtra("message"), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, intent.getStringExtra("message"), Toast.LENGTH_SHORT).show();
     }
 }
