@@ -582,6 +582,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             updateNumber++
         }
         if (updateNumber != 0) {
+            updateDialog.tv_update_number.setBackgroundResource(R.drawable.update_oval_red)
             updateDialog.tv_update_number.text = updateNumber.toString()
             //表示有升级
             update.setOnClickListener {
@@ -595,6 +596,8 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 intent.putExtra("ahwc", hardwareApp)
                 activity.startActivity(intent)
             }
+        }else{
+            updateDialog.tv_update_number.setBackgroundResource(R.drawable.splash_fully_transparent)
         }
 
 

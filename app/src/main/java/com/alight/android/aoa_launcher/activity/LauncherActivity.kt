@@ -82,9 +82,12 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         activityResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) {
+            Log.i(TAG, "registerForActivityResult")
             when (it.resultCode) {
                 //选择用户后的用户刷新逻辑
                 AppConstants.RESULT_CODE_SELECT_USER_BACK -> {
+                    val syncPutData = SPUtils.syncPutData("splashClose", true)
+                    Log.i(TAG, "initAccountUtil")
                     //初始化用户工具及展示用户数据
                     initAccountUtil()
                 }
