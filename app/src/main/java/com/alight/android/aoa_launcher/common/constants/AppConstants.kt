@@ -27,6 +27,8 @@ class AppConstants {
         //Launcher 包名
         const val LAUNCHER_PACKAGE_NAME = "com.alight.android.aoa_launcher"
 
+        const val AV_PACKAGE_NAME = "com.tencent.trtcav"
+
         //安智市场包名
         const val AZ_PACKAGE_NAME = "com.coolapk.market"
 
