@@ -54,6 +54,16 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             //如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         }
+
+        if (tv_user_name_launcher.text.isNullOrEmpty()) {
+            Glide.with(this@LauncherActivity)
+                .load(tokenPair?.avatar)
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .error(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
+                .into(iv_user_icon_launcher)
+            tv_user_name_launcher.text = tokenPair?.name
+        }
+
     }
 
 

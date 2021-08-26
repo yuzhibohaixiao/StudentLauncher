@@ -67,10 +67,11 @@ public class MoreDownloadActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        int newLauncherVersionCode =
+        int localLauncherVersionCode =
                 AppUtils.getVersionCode(this, AppConstants.LAUNCHER_PACKAGE_NAME);
-        int newAoaVersionCode = AppUtils.getVersionCode(this, AppConstants.AOA_PACKAGE_NAME);
-        int newAhwcxVersionCode = AppUtils.getVersionCode(this, AppConstants.AHWCX_PACKAGE_NAME);
+        int localAoaVersionCode = AppUtils.getVersionCode(this, AppConstants.AOA_PACKAGE_NAME);
+        int localAhwcxVersionCode = AppUtils.getVersionCode(this, AppConstants.AHWCX_PACKAGE_NAME);
+        int localAvVersionCode = AppUtils.getVersionCode(this, AppConstants.AV_PACKAGE_NAME);
         String newSystemVersionName = Build.DISPLAY;
         UpdateBeanData systemApp = (UpdateBeanData) getIntent().getSerializableExtra("system");
         systemApp.setType(".zip");
@@ -80,18 +81,23 @@ public class MoreDownloadActivity extends BaseActivity {
         aoa.setType(".apk");
         UpdateBeanData ahwc = (UpdateBeanData) getIntent().getSerializableExtra("ahwc");
         ahwc.setType(".apk");
+        UpdateBeanData av = (UpdateBeanData) getIntent().getSerializableExtra("av");
+        av.setType(".apk");
         //系统对比VersionName不同则升级
         if (!newSystemVersionName.equals(systemApp.getVersion_name())) {
             systemApp.setApp_name("update");
             urlList.add(systemApp);
         }
-        if (newAoaVersionCode < aoa.getVersion_code()) {
+        if (localAoaVersionCode < aoa.getVersion_code()) {
             urlList.add(aoa);
         }
-        if (newAhwcxVersionCode < ahwc.getVersion_code()) {
+        if (localAhwcxVersionCode < ahwc.getVersion_code()) {
             urlList.add(ahwc);
         }
-        if (newLauncherVersionCode < launcherApp.getVersion_code()) {
+        if (localAvVersionCode < av.getVersion_code()) {
+            urlList.add(av);
+        }
+        if (localLauncherVersionCode < launcherApp.getVersion_code()) {
             urlList.add(launcherApp);
         }
         if (urlList.size() == 0) {
@@ -103,6 +109,7 @@ public class MoreDownloadActivity extends BaseActivity {
 //        urlList.add(launcherApp);
 //        urlList.add(aoa);
 //        urlList.add(ahwc);
+//        urlList.add(av);
 
         checkExtrnalStorage();
         getData();

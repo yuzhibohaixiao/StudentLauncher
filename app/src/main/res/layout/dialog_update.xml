@@ -51,12 +51,12 @@
                 android:textSize="9sp" />
 
             <TextView
-                android:textColor="@color/black"
                 android:id="@+id/tv_hardware_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="1.02"
+                android:textColor="@color/black"
                 android:textSize="9sp" />
         </FrameLayout>
 
@@ -73,12 +73,12 @@
                 android:textSize="9sp" />
 
             <TextView
-                android:textColor="@color/black"
                 android:id="@+id/tv_aoa_version"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:text="1.02"
+                android:textColor="@color/black"
                 android:textSize="9sp" />
         </FrameLayout>
 
@@ -96,7 +96,6 @@
                 android:textSize="9sp" />
 
             <TextView
-                android:textColor="@color/black"
                 android:id="@+id/tv_system_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,6 +103,29 @@
                 android:layout_marginStart="150dp"
                 android:singleLine="true"
                 android:text="1.02"
+                android:textColor="@color/black"
+                android:textSize="9sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="音视频通话"
+                android:textColor="@color/black"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/tv_av_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="1.02"
+                android:textColor="@color/black"
                 android:textSize="9sp" />
         </FrameLayout>
 
@@ -120,12 +142,12 @@
                 android:textSize="9sp" />
 
             <TextView
-                android:textColor="@color/black"
                 android:id="@+id/tv_launcher_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="1.02"
+                android:textColor="@color/black"
                 android:textSize="9sp" />
         </FrameLayout>
 

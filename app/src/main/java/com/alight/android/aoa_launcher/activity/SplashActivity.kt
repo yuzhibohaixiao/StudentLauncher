@@ -228,8 +228,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun finishSplash() {
-        setResult(AppConstants.RESULT_CODE_SELECT_USER_BACK)
-        finish()
+        val syncPutData = SPUtils.syncPutData("splashClose", true)
+        if (syncPutData) {
+            setResult(AppConstants.RESULT_CODE_SELECT_USER_BACK)
+            finish()
+        }
     }
 
     private fun openUserSplash() {

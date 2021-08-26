@@ -540,6 +540,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         var launcherApp: UpdateBeanData? = null   //launcher
         var aoaApp: UpdateBeanData? = null    //aoa
         var hardwareApp: UpdateBeanData? = null   //硬件
+        var avApp: UpdateBeanData? = null   //音视频
 
         if (any.data == null) return
         for (position in any.data.indices) {
@@ -549,6 +550,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 "launcher" -> launcherApp = any.data[position]
                 "aoa" -> aoaApp = any.data[position]
                 "ahwc" -> hardwareApp = any.data[position]
+                "av" -> avApp = any.data[position]
             }
         }
         //当前版本名
@@ -556,19 +558,25 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             AppUtils.getVersionName(activity, AppConstants.LAUNCHER_PACKAGE_NAME)
         val aoaVersionName = AppUtils.getVersionName(activity, AppConstants.AOA_PACKAGE_NAME)
         val ahwcxVersionName = AppUtils.getVersionName(activity, AppConstants.AHWCX_PACKAGE_NAME)
+        val avVersionName = AppUtils.getVersionName(activity, AppConstants.AV_PACKAGE_NAME)
         var systemVersionName = Build.DISPLAY
         updateDialog.tv_hardware_version.text = ahwcxVersionName
         updateDialog.tv_launcher_version.text = launcherVersionName
         updateDialog.tv_aoa_version.text = aoaVersionName
         updateDialog.tv_system_version.text = systemVersionName
+        updateDialog.tv_av_version.text = avVersionName
 
         val launcherVersionCode =
             AppUtils.getVersionCode(activity, AppConstants.LAUNCHER_PACKAGE_NAME)
         val aoaVersionCode = AppUtils.getVersionCode(activity, AppConstants.AOA_PACKAGE_NAME)
         val ahwcxVersionCode = AppUtils.getVersionCode(activity, AppConstants.AHWCX_PACKAGE_NAME)
+        val avVersionCode = AppUtils.getVersionCode(activity, AppConstants.AV_PACKAGE_NAME)
 
         var updateNumber = 0
         if (launcherApp?.version_code!! > launcherVersionCode) {
+            updateNumber++
+        }
+        if (avApp?.version_code!! > avVersionCode) {
             updateNumber++
         }
         if (aoaApp?.version_code!! > aoaVersionCode) {
@@ -594,9 +602,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 intent.putExtra("test_apk", launcherApp)
                 intent.putExtra("aoa", aoaApp)
                 intent.putExtra("ahwc", hardwareApp)
+                intent.putExtra("av", avApp)
                 activity.startActivity(intent)
             }
-        }else{
+        } else {
             updateDialog.tv_update_number.setBackgroundResource(R.drawable.splash_fully_transparent)
         }
 
