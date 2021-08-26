@@ -46,16 +46,16 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     private var TAG = "LauncherActivity"
     private var dialog: CustomDialog? = null
     private var activityResultLauncher: ActivityResultLauncher<Intent>? = null
+    private var splashCloseFlag = false
 
     override fun onResume() {
         super.onResume()
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
-        if (!splashClose) {
+        if (!splashClose && !splashCloseFlag) {
             //如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         }
-
-        if (tv_user_name_launcher.text.isNullOrEmpty()) {
+        if (!splashCloseFlag && tv_user_name_launcher.text.isNullOrEmpty()) {
             Glide.with(this@LauncherActivity)
                 .load(tokenPair?.avatar)
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
@@ -63,7 +63,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 .into(iv_user_icon_launcher)
             tv_user_name_launcher.text = tokenPair?.name
         }
-
+        splashCloseFlag = false
     }
 
 
@@ -96,6 +96,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             when (it.resultCode) {
                 //选择用户后的用户刷新逻辑
                 AppConstants.RESULT_CODE_SELECT_USER_BACK -> {
+                    splashCloseFlag = true
                     val syncPutData = SPUtils.syncPutData("splashClose", true)
                     Log.i(TAG, "initAccountUtil")
                     //初始化用户工具及展示用户数据
