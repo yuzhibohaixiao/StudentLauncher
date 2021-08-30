@@ -2,6 +2,9 @@ package com.alight.android.aoa_launcher.presenter
 
 import android.Manifest
 import android.app.Activity
+import android.app.Notification.FLAG_NO_CLEAR
+import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -17,6 +20,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
@@ -24,6 +28,9 @@ import com.alight.android.aoa_launcher.activity.MoreDownloadActivity
 import com.alight.android.aoa_launcher.common.base.BasePresenter
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
+import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
+import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.SYSTEM_ZIP_FULL_PATH
+import com.alight.android.aoa_launcher.common.listener.DownloadListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.contract.IContract
 import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
@@ -48,6 +55,7 @@ import kotlinx.android.synthetic.main.dialog_update.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import java.util.*
+
 
 /**
  * launcher业务处理类
@@ -455,13 +463,81 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     }
 
-    fun updateAppAndSystem() {
-        //XUpdate 更新
-        /* EasyUpdate.create(activity, Urls.BASEURL_TEST + Urls.UPDATE)
-            .updateHttpService(AriaDownloader.getUpdateHttpService(activity))
-            .updateParser(CustomUpdateParser(activity))
-            .update()*/
+    fun updateSystem(activity: Activity, updateBean: UpdateBean) {
+        var localSystemVersionName = Build.DISPLAY
+        var systemApp: UpdateBeanData? = null //系统固件
+        for (position in updateBean.data.indices) {
+            when (updateBean.data[position].app_name) {
+                //系统升级
+                "system" -> systemApp = updateBean.data[position]
+            }
+        }
+        //系统版本名不同表示有升级
+        if (systemApp?.version_name!! != localSystemVersionName && systemApp.app_force_upgrade == 1) {//pp_force_upgrade == 1表示强更
+            var notificationManager =
+                activity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+            val builder: NotificationCompat.Builder = NotificationCompat.Builder(activity)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentInfo("下载中...")
+                .setContentTitle("系统下载中")
+            val notification = builder.build()
+            notification.flags = notification.flags or FLAG_NO_CLEAR
+
+            builder.setProgress(100, 0, true);
+            notificationManager.notify(0x3, notification)
+            //系统固件升级包下载
+            DownloadUtil.download(
+                systemApp.app_url,
+                SYSTEM_ZIP_FULL_PATH,
+                object : DownloadListener {
+
+                    var oldProgress = 0
+                    override fun onStart() {
+                        //运行在子线程
+                    }
+
+                    override fun onProgress(progress: Int) {
+                        if (oldProgress != progress) {
+                            Runnable {
+                                builder.setProgress(100, progress, false)
+                            }
+                            notificationManager.notify(0x3, builder.build())
+                            //运行在子线程
+                            Log.i("TAG", "onProgress: $progress")
+                        }
+
+                        oldProgress = progress
+                    }
+
+                    override fun onFinish(path: String?) {
+                        builder.setContentTitle("下载完成")
+                            .setContentInfo("下载完成")
+                        Log.i("TAG", "onProgress: 下载完成，尝试提示安装")
+                        //运行在子线程
+                        val intent = Intent()
+                        intent.component = ComponentName(
+                            "android.rockchip.update.service",
+                            "android.rockchip.update.service.FirmwareUpdatingActivity"
+                        )
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.putExtra(
+                            EXTRA_IMAGE_PATH,
+                            SYSTEM_ZIP_FULL_PATH
+                        )
+                        activity.startActivity(intent)
+                    }
+
+                    override fun onFail(errorInfo: String?) {
+                        //运行在子线程
+                    }
+                })
+        }
+        //XUpdate 更新
+        /*    EasyUpdate.create(launcherActivity, Urls.BASEURL + Urls.UPDATE)
+                .updateHttpService(AriaDownloader.getUpdateHttpService(launcherActivity))
+                .updateParser(CustomUpdateParser(launcherActivity))
+                .update()*/
     }
 
     fun setPersonInfo(activity: Activity) {

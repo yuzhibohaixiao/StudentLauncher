@@ -97,6 +97,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         }
         //判断网络是否连接
         if (InternetUtil.isNetworkAvalible(this)) {
+            //检测系统更新
+            getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
             fl_splash1.visibility = View.GONE
             ll_splash2.visibility = View.VISIBLE
             GlobalScope.launch(Dispatchers.IO) {
@@ -381,6 +383,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
                     }
                 }
+            }
+            is UpdateBean -> {
+                //获取App和系统固件更新
+                getPresenter().updateSystem(this@SplashActivity, any)
             }
         }
     }

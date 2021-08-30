@@ -1,23 +1,26 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.Manifest
-import android.content.ComponentName
-import android.content.Intent
+import android.content.*
 import android.database.ContentObserver
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.TokenMessage
 import com.alight.android.aoa_launcher.common.bean.TokenPair
+import com.alight.android.aoa_launcher.common.bean.UpdateBean
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.i.LauncherListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
+import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.AccountUtil
@@ -82,8 +85,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         initWeatherDate()
         //定位后获取天气
         getPresenter().getLocationAndWeather()
-        //获取App和系统固件更新
-//        getPresenter().updateAppAndSystem()
         startHardwareControl()
         Log.i(TAG, "DSN: ${AccountUtil.getDSN()}")
         SPUtils.syncPutData("splashClose", false)
@@ -107,9 +108,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                     activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
                 }
             }
-
         }
     }
+
 
     /**
      * 开启硬件控制
@@ -124,7 +125,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
     private var uri: Uri? = null
     private val handler =
-        Handler(Handler.Callback { msg ->
+        Handler { msg ->
             if (msg.what == 0x123) {
                 if (uri != null) {
                     val cursor =
@@ -151,7 +152,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 }
             }
             false
-        })
+        }
 
     /**
      * 内容提供者监听类

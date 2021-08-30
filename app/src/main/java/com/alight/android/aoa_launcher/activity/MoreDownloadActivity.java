@@ -51,7 +51,8 @@ import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYST
 
 /**
  * 多文件列表下载
- * bug 有一定的几率出现下载超时timeout,内存没有及时释放导致,未解决
+ *
+ * @author wangzhe
  */
 public class MoreDownloadActivity extends BaseActivity {
     private static final String TAG = "MoreDownloadActivity";

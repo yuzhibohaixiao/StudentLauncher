@@ -28,24 +28,18 @@ import retrofit2.Retrofit;
 public class DownloadUtil {
 
     public static void download(String url, final String path, final DownloadListener downloadListener) {
-       /* if (TextUtils.isEmpty(url))
-            return;
-        String[] urls = url.split("//");
-        for (int i = 0; i < urls.length; i++) {
-            if (TextUtils.isEmpty(urls[i])) {
-                if (TextUtils.isEmpty(url))
-                    return;
-            }
-        }*/
+        int index = url.lastIndexOf("/");
+        String baseUrl = url.substring(0, index + 1);
+        String fileUrl = url.substring(index+1);//不包含本身位置
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://alight-apk.oss-cn-beijing.aliyuncs.com/")
+                .baseUrl(baseUrl)
                 //通过线程池获取一个线程，指定callback在子线程中运行。
                 .callbackExecutor(Executors.newSingleThreadExecutor())
                 .build();
 
         Apiservice service = retrofit.create(Apiservice.class);
 
-        Call<ResponseBody> call = service.download("update.zip");
+        Call<ResponseBody> call = service.download(fileUrl);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull final Response<ResponseBody> response) {
