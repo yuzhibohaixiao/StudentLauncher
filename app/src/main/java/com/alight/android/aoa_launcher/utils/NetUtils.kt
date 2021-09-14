@@ -1,5 +1,6 @@
 package com.alight.android.aoa_launcher.utils
 
+import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.net.apiservice.Apiservice
 import com.alight.android.aoa_launcher.net.urls.HeaderInterceptor
 import com.alight.android.aoa_launcher.net.urls.Urls
@@ -43,15 +44,19 @@ class NetUtils private constructor() {
     init {
         var log = HttpLoggingInterceptor()
         log.setLevel(HttpLoggingInterceptor.Level.BODY)
-        var ok = OkHttpClient.Builder()
+
+    /*    var ok = OkHttpClient.Builder()
             .addInterceptor(log)
             .readTimeout(10, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS)
             .addInterceptor(HeaderInterceptor())
-            .build()
+            .build()*/
+
+        val httpsUtils = HTTPSUtils(LauncherApplication.getContext())
+
         var retro = Retrofit.Builder()
             .baseUrl(Urls.BASEURL)
-            .client(ok)
+            .client(httpsUtils.instance)
             //1 替换Factory CoroutineCallAdapterFactory()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())

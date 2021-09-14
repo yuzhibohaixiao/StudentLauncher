@@ -35,7 +35,6 @@ class LauncherApplication : Application() {
         init()
     }
 
-
     private fun init() {
         //初始化听云sdk
         //"Host" 为听云平台「Redirect」服务器地址，无需添加协议头

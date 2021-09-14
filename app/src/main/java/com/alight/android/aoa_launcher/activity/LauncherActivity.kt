@@ -54,7 +54,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     override fun onResume() {
         super.onResume()
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
+        Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
         if (!splashClose && !splashCloseFlag) {
+            Log.i(TAG, "展示引导页")
             //如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         }

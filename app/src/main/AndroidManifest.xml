@@ -39,10 +39,6 @@
     <uses-permission
         android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />
-    <!--配置glide加载https所需要的GlideModule-->
-    <meta-data
-        android:name="com.alpha58.okhttps.https.OkHttpGlideModule"
-        android:value="GlideModule" />
 
     <application
         android:name=".application.LauncherApplication"
