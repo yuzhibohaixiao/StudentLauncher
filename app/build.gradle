@@ -152,4 +152,6 @@ dependencies {
 
     implementation 'com.alight.ahwcx:bridge:0.2.2'
     implementation 'com.alight.ahwcx:ahwsdk:0.2.2'
+
+    implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
 }
