@@ -155,6 +155,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 SPUtils.syncPutData("rebinding", true)
                 //让引导再次开启
                 SPUtils.syncPutData("splashClose", false)
+                finish()
                 var intent = Intent(this, SplashActivity::class.java)
                 startActivity(intent)
             }

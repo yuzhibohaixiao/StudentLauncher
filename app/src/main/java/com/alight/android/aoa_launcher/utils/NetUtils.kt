@@ -2,14 +2,12 @@ package com.alight.android.aoa_launcher.utils
 
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.net.apiservice.Apiservice
-import com.alight.android.aoa_launcher.net.urls.HeaderInterceptor
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.google.gson.Gson
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -20,12 +18,10 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLConnection
-import java.util.concurrent.TimeUnit
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
