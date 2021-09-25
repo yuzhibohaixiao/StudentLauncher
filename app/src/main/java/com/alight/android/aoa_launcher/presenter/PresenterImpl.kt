@@ -688,7 +688,6 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
         updateDialog.show()
 
-
         unbind.setOnClickListener {
             //解绑二次确认弹窗
             val confirmDialog = ConfirmDialog(activity)

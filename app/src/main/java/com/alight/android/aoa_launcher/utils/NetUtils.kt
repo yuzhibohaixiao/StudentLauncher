@@ -14,16 +14,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.MalformedURLException
-import java.net.URL
-import java.net.URLConnection
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 /**
  * 协程 类似于rxjava 是一个异步处理库
@@ -41,7 +31,7 @@ class NetUtils private constructor() {
         var log = HttpLoggingInterceptor()
         log.setLevel(HttpLoggingInterceptor.Level.BODY)
 
-    /*    var ok = OkHttpClient.Builder()
+        /*    var ok = OkHttpClient.Builder()
             .addInterceptor(log)
             .readTimeout(10, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS)
@@ -149,58 +139,9 @@ class NetUtils private constructor() {
         fun onError(error: String)
     }
 
-    /**
-     * 通过CmyIP获取获取外网外网地址  需在异步线程中访问
-     * @return 外网IP
-     */
-    fun getOuterNetFormCmyIP(): String? {
-        val response = GetOuterNetIp("http://www.cmyip.com/")
-        val pattern: Pattern = Pattern
-            .compile("((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))")
-        val matcher: Matcher = pattern.matcher(response)
-        return if (matcher.find()) {
-            matcher.group()
-        } else null
+
+    inline fun <reified T : Any> T.toJson(): String {
+        return Gson().toJson(this)
+
     }
-
-    /**
-     * 获取获取外网外网地址  需在异步线程中访问
-     * @param ipaddr 提供外网服务的服务器ip地址
-     * @return       外网IP
-     */
-    fun GetOuterNetIp(ipaddr: String?): String? {
-        var infoUrl: URL? = null
-        var inStream: InputStream? = null
-        try {
-            infoUrl = URL(ipaddr)
-            val connection: URLConnection = infoUrl.openConnection()
-            val httpConnection: HttpURLConnection = connection as HttpURLConnection
-            val responseCode: Int = httpConnection.getResponseCode()
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                inStream = httpConnection.getInputStream()
-                val reader = BufferedReader(InputStreamReader(inStream, "utf-8"))
-                val strber = StringBuilder()
-                var line: String? = null
-                while (reader.readLine().also({ line = it }) != null) strber.append(
-                    """
-                        $line
-                        
-                        """.trimIndent()
-                )
-                inStream.close()
-                return strber.toString()
-            }
-        } catch (e: MalformedURLException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return ""
-    }
-
-}
-
-inline fun <reified T : Any> T.toJson(): String {
-    return Gson().toJson(this)
-
 }
