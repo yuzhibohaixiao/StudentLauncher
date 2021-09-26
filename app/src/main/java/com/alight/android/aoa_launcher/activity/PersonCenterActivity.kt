@@ -38,7 +38,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         rv_family_info.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rv_family_info.adapter = familyAdapter
-
+        // todo
+        tv_pen_touch.isSelected = true
+        tv_hand_touch.isSelected = false
     }
 
     override fun initData() {
@@ -85,10 +87,14 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     override fun setListener() {
         ll_back_personal_center.setOnClickListener(this)
         ll_exit_personal_center.setOnClickListener(this)
+        tv_exit_personal_center.setOnClickListener(this)
         tv_focus.setOnClickListener(this)
         tv_wifi.setOnClickListener(this)
         tv_set.setOnClickListener(this)
         tv_splash.setOnClickListener(this)
+        tv_pen_touch.setOnClickListener(this)
+        tv_hand_touch.setOnClickListener(this)
+
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
             if (status.online == 0) {
@@ -186,7 +192,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.ll_back_personal_center ->
                 finish()
             //用户注销
-            R.id.ll_exit_personal_center -> {
+            R.id.ll_exit_personal_center, R.id.tv_exit_personal_center -> {
                 sendSendUserLogoutBroadcast()
                 SPUtils.syncPutData("onlyShowSelectChild", true)
                 setResult(AppConstants.RESULT_CODE_LAUNCHER_START_SELECT_USER)
@@ -235,6 +241,14 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 val intent = Intent(this, SplashActivity::class.java)
                 intent.putExtra("openUserSplash", true)
                 startActivity(intent)
+            }
+            R.id.tv_pen_touch -> {
+                tv_pen_touch.isSelected = true
+                tv_hand_touch.isSelected = false
+            }
+            R.id.tv_hand_touch -> {
+                tv_pen_touch.isSelected = false
+                tv_hand_touch.isSelected = true
             }
         }
     }
