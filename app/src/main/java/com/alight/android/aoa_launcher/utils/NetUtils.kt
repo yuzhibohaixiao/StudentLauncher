@@ -142,6 +142,5 @@ class NetUtils private constructor() {
 
     inline fun <reified T : Any> T.toJson(): String {
         return Gson().toJson(this)
-
     }
 }
