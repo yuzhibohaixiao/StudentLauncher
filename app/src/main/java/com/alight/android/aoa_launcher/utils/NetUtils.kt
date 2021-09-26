@@ -139,8 +139,8 @@ class NetUtils private constructor() {
         fun onError(error: String)
     }
 
+}
 
-    inline fun <reified T : Any> T.toJson(): String {
-        return Gson().toJson(this)
-    }
+inline fun <reified T : Any> T.toJson(): String {
+    return Gson().toJson(this)
 }

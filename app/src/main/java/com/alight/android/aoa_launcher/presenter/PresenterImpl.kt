@@ -793,8 +793,4 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             return true
         }
     }
-
-    inline fun <reified T : Any> T.toJson(): String {
-        return Gson().toJson(this)
-    }
 }
