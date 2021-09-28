@@ -4,9 +4,12 @@ import android.content.Intent
 import android.os.Looper
 import android.provider.Settings
 import android.view.View
+import android.widget.SeekBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
+import com.alight.ahwcx.ahwsdk.abilities.PanelAbility
+import com.alight.ahwcx.ahwsdk.abilities.PanelAbility.HardwareStatusHandler
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
@@ -20,7 +23,11 @@ import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.xw.repo.BubbleSeekBar
 import kotlinx.android.synthetic.main.activity_personal_center.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -32,15 +39,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private val USER_LOGOUT_ACTION = "com.alight.android.user_logout" // 自定义ACTION
     private val abilityManager = AbilityManager("launcher", "3", "123")
     private var calibrationAbility: CalibrationAbility? = null
+    private var panelAbility: PanelAbility? = null
 
     override fun initView() {
         familyAdapter = PersonalCenterFamilyAdapter()
         rv_family_info.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rv_family_info.adapter = familyAdapter
-        // todo
-        tv_pen_touch.isSelected = true
-        tv_hand_touch.isSelected = false
     }
 
     override fun initData() {
@@ -82,6 +87,37 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         calibrationAbility =
             abilityManager.getAbility(CalibrationAbility::class.java, true, applicationContext)
         calibrationAbility?.bindLooper(Looper.myLooper()!!)
+        panelAbility =
+            abilityManager.getAbility(PanelAbility::class.java, true, applicationContext)
+        panelAbility?.bindLooper(Looper.myLooper()!!)
+
+        GlobalScope.launch {
+            delay(500)
+            //初始化控制中心
+            panelAbility?.getStatus(object : HardwareStatusHandler {
+                override fun onError(result: Map<String, Any>) {
+                }
+
+                override fun onSuccess(hardwareStatus: PanelAbility.HardwareStatus) {
+                    //触控模式
+                    when (hardwareStatus.touchMode) {
+                        PanelAbility.TouchMode.PEN_MODE -> {
+                            tv_pen_touch.isSelected = true
+                            tv_hand_touch.isSelected = false
+                        }
+                        PanelAbility.TouchMode.FINGER_MODE -> {
+                            tv_pen_touch.isSelected = false
+                            tv_hand_touch.isSelected = true
+                        }
+                    }
+                    //亮度
+                    bsb_light.setProgress(hardwareStatus.light.toFloat())
+                    //音量
+                    bsb_voice.setProgress(hardwareStatus.volume.toFloat())
+                }
+
+            })
+        }
     }
 
     override fun setListener() {
@@ -105,6 +141,87 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 ToastUtils.showShort(this, "当前用户忙碌中")
             }
         }
+
+        GlobalScope.launch {
+            delay(500)
+            panelAbility?.subStatus(object : HardwareStatusHandler {
+                override fun onError(result: Map<String, Any>) {
+
+                }
+
+                override fun onSuccess(hardwareStatus: PanelAbility.HardwareStatus) {
+                    //监听触控模式
+                    when (hardwareStatus.touchMode) {
+                        PanelAbility.TouchMode.PEN_MODE -> {
+                            tv_pen_touch.isSelected = true
+                            tv_hand_touch.isSelected = false
+                        }
+                        PanelAbility.TouchMode.FINGER_MODE -> {
+                            tv_pen_touch.isSelected = false
+                            tv_hand_touch.isSelected = true
+                        }
+                    }
+                    //亮度
+                    bsb_light.setProgress(hardwareStatus.light.toFloat())
+                    //音量
+                    bsb_voice.setProgress(hardwareStatus.volume.toFloat())
+                }
+            })
+
+        }
+
+        bsb_light.onProgressChangedListener = object : BubbleSeekBar.OnProgressChangedListener {
+            override fun onProgressChanged(
+                bubbleSeekBar: BubbleSeekBar?,
+                progress: Int,
+                progressFloat: Float,
+                fromUser: Boolean
+            ) {
+            }
+
+            override fun getProgressOnActionUp(
+                bubbleSeekBar: BubbleSeekBar?,
+                progress: Int,
+                progressFloat: Float
+            ) {
+                panelAbility?.setLight(progress)
+            }
+
+            override fun getProgressOnFinally(
+                bubbleSeekBar: BubbleSeekBar?,
+                progress: Int,
+                progressFloat: Float,
+                fromUser: Boolean
+            ) {
+            }
+        }
+        bsb_voice.onProgressChangedListener = object : BubbleSeekBar.OnProgressChangedListener {
+            override fun onProgressChanged(
+                bubbleSeekBar: BubbleSeekBar?,
+                progress: Int,
+                progressFloat: Float,
+                fromUser: Boolean
+            ) {
+            }
+
+            override fun getProgressOnActionUp(
+                bubbleSeekBar: BubbleSeekBar?,
+                progress: Int,
+                progressFloat: Float
+            ) {
+                panelAbility?.setVolume(progress)
+            }
+
+            override fun getProgressOnFinally(
+                bubbleSeekBar: BubbleSeekBar?,
+                progress: Int,
+                progressFloat: Float,
+                fromUser: Boolean
+            ) {
+
+            }
+        }
+
     }
 
     private fun startPhoneWindow(position: Int) {
@@ -245,10 +362,12 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_pen_touch -> {
                 tv_pen_touch.isSelected = true
                 tv_hand_touch.isSelected = false
+                panelAbility?.setTouchMode(PanelAbility.TouchMode.PEN_MODE)
             }
             R.id.tv_hand_touch -> {
                 tv_pen_touch.isSelected = false
                 tv_hand_touch.isSelected = true
+                panelAbility?.setTouchMode(PanelAbility.TouchMode.FINGER_MODE)
             }
         }
     }
