@@ -1,5 +1,6 @@
 package com.alight.android.aoa_launcher.ui.adapter
 
+import android.util.Log
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.bean.Parent
 import com.bumptech.glide.Glide
@@ -13,6 +14,7 @@ class PersonalCenterFamilyAdapter :
     BaseQuickAdapter<Parent, BaseViewHolder>(R.layout.item_family) {
 
     override fun convert(holder: BaseViewHolder, parent: Parent) {
+        Log.i("avatar", "parent.avatar: ${parent.avatar}")
         //家长头像
         Glide.with(context).load(parent.avatar)
             .error(if (parent.role_type == 1) R.drawable.father else R.drawable.mather)

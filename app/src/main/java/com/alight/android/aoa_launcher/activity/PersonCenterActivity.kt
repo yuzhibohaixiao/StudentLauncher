@@ -257,6 +257,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                     ToastUtils.showShort(this, "没有获取到家庭信息")
                 } else {
                     familyId = any.data.id
+                    //https转换
+//                    any.data.parents.forEach {
+//                        it.avatar.replace("https", "http")
+//                    }
                     familyAdapter.addData(any.data.parents)
 /*
                     any.data.parents.forEach {

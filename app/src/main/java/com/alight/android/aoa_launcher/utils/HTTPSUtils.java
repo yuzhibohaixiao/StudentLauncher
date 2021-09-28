@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+import java.security.SecureRandom;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +22,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+import javax.security.cert.X509Certificate;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -55,10 +58,66 @@ public final class HTTPSUtils {
         try {
             inputStream = mContext.getAssets().open("alightca.cer"); // 得到证书的输入流
             try {
+                TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                    /**
+                     * Given the partial or complete certificate chain provided by the
+                     * peer, build a certificate path to a trusted root and return if
+                     * it can be validated and is trusted for client SSL
+                     * authentication based on the authentication type.
+                     * <p>
+                     * The authentication type is determined by the actual certificate
+                     * used. For instance, if RSAPublicKey is used, the authType
+                     * should be "RSA". Checking is case-sensitive.
+                     *
+                     * @param chain    the peer certificate chain
+                     * @param authType the authentication type based on the client certificate
+                     * @throws IllegalArgumentException if null or zero-length chain
+                     *                                  is passed in for the chain parameter or if null or zero-length
+                     *                                  string is passed in for the  authType parameter
+                     * @throws CertificateException     if the certificate chain is not trusted
+                     *                                  by this TrustManager.
+                     */
+                    @Override
+                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
 
+                    }
+
+                    /**
+                     * Given the partial or complete certificate chain provided by the
+                     * peer, build a certificate path to a trusted root and return if
+                     * it can be validated and is trusted for server SSL
+                     * authentication based on the authentication type.
+                     * <p>
+                     * The authentication type is the key exchange algorithm portion
+                     * of the cipher suites represented as a String, such as "RSA",
+                     * "DHE_DSS". Note: for some exportable cipher suites, the key
+                     * exchange algorithm is determined at run time during the
+                     * handshake. For instance, for TLS_RSA_EXPORT_WITH_RC4_40_MD5,
+                     * the authType should be RSA_EXPORT when an ephemeral RSA key is
+                     * used for the key exchange, and RSA when the key from the server
+                     * certificate is used. Checking is case-sensitive.
+                     *
+                     * @param chain    the peer certificate chain
+                     * @param authType the key exchange algorithm used
+                     * @throws IllegalArgumentException if null or zero-length chain
+                     *                                  is passed in for the chain parameter or if null or zero-length
+                     *                                  string is passed in for the  authType parameter
+                     * @throws CertificateException     if the certificate chain is not trusted
+                     *                                  by this TrustManager.
+                     */
+                    @Override
+                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+
+                    }
+
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return new java.security.cert.X509Certificate[0];
+                    }
+                }};
                 trustManager = trustManagerForCertificates(inputStream);//以流的方式读入证书
                 SSLContext sslContext = SSLContext.getInstance("TLS");
-                sslContext.init(null, new TrustManager[]{trustManager}, null);
+                sslContext.init(null, trustAllCerts, new SecureRandom());
+//                sslContext.init(null, new TrustManager[]{trustManager}, null);
                 sslSocketFactory = sslContext.getSocketFactory();
 
             } catch (GeneralSecurityException e) {
@@ -67,6 +126,7 @@ public final class HTTPSUtils {
             HttpLoggingInterceptor log = new HttpLoggingInterceptor();
             log.setLevel(HttpLoggingInterceptor.Level.BODY);
             client = new OkHttpClient.Builder()
+                    .hostnameVerifier((hostname, session) -> true)
                     .addInterceptor(log)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .connectTimeout(10, TimeUnit.SECONDS)
