@@ -93,30 +93,34 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
         GlobalScope.launch {
             delay(500)
-            //初始化控制中心
-            panelAbility?.getStatus(object : HardwareStatusHandler {
-                override fun onError(result: Map<String, Any>) {
-                }
-
-                override fun onSuccess(hardwareStatus: PanelAbility.HardwareStatus) {
-                    //触控模式
-                    when (hardwareStatus.touchMode) {
-                        PanelAbility.TouchMode.PEN_MODE -> {
-                            tv_pen_touch.isSelected = true
-                            tv_hand_touch.isSelected = false
-                        }
-                        PanelAbility.TouchMode.FINGER_MODE -> {
-                            tv_pen_touch.isSelected = false
-                            tv_hand_touch.isSelected = true
-                        }
+            try {
+                //初始化控制中心
+                panelAbility?.getStatus(object : HardwareStatusHandler {
+                    override fun onError(result: Map<String, Any>) {
                     }
-                    //亮度
-                    bsb_light.setProgress(hardwareStatus.light.toFloat())
-                    //音量
-                    bsb_voice.setProgress(hardwareStatus.volume.toFloat())
-                }
 
-            })
+                    override fun onSuccess(hardwareStatus: PanelAbility.HardwareStatus) {
+                        //触控模式
+                        when (hardwareStatus.touchMode) {
+                            PanelAbility.TouchMode.PEN_MODE -> {
+                                tv_pen_touch.isSelected = true
+                                tv_hand_touch.isSelected = false
+                            }
+                            PanelAbility.TouchMode.FINGER_MODE -> {
+                                tv_pen_touch.isSelected = false
+                                tv_hand_touch.isSelected = true
+                            }
+                        }
+                        //亮度
+                        bsb_light.setProgress(hardwareStatus.light.toFloat())
+                        //音量
+                        bsb_voice.setProgress(hardwareStatus.volume.toFloat())
+                    }
+
+                })
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

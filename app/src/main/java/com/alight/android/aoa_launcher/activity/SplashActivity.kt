@@ -47,7 +47,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         R.drawable.launcher_splash1,
         R.drawable.launcher_splash2,
         R.drawable.launcher_splash3,
-        R.drawable.launcher_splash4
+        R.drawable.launcher_splash4,
+        R.drawable.launcher_splash5
     )
     private var userSplashNumber = 0
 
