@@ -42,6 +42,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private val abilityManager = AbilityManager("launcher", "3", "123")
     private var calibrationAbility: CalibrationAbility? = null
     private var panelAbility: PanelAbility? = null
+    private var music: MediaPlayer? = null
 
     override fun initView() {
         familyAdapter = PersonalCenterFamilyAdapter()
@@ -385,14 +386,14 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_pen_touch -> {
                 tv_pen_touch.isSelected = true
                 tv_hand_touch.isSelected = false
-                panelAbility?.setTouchMode(PanelAbility.TouchMode.PEN_MODE)
-                playClickMusic(R.raw.click)
+//                panelAbility?.setTouchMode(PanelAbility.TouchMode.PEN_MODE)
+                playClickMusic()
             }
             R.id.tv_hand_touch -> {
                 tv_pen_touch.isSelected = false
                 tv_hand_touch.isSelected = true
-                panelAbility?.setTouchMode(PanelAbility.TouchMode.FINGER_MODE)
-                playClickMusic(R.raw.click)
+//                panelAbility?.setTouchMode(PanelAbility.TouchMode.FINGER_MODE)
+                playClickMusic()
             }
         }
     }
@@ -400,9 +401,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     /**
      * 播放按键音
      */
-    private fun playClickMusic(musicId: Int) {
-        var music = MediaPlayer.create(this, musicId)
-        music.start()
+    private fun playClickMusic() {
+        if (music == null)
+            music = MediaPlayer.create(this, R.raw.click)
+        music?.start()
     }
 
     override fun onDestroy() {
