@@ -386,13 +386,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_pen_touch -> {
                 tv_pen_touch.isSelected = true
                 tv_hand_touch.isSelected = false
-//                panelAbility?.setTouchMode(PanelAbility.TouchMode.PEN_MODE)
+                panelAbility?.setTouchMode(PanelAbility.TouchMode.PEN_MODE)
                 playClickMusic()
             }
             R.id.tv_hand_touch -> {
                 tv_pen_touch.isSelected = false
                 tv_hand_touch.isSelected = true
-//                panelAbility?.setTouchMode(PanelAbility.TouchMode.FINGER_MODE)
+                panelAbility?.setTouchMode(PanelAbility.TouchMode.FINGER_MODE)
                 playClickMusic()
             }
         }
