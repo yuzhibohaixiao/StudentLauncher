@@ -1,10 +1,12 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.content.Intent
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.os.Looper
 import android.provider.Settings
+import android.view.SoundEffectConstants
 import android.view.View
-import android.widget.SeekBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
@@ -127,7 +129,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     override fun setListener() {
         ll_back_personal_center.setOnClickListener(this)
         ll_exit_personal_center.setOnClickListener(this)
-        tv_exit_personal_center.setOnClickListener(this)
+        tv_shutdown_personal_center.setOnClickListener(this)
         tv_focus.setOnClickListener(this)
         tv_wifi.setOnClickListener(this)
         tv_set.setOnClickListener(this)
@@ -317,11 +319,24 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.ll_back_personal_center ->
                 finish()
             //用户注销
-            R.id.ll_exit_personal_center, R.id.tv_exit_personal_center -> {
+            R.id.ll_exit_personal_center -> {
                 sendSendUserLogoutBroadcast()
                 SPUtils.syncPutData("onlyShowSelectChild", true)
                 setResult(AppConstants.RESULT_CODE_LAUNCHER_START_SELECT_USER)
                 finish()
+            }
+            //关机
+            R.id.tv_shutdown_personal_center -> {
+                val action = "android.intent.action.ACTION_REQUEST_SHUTDOWN"
+                val shutdown = Intent(action)
+                shutdown.putExtra("android.intent.extra.KEY_CONFIRM", true)
+                shutdown.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                try {
+                    startActivity(shutdown)
+                    finish()
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
             }
             R.id.tv_focus -> {
                 calibrationAbility?.startCalibration()
@@ -371,13 +386,23 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 tv_pen_touch.isSelected = true
                 tv_hand_touch.isSelected = false
                 panelAbility?.setTouchMode(PanelAbility.TouchMode.PEN_MODE)
+                playClickMusic(R.raw.click)
             }
             R.id.tv_hand_touch -> {
                 tv_pen_touch.isSelected = false
                 tv_hand_touch.isSelected = true
                 panelAbility?.setTouchMode(PanelAbility.TouchMode.FINGER_MODE)
+                playClickMusic(R.raw.click)
             }
         }
+    }
+
+    /**
+     * 播放按键音
+     */
+    private fun playClickMusic(musicId: Int) {
+        var music = MediaPlayer.create(this, musicId)
+        music.start()
     }
 
     override fun onDestroy() {

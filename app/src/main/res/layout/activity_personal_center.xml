@@ -418,6 +418,7 @@
                     <TextView
                         android:id="@+id/tv_pen_touch"
                         android:layout_width="69.5dp"
+                        android:soundEffectsEnabled="true"
                         android:layout_height="match_parent"
                         android:background="@drawable/touch_mode_selector"
                         android:drawableTop="@drawable/pen_touch"
@@ -429,6 +430,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:soundEffectsEnabled="true"
                         android:id="@+id/tv_hand_touch"
                         android:layout_width="69.5dp"
                         android:layout_height="match_parent"
@@ -444,16 +446,16 @@
             </FrameLayout>
 
             <TextView
-                android:id="@+id/tv_exit_personal_center"
+                android:id="@+id/tv_shutdown_personal_center"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                android:drawableTop="@drawable/launcher_user_exit"
+                android:drawableTop="@drawable/shutdown"
                 android:drawablePadding="5dp"
                 android:gravity="center_horizontal"
                 android:paddingTop="14dp"
-                android:text="切换用户"
+                android:text="关机"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
         </LinearLayout>
