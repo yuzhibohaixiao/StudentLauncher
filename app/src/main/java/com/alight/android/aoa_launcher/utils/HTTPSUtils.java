@@ -114,7 +114,8 @@ public final class HTTPSUtils {
                         return new java.security.cert.X509Certificate[0];
                     }
                 }};
-                trustManager = trustManagerForCertificates(inputStream);//以流的方式读入证书
+                //以流的方式读入证书
+                trustManager = trustManagerForCertificates(inputStream);
                 SSLContext sslContext = SSLContext.getInstance("TLS");
                 sslContext.init(null, trustAllCerts, new SecureRandom());
 //                sslContext.init(null, new TrustManager[]{trustManager}, null);
