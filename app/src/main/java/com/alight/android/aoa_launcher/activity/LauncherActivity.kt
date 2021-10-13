@@ -5,6 +5,7 @@ import android.content.*
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
+import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -181,6 +182,10 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     }
 
     private fun initPermission() {
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+        startActivity(intent)
+
         PermissionX.init(this)
             .permissions(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,

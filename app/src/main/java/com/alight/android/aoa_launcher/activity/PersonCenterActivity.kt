@@ -1,11 +1,9 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.content.Intent
-import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Looper
 import android.provider.Settings
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.ahwcx.ahwsdk.AbilityManager
@@ -328,16 +326,15 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             //关机
             R.id.tv_shutdown_personal_center -> {
-                val action = "android.intent.action.ACTION_REQUEST_SHUTDOWN"
-                val shutdown = Intent(action)
-                shutdown.putExtra("android.intent.extra.KEY_CONFIRM", true)
-                shutdown.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-                try {
-                    startActivity(shutdown)
-                    finish()
-                } catch (e: java.lang.Exception) {
-                    e.printStackTrace()
-                }
+//                val intent = Intent()
+//                intent.action = Intent.ACTION_SHUTDOWN
+//                sendBroadcast(intent)
+
+                val intent = Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN")
+                intent.putExtra("android.intent.extra.KEY_CONFIRM", true)
+                //其中false换成true,会弹出是否关机的确认窗口
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
             }
             R.id.tv_focus -> {
                 calibrationAbility?.startCalibration()

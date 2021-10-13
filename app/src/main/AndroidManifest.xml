@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.alight.android.aoa_launcher"
     android:persistent="true"
-    >
+    android:sharedUserId="android.uid.system">
 
     <!--   android:sharedUserId="android.uid.system"-->
     <uses-sdk tools:overrideLibrary="com.alight.ahwcx.ahwsdk,com.common.bridge" />
@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-    <uses-permission android:name="android.permission.SHUTDOWN"/>
+    <uses-permission android:name="android.permission.SHUTDOWN" />
 
     <uses-permission android:name="android.permission.RECOVERY" />
     <uses-permission android:name="android.permission.REBOOT" />
@@ -110,8 +110,8 @@
             </intent-filter>
         </receiver>
 
-
         <service android:name=".service.DownloadService" />
+
         <activity
             android:name=".activity.MoreDownloadActivity"
             android:screenOrientation="landscape"
