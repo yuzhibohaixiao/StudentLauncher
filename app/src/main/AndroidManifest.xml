@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.alight.android.aoa_launcher"
     android:persistent="true"
-    android:sharedUserId="android.uid.system">
+    >
 
     <!--   android:sharedUserId="android.uid.system"-->
     <uses-sdk tools:overrideLibrary="com.alight.ahwcx.ahwsdk,com.common.bridge" />
@@ -111,11 +111,17 @@
         </receiver>
 
         <service android:name=".service.DownloadService" />
+        <service android:name=".service.UpdateService" />
 
         <activity
             android:name=".activity.MoreDownloadActivity"
             android:screenOrientation="landscape"
             android:theme="@style/transparentStyle" />
+
+        <activity
+            android:name=".activity.UpdateActivity"
+            android:screenOrientation="landscape" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.alight.android.aoa_launcher.fileprovider"

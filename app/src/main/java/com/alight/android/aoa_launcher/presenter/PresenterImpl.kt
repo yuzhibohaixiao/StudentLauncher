@@ -16,8 +16,10 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -25,6 +27,7 @@ import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.activity.MoreDownloadActivity
+import com.alight.android.aoa_launcher.activity.UpdateActivity
 import com.alight.android.aoa_launcher.common.base.BasePresenter
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -606,84 +609,87 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         activity: Activity
     ) {
         //系统升级和解绑
-        val updateDialog = CustomDialog(activity, R.layout.dialog_update)
-
-        val update = updateDialog.findViewById<FrameLayout>(R.id.fl_update)
+        val updateDialog = CustomDialog(activity, R.layout.dialog_update_new)
         val close = updateDialog.findViewById<ImageView>(R.id.iv_close_update)
-        val unbind = updateDialog.findViewById<FrameLayout>(R.id.fl_unbind)
+        val unbind = updateDialog.findViewById<TextView>(R.id.tv_unbind_dialog)
+        val update = updateDialog.findViewById<TextView>(R.id.tv_update_dialog)
+        update.setOnClickListener {
+            var intent = Intent(activity, UpdateActivity::class.java)
+            activity.startActivity(intent)
+        }
 
-        var systemApp: UpdateBeanData? = null //系统固件
-        var launcherApp: UpdateBeanData? = null   //launcher
-        var aoaApp: UpdateBeanData? = null    //aoa
-        var hardwareApp: UpdateBeanData? = null   //硬件
-        var avApp: UpdateBeanData? = null   //音视频
+        /*  var systemApp: UpdateBeanData? = null //系统固件
+          var launcherApp: UpdateBeanData? = null   //launcher
+          var aoaApp: UpdateBeanData? = null    //aoa
+          var hardwareApp: UpdateBeanData? = null   //硬件
+          var avApp: UpdateBeanData? = null   //音视频
 
-        if (any.data == null) return
-        for (position in any.data.indices) {
-            when (any.data[position].app_name) {
-                //系统升级
-                "system" -> systemApp = any.data[position]
-                "launcher" -> launcherApp = any.data[position]
-                "aoa" -> aoaApp = any.data[position]
-                "ahwc" -> hardwareApp = any.data[position]
-                "av" -> avApp = any.data[position]
-            }
-        }
-        //当前版本名
-        val launcherVersionName =
-            AppUtils.getVersionName(activity, AppConstants.LAUNCHER_PACKAGE_NAME)
-        val aoaVersionName = AppUtils.getVersionName(activity, AppConstants.AOA_PACKAGE_NAME)
-        val ahwcxVersionName = AppUtils.getVersionName(activity, AppConstants.AHWCX_PACKAGE_NAME)
-        val avVersionName = AppUtils.getVersionName(activity, AppConstants.AV_PACKAGE_NAME)
-        var systemVersionName = Build.DISPLAY
-        updateDialog.tv_hardware_version.text = ahwcxVersionName
-        updateDialog.tv_launcher_version.text = launcherVersionName
-        updateDialog.tv_aoa_version.text = aoaVersionName
-        updateDialog.tv_system_version.text = systemVersionName
-        updateDialog.tv_av_version.text = avVersionName
+          if (any.data == null) return
+          for (position in any.data.indices) {
+              when (any.data[position].app_name) {
+                  //系统升级
+                  "system" -> systemApp = any.data[position]
+                  "launcher" -> launcherApp = any.data[position]
+                  "aoa" -> aoaApp = any.data[position]
+                  "ahwc" -> hardwareApp = any.data[position]
+                  "av" -> avApp = any.data[position]
+              }
+          }
+          //当前版本名
+          val launcherVersionName =
+              AppUtils.getVersionName(activity, AppConstants.LAUNCHER_PACKAGE_NAME)
+          val aoaVersionName = AppUtils.getVersionName(activity, AppConstants.AOA_PACKAGE_NAME)
+          val ahwcxVersionName = AppUtils.getVersionName(activity, AppConstants.AHWCX_PACKAGE_NAME)
+          val avVersionName = AppUtils.getVersionName(activity, AppConstants.AV_PACKAGE_NAME)
+          var systemVersionName = Build.DISPLAY
+          updateDialog.tv_hardware_version.text = ahwcxVersionName
+          updateDialog.tv_launcher_version.text = launcherVersionName
+          updateDialog.tv_aoa_version.text = aoaVersionName
+          updateDialog.tv_system_version.text = systemVersionName
+          updateDialog.tv_av_version.text = avVersionName
 
-        val launcherVersionCode =
-            AppUtils.getVersionCode(activity, AppConstants.LAUNCHER_PACKAGE_NAME)
-        val aoaVersionCode = AppUtils.getVersionCode(activity, AppConstants.AOA_PACKAGE_NAME)
-        val ahwcxVersionCode = AppUtils.getVersionCode(activity, AppConstants.AHWCX_PACKAGE_NAME)
-        val avVersionCode = AppUtils.getVersionCode(activity, AppConstants.AV_PACKAGE_NAME)
+          val launcherVersionCode =
+              AppUtils.getVersionCode(activity, AppConstants.LAUNCHER_PACKAGE_NAME)
+          val aoaVersionCode = AppUtils.getVersionCode(activity, AppConstants.AOA_PACKAGE_NAME)
+          val ahwcxVersionCode = AppUtils.getVersionCode(activity, AppConstants.AHWCX_PACKAGE_NAME)
+          val avVersionCode = AppUtils.getVersionCode(activity, AppConstants.AV_PACKAGE_NAME)
 
-        var updateNumber = 0
-        if (launcherApp?.version_code!! > launcherVersionCode) {
-            updateNumber++
-        }
-        if (avApp?.version_code!! > avVersionCode) {
-            updateNumber++
-        }
-        if (aoaApp?.version_code!! > aoaVersionCode) {
-            updateNumber++
-        }
-        if (hardwareApp?.version_code!! > ahwcxVersionCode) {
-            updateNumber++
-        }
-        //系统版本名不同表示有升级
-        if (systemApp?.version_name!! != systemVersionName) {
-            updateNumber++
-        }
-        if (updateNumber != 0) {
-            updateDialog.tv_update_number.setBackgroundResource(R.drawable.update_oval_red)
-            updateDialog.tv_update_number.text = updateNumber.toString()
-            //表示有升级
-            update.setOnClickListener {
-                updateDialog.dismiss()
-                //获取App和系统固件更新
-                var activity = getView() as Activity
-                var intent = Intent(activity, MoreDownloadActivity::class.java)
-                intent.putExtra("system", systemApp)
-                intent.putExtra("test_apk", launcherApp)
-                intent.putExtra("aoa", aoaApp)
-                intent.putExtra("ahwc", hardwareApp)
-                intent.putExtra("av", avApp)
-                activity.startActivity(intent)
-            }
-        } else {
-            updateDialog.tv_update_number.setBackgroundResource(R.drawable.splash_fully_transparent)
-        }
+          var updateNumber = 0
+          if (launcherApp?.version_code!! > launcherVersionCode) {
+              updateNumber++
+          }
+          if (avApp?.version_code!! > avVersionCode) {
+              updateNumber++
+          }
+          if (aoaApp?.version_code!! > aoaVersionCode) {
+              updateNumber++
+          }
+          if (hardwareApp?.version_code!! > ahwcxVersionCode) {
+              updateNumber++
+          }
+          //系统版本名不同表示有升级
+          if (systemApp?.version_name!! != systemVersionName) {
+              updateNumber++
+          }
+          if (updateNumber != 0) {
+              updateDialog.tv_update_number.setBackgroundResource(R.drawable.update_oval_red)
+              updateDialog.tv_update_number.text = updateNumber.toString()
+              //表示有升级
+              update.setOnClickListener {
+                  updateDialog.dismiss()
+                  //获取App和系统固件更新
+                  var activity = getView() as Activity
+                  var intent = Intent(activity, MoreDownloadActivity::class.java)
+                  intent.putExtra("system", systemApp)
+                  intent.putExtra("test_apk", launcherApp)
+                  intent.putExtra("aoa", aoaApp)
+                  intent.putExtra("ahwc", hardwareApp)
+                  intent.putExtra("av", avApp)
+                  activity.startActivity(intent)
+              }
+          } else {
+              updateDialog.tv_update_number.setBackgroundResource(R.drawable.splash_fully_transparent)
+          }*/
 
 
         updateDialog.show()
