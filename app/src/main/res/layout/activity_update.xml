@@ -38,36 +38,68 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="105dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="19.5dp"
-            android:orientation="vertical">
+            android:background="#10ffffff"
+            android:paddingTop="19.5dp">
 
-            <TextView
-                android:id="@+id/tv_system_app"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="#20ffffff"
-                android:gravity="center"
-                android:text="系统应用"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_other_app"
+                <TextView
+                    android:id="@+id/tv_system_app"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:background="@drawable/update_app_type_bg_selector"
+                    android:gravity="center"
+                    android:text="系统应用"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_other_app"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:background="@drawable/update_app_type_bg_selector"
+                    android:gravity="center"
+                    android:text="预装应用"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_back_update"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:gravity="center"
-                android:text="预装应用"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom" />
-        </LinearLayout>
+                android:layout_gravity="bottom|center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/launcher_personal_center">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/launcher_back" />
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9.5dp"
+                    android:layout_marginBottom="30dp"
+                    android:text="返回"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_app_update"

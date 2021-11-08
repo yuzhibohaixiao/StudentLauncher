@@ -27,12 +27,13 @@ android {
             v2SigningEnabled true
         }
     }
+
     defaultConfig {
         applicationId "com.alight.android.aoa_launcher"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 13
-        versionName "1.0.11"
+        versionCode 15
+        versionName "1.0.13"
         multiDexEnabled true
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

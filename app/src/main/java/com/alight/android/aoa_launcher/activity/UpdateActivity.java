@@ -13,13 +13,12 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alight.android.aoa_launcher.R;
@@ -34,7 +33,6 @@ import com.alight.android.aoa_launcher.service.UpdateService;
 import com.alight.android.aoa_launcher.ui.adapter.FileAdapter;
 import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
-import com.alight.android.aoa_launcher.utils.ToastUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +52,7 @@ import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYST
  *
  * @author wangzhe
  */
-public class UpdateActivity extends BaseActivity {
+public class UpdateActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "MoreDownloadActivity";
     private int REQUEST_CODE_EXTERNAL_STORAGE = 20;
     private RecyclerView recyclerView;
@@ -65,6 +63,9 @@ public class UpdateActivity extends BaseActivity {
     private HashMap<String, DownloadReceiver> downloadReceiverMap = new HashMap<>();
     private List<File> list = new ArrayList<>();
     private List<UpdateBeanData> urlList = new ArrayList<>();
+    private TextView tvSystemApp;
+    private TextView tvOtherApp;
+    private View llBackUpdate;
 
     @Override
     public void initData() {
@@ -224,12 +225,17 @@ public class UpdateActivity extends BaseActivity {
 
     @Override
     public void setListener() {
-
+        tvSystemApp.setOnClickListener(this);
+        tvOtherApp.setOnClickListener(this);
+        llBackUpdate.setOnClickListener(this);
     }
 
     @Override
     public void initView() {
-
+        tvSystemApp = findViewById(R.id.tv_system_app);
+        tvOtherApp = findViewById(R.id.tv_other_app);
+        llBackUpdate = findViewById(R.id.ll_back_update);
+        tvSystemApp.setSelected(true);
     }
 
     @Nullable
@@ -251,6 +257,29 @@ public class UpdateActivity extends BaseActivity {
     @Override
     public void onError(@NotNull String error) {
 
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_system_app:
+                tvSystemApp.setSelected(true);
+                tvOtherApp.setSelected(false);
+                break;
+            case R.id.tv_other_app:
+                tvOtherApp.setSelected(true);
+                tvSystemApp.setSelected(false);
+                break;
+            case R.id.ll_back_update:
+                finish();
+                break;
+            default:
+        }
     }
 
     class DownloadReceiver extends BroadcastReceiver {
