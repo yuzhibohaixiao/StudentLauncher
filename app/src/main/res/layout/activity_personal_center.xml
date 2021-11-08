@@ -255,6 +255,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
 
                 <ImageView
@@ -394,7 +395,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="16dp">
 
                 <TextView
                     android:layout_width="60dp"
@@ -418,19 +419,18 @@
                     <TextView
                         android:id="@+id/tv_pen_touch"
                         android:layout_width="69.5dp"
-                        android:soundEffectsEnabled="true"
                         android:layout_height="match_parent"
                         android:background="@drawable/touch_mode_selector"
                         android:drawableTop="@drawable/pen_touch"
                         android:drawablePadding="8dp"
                         android:gravity="center_horizontal"
                         android:paddingTop="14dp"
+                        android:soundEffectsEnabled="true"
                         android:text="笔触"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:soundEffectsEnabled="true"
                         android:id="@+id/tv_hand_touch"
                         android:layout_width="69.5dp"
                         android:layout_height="match_parent"
@@ -439,6 +439,7 @@
                         android:drawablePadding="8dp"
                         android:gravity="center_horizontal"
                         android:paddingTop="14dp"
+                        android:soundEffectsEnabled="true"
                         android:text="手触"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
@@ -449,7 +450,7 @@
                 android:id="@+id/tv_shutdown_personal_center"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
                 android:drawableTop="@drawable/shutdown"
                 android:drawablePadding="5dp"
