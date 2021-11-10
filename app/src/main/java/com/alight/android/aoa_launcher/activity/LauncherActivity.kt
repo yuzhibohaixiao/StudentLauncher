@@ -136,7 +136,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                     noNetworkInit()
                 } else {
                     //网络正常 刷新UI
-                    EventBus.getDefault().post(NetMessageEvent.getInstance(1, "网络恢复正常"));
+                    netState = 1
+                    EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
                     GlobalScope.launch(Dispatchers.Main) {
                         iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
                     }
