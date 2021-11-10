@@ -1,10 +1,15 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Paint
 import android.media.MediaPlayer
 import android.os.Looper
 import android.provider.Settings
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.View
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
@@ -14,9 +19,11 @@ import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
+import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.PersonalCenterFamilyAdapter
+import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.AccountUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
@@ -25,9 +32,13 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.xw.repo.BubbleSeekBar
 import kotlinx.android.synthetic.main.activity_personal_center.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 
 
@@ -41,6 +52,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private var calibrationAbility: CalibrationAbility? = null
     private var panelAbility: PanelAbility? = null
     private var music: MediaPlayer? = null
+    private var netState = 1
 
     override fun initView() {
         familyAdapter = PersonalCenterFamilyAdapter()
@@ -50,6 +62,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
+        EventBus.getDefault().register(this)
         val userInfo = intent.getSerializableExtra("userInfo")
         if (userInfo != null) {
             tokenPair = userInfo as TokenPair
@@ -123,9 +136,34 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 e.printStackTrace()
             }
         }
+        netState = intent.getIntExtra("netState", 0)
+        if (netState == 0) {
+            rv_family_info.visibility = View.GONE
+            ll_family_info_offline.visibility = View.VISIBLE
+            tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting_no_network, 0, 0)
+            tv_set.setTextColor(Color.parseColor("#50ffffff"))
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onGetNetEvent(event: NetMessageEvent) {
+        if (event.netState == 1) {
+            //网络正常 刷新UI
+            netState = event.netState
+            getPresenter().getModel(
+                Urls.FAMILY_INFO,
+                HashMap(),
+                FamilyInfoBean::class.java
+            )
+            rv_family_info.visibility = View.VISIBLE
+            ll_family_info_offline.visibility = View.GONE
+            tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting, 0, 0)
+            tv_set.setTextColor(Color.parseColor("#ffffff"))
+        }
     }
 
     override fun setListener() {
+        ll_family_info_offline.setOnClickListener(this)
         ll_back_personal_center.setOnClickListener(this)
         ll_exit_personal_center.setOnClickListener(this)
         tv_shutdown_personal_center.setOnClickListener(this)
@@ -341,8 +379,15 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_wifi ->
                 startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
+            R.id.ll_family_info_offline -> {
+                showOfflineDialog()
+            }
             R.id.tv_set -> {
-                getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+                if (netState == 1) {
+                    getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+                } else {
+                    showOfflineDialog()
+                }
                 /*
                 //todo 待解绑验证码接口完善后完成
                 val unbindDialog = CustomDialog(this, R.layout.dialog_unbind)
@@ -395,6 +440,21 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private fun showOfflineDialog() {
+        val customDialog = CustomDialog(this, R.layout.dialog_offline)
+        val tvOffline = customDialog.findViewById<TextView>(R.id.tv_offline)
+        val spannableString = SpannableString(tvOffline.text)
+        spannableString.setSpan(UnderlineSpan(), 7, 11, Paint.UNDERLINE_TEXT_FLAG)
+        tvOffline.setOnClickListener {
+            startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
+        }
+        GlobalScope.launch(Dispatchers.Main) {
+            customDialog.show()
+            delay(3000)
+            customDialog.dismiss()
+        }
+    }
+
     /**
      * 播放按键音
      */
@@ -407,5 +467,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     override fun onDestroy() {
         super.onDestroy()
         abilityManager.onStop()
+        EventBus.getDefault().unregister(this)
     }
 }

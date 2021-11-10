@@ -154,6 +154,31 @@
                     android:layout_marginTop="51.5dp"
                     android:clipToPadding="false"
                     android:paddingStart="26dp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_family_info_offline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="33.5dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/iv_family_info_offline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/no_network" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6.5dp"
+                        android:text="暂无信号，请连接网络后使用"
+                        android:textColor="#50ffffff"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </FrameLayout>
 
             <FrameLayout

@@ -3,12 +3,16 @@ package com.alight.android.aoa_launcher.activity
 import android.Manifest
 import android.content.*
 import android.database.ContentObserver
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Handler
 import android.provider.Settings
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.alight.android.aoa_launcher.R
@@ -16,16 +20,16 @@ import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.TokenMessage
 import com.alight.android.aoa_launcher.common.bean.TokenPair
 import com.alight.android.aoa_launcher.common.constants.AppConstants
+import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.common.i.LauncherListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
-import com.alight.android.aoa_launcher.utils.AccountUtil
-import com.alight.android.aoa_launcher.utils.DateUtil
-import com.alight.android.aoa_launcher.utils.SPUtils
+import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import kotlinx.android.synthetic.main.activity_main.*
@@ -34,6 +38,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 
@@ -42,6 +47,7 @@ import java.util.*
  */
 class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener {
 
+    private var netState = 1
     private var tokenPair: TokenPair? = null
     private var TAG = "LauncherActivity"
     private var dialog: CustomDialog? = null
@@ -54,8 +60,8 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
         if (!splashClose && !splashCloseFlag) {
             Log.i(TAG, "展示引导页")
-            //如果未展示过引导则展示引导页
-            activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
+//        如果未展示过引导则展示引导页
+//            activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         }
         if (!splashCloseFlag && tv_user_name_launcher.text.isNullOrEmpty()) {
             Glide.with(this@LauncherActivity)
@@ -70,6 +76,10 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
 
     override fun initData() {
+        val tokenPairCache = SPUtils.getData("tokenPair", "") as String
+        if (tokenPairCache.isNotEmpty()) {
+            tokenPair = Gson().fromJson(tokenPairCache, TokenPair::class.java)
+        }
         //获取用户信息之前必须调用的初始化方法
         AccountUtil.run()
         //初始化权限
@@ -107,6 +117,33 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                     activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
                 }
             }
+        }
+        noNetworkInit()
+
+    }
+
+    private fun noNetworkInit() {
+        if (!InternetUtil.isNetworkAvalible(this)) {
+            if (netState != 0) {
+                netState = 0
+                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa_offline)
+            }
+            //无网络时刷新UI
+            GlobalScope.launch {
+                delay(3000)
+                if (!InternetUtil.isNetworkAvalible(this@LauncherActivity)) {
+                    //等待3s后无网则继续轮询
+                    noNetworkInit()
+                } else {
+                    //网络正常 刷新UI
+                    EventBus.getDefault().post(NetMessageEvent.getInstance(1, "网络恢复正常"));
+                    GlobalScope.launch(Dispatchers.Main) {
+                        iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
+                    }
+                }
+            }
+        } else {
+            netState = 1
         }
     }
 
@@ -279,6 +316,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             //网络请求成功后的结果 让对应视图进行刷新
             if (any is TokenPair) {
                 tokenPair = any
+                if (tokenPair != null) {
+                    SPUtils.syncPutData("tokenPair", Gson().toJson(tokenPair))
+                }
                 Glide.with(this@LauncherActivity)
                     .load(tokenPair?.avatar)
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
@@ -326,13 +366,32 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             // 打开应用市场（安智）
             R.id.iv_app_store -> getPresenter().showAZMarket()
             //打开aoa星仔伴学
-            R.id.iv_aoa_launcher ->
-                getPresenter().showAOA()
+            R.id.iv_aoa_launcher -> {
+                if (netState == 1) {
+                    getPresenter().showAOA()
+                } else {
+                    val customDialog = CustomDialog(this, R.layout.dialog_offline)
+                    val tvOffline = customDialog.findViewById<TextView>(R.id.tv_offline)
+                    val spannableString = SpannableString(tvOffline.text)
+                    spannableString.setSpan(UnderlineSpan(), 7, 11, Paint.UNDERLINE_TEXT_FLAG)
+                    tvOffline.setOnClickListener {
+                        startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
+                    }
+                    GlobalScope.launch(Dispatchers.Main) {
+                        customDialog.show()
+                        delay(3000)
+                        customDialog.dismiss()
+                    }
+//                    ToastUtils.showLong(this, "当前无网络，请点击此处链接wifi")
+                }
+            }
+
             //个人中心
             R.id.ll_personal_center -> {
                 if (tokenPair == null) return
                 var intent = Intent(this, PersonCenterActivity::class.java)
                 intent.putExtra("userInfo", tokenPair)
+                intent.putExtra("netState", netState)
                 activityResultLauncher?.launch(intent)
             }
         }

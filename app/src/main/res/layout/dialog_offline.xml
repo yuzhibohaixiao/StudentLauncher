@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/launcher_white_round_rectangle_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_offline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:autoLink="all"
+        android:text="当前无网络，请点击此处链接wifi"
+        android:textColor="@color/launcher_cambridge_blue"
+        android:textSize="15sp" />
+
+</FrameLayout>
