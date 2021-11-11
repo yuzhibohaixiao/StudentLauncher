@@ -142,6 +142,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             ll_family_info_offline.visibility = View.VISIBLE
             tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting_no_network, 0, 0)
             tv_set.setTextColor(Color.parseColor("#50ffffff"))
+            ll_exit_personal_center.visibility = View.GONE
         }
     }
 
@@ -159,6 +160,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             ll_family_info_offline.visibility = View.GONE
             tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting, 0, 0)
             tv_set.setTextColor(Color.parseColor("#ffffff"))
+            ll_exit_personal_center.visibility = View.VISIBLE
         }
     }
 
