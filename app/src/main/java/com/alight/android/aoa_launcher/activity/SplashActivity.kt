@@ -173,38 +173,42 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                             val splashUserAdapter = SplashUserAdapter()
                             //点击事件
                             splashUserAdapter.setOnItemClickListener { adapter, view, position ->
-                                try {
-                                    GlobalScope.launch(Dispatchers.IO) {
-                                        val tokenPair = allUser[position]
-                                        NBSAppAgent.setUserIdentifier(tokenPair.userId.toString())
-                                        SPUtils.syncPutData(
-                                            AppConstants.USER_ID,
-                                            tokenPair.userId
-                                        )
-                                        SPUtils.syncPutData(
-                                            AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
-                                            tokenPair.token
-                                        )
-                                        AccountUtil.selectUser(tokenPair.userId)
-                                        GlobalScope.launch(Dispatchers.Main) {
-                                            //保存用户信息
-                                            writeUserInfo(tokenPair)
-                                            val onlyShowSelectChild =
-                                                SPUtils.getData(
-                                                    "onlyShowSelectChild",
-                                                    false
-                                                ) as Boolean
-                                            if (onlyShowSelectChild) {
-                                                //仅展示用户选择
-                                                finishSplash()
-                                            } else {
-                                                openUserSplash()
-                                            }
+                                if (InternetUtil.isNetworkAvalible(this@SplashActivity)) {
+                                    try {
+                                        GlobalScope.launch(Dispatchers.IO) {
+                                            val tokenPair = allUser[position]
+                                            NBSAppAgent.setUserIdentifier(tokenPair.userId.toString())
+                                            SPUtils.syncPutData(
+                                                AppConstants.USER_ID,
+                                                tokenPair.userId
+                                            )
+                                            SPUtils.syncPutData(
+                                                AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
+                                                tokenPair.token
+                                            )
+                                            AccountUtil.selectUser(tokenPair.userId)
+                                            GlobalScope.launch(Dispatchers.Main) {
+                                                //保存用户信息
+                                                writeUserInfo(tokenPair)
+                                                val onlyShowSelectChild =
+                                                    SPUtils.getData(
+                                                        "onlyShowSelectChild",
+                                                        false
+                                                    ) as Boolean
+                                                if (onlyShowSelectChild) {
+                                                    //仅展示用户选择
+                                                    finishSplash()
+                                                } else {
+                                                    openUserSplash()
+                                                }
 
+                                            }
                                         }
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
                                     }
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
+                                } else {
+                                    ToastUtils.showShort(this@SplashActivity, "当前网络异常，请联网后重试")
                                 }
                             }
                             rv_select_child_splash.adapter = splashUserAdapter
