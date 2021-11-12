@@ -7,17 +7,16 @@ import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
-import com.alight.android.aoa_launcher.ui.adapter.SplashUserAdapter
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
-import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.urls.Urls
+import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.ui.adapter.SplashUserAdapter
 import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -32,7 +31,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.NullPointerException
 import java.net.SocketTimeoutException
 import java.util.*
 
@@ -62,7 +60,6 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         ll_splash2.setOnClickListener(this)
         fl_splash3.setOnClickListener(this)
         tv_next_launcher_splash.setOnClickListener(this)
-        tv_next_launcher_splash2.setOnClickListener(this)
         tv_skip_splash.setOnClickListener(this)
         ll_no_child_splash.setOnClickListener(this)
     }
@@ -240,10 +237,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     private fun openUserSplash() {
         if (userSplashNumber == userSplashBgList.size) {
-            //新用户的状态设为false
-            SPUtils.asyncPutData(AppConstants.NEW_USER, false)
-            getPresenter().showAOA()
+            //关闭引导
+            closeSplash()
             finishSplash()
+//            getPresenter().showAOA()
             return
         }
         //显示launcher引导
@@ -269,8 +266,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             })
         userSplashNumber++
         if (userSplashNumber == userSplashBgList.size) {
-            tv_next_launcher_splash.text = "开始学习"
-            sc_next_launcher_splash2.visibility = View.VISIBLE
+            tv_next_launcher_splash.text = "完成引导"
         }
     }
 
@@ -420,7 +416,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_next_launcher_splash -> {
                 openUserSplash()
             }
-            R.id.tv_next_launcher_splash2, R.id.tv_skip_splash -> {
+            R.id.tv_skip_splash -> {
                 closeSplash()
             }
             R.id.ll_no_child_splash -> {

@@ -58,10 +58,11 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         super.onResume()
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
         Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
-        if (!splashClose && !splashCloseFlag) {
+        val tokenPairCache = SPUtils.getData("tokenPair", "") as String
+        if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty()) {
             Log.i(TAG, "展示引导页")
 //        如果未展示过引导则展示引导页
-//            activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
+            activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         }
         if (!splashCloseFlag && tv_user_name_launcher.text.isNullOrEmpty()) {
             Glide.with(this@LauncherActivity)
@@ -79,9 +80,11 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         if (tokenPairCache.isNotEmpty()) {
             tokenPair = Gson().fromJson(tokenPairCache, TokenPair::class.java)
+            writeUserInfo(tokenPair!!)
         }
         //获取用户信息之前必须调用的初始化方法
         AccountUtil.run()
+        initAccountUtil()
         //初始化权限
         initPermission()
         //监听contentProvider是否被操作
@@ -138,6 +141,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                     //网络正常 刷新UI
                     netState = 1
                     EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
+                    initAccountUtil()
                     GlobalScope.launch(Dispatchers.Main) {
                         iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
                     }
@@ -217,6 +221,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 //        main_recy.layoutManager = LinearLayoutManager(this)
 //        mAdapter = MyAdapter(baseContext)
 //        main_recy.adapter = mAdapter
+//        activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
     }
 
     private fun initPermission() {
@@ -318,6 +323,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
             if (any is TokenPair) {
                 tokenPair = any
                 if (tokenPair != null) {
+                    writeUserInfo(tokenPair!!)
                     SPUtils.syncPutData("tokenPair", Gson().toJson(tokenPair))
                 }
                 Glide.with(this@LauncherActivity)
@@ -330,6 +336,20 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         }
     }
 
+    private fun writeUserInfo(tokenPair: TokenPair) {
+        //插入数据前清除之前的数据
+        contentResolver.delete(LauncherContentProvider.URI, null, null)
+        val contentValues = ContentValues()
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN, tokenPair.token)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR, tokenPair.avatar)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_NAME, tokenPair.name)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID, tokenPair.userId)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER, tokenPair.gender)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME, tokenPair.expireTime)
+        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE, tokenPair.gradeType)
+        //将登陆的用户数据插入保存
+        contentResolver.insert(LauncherContentProvider.URI, contentValues)
+    }
 
     override fun onError(error: String) {
         Log.e("error", error)

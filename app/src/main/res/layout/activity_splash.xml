@@ -160,31 +160,6 @@
                 android:textStyle="bold" />
         </com.alight.android.aoa_launcher.ui.view.ShadowContainer>
 
-        <com.alight.android.aoa_launcher.ui.view.ShadowContainer
-            android:id="@+id/sc_next_launcher_splash2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="46dp"
-            android:visibility="gone"
-            app:containerCornerRadius="30dp"
-            app:containerDeltaLength="3dp"
-            app:containerShadowColor="@color/launcher_purple"
-            app:containerShadowRadius="1dp"
-            app:deltaY="5px">
-
-            <TextView
-                android:id="@+id/tv_next_launcher_splash2"
-                android:layout_width="106dp"
-                android:layout_height="32dp"
-                android:background="@drawable/launcher_splash_btn"
-                android:gravity="center"
-                android:text="完成引导"
-                android:textColor="@color/launcher_purple"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </com.alight.android.aoa_launcher.ui.view.ShadowContainer>
-
     </LinearLayout>
 
     <TextView

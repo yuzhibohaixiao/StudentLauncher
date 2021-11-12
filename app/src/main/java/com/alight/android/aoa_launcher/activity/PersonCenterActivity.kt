@@ -8,6 +8,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -306,6 +307,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 //                    any.data.parents.forEach {
 //                        it.avatar.replace("https", "http")
 //                    }
+                    familyAdapter.data.clear()
                     familyAdapter.addData(any.data.parents)
 /*
                     any.data.parents.forEach {
@@ -339,7 +341,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onError(error: String) {
-        ToastUtils.showShort(this, error)
+        Log.i("PersonCenter", "onError: $error")
+        ToastUtils.showShort(this, "网络请求错误")
     }
 
     /**
