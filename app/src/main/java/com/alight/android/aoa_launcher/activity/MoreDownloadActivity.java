@@ -253,6 +253,11 @@ public class MoreDownloadActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onNetChanged(int netWorkState) {
+
+    }
+
     class DownloadReceiver extends BroadcastReceiver {
 
         @Override

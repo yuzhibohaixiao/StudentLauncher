@@ -282,6 +282,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onNetChanged(int netWorkState) {
+
+    }
+
     class DownloadReceiver extends BroadcastReceiver {
 
         @Override

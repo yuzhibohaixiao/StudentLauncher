@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.alight.android.aoa_launcher.R
@@ -23,6 +24,7 @@ import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.common.i.LauncherListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
+import com.alight.android.aoa_launcher.net.NetTools
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.*
@@ -84,7 +86,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
         }
         //获取用户信息之前必须调用的初始化方法
         AccountUtil.run()
-        initAccountUtil()
+//        initAccountUtil()
         //初始化权限
         initPermission()
         //监听contentProvider是否被操作
@@ -121,7 +123,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 }
             }
         }
-        noNetworkInit()
+//        noNetworkInit()
 
     }
 
@@ -225,9 +227,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     }
 
     private fun initPermission() {
-        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
-        startActivity(intent)
+//        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+//        startActivity(intent)
 
         PermissionX.init(this)
             .permissions(
@@ -265,6 +267,42 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 }
             }
 
+        }
+    }
+
+    override fun onNetChanged(netWorkState: Int) {
+       /* if (netState != 0) {
+            netState = 0
+            iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa_offline)
+        }
+        //无网络时刷新UI
+        GlobalScope.launch {
+            delay(3000)
+            if (!InternetUtil.isNetworkAvalible(this@LauncherActivity)) {
+                //等待3s后无网则继续轮询
+                noNetworkInit()
+            } else {
+                //网络正常 刷新UI
+                netState = 1
+                EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
+                initAccountUtil()
+                GlobalScope.launch(Dispatchers.Main) {
+                    iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
+                }
+            }
+        }*/
+        when (netWorkState) {
+            NetTools.NETWORK_NONE -> {
+                netState = 0
+                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa_offline)
+                Log.e(TAG, "onNetChanged:没有网络 ")
+            }
+            NetTools.NETWORK_MOBILE, NetTools.NETWORK_WIFI -> {
+                netState = 1
+                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
+                initAccountUtil()
+                Log.e(TAG, "onNetChanged:网络正常 ")
+            }
         }
     }
 

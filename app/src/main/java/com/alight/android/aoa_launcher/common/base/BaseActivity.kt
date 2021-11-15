@@ -1,18 +1,29 @@
 package com.alight.android.aoa_launcher.common.base
 
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.alight.android.aoa_launcher.common.broadcast.NetStateReceiver
+import com.alight.android.aoa_launcher.net.INetEvent
 import com.alight.android.aoa_launcher.net.contract.IContract
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+
 
 /**
  * BaseActivity的基类封装
  * @author wangzhe
  * Created on 2021/5/12
  */
-abstract class BaseActivity : AppCompatActivity(), IContract.IView {
+abstract class BaseActivity : AppCompatActivity(), IContract.IView, INetEvent {
 
     private var mPresenter: PresenterImpl? = null
+
+    companion object {
+        lateinit var mINetEventList: ArrayList<INetEvent>
+        lateinit var mINetEvent: INetEvent
+    }
+
+    private var stateReceiver: NetStateReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,9 +35,23 @@ abstract class BaseActivity : AppCompatActivity(), IContract.IView {
             initView()
             setListener()
             initData()
+            mINetEvent = this
+            if (mINetEventList == null) {
+                mINetEventList = ArrayList()
+            }
+            mINetEventList.add(mINetEvent)
+            val intentFilter = IntentFilter()
+            intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE")
+            stateReceiver = NetStateReceiver()
+            registerReceiver(stateReceiver, intentFilter)
         } else {
             throw IllegalStateException("this activity no layout")
         }
+    }
+
+    abstract fun onNetChanged(netWorkState: Int)
+    override fun onNetChange(netWorkState: Int) {
+        onNetChanged(netWorkState)
     }
 
     //设置监听器
@@ -51,6 +76,8 @@ abstract class BaseActivity : AppCompatActivity(), IContract.IView {
 
     override fun onDestroy() {
         super.onDestroy()
+        mINetEventList.remove(mINetEvent)
+        unregisterReceiver(stateReceiver)
         if (mPresenter != null) {
             mPresenter!!.onDetach()
             mPresenter = null
@@ -60,5 +87,6 @@ abstract class BaseActivity : AppCompatActivity(), IContract.IView {
     fun getPresenter(): PresenterImpl {
         return mPresenter!!
     }
+
 
 }
