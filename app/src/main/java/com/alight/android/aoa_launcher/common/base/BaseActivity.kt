@@ -14,14 +14,9 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl
  * @author wangzhe
  * Created on 2021/5/12
  */
-abstract class BaseActivity : AppCompatActivity(), IContract.IView, INetEvent {
+abstract class BaseActivity : AppCompatActivity(), IContract.IView {
 
     private var mPresenter: PresenterImpl? = null
-
-    companion object {
-        lateinit var mINetEventList: ArrayList<INetEvent>
-        lateinit var mINetEvent: INetEvent
-    }
 
     private var stateReceiver: NetStateReceiver? = null
 
@@ -35,11 +30,6 @@ abstract class BaseActivity : AppCompatActivity(), IContract.IView, INetEvent {
             initView()
             setListener()
             initData()
-            mINetEvent = this
-            if (mINetEventList == null) {
-                mINetEventList = ArrayList()
-            }
-            mINetEventList.add(mINetEvent)
             val intentFilter = IntentFilter()
             intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE")
             stateReceiver = NetStateReceiver()
@@ -47,11 +37,6 @@ abstract class BaseActivity : AppCompatActivity(), IContract.IView, INetEvent {
         } else {
             throw IllegalStateException("this activity no layout")
         }
-    }
-
-    abstract fun onNetChanged(netWorkState: Int)
-    override fun onNetChange(netWorkState: Int) {
-        onNetChanged(netWorkState)
     }
 
     //设置监听器
@@ -76,7 +61,6 @@ abstract class BaseActivity : AppCompatActivity(), IContract.IView, INetEvent {
 
     override fun onDestroy() {
         super.onDestroy()
-        mINetEventList.remove(mINetEvent)
         unregisterReceiver(stateReceiver)
         if (mPresenter != null) {
             mPresenter!!.onDetach()

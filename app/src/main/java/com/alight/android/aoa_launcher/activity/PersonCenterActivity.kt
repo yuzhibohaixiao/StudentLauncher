@@ -11,7 +11,6 @@ import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
@@ -21,8 +20,7 @@ import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
-import com.alight.android.aoa_launcher.net.INetEvent
-import com.alight.android.aoa_launcher.net.NetTools
+import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.PersonalCenterFamilyAdapter
@@ -40,6 +38,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 
 
@@ -64,7 +65,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
-//        EventBus.getDefault().register(this)
+        EventBus.getDefault().register(this)
         val userInfo = intent.getSerializableExtra("userInfo")
         if (userInfo != null) {
             tokenPair = userInfo as TokenPair
@@ -138,21 +139,22 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 e.printStackTrace()
             }
         }
-     /*   netState = intent.getIntExtra("netState", 0)
-        if (netState == 0) {
-            rv_family_info.visibility = View.GONE
-            ll_family_info_offline.visibility = View.VISIBLE
-            tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting_no_network, 0, 0)
-            tv_set.setTextColor(Color.parseColor("#50ffffff"))
-            ll_exit_personal_center.visibility = View.GONE
-        }*/
+        netState = intent.getIntExtra("netState", 0)
+        getNetStateShowUI(netState)
     }
 
-   /* @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onGetNetEvent(event: NetMessageEvent) {
-        if (event.netState == 1) {
-            //网络正常 刷新UI
-            netState = event.netState
+        //网络正常 刷新UI
+        getNetStateShowUI(event.netState)
+    }
+
+    /**
+     * 根据网络状态展示不同的UI效果
+     */
+    private fun getNetStateShowUI(netState: Int) {
+        this.netState = netState
+        if (netState == 1) {
             getPresenter().getModel(
                 Urls.FAMILY_INFO,
                 HashMap(),
@@ -163,35 +165,14 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting, 0, 0)
             tv_set.setTextColor(Color.parseColor("#ffffff"))
             ll_exit_personal_center.visibility = View.VISIBLE
+        } else if (netState == 0) {
+            rv_family_info.visibility = View.GONE
+            ll_family_info_offline.visibility = View.VISIBLE
+            tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting_no_network, 0, 0)
+            tv_set.setTextColor(Color.parseColor("#50ffffff"))
+            ll_exit_personal_center.visibility = View.GONE
+            Log.e(TAG, "onNetChanged:没有网络 ")
         }
-    }
-*/
-    override fun onNetChanged(netWorkState: Int) {
-       when (netWorkState) {
-           NetTools.NETWORK_NONE -> {
-               netState = 0
-               rv_family_info.visibility = View.GONE
-               ll_family_info_offline.visibility = View.VISIBLE
-               tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting_no_network, 0, 0)
-               tv_set.setTextColor(Color.parseColor("#50ffffff"))
-               ll_exit_personal_center.visibility = View.GONE
-               Log.e(TAG, "onNetChanged:没有网络 ")
-           }
-           NetTools.NETWORK_MOBILE, NetTools.NETWORK_WIFI -> {
-               netState = 1
-               getPresenter().getModel(
-                   Urls.FAMILY_INFO,
-                   HashMap(),
-                   FamilyInfoBean::class.java
-               )
-               rv_family_info.visibility = View.VISIBLE
-               ll_family_info_offline.visibility = View.GONE
-               tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting, 0, 0)
-               tv_set.setTextColor(Color.parseColor("#ffffff"))
-               ll_exit_personal_center.visibility = View.VISIBLE
-               Log.e(TAG, "onNetChanged:移动网络 ")
-           }
-       }
     }
 
     override fun setListener() {
@@ -501,6 +482,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     override fun onDestroy() {
         super.onDestroy()
         abilityManager.onStop()
-//        EventBus.getDefault().unregister(this)
+        EventBus.getDefault().unregister(this)
     }
 }

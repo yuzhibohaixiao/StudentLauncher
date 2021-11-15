@@ -24,6 +24,7 @@ import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.common.i.LauncherListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
+import com.alight.android.aoa_launcher.net.INetEvent
 import com.alight.android.aoa_launcher.net.NetTools
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
@@ -47,7 +48,7 @@ import java.util.*
 /**
  * Launcher主页
  */
-class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener {
+class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener, INetEvent {
 
     private var netState = 1
     private var tokenPair: TokenPair? = null
@@ -55,6 +56,10 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     private var dialog: CustomDialog? = null
     private var activityResultLauncher: ActivityResultLauncher<Intent>? = null
     private var splashCloseFlag = false
+
+    companion object {
+        lateinit var mINetEvent: INetEvent
+    }
 
     override fun onResume() {
         super.onResume()
@@ -79,6 +84,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
 
     override fun initData() {
+        mINetEvent = this
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         if (tokenPairCache.isNotEmpty()) {
             tokenPair = Gson().fromJson(tokenPairCache, TokenPair::class.java)
@@ -123,37 +129,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
                 }
             }
         }
-//        noNetworkInit()
-
     }
-
-    private fun noNetworkInit() {
-        if (!InternetUtil.isNetworkAvalible(this)) {
-            if (netState != 0) {
-                netState = 0
-                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa_offline)
-            }
-            //无网络时刷新UI
-            GlobalScope.launch {
-                delay(3000)
-                if (!InternetUtil.isNetworkAvalible(this@LauncherActivity)) {
-                    //等待3s后无网则继续轮询
-                    noNetworkInit()
-                } else {
-                    //网络正常 刷新UI
-                    netState = 1
-                    EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
-                    initAccountUtil()
-                    GlobalScope.launch(Dispatchers.Main) {
-                        iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
-                    }
-                }
-            }
-        } else {
-            netState = 1
-        }
-    }
-
 
     /**
      * 开启硬件控制
@@ -269,43 +245,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
 
         }
     }
-
-    override fun onNetChanged(netWorkState: Int) {
-       /* if (netState != 0) {
-            netState = 0
-            iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa_offline)
-        }
-        //无网络时刷新UI
-        GlobalScope.launch {
-            delay(3000)
-            if (!InternetUtil.isNetworkAvalible(this@LauncherActivity)) {
-                //等待3s后无网则继续轮询
-                noNetworkInit()
-            } else {
-                //网络正常 刷新UI
-                netState = 1
-                EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
-                initAccountUtil()
-                GlobalScope.launch(Dispatchers.Main) {
-                    iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
-                }
-            }
-        }*/
-        when (netWorkState) {
-            NetTools.NETWORK_NONE -> {
-                netState = 0
-                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa_offline)
-                Log.e(TAG, "onNetChanged:没有网络 ")
-            }
-            NetTools.NETWORK_MOBILE, NetTools.NETWORK_WIFI -> {
-                netState = 1
-                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
-                initAccountUtil()
-                Log.e(TAG, "onNetChanged:网络正常 ")
-            }
-        }
-    }
-
 
     override fun setListener() {
         iv_education_launcher.setOnClickListener(this)
@@ -509,6 +448,24 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener 
     override fun onDestroy() {
         super.onDestroy()
         dialog?.dismiss()
+    }
+
+    override fun onNetChange(netWorkState: Int) {
+        when (netWorkState) {
+            NetTools.NETWORK_NONE -> {
+                netState = 0
+                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa_offline)
+                EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络异常"));
+                Log.e(TAG, "onNetChanged:没有网络 ")
+            }
+            NetTools.NETWORK_MOBILE, NetTools.NETWORK_WIFI -> {
+                netState = 1
+                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
+                initAccountUtil()
+                EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
+                Log.e(TAG, "onNetChanged:网络正常 ")
+            }
+        }
     }
 
 }

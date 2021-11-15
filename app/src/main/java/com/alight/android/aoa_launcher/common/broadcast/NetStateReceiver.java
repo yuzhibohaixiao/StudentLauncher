@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
+import com.alight.android.aoa_launcher.activity.LauncherActivity;
 import com.alight.android.aoa_launcher.common.base.BaseActivity;
 import com.alight.android.aoa_launcher.net.INetEvent;
 import com.alight.android.aoa_launcher.net.NetTools;
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 public class NetStateReceiver extends BroadcastReceiver {
     private static final String TAG = "NetStateReceiver";
-    private ArrayList<INetEvent> mINetEventList = BaseActivity.mINetEventList;
+    private INetEvent mINetEvent = LauncherActivity.mINetEvent;
 
     private static long WIFI_TIME = 0;
     private static long ETHERNET_TIME = 0;
@@ -36,26 +37,20 @@ public class NetStateReceiver extends BroadcastReceiver {
                 if (netWorkState == 0 && LAST_TYPE != 0) {
                     WIFI_TIME = time;
                     LAST_TYPE = netWorkState;
-                    if (mINetEventList != null) {
-                        for (int i = 0; i < mINetEventList.size(); i++) {
-                            mINetEventList.get(i).onNetChange(NetTools.getNetWorkState(context));
-                        }
+                    if (mINetEvent != null) {
+                        mINetEvent.onNetChange(NetTools.getNetWorkState(context));
                     }
                 } else if (netWorkState == 1 && LAST_TYPE != 1) {
                     ETHERNET_TIME = time;
                     LAST_TYPE = netWorkState;
-                    if (mINetEventList != null) {
-                        for (int i = 0; i < mINetEventList.size(); i++) {
-                            mINetEventList.get(i).onNetChange(NetTools.getNetWorkState(context));
-                        }
+                    if (mINetEvent != null) {
+                        mINetEvent.onNetChange(NetTools.getNetWorkState(context));
                     }
                 } else if (netWorkState == -1 && LAST_TYPE != -1) {
                     NONE_TIME = time;
                     LAST_TYPE = netWorkState;
-                    if (mINetEventList != null) {
-                        for (int i = 0; i < mINetEventList.size(); i++) {
-                            mINetEventList.get(i).onNetChange(NetTools.getNetWorkState(context));
-                        }
+                    if (mINetEvent != null) {
+                        mINetEvent.onNetChange(NetTools.getNetWorkState(context));
                     }
                 }
             }

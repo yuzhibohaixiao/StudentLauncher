@@ -55,9 +55,6 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     }
 
-    override fun onNetChanged(netWorkState: Int) {
-    }
-
     override fun setListener() {
         fl_splash1.setOnClickListener(this)
         ll_splash2.setOnClickListener(this)
