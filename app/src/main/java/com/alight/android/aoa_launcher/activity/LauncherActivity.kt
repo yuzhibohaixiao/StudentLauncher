@@ -129,6 +129,14 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
                 }
             }
         }
+        noNetworkInit()
+    }
+
+    private fun noNetworkInit() {
+        if (!InternetUtil.isNetworkAvalible(this)) {
+            netState = 0
+            iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa_offline)
+        }
     }
 
     /**
