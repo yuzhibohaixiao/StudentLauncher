@@ -8,12 +8,10 @@ import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.alight.android.aoa_launcher.activity.LauncherActivity;
-import com.alight.android.aoa_launcher.common.base.BaseActivity;
 import com.alight.android.aoa_launcher.net.INetEvent;
 import com.alight.android.aoa_launcher.net.NetTools;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class NetStateReceiver extends BroadcastReceiver {

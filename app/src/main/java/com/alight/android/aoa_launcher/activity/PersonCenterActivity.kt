@@ -26,6 +26,7 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.PersonalCenterFamilyAdapter
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.AccountUtil
+import com.alight.android.aoa_launcher.utils.InternetUtil
 import com.alight.android.aoa_launcher.utils.SPUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
@@ -96,11 +97,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 null
             )
         }
-        getPresenter().getModel(
-            Urls.FAMILY_INFO,
-            HashMap(),
-            FamilyInfoBean::class.java
-        )
         calibrationAbility =
             abilityManager.getAbility(CalibrationAbility::class.java, true, applicationContext)
         calibrationAbility?.bindLooper(Looper.myLooper()!!)
@@ -155,11 +151,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private fun getNetStateShowUI(netState: Int) {
         this.netState = netState
         if (netState == 1) {
-            getPresenter().getModel(
-                Urls.FAMILY_INFO,
-                HashMap(),
-                FamilyInfoBean::class.java
-            )
+            if (familyAdapter.data.size == 0 && InternetUtil.isNetworkAvalible(this)) {
+                getPresenter().getModel(
+                    Urls.FAMILY_INFO,
+                    HashMap(),
+                    FamilyInfoBean::class.java
+                )
+            }
             rv_family_info.visibility = View.VISIBLE
             ll_family_info_offline.visibility = View.GONE
             tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting, 0, 0)
