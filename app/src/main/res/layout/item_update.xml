@@ -17,13 +17,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="16dp"
         android:orientation="vertical">
 
-        <TextView
+        <ProgressBar
+            android:id="@+id/pb_update_item"
+            style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="45dp"
             android:layout_height="24dp"
-            android:layout_marginTop="11dp"
-            android:layout_marginEnd="16dp"
+            android:max="100"
+            android:progress="50"
+            android:progressDrawable="@drawable/pb_update_bg"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_update_item"
+            android:layout_width="45dp"
+            android:layout_height="24dp"
             android:background="@drawable/update_oval_trans20"
             android:gravity="center"
             android:text="可更新"
