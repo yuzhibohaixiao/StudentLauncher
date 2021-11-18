@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alight.android.aoa_launcher.R;
@@ -30,9 +31,10 @@ import com.alight.android.aoa_launcher.common.db.DbHelper;
 import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
 import com.alight.android.aoa_launcher.service.UpdateService;
-import com.alight.android.aoa_launcher.ui.adapter.FileAdapter;
+import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
 import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
+import com.alight.android.aoa_launcher.utils.ToastUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -56,7 +58,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private static final String TAG = "MoreDownloadActivity";
     private int REQUEST_CODE_EXTERNAL_STORAGE = 20;
     private RecyclerView recyclerView;
-    private FileAdapter fileAdapter;
+    private UpdateAdapter updateAdapter;
     private ArrayList<File> files = new ArrayList<>();
 
 
@@ -75,7 +77,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         int localAhwcxVersionCode = AppUtils.getVersionCode(this, AppConstants.AHWCX_PACKAGE_NAME);
         int localAvVersionCode = AppUtils.getVersionCode(this, AppConstants.AV_PACKAGE_NAME);
         String newSystemVersionName = Build.DISPLAY;
-       /* UpdateBeanData systemApp = (UpdateBeanData) getIntent().getSerializableExtra("system");
+        UpdateBeanData systemApp = (UpdateBeanData) getIntent().getSerializableExtra("system");
         systemApp.setType(".zip");
         UpdateBeanData launcherApp = (UpdateBeanData) getIntent().getSerializableExtra("test_apk");
         launcherApp.setType(".apk");
@@ -86,7 +88,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         UpdateBeanData av = (UpdateBeanData) getIntent().getSerializableExtra("av");
         av.setType(".apk");
         //系统对比VersionName不同则升级
-        if (!newSystemVersionName.equals(systemApp.getVersion_name())) {
+      /*  if (!newSystemVersionName.equals(systemApp.getVersion_name())) {
             systemApp.setApp_name("update");
             urlList.add(systemApp);
         }
@@ -107,20 +109,25 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             finish();
         }*/
         //默认全升级
-//        urlList.add(systemApp);
-//        urlList.add(launcherApp);
-//        urlList.add(aoa);
-//        urlList.add(ahwc);
-//        urlList.add(av);
+        urlList.add(systemApp);
+        urlList.add(launcherApp);
+        urlList.add(aoa);
+        urlList.add(ahwc);
+        urlList.add(av);
 
         checkExtrnalStorage();
-//        getData();
-//        recyclerView = findViewById(R.id.recyclerView);
-//        fileAdapter = new FileAdapter(list, this);
-      /*  recyclerView.setAdapter(fileAdapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        fileAdapter.setOnItemClickListener(new FileAdapter.OnItemClickListener() {
+        getData();
+
+        if (updateAdapter == null) {
+            updateAdapter = new UpdateAdapter();
+            recyclerView.setAdapter(updateAdapter);
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+            updateAdapter.addData(list);
+        } else {
+            updateAdapter.notifyDataSetChanged();
+        }
+
+       /* fileAdapter.setOnItemClickListener(new FileAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, int type) {
                 File file = list.get(position);
@@ -156,7 +163,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             File file = list.get(i);
             file.setSizeStr("请稍等");
             file.setSpeed("");
-            fileAdapter.notifyItemChanged(i);
+            updateAdapter.notifyItemChanged(i);
             Intent intent = new Intent(UpdateActivity.this, UpdateService.class);
             intent.putExtra("filename", file.getFileName());
             intent.putExtra("url", file.getUrl());
@@ -236,6 +243,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvOtherApp = findViewById(R.id.tv_other_app);
         llBackUpdate = findViewById(R.id.ll_back_update);
         tvSystemApp.setSelected(true);
+        recyclerView = findViewById(R.id.rv_app_update);
     }
 
     @Nullable
@@ -326,7 +334,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
                         file.setStatus(File.DOWNLOAD_ERROR);
                     }
-                    fileAdapter.notifyItemChanged(i);
+                    updateAdapter.notifyItemChanged(i);
                 }
             }
 
@@ -388,7 +396,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 

@@ -613,28 +613,36 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         val close = updateDialog.findViewById<ImageView>(R.id.iv_close_update)
         val unbind = updateDialog.findViewById<TextView>(R.id.tv_unbind_dialog)
         val update = updateDialog.findViewById<TextView>(R.id.tv_update_dialog)
+
+        var systemApp: UpdateBeanData? = null //系统固件
+        var launcherApp: UpdateBeanData? = null   //launcher
+        var aoaApp: UpdateBeanData? = null    //aoa
+        var hardwareApp: UpdateBeanData? = null   //硬件
+        var avApp: UpdateBeanData? = null   //音视频
+
+        if (any.data == null) return
+        for (position in any.data.indices) {
+            when (any.data[position].app_name) {
+                //系统升级
+                "system" -> systemApp = any.data[position]
+                "launcher" -> launcherApp = any.data[position]
+                "aoa" -> aoaApp = any.data[position]
+                "ahwc" -> hardwareApp = any.data[position]
+                "av" -> avApp = any.data[position]
+            }
+        }
+
         update.setOnClickListener {
             var intent = Intent(activity, UpdateActivity::class.java)
+            intent.putExtra("system", systemApp)
+            intent.putExtra("test_apk", launcherApp)
+            intent.putExtra("aoa", aoaApp)
+            intent.putExtra("ahwc", hardwareApp)
+            intent.putExtra("av", avApp)
             activity.startActivity(intent)
         }
 
-        /*  var systemApp: UpdateBeanData? = null //系统固件
-          var launcherApp: UpdateBeanData? = null   //launcher
-          var aoaApp: UpdateBeanData? = null    //aoa
-          var hardwareApp: UpdateBeanData? = null   //硬件
-          var avApp: UpdateBeanData? = null   //音视频
-
-          if (any.data == null) return
-          for (position in any.data.indices) {
-              when (any.data[position].app_name) {
-                  //系统升级
-                  "system" -> systemApp = any.data[position]
-                  "launcher" -> launcherApp = any.data[position]
-                  "aoa" -> aoaApp = any.data[position]
-                  "ahwc" -> hardwareApp = any.data[position]
-                  "av" -> avApp = any.data[position]
-              }
-          }
+        /*
           //当前版本名
           val launcherVersionName =
               AppUtils.getVersionName(activity, AppConstants.LAUNCHER_PACKAGE_NAME)

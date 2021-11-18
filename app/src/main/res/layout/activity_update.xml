@@ -104,6 +104,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_app_update"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp" />
     </LinearLayout>
 </LinearLayout>

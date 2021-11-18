@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="180dp"
+    android:layout_height="100dp"
+    android:layout_marginBottom="18dp"
+    android:background="@drawable/update_item_bg">
+
+    <ImageView
+        android:id="@+id/iv_app_icon_update_item"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:layout_margin="12dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher_round" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/update_oval_trans20"
+            android:gravity="center"
+            android:text="可更新"
+            android:textColor="@color/white"
+            android:textSize="9sp" />
+
+        <TextView
+            android:id="@+id/tv_app_size_update_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="36MB"
+            android:textColor="@color/white"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_app_name_update_item"
+        android:layout_width="51dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="13dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_horizontal"
+        android:text="星仔办学"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="版本：1.2.03-1.2.04"
+        android:textColor="@color/white"
+        android:textSize="9sp" />
+</FrameLayout>
