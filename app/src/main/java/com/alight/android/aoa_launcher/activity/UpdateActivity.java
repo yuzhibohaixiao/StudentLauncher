@@ -10,9 +10,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,6 +37,8 @@ import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
 import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
 import com.alight.android.aoa_launcher.utils.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,6 +49,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimerTask;
+
+import kotlinx.coroutines.Dispatchers;
+import kotlinx.coroutines.GlobalScope;
 
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
@@ -109,52 +117,86 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             finish();
         }*/
         //默认全升级
-        urlList.add(systemApp);
-        urlList.add(launcherApp);
         urlList.add(aoa);
         urlList.add(ahwc);
         urlList.add(av);
+        urlList.add(launcherApp);
+        //        urlList.add(systemApp);
 
         checkExtrnalStorage();
         getData();
 
         if (updateAdapter == null) {
             updateAdapter = new UpdateAdapter();
-            recyclerView.setAdapter(updateAdapter);
-            recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
             updateAdapter.addData(list);
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+            recyclerView.setAdapter(updateAdapter);
         } else {
             updateAdapter.notifyDataSetChanged();
         }
+        updateAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            if (view.getId() == R.id.tv_update_item) {
+                TextView tvUpdate = (TextView) adapter.getViewByPosition(position, R.id.tv_update_item);
+                ProgressBar pbUpdate = (ProgressBar) adapter.getViewByPosition(position, R.id.pb_update_item);
+                pbUpdate.setVisibility(View.VISIBLE);
+                Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    int i = 0;
 
-       /* fileAdapter.setOnItemClickListener(new FileAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position, int type) {
-                File file = list.get(position);
-                Intent intent = null;
-                switch (type) {
-                    case File.DOWNLOAD_ERROR://出错
-                        file.setStatus(File.DOWNLOAD_PROCEED);
-                        file.setSpeed("---");
-                        fileAdapter.notifyItemChanged(position);
-                        intent = new Intent(UpdateActivity.this, UpdateService.class);
-                        intent.putExtra("filename", file.getFileName());
-                        intent.putExtra("url", file.getUrl());
-                        intent.putExtra("id", file.getId());
-                        intent.putExtra("seq", file.getSeq());
-                        startService(intent);
-                        break;
-                    default:
-                        break;
+                    @Override
+                    public void run() {
+                        if (i < 100) {
+                            i++;
+                            pbUpdate.setProgress(i);
+                            tvUpdate.setText(i + "%");
+                            handler.postDelayed(this, 100);
+                        }
+                    }
+                };
+                handler.post(runnable);
+//                TimerTask task = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        pbUpdate.post(() -> pbUpdate.setProgress(1 + pbUpdate.getProgress()));
+//                        tvUpdate.post(() -> tvUpdate.setText(1 + pbUpdate.getProgress() + "%"));
+//                    }
+//                };
+/*
+                while (i < 100) {
+                    if (i == 100) {
+                        tvUpdate.setText("已完成");
+                    } else {
+                        tvUpdate.setText(i + "%");
+                    }
+                    pbUpdate.setProgress(i);
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    i++;
                 }
+*/
             }
-
-            @Override
-            public void onItemLongClick(View view, int position, int type) {
-                Toast.makeText(UpdateActivity.this, "长按" + type, Toast.LENGTH_SHORT).show();
-            }
-
-        });*/
+           /* File file = list.get(position);
+            Intent intent = null;
+            int type = file.getType();
+            switch (type) {
+                case File.DOWNLOAD_ERROR://出错
+                    file.setStatus(File.DOWNLOAD_PROCEED);
+                    file.setSpeed("---");
+                    updateAdapter.notifyItemChanged(position);
+                    intent = new Intent(UpdateActivity.this, UpdateService.class);
+                    intent.putExtra("filename", file.getFileName());
+                    intent.putExtra("url", file.getUrl());
+                    intent.putExtra("id", file.getId());
+                    intent.putExtra("seq", file.getSeq());
+                    startService(intent);
+                    break;
+                default:
+                    break;
+            }*/
+        });
 //        startDownload();
     }
 
