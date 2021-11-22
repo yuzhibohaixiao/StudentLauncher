@@ -41,7 +41,7 @@
                 android:background="@drawable/update_oval_trans20"
                 android:gravity="center"
                 android:text="可更新"
-                android:textColor="@color/white"
+                android:textColor="#50ffffff"
                 android:textSize="9sp" />
         </FrameLayout>
 

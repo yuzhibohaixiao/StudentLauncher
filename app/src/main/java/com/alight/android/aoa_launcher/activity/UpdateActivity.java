@@ -9,12 +9,9 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.alight.android.aoa_launcher.R;
 import com.alight.android.aoa_launcher.application.LauncherApplication;
@@ -34,11 +32,8 @@ import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
 import com.alight.android.aoa_launcher.service.UpdateService;
 import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
-import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
 import com.alight.android.aoa_launcher.utils.ToastUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,10 +44,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimerTask;
-
-import kotlinx.coroutines.Dispatchers;
-import kotlinx.coroutines.GlobalScope;
 
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
@@ -69,13 +60,13 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private UpdateAdapter updateAdapter;
     private ArrayList<File> files = new ArrayList<>();
 
-
     private HashMap<String, DownloadReceiver> downloadReceiverMap = new HashMap<>();
     private List<File> list = new ArrayList<>();
     private List<UpdateBeanData> urlList = new ArrayList<>();
     private TextView tvSystemApp;
     private TextView tvOtherApp;
     private View llBackUpdate;
+    private TextView tvUpdateAll;
 
     @Override
     public void initData() {
@@ -117,10 +108,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             finish();
         }*/
         //默认全升级
-        urlList.add(aoa);
+//        urlList.add(aoa);
         urlList.add(ahwc);
         urlList.add(av);
-        urlList.add(launcherApp);
+//        urlList.add(launcherApp);
         //        urlList.add(systemApp);
 
         checkExtrnalStorage();
@@ -130,13 +121,14 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             updateAdapter = new UpdateAdapter();
             updateAdapter.addData(list);
             recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+            ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             recyclerView.setAdapter(updateAdapter);
         } else {
             updateAdapter.notifyDataSetChanged();
         }
         updateAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             if (view.getId() == R.id.tv_update_item) {
-                TextView tvUpdate = (TextView) adapter.getViewByPosition(position, R.id.tv_update_item);
+         /*       TextView tvUpdate = (TextView) adapter.getViewByPosition(position, R.id.tv_update_item);
                 ProgressBar pbUpdate = (ProgressBar) adapter.getViewByPosition(position, R.id.pb_update_item);
                 pbUpdate.setVisibility(View.VISIBLE);
                 Handler handler = new Handler();
@@ -153,14 +145,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         }
                     }
                 };
-                handler.post(runnable);
-//                TimerTask task = new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        pbUpdate.post(() -> pbUpdate.setProgress(1 + pbUpdate.getProgress()));
-//                        tvUpdate.post(() -> tvUpdate.setText(1 + pbUpdate.getProgress() + "%"));
-//                    }
-//                };
+                handler.post(runnable);*/
 /*
                 while (i < 100) {
                     if (i == 100) {
@@ -178,7 +163,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
 */
             }
-           /* File file = list.get(position);
+            File file = list.get(position);
             Intent intent = null;
             int type = file.getType();
             switch (type) {
@@ -195,7 +180,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     break;
                 default:
                     break;
-            }*/
+            }
         });
 //        startDownload();
     }
@@ -205,7 +190,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             File file = list.get(i);
             file.setSizeStr("请稍等");
             file.setSpeed("");
-            updateAdapter.notifyItemChanged(i);
             Intent intent = new Intent(UpdateActivity.this, UpdateService.class);
             intent.putExtra("filename", file.getFileName());
             intent.putExtra("url", file.getUrl());
@@ -229,7 +213,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
                 System.out.println(file1);
                 Log.d(TAG, "getData: " + file1.getStatus());
-                file.setStatus(file1.getStatus());
+//                file.setStatus(file1.getStatus());
+                //状态始终保持初始
+                file.setStatus(File.DOWNLOAD_REDYA);
                 file.setSizeStr(file1.getSizeStr());
                 file.setCreateTime(file1.getCreateTime());
             } else {
@@ -270,6 +256,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             }
             downloadReceiverMap.clear();
         }
+        if (list != null) {
+            list.clear();
+        }
+        if (urlList != null) {
+            urlList.clear();
+        }
     }
 
     @Override
@@ -277,6 +269,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvSystemApp.setOnClickListener(this);
         tvOtherApp.setOnClickListener(this);
         llBackUpdate.setOnClickListener(this);
+        tvUpdateAll.setOnClickListener(this);
     }
 
     @Override
@@ -286,6 +279,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         llBackUpdate = findViewById(R.id.ll_back_update);
         tvSystemApp.setSelected(true);
         recyclerView = findViewById(R.id.rv_app_update);
+        tvUpdateAll = findViewById(R.id.tv_update_all);
     }
 
     @Nullable
@@ -320,10 +314,16 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             case R.id.tv_system_app:
                 tvSystemApp.setSelected(true);
                 tvOtherApp.setSelected(false);
+                tvUpdateAll.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_other_app:
                 tvOtherApp.setSelected(true);
                 tvSystemApp.setSelected(false);
+                tvUpdateAll.setVisibility(View.GONE);
+                break;
+            //开始下载
+            case R.id.tv_update_all:
+                startDownload();
                 break;
             case R.id.ll_back_update:
                 finish();
@@ -345,10 +345,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     int pencent = intent.getIntExtra("percent", 0);
                     int status = intent.getIntExtra("status", 0);
                     String filePath = intent.getStringExtra("filePath");
-                    if (status == File.DOWNLOAD_PROCEED) {
+                    if (status == File.DOWNLOAD_PROCEED) {//下载进行中
                         file.setSpeed(speedS);
                         file.setProgress(pencent);
                         file.setSizeStr(sizeS);
+                        updateAdapter.notifyItemChanged(i);
                     }
                     if (status == File.DOWNLOAD_COMPLETE) {//完成
                         file.setStatus(File.DOWNLOAD_COMPLETE);
@@ -359,7 +360,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         files.add(file);
                         Log.i(TAG, "已下载数量: " + files.size());
                         if (list.size() == files.size()) {
-                            for (int j = 0; j < files.size(); j++) {
+                     /*       for (int j = 0; j < files.size(); j++) {
                                 if (files.get(j).getFileName().equals("update.zip")) {
                                     installSystem(context);
                                     continue;
@@ -368,15 +369,15 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
 //                                ApkController.install(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName(), MoreDownloadActivity.this);
 //                                installAPK(MoreDownloadActivity.this, new java.io.File(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName()), false);
-                            }
-                            finish();
+                            }*/
+                            ToastUtils.showLong(UpdateActivity.this, "都下完啦！");
+//                            finish();
                         }
                     }
                     if (status == File.DOWNLOAD_ERROR) {
                         LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
                         file.setStatus(File.DOWNLOAD_ERROR);
                     }
-                    updateAdapter.notifyItemChanged(i);
                 }
             }
 
