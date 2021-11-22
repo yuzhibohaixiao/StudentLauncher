@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -33,6 +34,7 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl;
 import com.alight.android.aoa_launcher.service.UpdateService;
 import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
 import com.alight.android.aoa_launcher.utils.AppUtils;
+import com.alight.android.aoa_launcher.utils.StringUtils;
 import com.alight.android.aoa_launcher.utils.ToastUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +47,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.AHWCX_PACKAGE_NAME;
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.AOA_PACKAGE_NAME;
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.AV_PACKAGE_NAME;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.LAUNCHER_PACKAGE_NAME;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
 
 /**
@@ -70,21 +76,19 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initData() {
-        int localLauncherVersionCode =
-                AppUtils.getVersionCode(this, AppConstants.LAUNCHER_PACKAGE_NAME);
-        int localAoaVersionCode = AppUtils.getVersionCode(this, AppConstants.AOA_PACKAGE_NAME);
-        int localAhwcxVersionCode = AppUtils.getVersionCode(this, AppConstants.AHWCX_PACKAGE_NAME);
-        int localAvVersionCode = AppUtils.getVersionCode(this, AppConstants.AV_PACKAGE_NAME);
-        String newSystemVersionName = Build.DISPLAY;
         UpdateBeanData systemApp = (UpdateBeanData) getIntent().getSerializableExtra("system");
         systemApp.setType(".zip");
         UpdateBeanData launcherApp = (UpdateBeanData) getIntent().getSerializableExtra("test_apk");
+        launcherApp.setPackName(LAUNCHER_PACKAGE_NAME);
         launcherApp.setType(".apk");
         UpdateBeanData aoa = (UpdateBeanData) getIntent().getSerializableExtra("aoa");
+        aoa.setPackName(AOA_PACKAGE_NAME);
         aoa.setType(".apk");
         UpdateBeanData ahwc = (UpdateBeanData) getIntent().getSerializableExtra("ahwc");
+        ahwc.setPackName(AHWCX_PACKAGE_NAME);
         ahwc.setType(".apk");
         UpdateBeanData av = (UpdateBeanData) getIntent().getSerializableExtra("av");
+        av.setPackName(AV_PACKAGE_NAME);
         av.setType(".apk");
         //系统对比VersionName不同则升级
       /*  if (!newSystemVersionName.equals(systemApp.getVersion_name())) {
@@ -108,11 +112,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             finish();
         }*/
         //默认全升级
-//        urlList.add(aoa);
         urlList.add(ahwc);
+//        urlList.add(aoa);
         urlList.add(av);
 //        urlList.add(launcherApp);
-        //        urlList.add(systemApp);
+//        urlList.add(systemApp);
 
         checkExtrnalStorage();
         getData();
@@ -121,7 +125,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             updateAdapter = new UpdateAdapter();
             updateAdapter.addData(list);
             recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
-            ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             recyclerView.setAdapter(updateAdapter);
         } else {
             updateAdapter.notifyDataSetChanged();
@@ -224,6 +228,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             }
             file.setFileType(".apk");
             file.setUrl(urlList.get(i).getApp_url());
+            if (!StringUtils.isEmpty(urlList.get(i).getPackName())) {
+                file.setPackName(urlList.get(i).getPackName());
+            }
             list.add(file);
             IntentFilter filter = new IntentFilter();
             DownloadReceiver receiver = new DownloadReceiver();
@@ -262,6 +269,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         if (urlList != null) {
             urlList.clear();
         }
+        Intent intent = new Intent(UpdateActivity.this, UpdateService.class);
+        stopService(intent);
     }
 
     @Override
@@ -323,6 +332,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 break;
             //开始下载
             case R.id.tv_update_all:
+                tvUpdateAll.setTextColor(Color.parseColor("#50ffffff"));
+                tvUpdateAll.setEnabled(false);
+                tvUpdateAll.setClickable(false);
                 startDownload();
                 break;
             case R.id.ll_back_update:
@@ -370,6 +382,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 //                                ApkController.install(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName(), MoreDownloadActivity.this);
 //                                installAPK(MoreDownloadActivity.this, new java.io.File(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName()), false);
                             }*/
+                            //todo
+                            tvUpdateAll.setTextColor(Color.WHITE);
+                            tvUpdateAll.setEnabled(true);
+                            tvUpdateAll.setClickable(true);
                             ToastUtils.showLong(UpdateActivity.this, "都下完啦！");
 //                            finish();
                         }

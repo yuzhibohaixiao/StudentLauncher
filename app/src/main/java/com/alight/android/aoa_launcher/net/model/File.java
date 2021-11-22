@@ -9,17 +9,17 @@ import java.util.Date;
 @Table(name = "download_file")
 public class File implements Serializable {
     //下载完成
-    public static final int DOWNLOAD_COMPLETE=4;
+    public static final int DOWNLOAD_COMPLETE = 4;
     //准备下载
-    public static final int DOWNLOAD_REDYA=0;
+    public static final int DOWNLOAD_REDYA = 0;
     //下载进行中
-    public static final int DOWNLOAD_PROCEED=1;
+    public static final int DOWNLOAD_PROCEED = 1;
     //暂停
-    public static final int DOWNLOAD_PAUSE=2;
+    public static final int DOWNLOAD_PAUSE = 2;
     //出错
-    public static final int DOWNLOAD_ERROR=3;
+    public static final int DOWNLOAD_ERROR = 3;
 
-    @Column(name = "id",isId = true)
+    @Column(name = "id", isId = true)
     private String id;
     /**
      * 文件名
@@ -68,6 +68,22 @@ public class File implements Serializable {
     private Date createTime;
 
     private boolean checked;
+
+    private String packName;
+
+    public int getIconState() {
+        return iconState;
+    }
+
+    public void setIconState(int iconState) {
+        this.iconState = iconState;
+    }
+
+    /**
+     * 1为显示 0为未显示
+     */
+    private int iconState = 0;
+
     /**
      * 是否显示单选框
      */
@@ -81,6 +97,14 @@ public class File implements Serializable {
 
     public void setSeq(int seq) {
         this.seq = seq;
+    }
+
+    public String getPackName() {
+        return packName;
+    }
+
+    public void setPackName(String packName) {
+        this.packName = packName;
     }
 
     public boolean isShow() {

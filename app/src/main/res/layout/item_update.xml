@@ -10,20 +10,19 @@
         android:layout_width="51dp"
         android:layout_height="51dp"
         android:layout_margin="12dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher_round" />
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginTop="11dp"
-        android:layout_marginEnd="16dp"
         android:orientation="vertical">
 
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="45dp"
+            android:layout_marginEnd="16dp"
+            android:layout_height="24dp">
 
             <ProgressBar
                 android:id="@+id/pb_update_item"
@@ -68,12 +67,15 @@
         android:textSize="12sp" />
 
     <TextView
+        android:id="@+id/tv_app_code_update_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
+        android:layout_marginStart="100dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:text="版本：1.2.03-1.2.04"
+        android:singleLine="true"
+        android:text="版本：1.0.0"
         android:textColor="@color/white"
         android:textSize="9sp" />
 </FrameLayout>

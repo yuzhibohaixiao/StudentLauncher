@@ -125,7 +125,8 @@ public class UpdateService extends Service {
                 String speed = taskSpeed.speed();
                 int percent = (int) (((float) task.getInfo().getTotalOffset() / task.getInfo().getTotalLength()) * 100);
                 String totalSize = Util.humanReadableBytes(task.getInfo().getTotalLength(), true).toString();
-                String size = totalSize + "(" + (int) percent + "%)";
+//                String size = totalSize + "(" + (int) percent + "%)";
+                String size = totalSize;
                 intent.putExtra("percent", percent);
                 intent.putExtra("size", size);
                 intent.putExtra("speed", speed);
