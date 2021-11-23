@@ -57,13 +57,15 @@ import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYST
 public class UpdateActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "MoreDownloadActivity";
     private int REQUEST_CODE_EXTERNAL_STORAGE = 20;
-    private RecyclerView recyclerView;
-    private UpdateAdapter updateAdapter;
+    private RecyclerView systemRecyclerView;
+    private RecyclerView otherRecyclerView;
+    private UpdateAdapter systemAdapter;
+    private UpdateAdapter otherAdapter;
     private ArrayList<File> files = new ArrayList<>();
 
     private HashMap<String, DownloadReceiver> downloadReceiverMap = new HashMap<>();
-    private List<File> list = new ArrayList<>();
-    private List<UpdateBeanData> urlList = new ArrayList<>();
+    private List<File> appList = new ArrayList<>();
+    private List<File> otherList = new ArrayList<>();
     private TextView tvSystemApp;
     private TextView tvOtherApp;
     private View llBackUpdate;
@@ -71,54 +73,68 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private Intent serviceIntent;
     private ArrayList<UpdateBeanData> systemAppList;
     private ArrayList<UpdateBeanData> otherAppList;
+    //1为系统应用 2是预置应用
+    private int appType = 1;
 
     @Override
+
     public void initData() {
         systemAppList = (ArrayList<UpdateBeanData>) getIntent().getSerializableExtra("systemApp");
         otherAppList = (ArrayList<UpdateBeanData>) getIntent().getSerializableExtra("otherApp");
 
         checkExtrnalStorage();
-        getData();
+        getData(appType);
 
-        if (updateAdapter == null) {
-            updateAdapter = new UpdateAdapter();
-            updateAdapter.addData(list);
-            recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
-            ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-            recyclerView.setAdapter(updateAdapter);
+        if (systemAdapter == null) {
+            systemAdapter = new UpdateAdapter();
+            systemAdapter.setAppType(appType);
+            systemAdapter.addData(appList);
+            systemRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+            ((SimpleItemAnimator) systemRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            systemRecyclerView.setAdapter(systemAdapter);
         } else {
-            updateAdapter.notifyDataSetChanged();
+            systemAdapter.notifyDataSetChanged();
         }
-        updateAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            if (view.getId() == R.id.tv_update_item) {
-
-            }
-            File file = list.get(position);
-            int type = file.getType();
-            switch (type) {
-                case File.DOWNLOAD_ERROR://出错
-                    file.setStatus(File.DOWNLOAD_PROCEED);
-                    file.setSpeed("---");
-                    updateAdapter.notifyItemChanged(position);
-                    if (serviceIntent == null) {
-                        serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
-                    }
-                    serviceIntent.putExtra("filename", file.getFileName());
-                    serviceIntent.putExtra("url", file.getUrl());
-                    serviceIntent.putExtra("id", file.getId());
-                    serviceIntent.putExtra("seq", file.getSeq());
-                    startService(serviceIntent);
-                    break;
-                default:
-                    break;
+        if (otherAdapter == null) {
+            otherAdapter = new UpdateAdapter();
+            otherAdapter.setAppType(appType);
+            otherRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+            ((SimpleItemAnimator) otherRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            otherRecyclerView.setAdapter(otherAdapter);
+        } else {
+            otherAdapter.notifyDataSetChanged();
+        }
+        otherAdapter.setNewInstance(otherList);
+        otherAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            if (view.getId() == R.id.tv_update_item && appType == 2) {
+                startSingleDownload(position);
+              /*  File file = appList.get(position);
+                int type = file.getType();
+                switch (type) {
+                    case File.DOWNLOAD_ERROR://出错
+                        file.setStatus(File.DOWNLOAD_PROCEED);
+                        file.setSpeed("---");
+                        updateAdapter.notifyItemChanged(position);
+                        if (serviceIntent == null) {
+                            serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
+                        }
+                        serviceIntent.putExtra("filename", file.getFileName());
+                        serviceIntent.putExtra("url", file.getUrl());
+                        serviceIntent.putExtra("id", file.getId());
+                        serviceIntent.putExtra("seq", file.getSeq());
+                        startService(serviceIntent);
+                        break;
+                    default:
+                        break;
+                }*/
             }
         });
 //        startDownload();
     }
 
     private void startDownload() {
-        for (int i = 0; i < list.size(); i++) {
-            File file = list.get(i);
+        for (int i = 0; i < appList.size(); i++) {
+            File file = appList.get(i);
             file.setSizeStr("请稍等");
             file.setSpeed("");
             if (serviceIntent == null) {
@@ -128,44 +144,100 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             serviceIntent.putExtra("url", file.getUrl());
             serviceIntent.putExtra("id", file.getId());
             serviceIntent.putExtra("seq", file.getSeq());
+            serviceIntent.putExtra("type", 1);
             startService(serviceIntent);
             file.setStatus(File.DOWNLOAD_PROCEED);
         }
     }
 
-    private void getData() {
-        List<String> downloadedFileIds = getDownloadedFileIds();
-        Log.d(TAG, "getData: " + downloadedFileIds);
-        List<File> fileList = selectDownloadedFiles();
-        for (int i = 0; i < urlList.size(); i++) {
-            File file = new File();
-            file.setId("" + i);
-            file.setSeq(i);
-            file.setFileName(urlList.get(i).getApp_name());
-            if (downloadedFileIds.contains(file.getId())) {
-                File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
-                System.out.println(file1);
-                Log.d(TAG, "getData: " + file1.getStatus());
+    private void startSingleDownload(int position) {
+        if (otherList != null && otherList.size() > 0) {
+            File file = otherList.get(position);
+            file.setSizeStr("请稍等");
+            file.setSpeed("");
+            if (serviceIntent == null) {
+                serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
+            }
+            serviceIntent.putExtra("filename", file.getFileName());
+            serviceIntent.putExtra("url", file.getUrl());
+            serviceIntent.putExtra("id", file.getId());
+            serviceIntent.putExtra("seq", file.getSeq());
+            serviceIntent.putExtra("type", 2);
+            startService(serviceIntent);
+            file.setStatus(File.DOWNLOAD_PROCEED);
+        }
+    }
+
+
+    private void getData(int appType) {
+        if (appType == 1) {
+            List<String> downloadedFileIds = getDownloadedFileIds();
+            Log.d(TAG, "getData: " + downloadedFileIds);
+            List<File> fileList = selectDownloadedFiles();
+            for (int i = 0; i < systemAppList.size(); i++) {
+                File file = new File();
+                file.setId("" + i);
+                file.setSeq(i);
+                file.setFileName(systemAppList.get(i).getApp_name());
+                if (downloadedFileIds.contains(file.getId())) {
+                    File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
+                    System.out.println(file1);
+                    Log.d(TAG, "getData: " + file1.getStatus());
 //                file.setStatus(file1.getStatus());
-                //状态始终保持初始
-                file.setStatus(File.DOWNLOAD_REDYA);
-                file.setSizeStr(file1.getSizeStr());
-                file.setCreateTime(file1.getCreateTime());
-            } else {
-                file.setStatus(File.DOWNLOAD_REDYA);
-                file.setCreateTime(new Date());
+                    //状态始终保持初始
+                    file.setStatus(File.DOWNLOAD_REDYA);
+                    file.setSizeStr(file1.getSizeStr());
+                    file.setCreateTime(file1.getCreateTime());
+                } else {
+                    file.setStatus(File.DOWNLOAD_REDYA);
+                    file.setCreateTime(new Date());
+                }
+                file.setFileType(".apk");
+                file.setUrl(systemAppList.get(i).getApp_url());
+                if (!StringUtils.isEmpty(systemAppList.get(i).getPackName())) {
+                    file.setPackName(systemAppList.get(i).getPackName());
+                }
+                appList.add(file);
+                IntentFilter filter = new IntentFilter();
+                DownloadReceiver receiver = new DownloadReceiver();
+                filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + appType);
+                registerReceiver(receiver, filter);
+                downloadReceiverMap.put(file.getId(), receiver);
             }
-            file.setFileType(".apk");
-            file.setUrl(urlList.get(i).getApp_url());
-            if (!StringUtils.isEmpty(urlList.get(i).getPackName())) {
-                file.setPackName(urlList.get(i).getPackName());
+        } else {
+            List<String> downloadedFileIds = getDownloadedFileIds();
+            Log.d(TAG, "getData: " + downloadedFileIds);
+            List<File> fileList = selectDownloadedFiles();
+            for (int i = 0; i < otherAppList.size(); i++) {
+                File file = new File();
+                file.setId("" + i);
+                file.setSeq(i);
+                file.setFileName(otherAppList.get(i).getApp_name());
+                if (downloadedFileIds.contains(file.getId())) {
+                    File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
+                    System.out.println(file1);
+                    Log.d(TAG, "getData: " + file1.getStatus());
+//                file.setStatus(file1.getStatus());
+                    //状态始终保持初始
+                    file.setStatus(File.DOWNLOAD_REDYA);
+                    file.setSizeStr(file1.getSizeStr());
+                    file.setCreateTime(file1.getCreateTime());
+                } else {
+                    file.setStatus(File.DOWNLOAD_REDYA);
+                    file.setCreateTime(new Date());
+                }
+                file.setFileType(".apk");
+                file.setUrl(otherAppList.get(i).getApp_url());
+                if (!StringUtils.isEmpty(otherAppList.get(i).getApp_info().getPackage_name())) {
+                    file.setPackName(otherAppList.get(i).getApp_info().getPackage_name());
+                }
+                otherList.add(file);
+                IntentFilter filter = new IntentFilter();
+                DownloadReceiver receiver = new DownloadReceiver();
+                filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + appType);
+                registerReceiver(receiver, filter);
+                downloadReceiverMap.put(file.getId(), receiver);
             }
-            list.add(file);
-            IntentFilter filter = new IntentFilter();
-            DownloadReceiver receiver = new DownloadReceiver();
-            filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId());
-            registerReceiver(receiver, filter);
-            downloadReceiverMap.put(file.getId(), receiver);
         }
     }
 
@@ -192,11 +264,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             }
             downloadReceiverMap.clear();
         }
-        if (list != null) {
-            list.clear();
+        if (appList != null) {
+            appList.clear();
         }
-        if (urlList != null) {
-            urlList.clear();
+        if (appList != null) {
+            appList.clear();
         }
         if (serviceIntent != null) {
             stopService(serviceIntent);
@@ -217,7 +289,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvOtherApp = findViewById(R.id.tv_other_app);
         llBackUpdate = findViewById(R.id.ll_back_update);
         tvSystemApp.setSelected(true);
-        recyclerView = findViewById(R.id.rv_app_update);
+        systemRecyclerView = findViewById(R.id.rv_system_app_update);
+        otherRecyclerView = findViewById(R.id.rv_other_app_update);
         tvUpdateAll = findViewById(R.id.tv_update_all);
     }
 
@@ -251,14 +324,26 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_system_app:
+                otherRecyclerView.setVisibility(View.GONE);
+                systemRecyclerView.setVisibility(View.VISIBLE);
                 tvSystemApp.setSelected(true);
                 tvOtherApp.setSelected(false);
                 tvUpdateAll.setVisibility(View.VISIBLE);
+                appType = 2;
+                systemAdapter.setAppType(appType);
+                systemAdapter.setNewInstance(appList);
                 break;
             case R.id.tv_other_app:
+                otherRecyclerView.setVisibility(View.VISIBLE);
+                systemRecyclerView.setVisibility(View.GONE);
                 tvOtherApp.setSelected(true);
                 tvSystemApp.setSelected(false);
                 tvUpdateAll.setVisibility(View.GONE);
+                if (otherList.size() == 0) {
+                    appType = 2;
+                    getData(appType);
+                }
+                otherAdapter.setAppType(appType);
                 break;
             //开始下载
             case R.id.tv_update_all:
@@ -278,58 +363,71 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            for (int i = 0; i < list.size(); i++) {
-                File file = list.get(i);
-                if (intent.getAction().equals(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId())) {
-                    String speedS = intent.getStringExtra("speed");
-                    String sizeS = intent.getStringExtra("size");
-                    String totalSize = intent.getStringExtra("totalSize");
-                    int pencent = intent.getIntExtra("percent", 0);
-                    int status = intent.getIntExtra("status", 0);
-                    String filePath = intent.getStringExtra("filePath");
-                    if (status == File.DOWNLOAD_PROCEED) {//下载进行中
-                        file.setSpeed(speedS);
-                        file.setProgress(pencent);
-                        file.setSizeStr(sizeS);
-                        updateAdapter.notifyItemChanged(i);
-                    }
-                    if (status == File.DOWNLOAD_COMPLETE) {//完成
-                        file.setStatus(File.DOWNLOAD_COMPLETE);
-                        file.setProgress(pencent);
-                        file.setSizeStr(totalSize);
-                        file.setPath(filePath);
-                        LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
-                        files.add(file);
-                        Log.i(TAG, "已下载数量: " + files.size());
-                        if (list.size() == files.size()) {
-                     /*       for (int j = 0; j < files.size(); j++) {
-                                if (files.get(j).getFileName().equals("update.zip")) {
-                                    installSystem(context);
-                                    continue;
-                                }
-                                String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName();
-                                ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
-//                                ApkController.install(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName(), MoreDownloadActivity.this);
-//                                installAPK(MoreDownloadActivity.this, new java.io.File(Environment.getExternalStorageDirectory().getPath() + "/" + files.get(j).getFileName()), false);
-                            }*/
-                            //todo
-                            tvUpdateAll.setTextColor(Color.WHITE);
-                            tvUpdateAll.setEnabled(true);
-                            tvUpdateAll.setClickable(true);
-                            ToastUtils.showLong(UpdateActivity.this, "都下完啦！");
-                            updateAdapter.setInstallNotify();
-//                            finish();
+            int type = intent.getIntExtra("type", 1);
+            if (type == 1) {
+                //系统应用
+                for (int i = 0; i < appList.size(); i++) {
+                    File file = appList.get(i);
+                    if (intent.getAction().equals(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + type)) {
+                        String speedS = intent.getStringExtra("speed");
+                        String sizeS = intent.getStringExtra("size");
+                        String totalSize = intent.getStringExtra("totalSize");
+                        int pencent = intent.getIntExtra("percent", 0);
+                        int status = intent.getIntExtra("status", 0);
+                        String filePath = intent.getStringExtra("filePath");
+                        if (status == File.DOWNLOAD_PROCEED) {//下载进行中
+                            file.setSpeed(speedS);
+                            file.setProgress(pencent);
+                            file.setSizeStr(sizeS);
+                            systemAdapter.notifyItemChanged(i);
+                        }
+                        if (status == File.DOWNLOAD_COMPLETE) {//完成
+                            file.setStatus(File.DOWNLOAD_COMPLETE);
+                            file.setProgress(pencent);
+                            file.setSizeStr(totalSize);
+                            file.setPath(filePath);
+                            LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
+                        }
+                        if (status == File.DOWNLOAD_ERROR) {
+                            LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
+                            file.setStatus(File.DOWNLOAD_ERROR);
                         }
                     }
-                    if (status == File.DOWNLOAD_ERROR) {
-                        LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
-                        file.setStatus(File.DOWNLOAD_ERROR);
+                }
+            } else {
+                //预装应用
+                for (int i = 0; i < otherList.size(); i++) {
+                    File file = otherList.get(i);
+                    if (intent.getAction().equals(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + type)) {
+                        String speedS = intent.getStringExtra("speed");
+                        String sizeS = intent.getStringExtra("size");
+                        String totalSize = intent.getStringExtra("totalSize");
+                        int pencent = intent.getIntExtra("percent", 0);
+                        int status = intent.getIntExtra("status", 0);
+                        String filePath = intent.getStringExtra("filePath");
+                        if (status == File.DOWNLOAD_PROCEED) {//下载进行中
+                            file.setSpeed(speedS);
+                            file.setProgress(pencent);
+                            file.setSizeStr(sizeS);
+                            otherAdapter.notifyItemChanged(i);
+                        }
+                        if (status == File.DOWNLOAD_COMPLETE) {//完成
+                            file.setStatus(File.DOWNLOAD_COMPLETE);
+                            file.setProgress(pencent);
+                            file.setSizeStr(totalSize);
+                            file.setPath(filePath);
+                            otherAdapter.notifyItemChanged(i);
+                            LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
+                        }
+                        if (status == File.DOWNLOAD_ERROR) {
+                            LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
+                            file.setStatus(File.DOWNLOAD_ERROR);
+                        }
                     }
                 }
+
             }
-
         }
-
     }
 
     public void installAPK(Context context, java.io.File apkFile, boolean closeApp) {

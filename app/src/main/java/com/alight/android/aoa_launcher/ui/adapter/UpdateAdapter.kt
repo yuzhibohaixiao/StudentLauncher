@@ -18,7 +18,12 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_update) {
 
-    private var installFlag: Int = 0
+    private var installFlag = 0
+
+    private var appType = 1
+    fun setAppType(appType: Int) {
+        this.appType = appType
+    }
 
     init {
         //新版添加子控件点击事件
@@ -26,81 +31,157 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
     }
 
     override fun convert(holder: BaseViewHolder, file: File) {
-        //下载安装包名称
-        holder.setText(R.id.tv_app_name_update_item, file.fileName)
-        //下载安装包大小
-        holder.setText(R.id.tv_app_size_update_item, file.sizeStr)
-        if (file.iconState == 0) {
-            if (!StringUtils.isEmpty(file.packName)) {
-                Glide.with(context)
-                    .load(getIcon(file.packName))
-                    .error(R.mipmap.ic_launcher)
-                    .into(holder.getView(R.id.iv_app_icon_update_item))
-                //版本号
-                holder.setText(
-                    R.id.tv_app_code_update_item,
-                    "版本：" + AppUtils.getVersionName(context, file.packName)
-                )
-            } else {
-                Glide.with(context)
-                    .load(R.mipmap.ic_launcher)
-                    .into(holder.getView(R.id.iv_app_icon_update_item))
-                holder.setText(
-                    R.id.tv_app_code_update_item,
-                    "版本：" + "暂无"
-                )
+        if (appType == 1) {
+            //下载安装包名称
+            holder.setText(R.id.tv_app_name_update_item, file.fileName)
+            //下载安装包大小
+            holder.setText(R.id.tv_app_size_update_item, file.sizeStr)
+            if (file.iconState == 0) {
+                if (!StringUtils.isEmpty(file.packName)) {
+                    Glide.with(context)
+                        .load(getIcon(file.packName))
+                        .error(R.mipmap.ic_launcher)
+                        .into(holder.getView(R.id.iv_app_icon_update_item))
+                    //版本号
+                    holder.setText(
+                        R.id.tv_app_code_update_item,
+                        "版本：" + AppUtils.getVersionName(context, file.packName)
+                    )
+                } else {
+                    Glide.with(context)
+                        .load(R.mipmap.ic_launcher)
+                        .into(holder.getView(R.id.iv_app_icon_update_item))
+                    holder.setText(
+                        R.id.tv_app_code_update_item,
+                        "版本：" + "暂无"
+                    )
+                }
+                if (file.fileName == "system.zip") {
+                    holder.setText(
+                        R.id.tv_app_code_update_item,
+                        "版本：" + Build.DISPLAY
+                    )
+                }
+                //表示已经加载过图片
+                data[holder.layoutPosition].iconState = 1
             }
-            if (file.fileName == "system.zip") {
-                holder.setText(
-                    R.id.tv_app_code_update_item,
-                    "版本：" + Build.DISPLAY
-                )
-            }
-            //表示已经加载过图片
-            data[holder.layoutPosition].iconState = 1
-        }
 
-        var tvUpdate = holder.getView<TextView>(R.id.tv_update_item)
-        var pbUpdate = holder.getView<ProgressBar>(R.id.pb_update_item)
+            var tvUpdate = holder.getView<TextView>(R.id.tv_update_item)
+            var pbUpdate = holder.getView<ProgressBar>(R.id.pb_update_item)
 
-        if (installFlag == 1) {
-            tvUpdate.text = "安装中"
-            pbUpdate.visibility = View.GONE
-            return
-        }
-        when (file.status) {
-            File.DOWNLOAD_PAUSE ->//暂停->开始
-            {
-                pbUpdate.visibility = View.VISIBLE
-                pbUpdate.progress = file.progress
-            }
-            File.DOWNLOAD_PROCEED -> //下载进行中
-            {
-                pbUpdate.visibility = View.VISIBLE
-                pbUpdate.progress = file.progress
-                tvUpdate.setTextColor(Color.WHITE)
-                tvUpdate.text = "${pbUpdate.progress}%";
-
-            }
-            File.DOWNLOAD_ERROR ->//出错
-            {
-                tvUpdate.text = "下载出错"
-            }
-            File.DOWNLOAD_COMPLETE ->//完成
-            {
-                tvUpdate.text = "已完成"
+            if (installFlag == 1) {
+                tvUpdate.text = "安装中"
                 pbUpdate.visibility = View.GONE
-                tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                return
             }
-            File.DOWNLOAD_REDYA ->//准备下载 ->开始
-            {
+            when (file.status) {
+                File.DOWNLOAD_PAUSE ->//暂停->开始
+                {
+                    pbUpdate.visibility = View.VISIBLE
+                    pbUpdate.progress = file.progress
+                }
+                File.DOWNLOAD_PROCEED -> //下载进行中
+                {
+                    pbUpdate.visibility = View.VISIBLE
+                    pbUpdate.progress = file.progress
+                    tvUpdate.setTextColor(Color.WHITE)
+                    tvUpdate.text = "${pbUpdate.progress}%";
+
+                }
+                File.DOWNLOAD_ERROR ->//出错
+                {
+                    tvUpdate.text = "下载出错"
+                }
+                File.DOWNLOAD_COMPLETE ->//完成
+                {
+                    tvUpdate.text = "已完成"
+                    pbUpdate.visibility = View.GONE
+                    tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                }
+                File.DOWNLOAD_REDYA ->//准备下载 ->开始
+                {
 //                pbUpdate.visibility = View.VISIBLE
 //                pbUpdate.progress = file.progress
 //                tvUpdate.setTextColor(Color.WHITE)
 //                tvUpdate.text = "${pbUpdate.progress}%";
+                }
+            }
+        } else {
+            //下载安装包名称
+            holder.setText(R.id.tv_app_name_update_item, file.fileName)
+            //下载安装包大小
+            holder.setText(R.id.tv_app_size_update_item, file.sizeStr)
+            if (file.iconState == 0) {
+                if (!StringUtils.isEmpty(file.packName)) {
+                    Glide.with(context)
+                        .load(getIcon(file.packName))
+                        .error(R.mipmap.ic_launcher)
+                        .into(holder.getView(R.id.iv_app_icon_update_item))
+                    //版本号
+                    holder.setText(
+                        R.id.tv_app_code_update_item,
+                        "版本：" + AppUtils.getVersionName(context, file.packName)
+                    )
+                } else {
+                    Glide.with(context)
+                        .load(R.mipmap.ic_launcher)
+                        .into(holder.getView(R.id.iv_app_icon_update_item))
+                    holder.setText(
+                        R.id.tv_app_code_update_item,
+                        "版本：" + "暂无"
+                    )
+                }
+                if (file.fileName == "system.zip") {
+                    holder.setText(
+                        R.id.tv_app_code_update_item,
+                        "版本：" + Build.DISPLAY
+                    )
+                }
+                //表示已经加载过图片
+                data[holder.layoutPosition].iconState = 1
+            }
+
+            var tvUpdate = holder.getView<TextView>(R.id.tv_update_item)
+            var pbUpdate = holder.getView<ProgressBar>(R.id.pb_update_item)
+
+            tvUpdate.setTextColor(Color.WHITE)
+            if (installFlag == 1) {
+                tvUpdate.text = "安装中"
+                pbUpdate.visibility = View.GONE
+                return
+            }
+            when (file.status) {
+                File.DOWNLOAD_PAUSE ->//暂停->开始
+                {
+                    pbUpdate.visibility = View.VISIBLE
+                    pbUpdate.progress = file.progress
+                }
+                File.DOWNLOAD_PROCEED -> //下载进行中
+                {
+                    pbUpdate.visibility = View.VISIBLE
+                    pbUpdate.progress = file.progress
+                    tvUpdate.setTextColor(Color.WHITE)
+                    tvUpdate.text = "${pbUpdate.progress}%";
+
+                }
+                File.DOWNLOAD_ERROR ->//出错
+                {
+                    tvUpdate.text = "下载出错"
+                }
+                File.DOWNLOAD_COMPLETE ->//完成
+                {
+                    tvUpdate.text = "已完成"
+                    pbUpdate.visibility = View.GONE
+                }
+                File.DOWNLOAD_REDYA ->//准备下载 ->开始
+                {
+//                pbUpdate.visibility = View.VISIBLE
+//                pbUpdate.progress = file.progress
+//                tvUpdate.setTextColor(Color.WHITE)
+//                tvUpdate.text = "${pbUpdate.progress}%";
+                }
             }
         }
-
     }
 
     private fun getIcon(packName: String): Drawable? {

@@ -57,18 +57,19 @@ public class UpdateService extends Service {
                 String filename = intent.getStringExtra("filename");
                 String id = intent.getStringExtra("id");
                 int seq = intent.getIntExtra("seq", 0);
+                int type = intent.getIntExtra("type", 1);
                 Log.d(TAG, "onStartCommand: " + url);
                 Log.d(TAG, "onStartCommand: " + filename);
                 //开启下载进度
                 sharedPreferences = getSharedPreferences("download", MODE_PRIVATE);
 
-                download(filename, url, id, seq);
+                download(filename, url, id, seq, type);
             }
         }).start();
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void download(final String filename, final String url, final String id, final int seq) {
+    private void download(final String filename, final String url, final String id, final int seq, int type) {
         final boolean openDownloadNotify = sharedPreferences.getBoolean("open_download_notify", false);
         final File parentFile = Environment.getExternalStorageDirectory();
         final com.alight.android.aoa_launcher.net.model.File file = new com.alight.android.aoa_launcher.net.model.File();
@@ -81,7 +82,7 @@ public class UpdateService extends Service {
         String fileType = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
         file.setFileType(fileType);
         Log.d(TAG, "download: 下载" + filename);
-        final Intent intent = new Intent(AppConstants.LAUNCHER_PACKAGE_NAME + id);
+        final Intent intent = new Intent(AppConstants.LAUNCHER_PACKAGE_NAME + id + type);
         intent.setPackage(getPackageName());
 
         Log.d(TAG, "parentFile: " + parentFile.getPath());
@@ -132,6 +133,7 @@ public class UpdateService extends Service {
                 intent.putExtra("speed", speed);
                 intent.putExtra("status", com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_PROCEED);
                 intent.putExtra("totalSize", totalSize);
+                intent.putExtra("type", type);
                 sendBroadcast(intent);
                 if (openDownloadNotify) {
                     createNotification(percent, filename, speed, size, seq);
@@ -157,6 +159,7 @@ public class UpdateService extends Service {
                     intent.putExtra("status", com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_COMPLETE);
                     intent.putExtra("totalSize", totalSize);
                     intent.putExtra("filePath", file.getPath());
+                    intent.putExtra("type", type);
                     file.setProgress(percent);
                     file.setSizeStr(totalSize);
                     file.setStatus(com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_COMPLETE);

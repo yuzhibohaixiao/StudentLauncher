@@ -101,11 +101,25 @@
             </LinearLayout>
         </FrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_app_update"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="18dp" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_system_app_update"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_other_app_update"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
+                android:visibility="gone" />
+
+        </FrameLayout>
     </LinearLayout>
 </LinearLayout>

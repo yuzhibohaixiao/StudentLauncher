@@ -71,6 +71,16 @@ public class File implements Serializable {
 
     private String packName;
 
+    private int appType;
+
+    public int getAppType() {
+        return appType;
+    }
+
+    public void setAppType(int appType) {
+        this.appType = appType;
+    }
+
     public int getIconState() {
         return iconState;
     }
