@@ -22,6 +22,23 @@ data class UpdateBeanData(
     val update_time: String,
     val version_code: Int,
     val version_name: String,
-    var type: String,
-    var packName: String
+    var packName: String,
+    var format: Int,
+    var app_info: AppInfo
+) : Serializable
+
+/**
+ *
+System = 1  # 系统应用
+PresetsApp = 2  # 预置应用
+Ota = 3  # ota包
+
+
+class APP_FORMAT(enum.Enum):
+Zip = 1  # zip包
+Apk = 2  # apk包
+ */
+data class AppInfo(
+    val package_name: String,
+    val type: Int
 ) : Serializable

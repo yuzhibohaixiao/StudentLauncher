@@ -33,7 +33,6 @@ import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
 import com.alight.android.aoa_launcher.service.UpdateService;
 import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
-import com.alight.android.aoa_launcher.utils.AppUtils;
 import com.alight.android.aoa_launcher.utils.StringUtils;
 import com.alight.android.aoa_launcher.utils.ToastUtils;
 
@@ -47,11 +46,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.alight.android.aoa_launcher.common.constants.AppConstants.AHWCX_PACKAGE_NAME;
-import static com.alight.android.aoa_launcher.common.constants.AppConstants.AOA_PACKAGE_NAME;
-import static com.alight.android.aoa_launcher.common.constants.AppConstants.AV_PACKAGE_NAME;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
-import static com.alight.android.aoa_launcher.common.constants.AppConstants.LAUNCHER_PACKAGE_NAME;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
 
 /**
@@ -74,50 +69,13 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private View llBackUpdate;
     private TextView tvUpdateAll;
     private Intent serviceIntent;
+    private ArrayList<UpdateBeanData> systemAppList;
+    private ArrayList<UpdateBeanData> otherAppList;
 
     @Override
     public void initData() {
-        UpdateBeanData systemApp = (UpdateBeanData) getIntent().getSerializableExtra("system");
-        systemApp.setType(".zip");
-        UpdateBeanData launcherApp = (UpdateBeanData) getIntent().getSerializableExtra("test_apk");
-        launcherApp.setPackName(LAUNCHER_PACKAGE_NAME);
-        launcherApp.setType(".apk");
-        UpdateBeanData aoa = (UpdateBeanData) getIntent().getSerializableExtra("aoa");
-        aoa.setPackName(AOA_PACKAGE_NAME);
-        aoa.setType(".apk");
-        UpdateBeanData ahwc = (UpdateBeanData) getIntent().getSerializableExtra("ahwc");
-        ahwc.setPackName(AHWCX_PACKAGE_NAME);
-        ahwc.setType(".apk");
-        UpdateBeanData av = (UpdateBeanData) getIntent().getSerializableExtra("av");
-        av.setPackName(AV_PACKAGE_NAME);
-        av.setType(".apk");
-        //系统对比VersionName不同则升级
-      /*  if (!newSystemVersionName.equals(systemApp.getVersion_name())) {
-            systemApp.setApp_name("update");
-            urlList.add(systemApp);
-        }
-        if (localAoaVersionCode < aoa.getVersion_code()) {
-            urlList.add(aoa);
-        }
-        if (localAhwcxVersionCode < ahwc.getVersion_code()) {
-            urlList.add(ahwc);
-        }
-        if (localAvVersionCode < av.getVersion_code()) {
-            urlList.add(av);
-        }
-        if (localLauncherVersionCode < launcherApp.getVersion_code()) {
-            urlList.add(launcherApp);
-        }
-        if (urlList.size() == 0) {
-            ToastUtils.showLong(this, "暂无升级");
-            finish();
-        }*/
-        //默认全升级
-        urlList.add(ahwc);
-//        urlList.add(aoa);
-        urlList.add(av);
-//        urlList.add(launcherApp);
-//        urlList.add(systemApp);
+        systemAppList = (ArrayList<UpdateBeanData>) getIntent().getSerializableExtra("systemApp");
+        otherAppList = (ArrayList<UpdateBeanData>) getIntent().getSerializableExtra("otherApp");
 
         checkExtrnalStorage();
         getData();
@@ -133,40 +91,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         }
         updateAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             if (view.getId() == R.id.tv_update_item) {
-         /*       TextView tvUpdate = (TextView) adapter.getViewByPosition(position, R.id.tv_update_item);
-                ProgressBar pbUpdate = (ProgressBar) adapter.getViewByPosition(position, R.id.pb_update_item);
-                pbUpdate.setVisibility(View.VISIBLE);
-                Handler handler = new Handler();
-                Runnable runnable = new Runnable() {
-                    int i = 0;
 
-                    @Override
-                    public void run() {
-                        if (i < 100) {
-                            i++;
-                            pbUpdate.setProgress(i);
-                            tvUpdate.setText(i + "%");
-                            handler.postDelayed(this, 100);
-                        }
-                    }
-                };
-                handler.post(runnable);*/
-/*
-                while (i < 100) {
-                    if (i == 100) {
-                        tvUpdate.setText("已完成");
-                    } else {
-                        tvUpdate.setText(i + "%");
-                    }
-                    pbUpdate.setProgress(i);
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    i++;
-                }
-*/
             }
             File file = list.get(position);
             int type = file.getType();
@@ -216,7 +141,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             File file = new File();
             file.setId("" + i);
             file.setSeq(i);
-            file.setFileName(urlList.get(i).getApp_name() + urlList.get(i).getType());
+            file.setFileName(urlList.get(i).getApp_name());
             if (downloadedFileIds.contains(file.getId())) {
                 File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
                 System.out.println(file1);

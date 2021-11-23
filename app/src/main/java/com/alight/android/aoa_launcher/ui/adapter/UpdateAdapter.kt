@@ -27,7 +27,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
 
     override fun convert(holder: BaseViewHolder, file: File) {
         //下载安装包名称
-        holder.setText(R.id.tv_app_name_update_item, file.fileName.split(".")[0])
+        holder.setText(R.id.tv_app_name_update_item, file.fileName)
         //下载安装包大小
         holder.setText(R.id.tv_app_size_update_item, file.sizeStr)
         if (file.iconState == 0) {

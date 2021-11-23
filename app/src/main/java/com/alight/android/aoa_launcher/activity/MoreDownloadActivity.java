@@ -75,15 +75,15 @@ public class MoreDownloadActivity extends BaseActivity {
         int localAvVersionCode = AppUtils.getVersionCode(this, AppConstants.AV_PACKAGE_NAME);
         String newSystemVersionName = Build.DISPLAY;
         UpdateBeanData systemApp = (UpdateBeanData) getIntent().getSerializableExtra("system");
-        systemApp.setType(".zip");
+//        systemApp.setType(".zip");
         UpdateBeanData launcherApp = (UpdateBeanData) getIntent().getSerializableExtra("test_apk");
-        launcherApp.setType(".apk");
+//        launcherApp.setType(".apk");
         UpdateBeanData aoa = (UpdateBeanData) getIntent().getSerializableExtra("aoa");
-        aoa.setType(".apk");
+//        aoa.setType(".apk");
         UpdateBeanData ahwc = (UpdateBeanData) getIntent().getSerializableExtra("ahwc");
-        ahwc.setType(".apk");
+//        ahwc.setType(".apk");
         UpdateBeanData av = (UpdateBeanData) getIntent().getSerializableExtra("av");
-        av.setType(".apk");
+//        av.setType(".apk");
         //系统对比VersionName不同则升级
         if (!newSystemVersionName.equals(systemApp.getVersion_name())) {
             systemApp.setApp_name("update");
@@ -174,7 +174,7 @@ public class MoreDownloadActivity extends BaseActivity {
             File file = new File();
             file.setId("" + i);
             file.setSeq(i);
-            file.setFileName(urlList.get(i).getApp_name() + urlList.get(i).getType());
+//            file.setFileName(urlList.get(i).getApp_name() + urlList.get(i).getType());
             if (downloadedFileIds.contains(file.getId())) {
                 File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
                 System.out.println(file1);
