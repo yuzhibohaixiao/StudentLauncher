@@ -21,8 +21,8 @@
 
         <FrameLayout
             android:layout_width="45dp"
-            android:layout_marginEnd="16dp"
-            android:layout_height="24dp">
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp">
 
             <ProgressBar
                 android:id="@+id/pb_update_item"
@@ -48,8 +48,10 @@
             android:id="@+id/tv_app_size_update_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_marginTop="4dp"
-            android:text="36MB"
+            android:layout_marginEnd="23dp"
+            android:text="36.1 MB"
             android:textColor="@color/white"
             android:textSize="9sp" />
     </LinearLayout>

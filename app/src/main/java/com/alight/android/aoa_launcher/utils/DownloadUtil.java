@@ -30,7 +30,7 @@ public class DownloadUtil {
     public static void download(String url, final String path, final DownloadListener downloadListener) {
         int index = url.lastIndexOf("/");
         String baseUrl = url.substring(0, index + 1);
-        String fileUrl = url.substring(index+1);//不包含本身位置
+        String fileUrl = url.substring(index + 1);//不包含本身位置
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 //通过线程池获取一个线程，指定callback在子线程中运行。
@@ -61,7 +61,11 @@ public class DownloadUtil {
 
     private static void writeResponseToDisk(String path, Response<ResponseBody> response, DownloadListener downloadListener) {
         //从response获取输入流以及总大小
-        writeFileFromIS(new File(path), response.body().byteStream(), response.body().contentLength(), downloadListener);
+        try {
+            writeFileFromIS(new File(path), response.body().byteStream(), response.body().contentLength(), downloadListener);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static int sBufferSize = 8192;

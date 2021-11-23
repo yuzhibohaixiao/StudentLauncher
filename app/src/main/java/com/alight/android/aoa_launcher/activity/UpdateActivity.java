@@ -73,6 +73,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private TextView tvOtherApp;
     private View llBackUpdate;
     private TextView tvUpdateAll;
+    private Intent serviceIntent;
 
     @Override
     public void initData() {
@@ -168,19 +169,20 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 */
             }
             File file = list.get(position);
-            Intent intent = null;
             int type = file.getType();
             switch (type) {
                 case File.DOWNLOAD_ERROR://出错
                     file.setStatus(File.DOWNLOAD_PROCEED);
                     file.setSpeed("---");
                     updateAdapter.notifyItemChanged(position);
-                    intent = new Intent(UpdateActivity.this, UpdateService.class);
-                    intent.putExtra("filename", file.getFileName());
-                    intent.putExtra("url", file.getUrl());
-                    intent.putExtra("id", file.getId());
-                    intent.putExtra("seq", file.getSeq());
-                    startService(intent);
+                    if (serviceIntent == null) {
+                        serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
+                    }
+                    serviceIntent.putExtra("filename", file.getFileName());
+                    serviceIntent.putExtra("url", file.getUrl());
+                    serviceIntent.putExtra("id", file.getId());
+                    serviceIntent.putExtra("seq", file.getSeq());
+                    startService(serviceIntent);
                     break;
                 default:
                     break;
@@ -194,12 +196,14 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             File file = list.get(i);
             file.setSizeStr("请稍等");
             file.setSpeed("");
-            Intent intent = new Intent(UpdateActivity.this, UpdateService.class);
-            intent.putExtra("filename", file.getFileName());
-            intent.putExtra("url", file.getUrl());
-            intent.putExtra("id", file.getId());
-            intent.putExtra("seq", file.getSeq());
-            startService(intent);
+            if (serviceIntent == null) {
+                serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
+            }
+            serviceIntent.putExtra("filename", file.getFileName());
+            serviceIntent.putExtra("url", file.getUrl());
+            serviceIntent.putExtra("id", file.getId());
+            serviceIntent.putExtra("seq", file.getSeq());
+            startService(serviceIntent);
             file.setStatus(File.DOWNLOAD_PROCEED);
         }
     }
@@ -269,8 +273,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         if (urlList != null) {
             urlList.clear();
         }
-        Intent intent = new Intent(UpdateActivity.this, UpdateService.class);
-        stopService(intent);
+        if (serviceIntent != null) {
+            stopService(serviceIntent);
+        }
     }
 
     @Override
@@ -387,6 +392,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             tvUpdateAll.setEnabled(true);
                             tvUpdateAll.setClickable(true);
                             ToastUtils.showLong(UpdateActivity.this, "都下完啦！");
+                            updateAdapter.setInstallNotify();
 //                            finish();
                         }
                     }

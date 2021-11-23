@@ -18,6 +18,8 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_update) {
 
+    private var installFlag: Int = 0
+
     init {
         //新版添加子控件点击事件
         addChildClickViewIds(R.id.tv_update_item)
@@ -61,6 +63,11 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
         var tvUpdate = holder.getView<TextView>(R.id.tv_update_item)
         var pbUpdate = holder.getView<ProgressBar>(R.id.pb_update_item)
 
+        if (installFlag == 1) {
+            tvUpdate.text = "安装中"
+            pbUpdate.visibility = View.GONE
+            return
+        }
         when (file.status) {
             File.DOWNLOAD_PAUSE ->//暂停->开始
             {
@@ -109,5 +116,10 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
             e.printStackTrace()
         }
         return null
+    }
+
+    fun setInstallNotify() {
+        installFlag = 1
+        notifyDataSetChanged()
     }
 }
