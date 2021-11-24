@@ -488,7 +488,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             val notification = builder.build()
             notification.flags = notification.flags or FLAG_NO_CLEAR
 
-            builder.setProgress(100, 0, true);
+            builder.setProgress(100, 0, true)
             notificationManager.notify(0x3, notification)
             //系统固件升级包下载
             DownloadUtil.download(
@@ -625,15 +625,31 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         var systemAppList: ArrayList<UpdateBeanData> = arrayListOf()
         //预置应用
         var otherAppList: ArrayList<UpdateBeanData> = arrayListOf()
+        var systemApp: UpdateBeanData? = null
         if (any.data == null) return
         for (position in any.data.indices) {
             val updateBeanData = any.data[position]
+            //把ota单独抽出放到最后
+            if (updateBeanData.app_name == "system") {
+                updateBeanData.format = 3
+            }
+            if (updateBeanData.format == 3) {
+                systemApp = updateBeanData
+                continue
+            }
             if (updateBeanData.app_info.type == 1) {
                 systemAppList.add(updateBeanData)
-            } else {
+            } else if (updateBeanData.app_info.type == 2) {
                 otherAppList.add(updateBeanData)
             }
         }
+
+        if (systemApp?.app_info?.type == 1) {
+            systemAppList.add(systemApp)
+        } else if (systemApp?.app_info?.type == 2) {
+            otherAppList.add(systemApp)
+        }
+
         /* for (position in any.data.indices) {
              when (any.data[position].app_name) {
                  //系统升级

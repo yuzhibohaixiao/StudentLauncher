@@ -149,7 +149,8 @@ public class UpdateService extends Service {
             public void taskEnd(@NonNull DownloadTask task, @NonNull EndCause cause, @Nullable Exception realCause, @NonNull SpeedCalculator taskSpeed) {
                 int percent = (int) (((float) task.getInfo().getTotalOffset() / task.getInfo().getTotalLength()) * 100);
                 String totalSize = Util.humanReadableBytes(task.getInfo().getTotalLength(), true).toString();
-                String size = totalSize + "(" + (int) percent + "%)";
+//                String size = totalSize + "(" + (int) percent + "%)";
+                String size = totalSize;
                 file.setSize(task.getInfo().getTotalLength());
                 System.out.println(cause == EndCause.COMPLETED);
                 if (cause == EndCause.COMPLETED) {

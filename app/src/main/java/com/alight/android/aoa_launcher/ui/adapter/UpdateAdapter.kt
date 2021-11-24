@@ -31,6 +31,9 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
     }
 
     override fun convert(holder: BaseViewHolder, file: File) {
+        val tvSize = holder.getView<TextView>(R.id.tv_app_size_update_item)
+        val tvUpdate = holder.getView<TextView>(R.id.tv_update_item)
+        val tvVersionCode = holder.getView<TextView>(R.id.tv_app_code_update_item)
         if (appType == 1) {
             //下载安装包名称
             holder.setText(R.id.tv_app_name_update_item, file.fileName)
@@ -62,6 +65,14 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                         "版本：" + Build.DISPLAY
                     )
                 }
+                if (file.format == 3) {
+                    tvSize.visibility = View.GONE
+                    tvUpdate.text = "无需更新"
+                    tvVersionCode.text = Build.DISPLAY
+                } else {
+                    tvUpdate.text = "可更新"
+                    tvSize.visibility = View.VISIBLE
+                }
                 //表示已经加载过图片
                 data[holder.layoutPosition].iconState = 1
             }
@@ -69,6 +80,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
             var tvUpdate = holder.getView<TextView>(R.id.tv_update_item)
             var pbUpdate = holder.getView<ProgressBar>(R.id.pb_update_item)
 
+            tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
             if (installFlag == 1) {
                 tvUpdate.text = "安装中"
                 pbUpdate.visibility = View.GONE
@@ -137,6 +149,14 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                         "版本：" + Build.DISPLAY
                     )
                 }
+                if (file.format == 3) {
+                    tvSize.visibility = View.GONE
+                    tvUpdate.text = "无需更新"
+                    tvVersionCode.text = Build.DISPLAY
+                } else {
+                    tvUpdate.text = "可更新"
+                    tvSize.visibility = View.VISIBLE
+                }
                 //表示已经加载过图片
                 data[holder.layoutPosition].iconState = 1
             }
@@ -171,6 +191,8 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 File.DOWNLOAD_COMPLETE ->//完成
                 {
                     tvUpdate.text = "已完成"
+                    tvUpdate.isEnabled = false
+                    tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
                     pbUpdate.visibility = View.GONE
                 }
                 File.DOWNLOAD_REDYA ->//准备下载 ->开始

@@ -342,6 +342,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 startActivity(intent)
             }
             is UpdateBean -> {
+                familyId = 0
                 if (familyId != null)
                     getPresenter().showUpdateDialog(any, familyId!!, this)
             }

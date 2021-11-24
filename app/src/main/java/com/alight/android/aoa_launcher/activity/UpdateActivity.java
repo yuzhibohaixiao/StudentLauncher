@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -33,8 +34,8 @@ import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
 import com.alight.android.aoa_launcher.service.UpdateService;
 import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
+import com.alight.android.aoa_launcher.utils.AppUtils;
 import com.alight.android.aoa_launcher.utils.StringUtils;
-import com.alight.android.aoa_launcher.utils.ToastUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -89,6 +90,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             systemAdapter = new UpdateAdapter();
             systemAdapter.setAppType(appType);
             systemAdapter.addData(appList);
+//            View footerView = View.inflate(this, R.layout.item_update, null);
+//            TextView appName = footerView.findViewById(R.id.tv_app_name_update_item);
+//            appName.setText("system");
+//            TextView appCode = footerView.findViewById(R.id.tv_app_code_update_item);
+//            appCode.setText(Build.DISPLAY);
+//            systemAdapter.addFooterView(footerView);
             systemRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
             ((SimpleItemAnimator) systemRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             systemRecyclerView.setAdapter(systemAdapter);
@@ -135,6 +142,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private void startDownload() {
         for (int i = 0; i < appList.size(); i++) {
             File file = appList.get(i);
+            if (file.getFormat() == 3) {
+                continue;
+            }
             file.setSizeStr("请稍等");
             file.setSpeed("");
             if (serviceIntent == null) {
@@ -153,6 +163,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private void startSingleDownload(int position) {
         if (otherList != null && otherList.size() > 0) {
             File file = otherList.get(position);
+            if (file.getFormat() == 3) {
+                return;
+            }
             file.setSizeStr("请稍等");
             file.setSpeed("");
             if (serviceIntent == null) {
@@ -194,10 +207,21 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
                 file.setFileType(".apk");
                 file.setUrl(systemAppList.get(i).getApp_url());
-                if (!StringUtils.isEmpty(systemAppList.get(i).getPackName())) {
-                    file.setPackName(systemAppList.get(i).getPackName());
+                if (!StringUtils.isEmpty(systemAppList.get(i).getApp_info().getPackage_name())) {
+                    file.setPackName(systemAppList.get(i).getApp_info().getPackage_name());
                 }
-                appList.add(file);
+                if (systemAppList.get(i).getFormat() == 3) {
+                    file.setFormat(systemAppList.get(i).getFormat());
+                    appList.add(file);
+                    //跳过ota应用
+                    continue;
+                } else if (AppUtils.getVersionCode(this, systemAppList.get(i).getPackName()) >= systemAppList.get(i).getVersion_code()) {
+                    file.setFormat(4);
+                    appList.add(file);
+                    continue;
+                } else {
+                    appList.add(file);
+                }
                 IntentFilter filter = new IntentFilter();
                 DownloadReceiver receiver = new DownloadReceiver();
                 filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + appType);
@@ -231,7 +255,18 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 if (!StringUtils.isEmpty(otherAppList.get(i).getApp_info().getPackage_name())) {
                     file.setPackName(otherAppList.get(i).getApp_info().getPackage_name());
                 }
-                otherList.add(file);
+                if (otherAppList.get(i).getFormat() == 3) {
+                    file.setFormat(otherAppList.get(i).getFormat());
+                    otherList.add(file);
+                    //跳过ota应用
+                    continue;
+                } else if (AppUtils.getVersionCode(this, otherAppList.get(i).getPackName()) >= otherAppList.get(i).getVersion_code()) {
+                    file.setFormat(4);
+                    otherList.add(file);
+                    continue;
+                } else {
+                    otherList.add(file);
+                }
                 IntentFilter filter = new IntentFilter();
                 DownloadReceiver receiver = new DownloadReceiver();
                 filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + appType);
@@ -329,9 +364,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 tvSystemApp.setSelected(true);
                 tvOtherApp.setSelected(false);
                 tvUpdateAll.setVisibility(View.VISIBLE);
-                appType = 2;
+                appType = 1;
                 systemAdapter.setAppType(appType);
-                systemAdapter.setNewInstance(appList);
+                systemAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_other_app:
                 otherRecyclerView.setVisibility(View.VISIBLE);
@@ -339,11 +374,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 tvOtherApp.setSelected(true);
                 tvSystemApp.setSelected(false);
                 tvUpdateAll.setVisibility(View.GONE);
+                appType = 2;
                 if (otherList.size() == 0) {
-                    appType = 2;
                     getData(appType);
                 }
                 otherAdapter.setAppType(appType);
+                otherAdapter.notifyDataSetChanged();
                 break;
             //开始下载
             case R.id.tv_update_all:

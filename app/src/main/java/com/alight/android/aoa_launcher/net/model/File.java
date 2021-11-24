@@ -71,6 +71,15 @@ public class File implements Serializable {
 
     private String packName;
 
+    public int getFormat() {
+        return format;
+    }
+
+    public void setFormat(int format) {
+        this.format = format;
+    }
+
+    private int format;
     private int appType;
 
     public int getAppType() {

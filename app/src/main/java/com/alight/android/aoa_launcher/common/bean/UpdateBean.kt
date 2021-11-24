@@ -31,12 +31,11 @@ data class UpdateBeanData(
  *
 System = 1  # 系统应用
 PresetsApp = 2  # 预置应用
-Ota = 3  # ota包
-
 
 class APP_FORMAT(enum.Enum):
 Zip = 1  # zip包
 Apk = 2  # apk包
+Ota = 3  # ota包
  */
 data class AppInfo(
     val package_name: String,
