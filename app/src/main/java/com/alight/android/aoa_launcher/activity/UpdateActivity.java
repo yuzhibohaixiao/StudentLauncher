@@ -44,10 +44,22 @@ import org.jetbrains.annotations.Nullable;
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
@@ -117,28 +129,121 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         otherAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             if (view.getId() == R.id.tv_update_item && appType == 2) {
                 startSingleDownload(position);
-              /*  File file = appList.get(position);
-                int type = file.getType();
-                switch (type) {
-                    case File.DOWNLOAD_ERROR://出错
-                        file.setStatus(File.DOWNLOAD_PROCEED);
-                        file.setSpeed("---");
-                        updateAdapter.notifyItemChanged(position);
-                        if (serviceIntent == null) {
-                            serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
-                        }
-                        serviceIntent.putExtra("filename", file.getFileName());
-                        serviceIntent.putExtra("url", file.getUrl());
-                        serviceIntent.putExtra("id", file.getId());
-                        serviceIntent.putExtra("seq", file.getSeq());
-                        startService(serviceIntent);
-                        break;
-                    default:
-                        break;
-                }*/
             }
         });
+//        new Thread(this::loadZip).start();
 //        startDownload();
+    }
+
+    private void loadZip() {
+        try {
+            String zipPath = AppConstants.SYSTEM_ZIP_PATH + "ansystem.zip";
+            ZipFile zip = new ZipFile(zipPath);
+            Enumeration<ZipEntry> entries = (Enumeration<ZipEntry>) zip.entries();
+            StringBuilder stringBuilder = new StringBuilder();
+            ZipEntry ze;
+            // 枚举zip文件内的文件/
+            while (entries.hasMoreElements()) {
+                ze = entries.nextElement();
+                // 读取目标对象
+                if (ze.getName().equals("path.txt")) {
+                    Scanner scanner = new Scanner(zip.getInputStream(ze));
+                    while (scanner.hasNextLine()) {
+                        stringBuilder.append(scanner.nextLine());
+                    }
+                    scanner.close();
+                }
+            }
+            zip.close();
+            unzip(new java.io.File(zipPath), new java.io.File(stringBuilder.toString()));
+//            upZipFile(new java.io.File(zipPath), stringBuilder.toString(),zipPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 解压zip文件到指定目录
+     * unzip(new File("1.zip"),new File(Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"test"))
+     */
+    public static void unzip(java.io.File source, java.io.File dest) throws IOException {
+        ZipFile zipFile = new ZipFile(String.valueOf(source));
+        try {
+            if (!dest.exists()) {
+                dest.mkdirs();
+            }
+            ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(source)));
+            ZipEntry entry;
+            byte[] buffer = new byte[1024];
+            while ((entry = zis.getNextEntry()) != null) {
+                String filename = entry.getName();
+                //排除MACOS环境下生成的隐藏文件
+                if (filename.contains("__MACOSX")) {
+                } else {
+                    if (entry.isDirectory()) {
+                        new java.io.File(dest, filename).mkdirs();
+                        continue;
+                    }
+                    InputStream inputStream = zipFile.getInputStream(entry);
+                    int len;
+                    try (FileOutputStream outputStream = new FileOutputStream(new java.io.File(dest, filename))) {
+                        while ((len = inputStream.read(buffer)) >= 0) {
+                            outputStream.write(buffer, 0, len);
+                        }
+                        outputStream.flush();
+                        inputStream.close();
+                    }
+                }
+                zis.closeEntry();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            zipFile.close();
+        }
+    }
+
+    /**
+     * 解压缩功能.
+     * 将zipFile文件解压到folderPath目录下.
+     *
+     * @throws Exception
+     */
+    public static int upZipFile(java.io.File zipFile, String folderPath, String zipPath) {
+        try {
+            ZipFile zfile = new ZipFile(zipFile);
+            Enumeration zList = zfile.entries();
+            ZipEntry ze = null;
+            byte[] buf = new byte[1024];
+            while (zList.hasMoreElements()) {
+                ze = (ZipEntry) zList.nextElement();
+                if (ze.isDirectory()) {
+                    //Logcat.d("upZipFile", "ze.getName() = " + ze.getName());
+                    String dirstr = folderPath + ze.getName();
+                    //dirstr.trim();
+                    dirstr = new String(dirstr.getBytes("8859_1"), "GB2312");
+                    //Logcat.d("upZipFile", "str = " + dirstr);
+                    java.io.File f = new java.io.File(dirstr);
+                    f.mkdir();
+                    continue;
+                }
+                //Logcat.d("upZipFile", "ze.getName() = " + ze.getName());
+                OutputStream os = new BufferedOutputStream(new FileOutputStream(zipPath));
+                InputStream is = new BufferedInputStream(zfile.getInputStream(ze));
+                int readLen = 0;
+                while ((readLen = is.read(buf, 0, 1024)) != -1) {
+                    os.write(buf, 0, readLen);
+                }
+                is.close();
+                os.close();
+            }
+            zfile.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 
     private void startDownload() {
