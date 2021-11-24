@@ -630,9 +630,6 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         for (position in any.data.indices) {
             val updateBeanData = any.data[position]
             //把ota单独抽出放到最后
-            if (updateBeanData.app_name == "system") {
-                updateBeanData.format = 3
-            }
             if (updateBeanData.format == 3) {
                 systemApp = updateBeanData
                 continue

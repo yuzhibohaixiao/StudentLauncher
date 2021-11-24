@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -34,6 +35,7 @@ import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
 import com.alight.android.aoa_launcher.service.UpdateService;
 import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
+import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
 import com.alight.android.aoa_launcher.utils.StringUtils;
 
@@ -191,7 +193,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 File file = new File();
                 file.setId("" + i);
                 file.setSeq(i);
-                file.setFileName(systemAppList.get(i).getApp_name());
+                if (systemAppList.get(i).getApp_info().getType() == 2) {
+                    file.setType(2);
+                    file.setFileName(systemAppList.get(i).getApp_name() + ".apk");
+                } else {
+                    file.setFileName(systemAppList.get(i).getApp_name());
+                }
                 if (downloadedFileIds.contains(file.getId())) {
                     File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
                     System.out.println(file1);
@@ -236,7 +243,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 File file = new File();
                 file.setId("" + i);
                 file.setSeq(i);
-                file.setFileName(otherAppList.get(i).getApp_name());
+                if (otherAppList.get(i).getApp_info().getType() == 2) {
+                    file.setType(2);
+                    file.setFileName(otherAppList.get(i).getApp_name() + ".apk");
+                } else {
+                    file.setFileName(otherAppList.get(i).getApp_name());
+                }
                 if (downloadedFileIds.contains(file.getId())) {
                     File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
                     System.out.println(file1);
@@ -423,6 +435,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             file.setSizeStr(totalSize);
                             file.setPath(filePath);
                             LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
+                            String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + files.get(i).getFileName();
+                            ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
                         }
                         if (status == File.DOWNLOAD_ERROR) {
                             LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
@@ -454,6 +468,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             file.setPath(filePath);
                             otherAdapter.notifyItemChanged(i);
                             LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
+                            if (file.getType() == 2) {
+                                String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
+                                ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+                            }
                         }
                         if (status == File.DOWNLOAD_ERROR) {
                             LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
@@ -463,24 +481,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
 
             }
-        }
-    }
-
-    public void installAPK(Context context, java.io.File apkFile, boolean closeApp) {
-        Intent intent = new Intent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(Intent.ACTION_VIEW);
-        if (Build.VERSION.SDK_INT >= 24) {
-            Uri apkUri = FileProvider.getUriForFile(this, "com.alight.android.aoa_launcher.fileprovider", apkFile);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
-            Log.e("TAG", "installAPK: ................uri=" + apkUri);
-        } else {
-            intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
-        }
-        context.startActivity(intent);
-        if (closeApp) {
-            android.os.Process.killProcess(android.os.Process.myPid());// 如果不加上这句的话在apk安装完成之后点击单开会崩溃
         }
     }
 
