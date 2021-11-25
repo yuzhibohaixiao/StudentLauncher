@@ -18,8 +18,6 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_update) {
 
-    private var installFlag = 0
-
     private var appType = 1
     fun setAppType(appType: Int) {
         this.appType = appType
@@ -81,41 +79,41 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 data[holder.layoutPosition].iconState = 1
             }
             tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
-            if (installFlag == 1) {
+            if (pbUpdate.progress == 100) {
                 tvUpdate.text = "安装中"
                 pbUpdate.visibility = View.GONE
-                return
-            }
-            when (file.status) {
-                File.DOWNLOAD_PAUSE ->//暂停->开始
-                {
-                    pbUpdate.visibility = View.VISIBLE
-                    pbUpdate.progress = file.progress
-                }
-                File.DOWNLOAD_PROCEED -> //下载进行中
-                {
-                    pbUpdate.visibility = View.VISIBLE
-                    pbUpdate.progress = file.progress
-                    tvUpdate.setTextColor(Color.WHITE)
-                    tvUpdate.text = "${pbUpdate.progress}%";
+            } else {
+                when (file.status) {
+                    File.DOWNLOAD_PAUSE ->//暂停->开始
+                    {
+                        pbUpdate.visibility = View.VISIBLE
+                        pbUpdate.progress = file.progress
+                    }
+                    File.DOWNLOAD_PROCEED -> //下载进行中
+                    {
+                        pbUpdate.visibility = View.VISIBLE
+                        pbUpdate.progress = file.progress
+                        tvUpdate.setTextColor(Color.WHITE)
+                        tvUpdate.text = "${pbUpdate.progress}%";
 
-                }
-                File.DOWNLOAD_ERROR ->//出错
-                {
-                    tvUpdate.text = "下载出错"
-                }
-                File.DOWNLOAD_COMPLETE ->//完成
-                {
-                    tvUpdate.text = "已完成"
-                    pbUpdate.visibility = View.GONE
-                    tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
-                }
-                File.DOWNLOAD_REDYA ->//准备下载 ->开始
-                {
+                    }
+                    File.DOWNLOAD_ERROR ->//出错
+                    {
+                        tvUpdate.text = "下载出错"
+                    }
+                    File.DOWNLOAD_COMPLETE ->//完成
+                    {
+                        tvUpdate.text = "已完成"
+                        pbUpdate.visibility = View.GONE
+                        tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                    }
+                    File.DOWNLOAD_REDYA ->//准备下载 ->开始
+                    {
 //                pbUpdate.visibility = View.VISIBLE
 //                pbUpdate.progress = file.progress
 //                tvUpdate.setTextColor(Color.WHITE)
 //                tvUpdate.text = "${pbUpdate.progress}%";
+                    }
                 }
             }
         } else {
@@ -172,43 +170,45 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 //表示已经加载过图片
                 data[holder.layoutPosition].iconState = 1
             }
-            if (installFlag == 1) {
+            if (pbUpdate.progress == 100) {
                 tvUpdate.text = "安装中"
                 pbUpdate.visibility = View.GONE
                 return
-            }
-            when (file.status) {
-                File.DOWNLOAD_PAUSE ->//暂停->开始
-                {
-                    pbUpdate.visibility = View.VISIBLE
-                    pbUpdate.progress = file.progress
-                }
-                File.DOWNLOAD_PROCEED -> //下载进行中
-                {
-                    pbUpdate.visibility = View.VISIBLE
-                    pbUpdate.progress = file.progress
-                    tvUpdate.setTextColor(Color.WHITE)
-                    tvUpdate.text = "${pbUpdate.progress}%";
+            } else {
+                when (file.status) {
+                    File.DOWNLOAD_PAUSE ->//暂停->开始
+                    {
+                        pbUpdate.visibility = View.VISIBLE
+                        pbUpdate.progress = file.progress
+                    }
+                    File.DOWNLOAD_PROCEED -> //下载进行中
+                    {
+                        pbUpdate.visibility = View.VISIBLE
+                        pbUpdate.progress = file.progress
+                        tvUpdate.setTextColor(Color.WHITE)
+                        tvUpdate.text = "${pbUpdate.progress}%";
 
-                }
-                File.DOWNLOAD_ERROR ->//出错
-                {
-                    tvUpdate.text = "下载出错"
-                }
-                File.DOWNLOAD_COMPLETE ->//完成
-                {
-                    tvUpdate.text = "已完成"
-                    tvUpdate.isEnabled = false
-                    tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
-                    pbUpdate.visibility = View.GONE
-                }
-                File.DOWNLOAD_REDYA ->//准备下载 ->开始
-                {
+                    }
+                    File.DOWNLOAD_ERROR ->//出错
+                    {
+                        tvUpdate.text = "下载出错"
+                    }
+                    File.DOWNLOAD_COMPLETE ->//完成
+                    {
+                        tvUpdate.text = "已完成"
+                        tvUpdate.isEnabled = false
+                        tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                        pbUpdate.visibility = View.GONE
+                    }
+                    File.DOWNLOAD_REDYA ->//准备下载 ->开始
+                    {
 //                pbUpdate.visibility = View.VISIBLE
 //                pbUpdate.progress = file.progress
 //                tvUpdate.setTextColor(Color.WHITE)
 //                tvUpdate.text = "${pbUpdate.progress}%";
+                    }
                 }
+
             }
         }
     }
@@ -228,8 +228,4 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
         return null
     }
 
-    fun setInstallNotify() {
-        installFlag = 1
-        notifyDataSetChanged()
-    }
 }

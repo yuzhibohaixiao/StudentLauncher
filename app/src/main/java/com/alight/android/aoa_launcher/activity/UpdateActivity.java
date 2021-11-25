@@ -33,6 +33,7 @@ import com.alight.android.aoa_launcher.common.constants.AppConstants;
 import com.alight.android.aoa_launcher.common.db.DbHelper;
 import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
+import com.alight.android.aoa_launcher.service.DownloadService;
 import com.alight.android.aoa_launcher.service.UpdateService;
 import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
 import com.alight.android.aoa_launcher.utils.ApkController;
@@ -120,7 +121,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         }
         if (otherAdapter == null) {
             otherAdapter = new UpdateAdapter();
-            otherAdapter.setAppType(appType);
+            otherAdapter.setAppType(2);
             otherRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
             ((SimpleItemAnimator) otherRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             otherRecyclerView.setAdapter(otherAdapter);
@@ -300,13 +301,19 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 } else {
                     appList.add(file);
                 }
+            }
+            Collections.sort(appList);
+            for (int i = 0; i < appList.size(); i++) {
+                File file = appList.get(i);
+                if (file.getFormat() == 3 || file.getFormat() == 4) {
+                    continue;
+                }
                 IntentFilter filter = new IntentFilter();
                 DownloadReceiver receiver = new DownloadReceiver();
                 filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + appType);
                 registerReceiver(receiver, filter);
                 downloadReceiverMap.put(file.getId(), receiver);
             }
-            Collections.sort(appList);
         } else {
             List<String> downloadedFileIds = getDownloadedFileIds();
             Log.d(TAG, "getData: " + downloadedFileIds);
@@ -358,13 +365,19 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 } else {
                     otherList.add(file);
                 }
+            }
+            Collections.sort(otherList);
+            for (int i = 0; i < otherList.size(); i++) {
+                File file = otherList.get(i);
+                if (file.getFormat() == 3 || file.getFormat() == 4) {
+                    continue;
+                }
                 IntentFilter filter = new IntentFilter();
                 DownloadReceiver receiver = new DownloadReceiver();
                 filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + appType);
                 registerReceiver(receiver, filter);
                 downloadReceiverMap.put(file.getId(), receiver);
             }
-            Collections.sort(otherList);
         }
     }
 
@@ -467,8 +480,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 tvSystemApp.setSelected(true);
                 tvOtherApp.setSelected(false);
                 tvUpdateAll.setVisibility(View.VISIBLE);
-                appType = 1;
-                systemAdapter.setAppType(appType);
                 break;
             case R.id.tv_other_app:
                 otherRecyclerView.setVisibility(View.VISIBLE);
@@ -476,8 +487,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 tvOtherApp.setSelected(true);
                 tvSystemApp.setSelected(false);
                 tvUpdateAll.setVisibility(View.GONE);
-                appType = 2;
-                otherAdapter.setAppType(appType);
                 if (otherList.size() == 0) {
                     getData(appType);
                     otherAdapter.notifyDataSetChanged();
@@ -505,41 +514,56 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             if (type == 1) {
                 //系统应用
                 for (int i = 0; i < appList.size(); i++) {
-                    File file = appList.get(i);
-                    if (intent.getAction().equals(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + type)) {
-                        String speedS = intent.getStringExtra("speed");
-                        String sizeS = intent.getStringExtra("size");
-                        String totalSize = intent.getStringExtra("totalSize");
-                        int pencent = intent.getIntExtra("percent", 0);
-                        int status = intent.getIntExtra("status", 0);
-                        String filePath = intent.getStringExtra("filePath");
-                        if (status == File.DOWNLOAD_PROCEED) {//下载进行中
-                            file.setSpeed(speedS);
-                            file.setProgress(pencent);
-                            file.setSizeStr(sizeS);
-                            systemAdapter.notifyItemChanged(i);
-                        }
-                        if (status == File.DOWNLOAD_COMPLETE) {//完成
-                            file.setStatus(File.DOWNLOAD_COMPLETE);
-                            file.setProgress(pencent);
-                            file.setSizeStr(totalSize);
-                            file.setPath(filePath);
-                            LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
-                            String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + files.get(i).getFileName();
-                            if (file.getType() == 2) {
-                                ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
-                            } else if (file.getType() == 1) {
-                                new Thread(() -> {
-                                    if (!StringUtils.isEmpty(apkPath)) {
-                                        loadZip(apkPath, file.getVersionCode());
-                                    }
-                                }).start();
+                    try {
+                        File file = appList.get(i);
+                        if (intent.getAction().equals(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + type)) {
+                            String speedS = intent.getStringExtra("speed");
+                            String sizeS = intent.getStringExtra("size");
+                            String totalSize = intent.getStringExtra("totalSize");
+                            int pencent = intent.getIntExtra("percent", 0);
+                            int status = intent.getIntExtra("status", 0);
+                            String filePath = intent.getStringExtra("filePath");
+                            if (status == File.DOWNLOAD_PROCEED) {//下载进行中
+                                file.setSpeed(speedS);
+                                file.setProgress(pencent);
+                                file.setSizeStr(sizeS);
+                                systemAdapter.notifyItemChanged(i);
+                            }
+                            if (status == File.DOWNLOAD_COMPLETE) {//完成
+                                file.setStatus(File.DOWNLOAD_COMPLETE);
+                                file.setProgress(pencent);
+                                file.setSizeStr(totalSize);
+                                file.setPath(filePath);
+                                LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
+                                String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
+                                if (file.getFormat() == 2) {
+                                    new Thread(() -> {
+                                        ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+                                    }).start();
+                                } else if (file.getFormat() == 1) {
+                                    new Thread(() -> {
+                                        if (!StringUtils.isEmpty(apkPath)) {
+                                            loadZip(apkPath, file.getVersionCode());
+                                        }
+                                    }).start();
+                                }
+                            }
+                            if (status == File.DOWNLOAD_ERROR) {
+                                //出错则继续下载
+                                file.setStatus(File.DOWNLOAD_PROCEED);
+                                file.setSpeed("---");
+                                intent = new Intent(UpdateActivity.this, DownloadService.class);
+                                intent.putExtra("filename", file.getFileName());
+                                intent.putExtra("url", file.getUrl());
+                                intent.putExtra("id", file.getId());
+                                intent.putExtra("seq", file.getSeq());
+                                startService(intent);
+//                            LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
+//                            file.setStatus(File.DOWNLOAD_ERROR);
                             }
                         }
-                        if (status == File.DOWNLOAD_ERROR) {
-                            LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
-                            file.setStatus(File.DOWNLOAD_ERROR);
-                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             } else {
@@ -567,9 +591,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             otherAdapter.notifyItemChanged(i);
                             LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                             String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
-                            if (file.getType() == 2) {
-                                ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
-                            } else if (file.getType() == 1) {
+                            if (file.getFormat() == 2) {
+                                new Thread(
+                                        () -> ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)
+                                ).start();
+                            } else if (file.getFormat() == 1) {
                                 new Thread(() -> {
                                     if (!StringUtils.isEmpty(apkPath)) {
                                         loadZip(apkPath, file.getVersionCode());
