@@ -37,6 +37,7 @@ import com.alight.android.aoa_launcher.service.UpdateService;
 import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
 import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
+import com.alight.android.aoa_launcher.utils.SPUtils;
 import com.alight.android.aoa_launcher.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +53,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -135,7 +137,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 //        startDownload();
     }
 
-    private void loadZip(String apkPath) {
+    private void loadZip(String apkPath, int versionCode) {
         try {
             String zipPath = apkPath;
             ZipFile zip = new ZipFile(zipPath);
@@ -155,7 +157,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
             }
             zip.close();
-            unzip(new java.io.File(zipPath), new java.io.File(stringBuilder.toString()));
+            unzip(new java.io.File(zipPath), new java.io.File(stringBuilder.toString()), versionCode);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -165,7 +167,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
      * 解压zip文件到指定目录
      * unzip(new File("1.zip"),new File(Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"test"))
      */
-    public static void unzip(java.io.File source, java.io.File dest) throws IOException {
+    public static void unzip(java.io.File source, java.io.File dest, int versionCode) throws IOException {
         ZipFile zipFile = new ZipFile(String.valueOf(source));
         try {
             if (!dest.exists()) {
@@ -195,6 +197,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
                 zis.closeEntry();
             }
+            SPUtils.syncPutData("configVersion", versionCode);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -251,17 +254,21 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             Log.d(TAG, "getData: " + downloadedFileIds);
             List<File> fileList = selectDownloadedFiles();
             for (int i = 0; i < systemAppList.size(); i++) {
+                UpdateBeanData systemUpdateBean = systemAppList.get(i);
                 File file = new File();
                 file.setId("" + i);
                 file.setSeq(i);
-                if (systemAppList.get(i).getFormat() == 2) {
-                    file.setFormat(systemAppList.get(i).getFormat());
-                    file.setFileName(systemAppList.get(i).getApp_name() + ".apk");
-                } else if (systemAppList.get(i).getFormat() == 1 || systemAppList.get(i).getFormat() == 3) {
-                    file.setFormat(systemAppList.get(i).getFormat());
-                    file.setFileName(systemAppList.get(i).getApp_name() + ".zip");
+                if (systemUpdateBean.getFormat() == 2) {
+                    file.setFormat(systemUpdateBean.getFormat());
+                    file.setFileName(systemUpdateBean.getApp_name() + ".apk");
+                } else if (systemUpdateBean.getFormat() == 1 || systemUpdateBean.getFormat() == 3) {
+                    file.setFormat(systemUpdateBean.getFormat());
+                    file.setFileName(systemUpdateBean.getApp_name() + ".zip");
+                    if (systemUpdateBean.getFormat() == 1) {
+                        file.setVersionCode(systemUpdateBean.getVersion_code());
+                    }
                 } else {
-                    file.setFileName(systemAppList.get(i).getApp_name());
+                    file.setFileName(systemUpdateBean.getApp_name());
                 }
                 if (downloadedFileIds.contains(file.getId())) {
                     File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
@@ -276,16 +283,17 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     file.setStatus(File.DOWNLOAD_REDYA);
                     file.setCreateTime(new Date());
                 }
-                file.setUrl(systemAppList.get(i).getApp_url());
-                if (!StringUtils.isEmpty(systemAppList.get(i).getApp_info().getPackage_name())) {
-                    file.setPackName(systemAppList.get(i).getApp_info().getPackage_name());
+                file.setUrl(systemUpdateBean.getApp_url());
+                if (!StringUtils.isEmpty(systemUpdateBean.getApp_info().getPackage_name())) {
+                    file.setPackName(systemUpdateBean.getApp_info().getPackage_name());
                 }
-                if (systemAppList.get(i).getFormat() == 3) {
-                    file.setFormat(systemAppList.get(i).getFormat());
+                if (systemUpdateBean.getFormat() == 3) {
+                    file.setFormat(systemUpdateBean.getFormat());
                     appList.add(file);
                     //跳过ota应用
                     continue;
-                } else if (AppUtils.getVersionCode(this, file.getPackName()) >= systemAppList.get(i).getVersion_code()) {
+                } else if ((systemUpdateBean.getFormat() == 1 && (int) SPUtils.getData("configVersion", 0) >= systemUpdateBean.getVersion_code())
+                        || AppUtils.getVersionCode(this, file.getPackName()) >= systemUpdateBean.getVersion_code()) {
                     file.setFormat(4);
                     appList.add(file);
                     continue;
@@ -298,23 +306,27 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 registerReceiver(receiver, filter);
                 downloadReceiverMap.put(file.getId(), receiver);
             }
-            sortList(appList);
+            Collections.sort(appList);
         } else {
             List<String> downloadedFileIds = getDownloadedFileIds();
             Log.d(TAG, "getData: " + downloadedFileIds);
             List<File> fileList = selectDownloadedFiles();
             for (int i = 0; i < otherAppList.size(); i++) {
+                UpdateBeanData otherUpdateBean = otherAppList.get(i);
                 File file = new File();
                 file.setId("" + i);
                 file.setSeq(i);
-                if (otherAppList.get(i).getFormat() == 2) {
-                    file.setFormat(otherAppList.get(i).getFormat());
-                    file.setFileName(otherAppList.get(i).getApp_name() + ".apk");
-                } else if (otherAppList.get(i).getFormat() == 1 || otherAppList.get(i).getFormat() == 3) {
-                    file.setFormat(otherAppList.get(i).getApp_info().getType());
-                    file.setFileName(otherAppList.get(i).getApp_name() + ".zip");
+                if (otherUpdateBean.getFormat() == 2) {
+                    file.setFormat(otherUpdateBean.getFormat());
+                    file.setFileName(otherUpdateBean.getApp_name() + ".apk");
+                } else if (otherUpdateBean.getFormat() == 1 || otherUpdateBean.getFormat() == 3) {
+                    file.setFormat(otherUpdateBean.getApp_info().getType());
+                    file.setFileName(otherUpdateBean.getApp_name() + ".zip");
+                    if (otherUpdateBean.getFormat() == 1) {
+                        file.setVersionCode(otherUpdateBean.getVersion_code());
+                    }
                 } else {
-                    file.setFileName(otherAppList.get(i).getApp_name());
+                    file.setFileName(otherUpdateBean.getApp_name());
                 }
                 if (downloadedFileIds.contains(file.getId())) {
                     File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
@@ -329,16 +341,17 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     file.setStatus(File.DOWNLOAD_REDYA);
                     file.setCreateTime(new Date());
                 }
-                file.setUrl(otherAppList.get(i).getApp_url());
-                if (!StringUtils.isEmpty(otherAppList.get(i).getApp_info().getPackage_name())) {
-                    file.setPackName(otherAppList.get(i).getApp_info().getPackage_name());
+                file.setUrl(otherUpdateBean.getApp_url());
+                if (!StringUtils.isEmpty(otherUpdateBean.getApp_info().getPackage_name())) {
+                    file.setPackName(otherUpdateBean.getApp_info().getPackage_name());
                 }
-                if (otherAppList.get(i).getFormat() == 3) {
-                    file.setFormat(otherAppList.get(i).getFormat());
+                if (otherUpdateBean.getFormat() == 3) {
+                    file.setFormat(otherUpdateBean.getFormat());
                     otherList.add(file);
                     //跳过ota应用
                     continue;
-                } else if (AppUtils.getVersionCode(this, file.getPackName()) >= otherAppList.get(i).getVersion_code()) {
+                } else if ((otherUpdateBean.getFormat() == 1 && (int) SPUtils.getData("configVersion", 0) >= otherUpdateBean.getVersion_code())
+                        || AppUtils.getVersionCode(this, file.getPackName()) >= otherUpdateBean.getVersion_code()) {
                     file.setFormat(4);
                     otherList.add(file);
                     continue;
@@ -351,12 +364,13 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 registerReceiver(receiver, filter);
                 downloadReceiverMap.put(file.getId(), receiver);
             }
-            sortList(otherList);
+            Collections.sort(otherList);
         }
     }
 
     private void sortList(List<File> list) {
         for (int i = 0; i < list.size(); i++) {
+            //format 3 为ota不需要处理 format 4 表示已有最新则无需更新
             if (list.get(i).getFormat() == 3 || list.get(i).getFormat() == 4) {
                 File file = list.get(i);
                 list.remove(i);
@@ -517,7 +531,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             } else if (file.getType() == 1) {
                                 new Thread(() -> {
                                     if (!StringUtils.isEmpty(apkPath)) {
-                                        loadZip(apkPath);
+                                        loadZip(apkPath, file.getVersionCode());
                                     }
                                 }).start();
                             }
@@ -552,9 +566,15 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             file.setPath(filePath);
                             otherAdapter.notifyItemChanged(i);
                             LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
+                            String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
                             if (file.getType() == 2) {
-                                String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
                                 ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+                            } else if (file.getType() == 1) {
+                                new Thread(() -> {
+                                    if (!StringUtils.isEmpty(apkPath)) {
+                                        loadZip(apkPath, file.getVersionCode());
+                                    }
+                                }).start();
                             }
                         }
                         if (status == File.DOWNLOAD_ERROR) {

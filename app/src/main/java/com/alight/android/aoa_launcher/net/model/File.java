@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Table(name = "download_file")
-public class File implements Serializable {
+public class File implements Serializable, Comparable<File> {
     //下载完成
     public static final int DOWNLOAD_COMPLETE = 4;
     //准备下载
@@ -69,6 +69,16 @@ public class File implements Serializable {
 
     private boolean checked;
 
+    public int getVersionCode() {
+        return versionCode;
+    }
+
+    public void setVersionCode(int versionCode) {
+        this.versionCode = versionCode;
+    }
+
+    private int versionCode;
+
     private String packName;
 
     public int getFormat() {
@@ -80,15 +90,6 @@ public class File implements Serializable {
     }
 
     private int format;
-    private int appType;
-
-    public int getAppType() {
-        return appType;
-    }
-
-    public void setAppType(int appType) {
-        this.appType = appType;
-    }
 
     public int getIconState() {
         return iconState;
@@ -238,6 +239,7 @@ public class File implements Serializable {
         this.url = url;
     }
 
+
     @Override
     public String toString() {
         return "File{" +
@@ -256,5 +258,16 @@ public class File implements Serializable {
                 ", checked=" + checked +
                 ", show=" + show +
                 '}';
+    }
+
+    @Override
+    public int compareTo(File o) {
+        if (this.getFormat() > o.getFormat()) {
+            return 1;
+        } else if (this.getFormat() < o.getFormat()) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }
