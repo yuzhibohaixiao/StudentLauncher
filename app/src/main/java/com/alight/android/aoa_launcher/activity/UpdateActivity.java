@@ -8,11 +8,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
@@ -47,12 +44,10 @@ import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -198,7 +193,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
                 zis.closeEntry();
             }
-            SPUtils.syncPutData("configVersion", versionCode);
+            SPUtils.asyncPutData("configVersion", versionCode);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -488,7 +483,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 tvSystemApp.setSelected(false);
                 tvUpdateAll.setVisibility(View.GONE);
                 if (otherList.size() == 0) {
-                    getData(appType);
+                    getData(2);
+                    otherAdapter.setNewInstance(otherList);
                     otherAdapter.notifyDataSetChanged();
                 }
                 break;
@@ -534,6 +530,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 file.setProgress(pencent);
                                 file.setSizeStr(totalSize);
                                 file.setPath(filePath);
+                                systemAdapter.notifyItemChanged(i);
                                 LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                                 String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
                                 if (file.getFormat() == 2) {
