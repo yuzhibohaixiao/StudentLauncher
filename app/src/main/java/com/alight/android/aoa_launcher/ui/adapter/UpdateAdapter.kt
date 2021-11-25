@@ -33,10 +33,11 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
     override fun convert(holder: BaseViewHolder, file: File) {
         val tvSize = holder.getView<TextView>(R.id.tv_app_size_update_item)
         val tvUpdate = holder.getView<TextView>(R.id.tv_update_item)
+        var pbUpdate = holder.getView<ProgressBar>(R.id.pb_update_item)
         val tvVersionCode = holder.getView<TextView>(R.id.tv_app_code_update_item)
         if (appType == 1) {
             //下载安装包名称
-            holder.setText(R.id.tv_app_name_update_item, file.fileName)
+            holder.setText(R.id.tv_app_name_update_item, file.fileName.split(".")[0])
             //下载安装包大小
             holder.setText(R.id.tv_app_size_update_item, file.sizeStr)
             if (file.iconState == 0) {
@@ -53,22 +54,25 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 } else {
                     Glide.with(context)
                         .load(R.mipmap.ic_launcher)
+                        .error(R.mipmap.ic_launcher)
                         .into(holder.getView(R.id.iv_app_icon_update_item))
                     holder.setText(
                         R.id.tv_app_code_update_item,
                         "版本：" + "暂无"
                     )
                 }
-                if (file.fileName == "system.zip") {
+                //ota
+                if (file.format == 3) {
+                    tvSize.visibility = View.GONE
+                    tvUpdate.text = "无需更新"
                     holder.setText(
                         R.id.tv_app_code_update_item,
                         "版本：" + Build.DISPLAY
                     )
-                }
-                if (file.format == 3) {
+                    //版本已经为最新
+                } else if (file.format == 4) {
                     tvSize.visibility = View.GONE
                     tvUpdate.text = "无需更新"
-                    tvVersionCode.text = Build.DISPLAY
                 } else {
                     tvUpdate.text = "可更新"
                     tvSize.visibility = View.VISIBLE
@@ -76,10 +80,6 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 //表示已经加载过图片
                 data[holder.layoutPosition].iconState = 1
             }
-
-            var tvUpdate = holder.getView<TextView>(R.id.tv_update_item)
-            var pbUpdate = holder.getView<ProgressBar>(R.id.pb_update_item)
-
             tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
             if (installFlag == 1) {
                 tvUpdate.text = "安装中"
@@ -120,7 +120,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
             }
         } else {
             //下载安装包名称
-            holder.setText(R.id.tv_app_name_update_item, file.fileName)
+            holder.setText(R.id.tv_app_name_update_item, file.fileName.split(".")[0])
             //下载安装包大小
             holder.setText(R.id.tv_app_size_update_item, file.sizeStr)
             if (file.iconState == 0) {
@@ -137,6 +137,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 } else {
                     Glide.with(context)
                         .load(R.mipmap.ic_launcher)
+                        .error(R.mipmap.ic_launcher)
                         .into(holder.getView(R.id.iv_app_icon_update_item))
                     holder.setText(
                         R.id.tv_app_code_update_item,
@@ -149,22 +150,28 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                         "版本：" + Build.DISPLAY
                     )
                 }
+                //ota
                 if (file.format == 3) {
                     tvSize.visibility = View.GONE
                     tvUpdate.text = "无需更新"
-                    tvVersionCode.text = Build.DISPLAY
+                    tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                    holder.setText(
+                        R.id.tv_app_code_update_item,
+                        "版本：" + Build.DISPLAY
+                    )
+                    //版本已经为最新
+                } else if (file.format == 4) {
+                    tvSize.visibility = View.GONE
+                    tvUpdate.text = "无需更新"
+                    tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
                 } else {
+                    tvUpdate.isEnabled = true
                     tvUpdate.text = "可更新"
                     tvSize.visibility = View.VISIBLE
                 }
                 //表示已经加载过图片
                 data[holder.layoutPosition].iconState = 1
             }
-
-            var tvUpdate = holder.getView<TextView>(R.id.tv_update_item)
-            var pbUpdate = holder.getView<ProgressBar>(R.id.pb_update_item)
-
-            tvUpdate.setTextColor(Color.WHITE)
             if (installFlag == 1) {
                 tvUpdate.text = "安装中"
                 pbUpdate.visibility = View.GONE

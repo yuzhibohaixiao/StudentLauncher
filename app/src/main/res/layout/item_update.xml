@@ -64,6 +64,7 @@
         android:layout_marginStart="13dp"
         android:layout_marginBottom="8dp"
         android:gravity="center_horizontal"
+        android:singleLine="true"
         android:text="星仔办学"
         android:textColor="@color/white"
         android:textSize="12sp" />

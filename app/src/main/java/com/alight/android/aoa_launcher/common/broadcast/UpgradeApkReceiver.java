@@ -11,7 +11,7 @@ import com.alight.android.aoa_launcher.activity.LauncherActivity;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;
 
 /**
- * 接收用户登出的广播
+ * 接收用户安装替换的广播
  */
 public class UpgradeApkReceiver extends BroadcastReceiver {
 
@@ -21,16 +21,16 @@ public class UpgradeApkReceiver extends BroadcastReceiver {
         if (intent.getAction().equals("android.intent.action.PACKAGE_REPLACED")) {
             String packageName = intent.getComponent().getPackageName();
             Log.i("UpgradeApkReceiver", "安装完成: packageName = " + packageName);
-            if (packageName.equals(AppConstants.LAUNCHER_PACKAGE_NAME)) {
-                Intent myIntent = new Intent(context, LauncherActivity.class);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(myIntent);
-            } else if (packageName.equals(AppConstants.AHWCX_PACKAGE_NAME)) {
+            if (packageName.equals(AppConstants.AHWCX_PACKAGE_NAME)) {
                 Intent myIntent = new Intent();
                 ComponentName componentName =
                         new ComponentName(AppConstants.AHWCX_PACKAGE_NAME, AppConstants.AHWCX_SERVICE_NAME);
                 myIntent.setComponent(componentName);
                 context.startService(myIntent);
+            } else if (packageName.equals(AppConstants.LAUNCHER_PACKAGE_NAME)) {
+                Intent myIntent = new Intent(context, LauncherActivity.class);
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(myIntent);
             }
         }
     }

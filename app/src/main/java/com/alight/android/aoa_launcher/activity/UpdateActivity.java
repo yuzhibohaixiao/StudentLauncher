@@ -126,18 +126,18 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             otherAdapter.notifyDataSetChanged();
         }
         otherAdapter.setNewInstance(otherList);
+        //只给预装应用的TextView设置了点击监听
         otherAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            if (view.getId() == R.id.tv_update_item && appType == 2) {
+            if (view.getId() == R.id.tv_update_item) {
                 startSingleDownload(position);
             }
         });
-//        new Thread(this::loadZip).start();
 //        startDownload();
     }
 
-    private void loadZip() {
+    private void loadZip(String apkPath) {
         try {
-            String zipPath = AppConstants.SYSTEM_ZIP_PATH + "ansystem.zip";
+            String zipPath = apkPath;
             ZipFile zip = new ZipFile(zipPath);
             Enumeration<ZipEntry> entries = (Enumeration<ZipEntry>) zip.entries();
             StringBuilder stringBuilder = new StringBuilder();
@@ -156,7 +156,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             }
             zip.close();
             unzip(new java.io.File(zipPath), new java.io.File(stringBuilder.toString()));
-//            upZipFile(new java.io.File(zipPath), stringBuilder.toString(),zipPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -201,49 +200,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         } finally {
             zipFile.close();
         }
-    }
-
-    /**
-     * 解压缩功能.
-     * 将zipFile文件解压到folderPath目录下.
-     *
-     * @throws Exception
-     */
-    public static int upZipFile(java.io.File zipFile, String folderPath, String zipPath) {
-        try {
-            ZipFile zfile = new ZipFile(zipFile);
-            Enumeration zList = zfile.entries();
-            ZipEntry ze = null;
-            byte[] buf = new byte[1024];
-            while (zList.hasMoreElements()) {
-                ze = (ZipEntry) zList.nextElement();
-                if (ze.isDirectory()) {
-                    //Logcat.d("upZipFile", "ze.getName() = " + ze.getName());
-                    String dirstr = folderPath + ze.getName();
-                    //dirstr.trim();
-                    dirstr = new String(dirstr.getBytes("8859_1"), "GB2312");
-                    //Logcat.d("upZipFile", "str = " + dirstr);
-                    java.io.File f = new java.io.File(dirstr);
-                    f.mkdir();
-                    continue;
-                }
-                //Logcat.d("upZipFile", "ze.getName() = " + ze.getName());
-                OutputStream os = new BufferedOutputStream(new FileOutputStream(zipPath));
-                InputStream is = new BufferedInputStream(zfile.getInputStream(ze));
-                int readLen = 0;
-                while ((readLen = is.read(buf, 0, 1024)) != -1) {
-                    os.write(buf, 0, readLen);
-                }
-                is.close();
-                os.close();
-            }
-            zfile.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return 0;
     }
 
     private void startDownload() {
@@ -298,9 +254,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 File file = new File();
                 file.setId("" + i);
                 file.setSeq(i);
-                if (systemAppList.get(i).getApp_info().getType() == 2) {
-                    file.setType(2);
+                if (systemAppList.get(i).getFormat() == 2) {
+                    file.setFormat(systemAppList.get(i).getFormat());
                     file.setFileName(systemAppList.get(i).getApp_name() + ".apk");
+                } else if (systemAppList.get(i).getFormat() == 1 || systemAppList.get(i).getFormat() == 3) {
+                    file.setFormat(systemAppList.get(i).getFormat());
+                    file.setFileName(systemAppList.get(i).getApp_name() + ".zip");
                 } else {
                     file.setFileName(systemAppList.get(i).getApp_name());
                 }
@@ -317,7 +276,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     file.setStatus(File.DOWNLOAD_REDYA);
                     file.setCreateTime(new Date());
                 }
-                file.setFileType(".apk");
                 file.setUrl(systemAppList.get(i).getApp_url());
                 if (!StringUtils.isEmpty(systemAppList.get(i).getApp_info().getPackage_name())) {
                     file.setPackName(systemAppList.get(i).getApp_info().getPackage_name());
@@ -327,7 +285,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     appList.add(file);
                     //跳过ota应用
                     continue;
-                } else if (AppUtils.getVersionCode(this, systemAppList.get(i).getPackName()) >= systemAppList.get(i).getVersion_code()) {
+                } else if (AppUtils.getVersionCode(this, file.getPackName()) >= systemAppList.get(i).getVersion_code()) {
                     file.setFormat(4);
                     appList.add(file);
                     continue;
@@ -340,6 +298,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 registerReceiver(receiver, filter);
                 downloadReceiverMap.put(file.getId(), receiver);
             }
+            sortList(appList);
         } else {
             List<String> downloadedFileIds = getDownloadedFileIds();
             Log.d(TAG, "getData: " + downloadedFileIds);
@@ -348,9 +307,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 File file = new File();
                 file.setId("" + i);
                 file.setSeq(i);
-                if (otherAppList.get(i).getApp_info().getType() == 2) {
-                    file.setType(2);
+                if (otherAppList.get(i).getFormat() == 2) {
+                    file.setFormat(otherAppList.get(i).getFormat());
                     file.setFileName(otherAppList.get(i).getApp_name() + ".apk");
+                } else if (otherAppList.get(i).getFormat() == 1 || otherAppList.get(i).getFormat() == 3) {
+                    file.setFormat(otherAppList.get(i).getApp_info().getType());
+                    file.setFileName(otherAppList.get(i).getApp_name() + ".zip");
                 } else {
                     file.setFileName(otherAppList.get(i).getApp_name());
                 }
@@ -367,7 +329,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     file.setStatus(File.DOWNLOAD_REDYA);
                     file.setCreateTime(new Date());
                 }
-                file.setFileType(".apk");
                 file.setUrl(otherAppList.get(i).getApp_url());
                 if (!StringUtils.isEmpty(otherAppList.get(i).getApp_info().getPackage_name())) {
                     file.setPackName(otherAppList.get(i).getApp_info().getPackage_name());
@@ -377,7 +338,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     otherList.add(file);
                     //跳过ota应用
                     continue;
-                } else if (AppUtils.getVersionCode(this, otherAppList.get(i).getPackName()) >= otherAppList.get(i).getVersion_code()) {
+                } else if (AppUtils.getVersionCode(this, file.getPackName()) >= otherAppList.get(i).getVersion_code()) {
                     file.setFormat(4);
                     otherList.add(file);
                     continue;
@@ -389,6 +350,17 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + appType);
                 registerReceiver(receiver, filter);
                 downloadReceiverMap.put(file.getId(), receiver);
+            }
+            sortList(otherList);
+        }
+    }
+
+    private void sortList(List<File> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getFormat() == 3 || list.get(i).getFormat() == 4) {
+                File file = list.get(i);
+                list.remove(i);
+                list.add(file);
             }
         }
     }
@@ -483,7 +455,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 tvUpdateAll.setVisibility(View.VISIBLE);
                 appType = 1;
                 systemAdapter.setAppType(appType);
-                systemAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_other_app:
                 otherRecyclerView.setVisibility(View.VISIBLE);
@@ -492,11 +463,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 tvSystemApp.setSelected(false);
                 tvUpdateAll.setVisibility(View.GONE);
                 appType = 2;
+                otherAdapter.setAppType(appType);
                 if (otherList.size() == 0) {
                     getData(appType);
+                    otherAdapter.notifyDataSetChanged();
                 }
-                otherAdapter.setAppType(appType);
-                otherAdapter.notifyDataSetChanged();
                 break;
             //开始下载
             case R.id.tv_update_all:
@@ -541,7 +512,15 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             file.setPath(filePath);
                             LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                             String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + files.get(i).getFileName();
-                            ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+                            if (file.getType() == 2) {
+                                ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+                            } else if (file.getType() == 1) {
+                                new Thread(() -> {
+                                    if (!StringUtils.isEmpty(apkPath)) {
+                                        loadZip(apkPath);
+                                    }
+                                }).start();
+                            }
                         }
                         if (status == File.DOWNLOAD_ERROR) {
                             LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
