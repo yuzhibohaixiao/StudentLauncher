@@ -165,6 +165,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 } else {
                     tvUpdate.isEnabled = true
                     tvUpdate.text = "可更新"
+                    tvUpdate.setTextColor(Color.WHITE)
                     tvSize.visibility = View.VISIBLE
                 }
                 //表示已经加载过图片
