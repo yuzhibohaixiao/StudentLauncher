@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.media.MediaPlayer
-import android.os.Environment
 import android.os.Looper
 import android.provider.Settings
 import android.text.SpannableString
@@ -18,7 +17,6 @@ import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
 import com.alight.ahwcx.ahwsdk.abilities.PanelAbility
 import com.alight.ahwcx.ahwsdk.abilities.PanelAbility.HardwareStatusHandler
 import com.alight.android.aoa_launcher.R
-import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -138,10 +136,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         getNetStateShowUI(netState)
 
 
-       /* ApkController.slienceInstallWithSysSign(
-            LauncherApplication.getContext(),
-            Environment.getExternalStorageDirectory().path + "/"+ "launcher.apk"
-        )*/
+        /* ApkController.slienceInstallWithSysSign(
+             LauncherApplication.getContext(),
+             Environment.getExternalStorageDirectory().path + "/"+ "launcher.apk"
+         )*/
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -347,7 +345,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 startActivity(intent)
             }
             is UpdateBean -> {
-                familyId = 0
                 if (familyId != null)
                     getPresenter().showUpdateDialog(any, familyId!!, this)
             }
