@@ -70,123 +70,127 @@ public class UpdateService extends Service {
     }
 
     private void download(final String filename, final String url, final String id, final int seq, int type) {
-        final boolean openDownloadNotify = sharedPreferences.getBoolean("open_download_notify", false);
-        final File parentFile = Environment.getExternalStorageDirectory();
-        final com.alight.android.aoa_launcher.net.model.File file = new com.alight.android.aoa_launcher.net.model.File();
-        file.setId(id);
-        file.setCreateTime(new Date());
-        file.setUrl(url);
-        file.setFileName(filename);
-        file.setPath(SYSTEM_ZIP_PATH + filename);
-        System.out.println(file.getPath());
-        String fileType = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
-        file.setFileType(fileType);
-        Log.d(TAG, "download: 下载" + filename);
-        final Intent intent = new Intent(AppConstants.LAUNCHER_PACKAGE_NAME + id + type);
-        intent.setPackage(getPackageName());
+        try {
+            final boolean openDownloadNotify = sharedPreferences.getBoolean("open_download_notify", false);
+            final File parentFile = Environment.getExternalStorageDirectory();
+            final com.alight.android.aoa_launcher.net.model.File file = new com.alight.android.aoa_launcher.net.model.File();
+            file.setId(id);
+            file.setCreateTime(new Date());
+            file.setUrl(url);
+            file.setFileName(filename);
+            file.setPath(SYSTEM_ZIP_PATH + filename);
+            System.out.println(file.getPath());
+            String fileType = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
+            file.setFileType(fileType);
+            Log.d(TAG, "download: 下载" + filename);
+            final Intent intent = new Intent(AppConstants.LAUNCHER_PACKAGE_NAME + id + type);
+            intent.setPackage(getPackageName());
 
-        Log.d(TAG, "parentFile: " + parentFile.getPath());
+            Log.d(TAG, "parentFile: " + parentFile.getPath());
 //        File parentFile = getExternalCacheDir();
-        task = new DownloadTask.Builder(url, parentFile)
-                .setFilename(filename)
-                .setMinIntervalMillisCallbackProcess(30) // 下载进度回调的间隔时间（毫秒）
-                .setPassIfAlreadyCompleted(false)// 任务过去已完成是否要重新下载
-                .setPriority(10)
+            task = new DownloadTask.Builder(url, parentFile)
+                    .setFilename(filename)
+                    .setMinIntervalMillisCallbackProcess(30) // 下载进度回调的间隔时间（毫秒）
+                    .setPassIfAlreadyCompleted(false)// 任务过去已完成是否要重新下载
+                    .setPriority(10)
 
-                .build();
-        task.enqueue(new DownloadListener4WithSpeed() {
-            @Override
-            public void taskStart(@NonNull DownloadTask task) {
-                Log.d(TAG, "taskStart: " + task.getId());
-            }
-
-            @Override
-            public void connectStart(@NonNull DownloadTask task, int blockIndex, @NonNull Map<String, List<String>> requestHeaderFields) {
-                Log.d(TAG, "connectStart: ");
-            }
-
-            @Override
-            public void connectEnd(@NonNull DownloadTask task, int blockIndex, int responseCode, @NonNull Map<String, List<String>> responseHeaderFields) {
-                Log.d(TAG, "connectEnd: ");
-            }
-
-            @Override
-            public void infoReady(@NonNull DownloadTask task, @NonNull BreakpointInfo info, boolean fromBreakpoint, @NonNull Listener4SpeedAssistExtend.Listener4SpeedModel model) {
-                Log.d(TAG, "infoReady: ");
-            }
-
-            @Override
-            public void progressBlock(@NonNull DownloadTask task, int blockIndex, long currentBlockOffset, @NonNull SpeedCalculator blockSpeed) {
-                Log.d(TAG, "progressBlock: ");
-            }
-
-            @Override
-            public void progress(@NonNull DownloadTask task, long currentOffset, @NonNull SpeedCalculator taskSpeed) {
-                Log.d(TAG, "progress: " + taskSpeed.speed());
-                String speed = taskSpeed.speed();
-                int percent = (int) (((float) task.getInfo().getTotalOffset() / task.getInfo().getTotalLength()) * 100);
-                String totalSize = Util.humanReadableBytes(task.getInfo().getTotalLength(), true).toString();
-//                String size = totalSize + "(" + (int) percent + "%)";
-                String size = totalSize;
-                intent.putExtra("percent", percent);
-                intent.putExtra("size", size);
-                intent.putExtra("speed", speed);
-                intent.putExtra("status", com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_PROCEED);
-                intent.putExtra("totalSize", totalSize);
-                intent.putExtra("type", type);
-                sendBroadcast(intent);
-                if (openDownloadNotify) {
-                    createNotification(percent, filename, speed, size, seq);
+                    .build();
+            task.enqueue(new DownloadListener4WithSpeed() {
+                @Override
+                public void taskStart(@NonNull DownloadTask task) {
+                    Log.d(TAG, "taskStart: " + task.getId());
                 }
-            }
 
-            @Override
-            public void blockEnd(@NonNull DownloadTask task, int blockIndex, BlockInfo info, @NonNull SpeedCalculator blockSpeed) {
-                Log.d(TAG, "blockEnd: ");
-            }
+                @Override
+                public void connectStart(@NonNull DownloadTask task, int blockIndex, @NonNull Map<String, List<String>> requestHeaderFields) {
+                    Log.d(TAG, "connectStart: ");
+                }
 
-            @Override
-            public void taskEnd(@NonNull DownloadTask task, @NonNull EndCause cause, @Nullable Exception realCause, @NonNull SpeedCalculator taskSpeed) {
-                int percent = (int) (((float) task.getInfo().getTotalOffset() / task.getInfo().getTotalLength()) * 100);
-                String totalSize = Util.humanReadableBytes(task.getInfo().getTotalLength(), true).toString();
+                @Override
+                public void connectEnd(@NonNull DownloadTask task, int blockIndex, int responseCode, @NonNull Map<String, List<String>> responseHeaderFields) {
+                    Log.d(TAG, "connectEnd: ");
+                }
+
+                @Override
+                public void infoReady(@NonNull DownloadTask task, @NonNull BreakpointInfo info, boolean fromBreakpoint, @NonNull Listener4SpeedAssistExtend.Listener4SpeedModel model) {
+                    Log.d(TAG, "infoReady: ");
+                }
+
+                @Override
+                public void progressBlock(@NonNull DownloadTask task, int blockIndex, long currentBlockOffset, @NonNull SpeedCalculator blockSpeed) {
+                    Log.d(TAG, "progressBlock: ");
+                }
+
+                @Override
+                public void progress(@NonNull DownloadTask task, long currentOffset, @NonNull SpeedCalculator taskSpeed) {
+                    Log.d(TAG, "progress: " + taskSpeed.speed());
+                    String speed = taskSpeed.speed();
+                    int percent = (int) (((float) task.getInfo().getTotalOffset() / task.getInfo().getTotalLength()) * 100);
+                    String totalSize = Util.humanReadableBytes(task.getInfo().getTotalLength(), true).toString();
 //                String size = totalSize + "(" + (int) percent + "%)";
-                String size = totalSize;
-                file.setSize(task.getInfo().getTotalLength());
-                System.out.println(cause == EndCause.COMPLETED);
-                if (cause == EndCause.COMPLETED) {
+                    String size = totalSize;
                     intent.putExtra("percent", percent);
                     intent.putExtra("size", size);
-                    intent.putExtra("speed", "");
-                    intent.putExtra("status", com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_COMPLETE);
+                    intent.putExtra("speed", speed);
+                    intent.putExtra("status", com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_PROCEED);
                     intent.putExtra("totalSize", totalSize);
-                    intent.putExtra("filePath", file.getPath());
                     intent.putExtra("type", type);
-                    file.setProgress(percent);
-                    file.setSizeStr(totalSize);
-                    file.setStatus(com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_COMPLETE);
+                    sendBroadcast(intent);
                     if (openDownloadNotify) {
-                        createDownloadCompleteNotification(filename, totalSize, seq);
+                        createNotification(percent, filename, speed, size, seq);
                     }
                 }
-                Log.d(TAG, "cause: " + cause.toString());
-                if (realCause != null) {
-                    intent.putExtra("status", com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_ERROR);
-                    file.setProgress(percent);
-                    file.setSizeStr(size);
-                    file.setStatus(com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_PAUSE);
-                    createDownloadErrorNotification(filename, seq);
+
+                @Override
+                public void blockEnd(@NonNull DownloadTask task, int blockIndex, BlockInfo info, @NonNull SpeedCalculator blockSpeed) {
+                    Log.d(TAG, "blockEnd: ");
                 }
-                Log.d(TAG, "taskEnd: ");
-                Log.d(TAG, "taskEnd: " + task.getFile().getPath());
-                Log.d(TAG, "taskEnd: " + task.getFilename());
-                Log.d(TAG, "taskEnd: " + task.getFilenameHolder().get());
-                Log.d(TAG, "taskEnd: " + task.getParentFile().getPath());
-                insertOrUpdate(file);
-                sendBroadcast(intent);
-                stopSelf();
-            }
-        });
-        LauncherApplication.Companion.getDownloadTaskHashMap().put(id, task);
+
+                @Override
+                public void taskEnd(@NonNull DownloadTask task, @NonNull EndCause cause, @Nullable Exception realCause, @NonNull SpeedCalculator taskSpeed) {
+                    int percent = (int) (((float) task.getInfo().getTotalOffset() / task.getInfo().getTotalLength()) * 100);
+                    String totalSize = Util.humanReadableBytes(task.getInfo().getTotalLength(), true).toString();
+//                String size = totalSize + "(" + (int) percent + "%)";
+                    String size = totalSize;
+                    file.setSize(task.getInfo().getTotalLength());
+                    System.out.println(cause == EndCause.COMPLETED);
+                    if (cause == EndCause.COMPLETED) {
+                        intent.putExtra("percent", percent);
+                        intent.putExtra("size", size);
+                        intent.putExtra("speed", "");
+                        intent.putExtra("status", com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_COMPLETE);
+                        intent.putExtra("totalSize", totalSize);
+                        intent.putExtra("filePath", file.getPath());
+                        intent.putExtra("type", type);
+                        file.setProgress(percent);
+                        file.setSizeStr(totalSize);
+                        file.setStatus(com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_COMPLETE);
+                        if (openDownloadNotify) {
+                            createDownloadCompleteNotification(filename, totalSize, seq);
+                        }
+                    }
+                    Log.d(TAG, "cause: " + cause.toString());
+                    if (realCause != null) {
+                        intent.putExtra("status", com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_ERROR);
+                        file.setProgress(percent);
+                        file.setSizeStr(size);
+                        file.setStatus(com.alight.android.aoa_launcher.net.model.File.DOWNLOAD_PAUSE);
+                        createDownloadErrorNotification(filename, seq);
+                    }
+                    Log.d(TAG, "taskEnd: ");
+                    Log.d(TAG, "taskEnd: " + task.getFile().getPath());
+                    Log.d(TAG, "taskEnd: " + task.getFilename());
+                    Log.d(TAG, "taskEnd: " + task.getFilenameHolder().get());
+                    Log.d(TAG, "taskEnd: " + task.getParentFile().getPath());
+                    insertOrUpdate(file);
+                    sendBroadcast(intent);
+                    stopSelf();
+                }
+            });
+            LauncherApplication.Companion.getDownloadTaskHashMap().put(id, task);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

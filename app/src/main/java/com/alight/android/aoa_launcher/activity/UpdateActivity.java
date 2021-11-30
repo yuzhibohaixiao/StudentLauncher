@@ -101,12 +101,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             systemAdapter = new UpdateAdapter();
             systemAdapter.setAppType(appType);
             systemAdapter.addData(appList);
-//            View footerView = View.inflate(this, R.layout.item_update, null);
-//            TextView appName = footerView.findViewById(R.id.tv_app_name_update_item);
-//            appName.setText("system");
-//            TextView appCode = footerView.findViewById(R.id.tv_app_code_update_item);
-//            appCode.setText(Build.DISPLAY);
-//            systemAdapter.addFooterView(footerView);
             systemRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
             ((SimpleItemAnimator) systemRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             systemRecyclerView.setAdapter(systemAdapter);
@@ -125,7 +119,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         otherAdapter.setNewInstance(otherList);
         //只给预装应用的TextView设置了点击监听
         otherAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            if (view.getId() == R.id.tv_update_item) {
+            if (view.getId() == R.id.tv_update_item && (otherAdapter.getData().get(position).getFormat() == 1 || otherAdapter.getData().get(position).getFormat() == 2)) {
+                View tvUpdate = otherAdapter.getViewByPosition(position, R.id.tv_update_item);
+                tvUpdate.setEnabled(false);
                 startSingleDownload(position);
             }
         });
@@ -522,15 +518,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                                 String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
                                 if (file.getFormat() == 2) {
-                                    new Thread(() -> {
-                                        ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
-                                    }).start();
+                                    ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
                                 } else if (file.getFormat() == 1) {
-                                    new Thread(() -> {
-                                        if (!StringUtils.isEmpty(apkPath)) {
-                                            loadZip(apkPath, file.getVersionCode());
-                                        }
-                                    }).start();
+                                    if (!StringUtils.isEmpty(apkPath)) {
+                                        loadZip(apkPath, file.getVersionCode());
+                                    }
                                 }
                             }
                             if (status == File.DOWNLOAD_ERROR) {

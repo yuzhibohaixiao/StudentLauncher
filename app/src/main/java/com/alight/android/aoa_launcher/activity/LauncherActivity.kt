@@ -5,7 +5,6 @@ import android.content.*
 import android.database.ContentObserver
 import android.graphics.Paint
 import android.net.Uri
-import android.os.Environment
 import android.os.Handler
 import android.provider.Settings
 import android.text.SpannableString
@@ -17,7 +16,6 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.alight.android.aoa_launcher.R
-import com.alight.android.aoa_launcher.application.LauncherApplication.Companion.getContext
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.TokenMessage
 import com.alight.android.aoa_launcher.common.bean.TokenPair
@@ -66,6 +64,12 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
         super.onResume()
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
         Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
+        val rebinding = SPUtils.getData("rebinding", false) as Boolean
+        //用户重新绑定
+        if (rebinding) {
+            initAccountUtil()
+            SPUtils.syncPutData("rebinding", false)
+        }
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty()) {
             Log.i(TAG, "展示引导页")

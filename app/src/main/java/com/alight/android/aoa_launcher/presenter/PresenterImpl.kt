@@ -28,6 +28,7 @@ import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.activity.MoreDownloadActivity
 import com.alight.android.aoa_launcher.activity.UpdateActivity
+import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BasePresenter
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -609,8 +610,12 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         familyId: Int,
         activity: Activity
     ) {
+        if (activity == null || activity.isDestroyed) {
+            return
+        }
         //系统升级和解绑
-        val updateDialog = CustomDialog(activity, R.layout.dialog_update_new)
+        val updateDialog =
+            CustomDialog(activity, R.layout.dialog_update_new)
         val close = updateDialog.findViewById<ImageView>(R.id.iv_close_update)
         val unbind = updateDialog.findViewById<TextView>(R.id.tv_unbind_dialog)
         val update = updateDialog.findViewById<TextView>(R.id.tv_update_dialog)
@@ -665,7 +670,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             activity.startActivity(intent)
         }
 
-        updateDialog.show()
+        if (updateDialog != null) {
+            updateDialog.show()
+        }
 
         unbind.setOnClickListener {
             //解绑二次确认弹窗
