@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -372,17 +371,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + appType);
                 registerReceiver(receiver, filter);
                 downloadReceiverMap.put(file.getId(), receiver);
-            }
-        }
-    }
-
-    private void sortList(List<File> list) {
-        for (int i = 0; i < list.size(); i++) {
-            //format 3 为ota不需要处理 format 4 表示已有最新则无需更新
-            if (list.get(i).getFormat() == 3 || list.get(i).getFormat() == 4) {
-                File file = list.get(i);
-                list.remove(i);
-                list.add(file);
             }
         }
     }
