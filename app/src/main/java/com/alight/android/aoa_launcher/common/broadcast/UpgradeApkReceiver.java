@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.alight.android.aoa_launcher.activity.LauncherActivity;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;

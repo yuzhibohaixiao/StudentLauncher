@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.media.MediaPlayer
+import android.os.Environment
 import android.os.Looper
 import android.provider.Settings
 import android.text.SpannableString
@@ -17,6 +18,7 @@ import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
 import com.alight.ahwcx.ahwsdk.abilities.PanelAbility
 import com.alight.ahwcx.ahwsdk.abilities.PanelAbility.HardwareStatusHandler
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -25,10 +27,7 @@ import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.PersonalCenterFamilyAdapter
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
-import com.alight.android.aoa_launcher.utils.AccountUtil
-import com.alight.android.aoa_launcher.utils.InternetUtil
-import com.alight.android.aoa_launcher.utils.SPUtils
-import com.alight.android.aoa_launcher.utils.ToastUtils
+import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
@@ -137,6 +136,12 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         }
         netState = intent.getIntExtra("netState", 0)
         getNetStateShowUI(netState)
+
+
+       /* ApkController.slienceInstallWithSysSign(
+            LauncherApplication.getContext(),
+            Environment.getExternalStorageDirectory().path + "/"+ "launcher.apk"
+        )*/
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

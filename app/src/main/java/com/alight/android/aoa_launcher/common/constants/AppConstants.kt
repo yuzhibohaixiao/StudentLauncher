@@ -46,5 +46,7 @@ class AppConstants {
         //系统固件升级包下载｜安装路径
         const val SYSTEM_ZIP_FULL_PATH = "/data/media/0/update.zip"
         const val SYSTEM_ZIP_PATH = "/data/media/0/"
+
+        const val APP_DOWNLOAD_PATH = "/storage/emulated/0/"
     }
 }

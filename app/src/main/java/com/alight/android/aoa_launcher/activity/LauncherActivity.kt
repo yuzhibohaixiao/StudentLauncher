@@ -5,6 +5,7 @@ import android.content.*
 import android.database.ContentObserver
 import android.graphics.Paint
 import android.net.Uri
+import android.os.Environment
 import android.os.Handler
 import android.provider.Settings
 import android.text.SpannableString
@@ -13,10 +14,10 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.application.LauncherApplication.Companion.getContext
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.TokenMessage
 import com.alight.android.aoa_launcher.common.bean.TokenPair
