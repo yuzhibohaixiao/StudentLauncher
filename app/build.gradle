@@ -37,6 +37,16 @@ android {
         multiDexEnabled true
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: "com.alight.android.aoa_launcher",
+                JPUSH_APPKEY : "7e4d2631fca6370d618cb857", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+        ]
     }
 
     buildTypes {
@@ -159,4 +169,8 @@ dependencies {
 //    implementation 'com.github.rubensousa:previewseekbar:3.0.0'
     implementation 'com.xw.repo:bubbleseekbar:3.20-lite'
     implementation 'org.greenrobot:eventbus:3.1.1'
+
+    //JPush
+    implementation 'cn.jiguang.sdk:jpush:4.4.5'
+    implementation 'cn.jiguang.sdk:jcore:3.1.0'
 }

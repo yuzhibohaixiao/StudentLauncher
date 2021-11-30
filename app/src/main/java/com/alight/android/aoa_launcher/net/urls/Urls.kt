@@ -2,7 +2,7 @@ package com.alight.android.aoa_launcher.net.urls
 
 object Urls {
 
-//            const val BASEURL = "http://api.alight-sys.com"   //正式服务（生产）
+    //            const val BASEURL = "http://api.alight-sys.com"   //正式服务（生产）
     const val BASEURL =
         "http://test.api.alight-sys.com" //测试服务
 
@@ -24,4 +24,11 @@ object Urls {
 
     //查看设备绑定家庭 （二维码是否绑定）
     const val DEVICE_BIND = "/family/v1/student/device/check"
+
+    //   POST 用户绑定极光推送
+    const val BIND_PUSH = "/asf/v1/student/jpush"
+
+    //  GET 在线状态打点
+    const val HEART_BEAT = "/state/v1/heartbeat"
+
 }

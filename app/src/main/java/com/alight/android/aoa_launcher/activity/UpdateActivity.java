@@ -679,13 +679,4 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         return ids;
     }
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            return true;//系统层不做处理 就可以了
-        } else {
-            return super.dispatchKeyEvent(event);
-        }
-    }
-
 }
