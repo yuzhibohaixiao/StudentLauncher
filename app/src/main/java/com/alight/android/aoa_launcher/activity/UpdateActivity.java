@@ -199,7 +199,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private void startDownload() {
         for (int i = 0; i < appList.size(); i++) {
             File file = appList.get(i);
-            if (file.getFormat() == 3) {
+            if (file.getFormat() == 3 || file.getFormat() == 4) {
                 continue;
             }
             file.setSizeStr("请稍等");
@@ -220,7 +220,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private void startSingleDownload(int position) {
         if (otherList != null && otherList.size() > 0) {
             File file = otherList.get(position);
-            if (file.getFormat() == 3) {
+            if (file.getFormat() == 3 || file.getFormat() == 4) {
                 return;
             }
             file.setSizeStr("请稍等");
@@ -278,7 +278,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 if (!StringUtils.isEmpty(systemUpdateBean.getApp_info().getPackage_name())) {
                     file.setPackName(systemUpdateBean.getApp_info().getPackage_name());
                 }
-                if (systemUpdateBean.getFormat() == 3) {
+                if (systemUpdateBean.getApp_name().equals("ahwc")) {
+                    appList.add(file);
+                } else if (systemUpdateBean.getFormat() == 3) {
                     file.setFormat(systemUpdateBean.getFormat());
                     appList.add(file);
                     //跳过ota应用
@@ -529,7 +531,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 //出错则继续下载
                                 file.setStatus(File.DOWNLOAD_PROCEED);
                                 file.setSpeed("---");
-                                intent = new Intent(UpdateActivity.this, DownloadService.class);
+                                intent = new Intent(LauncherApplication.Companion.getContext(), DownloadService.class);
                                 intent.putExtra("filename", file.getFileName());
                                 intent.putExtra("url", file.getUrl());
                                 intent.putExtra("id", file.getId());
@@ -569,15 +571,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                             String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
                             if (file.getFormat() == 2) {
-                                new Thread(
-                                        () -> ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)
-                                ).start();
+                                ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
                             } else if (file.getFormat() == 1) {
-                                new Thread(() -> {
-                                    if (!StringUtils.isEmpty(apkPath)) {
-                                        loadZip(apkPath, file.getVersionCode());
-                                    }
-                                }).start();
+                                if (!StringUtils.isEmpty(apkPath)) {
+                                    loadZip(apkPath, file.getVersionCode());
+                                }
                             }
                         }
                         if (status == File.DOWNLOAD_ERROR) {

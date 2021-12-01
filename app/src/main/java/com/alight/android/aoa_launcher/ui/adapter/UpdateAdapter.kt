@@ -95,7 +95,6 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                         pbUpdate.progress = file.progress
                         tvUpdate.setTextColor(Color.WHITE)
                         tvUpdate.text = "${pbUpdate.progress}%";
-
                     }
                     File.DOWNLOAD_ERROR ->//出错
                     {

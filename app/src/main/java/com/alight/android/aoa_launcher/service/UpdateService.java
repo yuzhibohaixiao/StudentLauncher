@@ -62,12 +62,27 @@ public class UpdateService extends Service {
                 Log.d(TAG, "onStartCommand: " + filename);
                 //开启下载进度
                 sharedPreferences = getSharedPreferences("download", MODE_PRIVATE);
-
+//                deleteDownloadFile(AppConstants.SYSTEM_ZIP_PATH + filename);
                 download(filename, url, id, seq, type);
             }
         }).start();
         return super.onStartCommand(intent, flags, startId);
     }
+
+    /**
+     * 删除单个文件
+     *
+     * @param filePath 被删除文件的文件名
+     * @return 文件删除成功返回true，否则返回false
+     */
+    public boolean deleteDownloadFile(String filePath) {
+        File file = new File(filePath);
+        if (file.isFile() && file.exists()) {
+            return file.delete();
+        }
+        return false;
+    }
+
 
     private void download(final String filename, final String url, final String id, final int seq, int type) {
         try {
@@ -93,7 +108,6 @@ public class UpdateService extends Service {
                     .setMinIntervalMillisCallbackProcess(30) // 下载进度回调的间隔时间（毫秒）
                     .setPassIfAlreadyCompleted(false)// 任务过去已完成是否要重新下载
                     .setPriority(10)
-
                     .build();
             task.enqueue(new DownloadListener4WithSpeed() {
                 @Override
