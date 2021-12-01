@@ -18,18 +18,14 @@ public class UpgradeApkReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.PACKAGE_REPLACED")) {
-            String packageName = intent.getComponent().getPackageName();
+            String packageName = intent.getData().getSchemeSpecificPart();
             Log.i("UpgradeApkReceiver", "安装完成: packageName = " + packageName);
             if (packageName.equals(AppConstants.AHWCX_PACKAGE_NAME)) {
-//                Intent myIntent = new Intent();
-//                ComponentName componentName =
-//                        new ComponentName(AppConstants.AHWCX_PACKAGE_NAME, AppConstants.AHWCX_SERVICE_NAME);
-//                myIntent.setComponent(componentName);
-//                context.startService(myIntent);
-                Context localContext = context.getApplicationContext();
-                Intent mIntent = new Intent(AppConstants.AHWCX_SERVICE_NAME);
-                mIntent.setPackage(AppConstants.AHWCX_PACKAGE_NAME);
-                localContext.startService(mIntent);
+                Intent myIntent = new Intent();
+                ComponentName componentName =
+                        new ComponentName(AppConstants.AHWCX_PACKAGE_NAME, AppConstants.AHWCX_SERVICE_NAME);
+                myIntent.setComponent(componentName);
+                context.startService(myIntent);
 
             } else if (packageName.equals(AppConstants.LAUNCHER_PACKAGE_NAME)) {
 //                Intent myIntent = new Intent(context, LauncherActivity.class);

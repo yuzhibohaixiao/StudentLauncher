@@ -204,9 +204,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             }
             file.setSizeStr("请稍等");
             file.setSpeed("");
-            if (serviceIntent == null) {
-                serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
-            }
+            serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
             serviceIntent.putExtra("filename", file.getFileName());
             serviceIntent.putExtra("url", file.getUrl());
             serviceIntent.putExtra("id", file.getId());
@@ -225,9 +223,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             }
             file.setSizeStr("请稍等");
             file.setSpeed("");
-            if (serviceIntent == null) {
-                serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
-            }
+            serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
             serviceIntent.putExtra("filename", file.getFileName());
             serviceIntent.putExtra("url", file.getUrl());
             serviceIntent.putExtra("id", file.getId());
@@ -278,9 +274,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 if (!StringUtils.isEmpty(systemUpdateBean.getApp_info().getPackage_name())) {
                     file.setPackName(systemUpdateBean.getApp_info().getPackage_name());
                 }
-                if (systemUpdateBean.getApp_name().equals("ahwc")) {
-                    appList.add(file);
-                } else if (systemUpdateBean.getFormat() == 3) {
+              if (systemUpdateBean.getFormat() == 3) {
                     file.setFormat(systemUpdateBean.getFormat());
                     appList.add(file);
                     //跳过ota应用
