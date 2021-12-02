@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import cn.jpush.android.api.JPushInterface
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
+import com.alight.android.aoa_launcher.common.bean.JPushBindBean
 import com.alight.android.aoa_launcher.common.bean.TokenMessage
 import com.alight.android.aoa_launcher.common.bean.TokenPair
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -42,6 +43,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 
@@ -136,18 +138,20 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
                 }
             }
         }
-//        NetUtils.intance.getInfo(Urls.AV_STATE + roomId, hashMapOf(), BaseAVChat::class.java
-        getPresenter().getModel(
-            Urls.BIND_PUSH,
-            hashMapOf(
-                "registration_id" to JPushInterface.getRegistrationID(
-                    this@LauncherActivity
-                )
-            ),
-            String::class.java
-        )
         //展示无网络UI
         noNetworkInit()
+        // 用户绑定极光推送
+        getPresenter().postModel(
+            Urls.BIND_PUSH,
+            RequestBody.create(
+                null,
+                mapOf(
+                    AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(this@LauncherActivity)
+                ).toJson()
+            ),
+            JPushBindBean::class.java
+        )
+
     }
 
     private fun noNetworkInit() {
@@ -264,6 +268,20 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
                     }
                     //设置用户信息
                     getPresenter().setPersonInfo(this@LauncherActivity)
+                    // 用户绑定极光推送
+                    getPresenter().postModel(
+                        Urls.BIND_PUSH,
+                        RequestBody.create(
+                            null,
+                            mapOf(
+                                AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(
+                                    this@LauncherActivity
+                                )
+                            ).toJson()
+                        ),
+                        JPushBindBean::class.java
+                    )
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

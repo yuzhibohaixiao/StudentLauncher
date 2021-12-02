@@ -31,6 +31,26 @@ class ModelImpl : IContract.IModel {
         })
     }
 
+    override fun <T> postNetInfo(
+        url: String,
+        requestBody: RequestBody,
+        cls: Class<T>,
+        callback: NetUtils.NetCallback
+    ) {
+        //调用NetUtil中的网络请求
+        NetUtils.intance.postInfo(url, requestBody, cls, object : NetUtils.NetCallback {
+            override fun onSuccess(any: Any) {
+                //回调到Presenter层
+                callback.onSuccess(any)
+            }
+
+            override fun onError(error: String) {
+                callback.onError(error)
+            }
+        })
+    }
+
+
     //不实现接口的话可以自己来写
     override fun <T> deleteNetInfo(
         requestBody: RequestBody,

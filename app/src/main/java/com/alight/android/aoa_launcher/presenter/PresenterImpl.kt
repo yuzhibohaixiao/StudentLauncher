@@ -16,8 +16,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.View
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -26,9 +24,7 @@ import androidx.core.app.NotificationCompat
 import androidx.viewpager.widget.ViewPager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
-import com.alight.android.aoa_launcher.activity.MoreDownloadActivity
 import com.alight.android.aoa_launcher.activity.UpdateActivity
-import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BasePresenter
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -37,7 +33,6 @@ import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.S
 import com.alight.android.aoa_launcher.common.listener.DownloadListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.contract.IContract
-import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
@@ -86,9 +81,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         })
     }
 
-    fun <T> deleteModel(requestBody: RequestBody, cls: Class<T>) {
+    fun <T> postModel(url: String, requestBody: RequestBody, cls: Class<T>) {
         //调用model
-        getModel().deleteNetInfo(requestBody, cls, object : NetUtils.NetCallback {
+        getModel().postNetInfo(url, requestBody, cls, object : NetUtils.NetCallback {
             //model层回调给Presenter层级
             override fun onSuccess(any: Any) {
                 //希望在View层进行视图的刷新
@@ -102,7 +97,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
 
-    fun <T> postModel(requestBody: RequestBody, cls: Class<T>) {
+    fun <T> deleteModel(requestBody: RequestBody, cls: Class<T>) {
         //调用model
         getModel().deleteNetInfo(requestBody, cls, object : NetUtils.NetCallback {
             //model层回调给Presenter层级
