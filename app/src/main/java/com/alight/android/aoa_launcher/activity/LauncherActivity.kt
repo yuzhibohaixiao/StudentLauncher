@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import cn.jpush.android.api.JPushInterface
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.TokenMessage
@@ -25,6 +26,7 @@ import com.alight.android.aoa_launcher.common.i.LauncherListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.INetEvent
 import com.alight.android.aoa_launcher.net.NetTools
+import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.*
@@ -134,6 +136,17 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
                 }
             }
         }
+//        NetUtils.intance.getInfo(Urls.AV_STATE + roomId, hashMapOf(), BaseAVChat::class.java
+        getPresenter().getModel(
+            Urls.BIND_PUSH,
+            hashMapOf(
+                "registration_id" to JPushInterface.getRegistrationID(
+                    this@LauncherActivity
+                )
+            ),
+            String::class.java
+        )
+        //展示无网络UI
         noNetworkInit()
     }
 
@@ -322,6 +335,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
                     .error(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
                     .into(iv_user_icon_launcher)
                 tv_user_name_launcher.text = any.name
+                if (StringUtils.isEmpty(tokenPair?.token)) {
+                    getPresenter().getLocationAndWeather()
+                }
             }
         }
     }

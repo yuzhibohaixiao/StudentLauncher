@@ -89,6 +89,44 @@ class NetUtils private constructor() {
             })
     }
 
+    fun <T> postInfo(url: String,
+                     requestBody: RequestBody,
+                     cls: Class<T>,
+                     callback: NetCallback
+    ) {
+        apiService.postAllInfo(url, requestBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ResponseBody> {
+                override fun onComplete() {
+
+                }
+
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onNext(t: ResponseBody) {
+                    var gson = Gson()
+                    try {
+                        var any = gson.fromJson(t.string(), cls)
+                        if (callback != null && any != null) {
+                            //回调到model层
+                            callback.onSuccess(any)
+                        }
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    if (callback != null) {
+                        callback.onError(e.message!!)
+                    }
+                }
+
+            })
+    }
+
     //具体的网络请求实现类
     fun <T> deleteInfo(
         requestBody: RequestBody,

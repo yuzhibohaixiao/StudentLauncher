@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.alight.android.aoa_launcher"
     android:persistent="true"
-    android:sharedUserId="android.uid.system"
     >
 
     <!--   android:sharedUserId="android.uid.system"-->
@@ -243,6 +242,23 @@
                 <category android:name="com.alight.android.aoa_launcher" />
             </intent-filter>
         </receiver>
+
+<!--
+        <receiver
+            android:name=".common.broadcast.JPushDefaultReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
+                <category android:name="com.alight.android.aoa_launcher" />
+            </intent-filter>
+        </receiver>
+-->
 
         <!-- User defined. 用户自定义 Receiver 接收被拉起回调-->
         <!-- 自定义 Receiver 组件，继承cn.jpush.android.service.WakedResultReceiver类,复写onWake(int wakeType)或 onWake(Context context, int wakeType)方法以监听被拉起 -->

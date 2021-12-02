@@ -26,4 +26,8 @@ interface Apiservice {
     @Streaming
     @GET
     fun download(@Url url: String?): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST
+    fun postAllInfo(@Url url: String, @Body requestBody: RequestBody): Observable<ResponseBody>
 }

@@ -30,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId "com.alight.android.aoa_launcher"
-        minSdkVersion 24
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 17
         versionName "1.0.14"

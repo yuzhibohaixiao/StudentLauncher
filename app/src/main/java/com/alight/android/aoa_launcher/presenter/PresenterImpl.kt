@@ -37,6 +37,7 @@ import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.S
 import com.alight.android.aoa_launcher.common.listener.DownloadListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.contract.IContract
+import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
@@ -99,6 +100,23 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             }
         })
     }
+
+
+    fun <T> postModel(requestBody: RequestBody, cls: Class<T>) {
+        //调用model
+        getModel().deleteNetInfo(requestBody, cls, object : NetUtils.NetCallback {
+            //model层回调给Presenter层级
+            override fun onSuccess(any: Any) {
+                //希望在View层进行视图的刷新
+                getView()?.onSuccess(any)
+            }
+
+            override fun onError(error: String) {
+                getView()?.onError(error)
+            }
+        })
+    }
+
 
     /**
      *  初始化天气服务
@@ -301,6 +319,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
 
     }
+
 
     /**
      * 获取系统应用并封装
