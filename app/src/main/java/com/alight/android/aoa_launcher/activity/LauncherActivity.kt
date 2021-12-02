@@ -219,7 +219,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
 //        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
 //        startActivity(intent)
-
+        PermissionUtils.isGrantExternalRW(this, 1)
         PermissionX.init(this)
             .permissions(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,

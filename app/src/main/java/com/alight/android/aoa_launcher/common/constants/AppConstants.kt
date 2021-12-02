@@ -48,5 +48,8 @@ class AppConstants {
         const val SYSTEM_ZIP_PATH = "/data/media/0/"
 
         const val APP_DOWNLOAD_PATH = "/storage/emulated/0/"
+
+        //配置文件的解压路径
+        const val CONFIG_PATH = "/data/media/0/ansystem"
     }
 }

@@ -36,6 +36,8 @@ import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
 import com.alight.android.aoa_launcher.utils.SPUtils;
 import com.alight.android.aoa_launcher.utils.StringUtils;
+import com.alight.android.aoa_launcher.utils.ToastUtil;
+import com.alight.android.aoa_launcher.utils.ToastUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,10 +45,13 @@ import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 
 import java.io.BufferedInputStream;
-import java.io.FileInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -56,7 +61,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
@@ -87,6 +91,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private ArrayList<UpdateBeanData> otherAppList;
     //1为系统应用 2是预置应用
     private int appType = 1;
+    //是否包含需要解压的配置文件
+    private boolean containsConfigFile = false;
 
     @Override
 
@@ -125,74 +131,288 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 startSingleDownload(position);
             }
         });
-//        startDownload();
     }
 
-    private void loadZip(String apkPath, int versionCode) {
+    /**
+     * 含子目录的文件压缩
+     *
+     * @throws Exception
+     */
+
+// 第一个参数就是需要解压的文件，第二个就是解压的目录
+    public boolean upZipFile(String zipFile, String folderPath) {
+        ZipFile zfile = null;
+
         try {
-            String zipPath = apkPath;
-            ZipFile zip = new ZipFile(zipPath);
-            Enumeration<ZipEntry> entries = (Enumeration<ZipEntry>) zip.entries();
-            StringBuilder stringBuilder = new StringBuilder();
-            ZipEntry ze;
-            // 枚举zip文件内的文件/
-            while (entries.hasMoreElements()) {
-                ze = entries.nextElement();
-                // 读取目标对象
-                if (ze.getName().equals("path.txt")) {
-                    Scanner scanner = new Scanner(zip.getInputStream(ze));
-                    while (scanner.hasNextLine()) {
-                        stringBuilder.append(scanner.nextLine());
-                    }
-                    scanner.close();
-                }
-            }
-            zip.close();
-            unzip(new java.io.File(zipPath), new java.io.File(stringBuilder.toString()), versionCode);
+// 转码为GBK格式，支持中文
+
+            zfile = new ZipFile(zipFile, Charset.forName("gbk"));
+
         } catch (IOException e) {
+            e.printStackTrace();
+
+            return false;
+
+        }
+
+        Enumeration zList = zfile.entries();
+
+        ZipEntry ze = null;
+
+        byte[] buf = new byte[1024];
+
+        while (zList.hasMoreElements()) {
+            ze = (ZipEntry) zList.nextElement();
+
+// 列举的压缩文件里面的各个文件，判断是否为目录
+
+            if (ze.isDirectory()) {
+                String dirstr = folderPath + ze.getName();
+
+                Log.i(TAG, "dirstr=" + dirstr);
+
+                dirstr.trim();
+
+                java.io.File f = new java.io.File(dirstr);
+
+                f.mkdir();
+
+                continue;
+
+            }
+
+            OutputStream os = null;
+
+            FileOutputStream fos = null;
+
+// ze.getName()会返回 script/start.script这样的，是为了返回实体的File
+
+            java.io.File realFile = getRealFileName(folderPath, ze.getName());
+
+            try {
+                fos = new FileOutputStream(realFile);
+
+            } catch (FileNotFoundException e) {
+                Log.e(TAG, e.getMessage());
+
+                return false;
+
+            }
+
+            os = new BufferedOutputStream(fos);
+
+            InputStream is = null;
+
+            try {
+                is = new BufferedInputStream(zfile.getInputStream(ze));
+
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+                return false;
+            }
+
+            int readLen = 0;
+
+// 进行一些内容复制操作
+
+            try {
+                while ((readLen = is.read(buf, 0, 1024)) != -1) {
+                    os.write(buf, 0, readLen);
+
+                }
+
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+
+                return false;
+
+            }
+
+            try {
+                is.close();
+
+                os.close();
+
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+                return false;
+
+            }
+
+        }
+
+        try {
+            zfile.close();
+
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+    /**
+     * 给定根目录，返回一个相对路径所对应的实际文件名.
+     *
+     * @param baseDir     指定根目录
+     * @param absFileName 相对路径名，来自于ZipEntry中的name
+     * @return java.io.File 实际的文件
+     */
+
+    public static java.io.File getRealFileName(String baseDir, String absFileName) {
+        Log.i(TAG, "baseDir=" + baseDir + "------absFileName="
+
+                + absFileName);
+
+        absFileName = absFileName.replace("\\", "/");
+
+        Log.i(TAG, "absFileName=" + absFileName);
+
+        String[] dirs = absFileName.split("/");
+
+        Log.i(TAG, "dirs=" + dirs);
+
+        java.io.File ret = new java.io.File(baseDir);
+
+        String substr = null;
+
+        if (dirs.length > 1) {
+            for (int i = 0; i < dirs.length - 1; i++) {
+                substr = dirs[i];
+
+                ret = new java.io.File(ret, substr);
+
+            }
+
+            if (!ret.exists()) {
+                ret.mkdirs();
+            }
+
+            substr = dirs[dirs.length - 1];
+
+            ret = new java.io.File(ret, substr);
+
+            return ret;
+
+        } else {
+            ret = new java.io.File(ret, absFileName);
+
+        }
+
+        return ret;
+
+    }
+
+    private void loadZip(String zipPath, int versionCode) {
+        try {
+            String string = new String();
+            ZipFile zip = new ZipFile(new java.io.File(zipPath));
+            ZipEntry ze = zip.getEntry("path.txt");
+            if (ze != null) {
+                Log.d("print", "已经查找到该文件");
+                // 读取目标对象
+                Scanner scanner = new Scanner(zip.getInputStream(ze));
+                if (scanner.hasNextLine()) {
+                    string = scanner.nextLine();
+                }
+                scanner.close();
+                zip.close();
+//                deleteFolder(string);
+                if (upZipFile(zipPath, string)) {
+                    containsConfigFile = false;
+                    SPUtils.asyncPutData("configVersion", versionCode);
+                    String launcherApkPath = Environment.getExternalStorageDirectory().getPath() + "/launcher.apk";
+                    if (!StringUtils.isEmpty(launcherApkPath)) {
+                        ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), launcherApkPath);
+                    }
+                }
+            } else {
+                Log.d("print", "该文件不存在");
+            }
+        } catch (
+                Exception e) {
             e.printStackTrace();
         }
     }
 
+
     /**
-     * 解压zip文件到指定目录
-     * unzip(new File("1.zip"),new File(Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"test"))
+     * 删除单个文件
+     *
+     * @param filePath 被删除文件的文件名
+     * @return 文件删除成功返回true，否则返回false
      */
-    public static void unzip(java.io.File source, java.io.File dest, int versionCode) throws IOException {
-        ZipFile zipFile = new ZipFile(String.valueOf(source));
-        try {
-            if (!dest.exists()) {
-                dest.mkdirs();
-            }
-            ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(source)));
-            ZipEntry entry;
-            byte[] buffer = new byte[1024];
-            while ((entry = zis.getNextEntry()) != null) {
-                String filename = entry.getName();
-                //排除MACOS环境下生成的隐藏文件
-                if (filename.contains("__MACOSX")) {
-                } else {
-                    if (entry.isDirectory()) {
-                        new java.io.File(dest, filename).mkdirs();
-                        continue;
-                    }
-                    InputStream inputStream = zipFile.getInputStream(entry);
-                    int len;
-                    try (FileOutputStream outputStream = new FileOutputStream(new java.io.File(dest, filename))) {
-                        while ((len = inputStream.read(buffer)) >= 0) {
-                            outputStream.write(buffer, 0, len);
-                        }
-                        outputStream.flush();
-                        inputStream.close();
-                    }
+    public boolean deleteSingleFile(String filePath) {
+        java.io.File file = new java.io.File(filePath);
+        if (file.isFile() && file.exists()) {
+            return file.delete();
+        }
+        return false;
+    }
+
+    /**
+     * 删除文件夹以及目录下的文件
+     *
+     * @param filePath 被删除目录的文件路径
+     * @return 目录删除成功返回true，否则返回false
+     */
+    public boolean deleteDirectory(String filePath) {
+        boolean flag = false;
+        //如果filePath不以文件分隔符结尾，自动添加文件分隔符
+        if (!filePath.endsWith(java.io.File.separator)) {
+            filePath = filePath + java.io.File.separator;
+        }
+        java.io.File dirFile = new java.io.File(filePath);
+        if (!dirFile.exists() || !dirFile.isDirectory()) {
+            return false;
+        }
+        flag = true;
+        java.io.File[] files = dirFile.listFiles();
+        //遍历删除文件夹下的所有文件(包括子目录)
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isFile()) {
+                //删除子文件
+                flag = deleteFile(files[i].getAbsolutePath());
+                if (!flag) {
+                    break;
                 }
-                zis.closeEntry();
+            } else {
+                //删除子目录
+                flag = deleteDirectory(files[i].getAbsolutePath());
+                if (!flag) {
+                    break;
+                }
             }
-            SPUtils.asyncPutData("configVersion", versionCode);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            zipFile.close();
+        }
+        if (!flag) {
+            return false;
+        }
+        //删除当前空目录
+        return dirFile.delete();
+    }
+
+    /**
+     * 根据路径删除指定的目录或文件，无论存在与否
+     *
+     * @param filePath 要删除的目录或文件
+     * @return 删除成功返回 true，否则返回 false。
+     */
+    public boolean deleteFolder(String filePath) {
+        java.io.File file = new java.io.File(filePath);
+        if (!file.exists()) {
+            return false;
+        } else {
+            if (file.isFile()) {
+                // 为文件时调用删除文件方法
+                return deleteFile(filePath);
+            } else {
+                // 为目录时调用删除目录方法
+                return deleteDirectory(filePath);
+            }
         }
     }
 
@@ -253,6 +473,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     file.setFileName(systemUpdateBean.getApp_name() + ".zip");
                     if (systemUpdateBean.getFormat() == 1) {
                         file.setVersionCode(systemUpdateBean.getVersion_code());
+                        file.setFileName("ansystem.zip");
+                        containsConfigFile = true;
                     }
                 } else {
                     file.setFileName(systemUpdateBean.getApp_name());
@@ -274,13 +496,17 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 if (!StringUtils.isEmpty(systemUpdateBean.getApp_info().getPackage_name())) {
                     file.setPackName(systemUpdateBean.getApp_info().getPackage_name());
                 }
-              if (systemUpdateBean.getFormat() == 3) {
+                if (systemUpdateBean.getFormat() == 3) {
                     file.setFormat(systemUpdateBean.getFormat());
                     appList.add(file);
                     //跳过ota应用
                     continue;
                 } else if ((systemUpdateBean.getFormat() == 1 && (int) SPUtils.getData("configVersion", 0) >= systemUpdateBean.getVersion_code())
-                        || AppUtils.getVersionCode(this, file.getPackName()) >= systemUpdateBean.getVersion_code()) {
+                        || (file.getPackName() != null && AppUtils.getVersionCode(this, file.getPackName()) >= systemUpdateBean.getVersion_code())) {
+                    if (systemUpdateBean.getFormat() == 1) {
+                        //配置文件已经是最新
+                        containsConfigFile = false;
+                    }
                     file.setFormat(4);
                     appList.add(file);
                     continue;
@@ -344,7 +570,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     //跳过ota应用
                     continue;
                 } else if ((otherUpdateBean.getFormat() == 1 && (int) SPUtils.getData("configVersion", 0) >= otherUpdateBean.getVersion_code())
-                        || AppUtils.getVersionCode(this, file.getPackName()) >= otherUpdateBean.getVersion_code()) {
+                        || (file.getPackName() != null && AppUtils.getVersionCode(this, file.getPackName()) >= otherUpdateBean.getVersion_code())) {
                     file.setFormat(4);
                     otherList.add(file);
                     continue;
@@ -513,11 +739,13 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 systemAdapter.notifyItemChanged(i);
                                 LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                                 String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
-                                if (file.getFormat() == 2) {
+                                if (file.getPackName() != null && file.getPackName().equals(AppConstants.LAUNCHER_PACKAGE_NAME) && containsConfigFile) {
+                                } else if (file.getFormat() == 2) {
                                     ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
                                 } else if (file.getFormat() == 1) {
                                     if (!StringUtils.isEmpty(apkPath)) {
-                                        loadZip(apkPath, file.getVersionCode());
+                                        ToastUtils.showLong(UpdateActivity.this, "当前正在解压配置文件，请稍等..请不要退出当前页面");
+                                        new Thread(() -> loadZip(apkPath, file.getVersionCode())).start();
                                     }
                                 }
                             }
@@ -581,6 +809,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
             }
         }
+
     }
 
     /**
