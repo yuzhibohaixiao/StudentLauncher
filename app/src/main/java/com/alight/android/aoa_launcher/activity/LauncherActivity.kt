@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import cn.jpush.android.api.JPushInterface
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
+import com.alight.android.aoa_launcher.common.bean.BaseBean
 import com.alight.android.aoa_launcher.common.bean.JPushBindBean
 import com.alight.android.aoa_launcher.common.bean.TokenMessage
 import com.alight.android.aoa_launcher.common.bean.TokenPair
@@ -356,7 +357,20 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
                 if (StringUtils.isEmpty(tokenPair?.token)) {
                     getPresenter().getLocationAndWeather()
                 }
+            } else if (any is JPushBindBean) {
+                if (any.code == 201) {
+                    heartbeat()
+                }
             }
+        }
+    }
+
+    private fun heartbeat() {
+        GlobalScope.launch(Dispatchers.IO) {
+            getPresenter().getModel(Urls.HEART_BEAT, hashMapOf(), BaseBean::class.java)
+            //每15秒调用一次打点接口
+            delay(1000 * 15)
+            heartbeat()
         }
     }
 
