@@ -18,10 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import cn.jpush.android.api.JPushInterface
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
-import com.alight.android.aoa_launcher.common.bean.BaseBean
-import com.alight.android.aoa_launcher.common.bean.JPushBindBean
-import com.alight.android.aoa_launcher.common.bean.TokenMessage
-import com.alight.android.aoa_launcher.common.bean.TokenPair
+import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.common.i.LauncherListener
@@ -152,7 +149,6 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
             ),
             JPushBindBean::class.java
         )
-
     }
 
     private fun noNetworkInit() {
@@ -416,6 +412,55 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
             )
             //游戏
             R.id.iv_game_launcher -> getPresenter().showDialog(dialog!!, AppConstants.GAME_APP)
+/*
+            R.id.iv_game_launcher -> {
+                var intent = Intent("com.alight.trtcav.WindowActivity")
+                var json = "{\n" +
+                        "    \"extras\":\"\",\n" +
+                        "    \"id\":9180820315017280000000000000000000000,\n" +
+                        "    \"intent_url\":\"87://ar\",\n" +
+                        "    \"message\":{\n" +
+                        "        \"fromUserId\":301,\n" +
+                        "        \"fromUserInfo\":{\n" +
+                        "            \"avatar\":\"https://thirdwx.qlogo.cn/mmopen/vi_32/RqGtKcj2577SAw82p0hibopIpmXtPicKibEDhiakpeu9DXpS7ViaibaAUfaZmRKM3XW2DeezcmuRoE6KzicHtGfPQ4CLQ/132\",\n" +
+                        "            \"birthday\":0,\n" +
+                        "            \"city\":\"朝阳\",\n" +
+                        "            \"country\":\"中国\",\n" +
+                        "            \"create_time\":\"2021-09-05 21:59:24\",\n" +
+                        "            \"gender\":2,\n" +
+                        "            \"id\":301,\n" +
+                        "            \"is_active\":true,\n" +
+                        "            \"language\":null,\n" +
+                        "            \"name\":\"@\",\n" +
+                        "            \"phone\":\"17336332639\",\n" +
+                        "            \"province\":\"北京\",\n" +
+                        "            \"update_time\":\"2021-10-27 15:52:17\"\n" +
+                        "        },\n" +
+                        "        \"roomId\":9,\n" +
+                        "        \"type\":\"video\",\n" +
+                        "        \"userId\":330\n" +
+                        "    },\n" +
+                        "    \"title\":\"@ 打来了电话!\",\n" +
+                        "    \"trace\":{\n" +
+                        "        \"dst_id\":-1,\n" +
+                        "        \"dst_platform\":-1,\n" +
+                        "        \"src_id\":-1,\n" +
+                        "        \"src_platform\":-1\n" +
+                        "    },\n" +
+                        "    \"type\":0\n" +
+                        "}"
+                val callArBean = Gson().fromJson(json, CallArBean::class.java)
+                intent.putExtra("parentId", callArBean.message.fromUserId.toString())
+                intent.putExtra("parentName", callArBean.message.fromUserInfo.name)
+                intent.putExtra("parentAvatar", callArBean.message.fromUserInfo.avatar)
+                intent.putExtra("roomId", callArBean.message.roomId)
+                intent.putExtra("childId", AccountUtil.getCurrentUser().userId.toString())
+                intent.putExtra("called", 2)
+                intent.putExtra("token", AccountUtil.getCurrentUser().token)
+                intent.putExtra("callType", callArBean.message.type)
+                startActivity(intent)
+            }
+*/
             //其他
             R.id.iv_other_launcher -> getPresenter().showDialog(dialog!!, AppConstants.OTHER_APP)
             //音视频

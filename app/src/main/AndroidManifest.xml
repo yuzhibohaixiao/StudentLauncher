@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.alight.android.aoa_launcher"
-    android:persistent="true"
-    >
+    android:persistent="true">
 
     <!--   android:sharedUserId="android.uid.system"-->
     <uses-sdk tools:overrideLibrary="com.alight.ahwcx.ahwsdk,com.common.bridge" />
@@ -243,7 +242,6 @@
             </intent-filter>
         </receiver>
 
-<!--
         <receiver
             android:name=".common.broadcast.JPushDefaultReceiver"
             android:enabled="true"
@@ -255,10 +253,10 @@
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
+
                 <category android:name="com.alight.android.aoa_launcher" />
             </intent-filter>
         </receiver>
--->
 
         <!-- User defined. 用户自定义 Receiver 接收被拉起回调-->
         <!-- 自定义 Receiver 组件，继承cn.jpush.android.service.WakedResultReceiver类,复写onWake(int wakeType)或 onWake(Context context, int wakeType)方法以监听被拉起 -->
@@ -270,18 +268,18 @@
         </receiver>
 
         <!--Required SDK核心功能 since 3.3.0-->
-         <activity
-             android:name="cn.jpush.android.service.JNotifyActivity"
-             android:exported="true"
-             tools:replace="android:exported,theme"
-             android:taskAffinity="jpush.custom"
-             android:theme="@android:style/Theme.Translucent.NoTitleBar">
-             <intent-filter>
-                 <action android:name="cn.jpush.android.intent.JNotifyActivity" />
-                 <category android:name="android.intent.category.DEFAULT" /><!--Required SDK核心功能 since 4.2.2-->
-                 <category android:name="com.alight.android.aoa_launcher" />
-             </intent-filter>
-         </activity>
+        <activity
+            android:name="cn.jpush.android.service.JNotifyActivity"
+            android:exported="true"
+            android:taskAffinity="jpush.custom"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            tools:replace="android:exported,theme">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.JNotifyActivity" />
+                <category android:name="android.intent.category.DEFAULT" /><!--Required SDK核心功能 since 4.2.2-->
+                <category android:name="com.alight.android.aoa_launcher" />
+            </intent-filter>
+        </activity>
 
         <!-- Required. For publish channel feature -->
         <!-- JPUSH_CHANNEL 是为了方便开发者统计 APK 分发渠道。-->
