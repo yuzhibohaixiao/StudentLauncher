@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.alight.android.aoa_launcher.common.bean.ArBean;
 import com.alight.android.aoa_launcher.common.bean.CallArBean;
-import com.alight.android.aoa_launcher.common.bean.CallVideoBean;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;
 import com.alight.android.aoa_launcher.utils.AccountUtil;
 import com.alight.android.aoa_launcher.utils.SPUtils;
