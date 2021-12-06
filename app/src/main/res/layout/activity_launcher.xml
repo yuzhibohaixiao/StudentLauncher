@@ -65,19 +65,20 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="213dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="86.5dp"
         android:orientation="horizontal">
 
         <FrameLayout
-            android:layout_width="165dp"
-            android:layout_height="wrap_content">
+            android:layout_width="195dp"
+            android:layout_height="450dp"
+            android:layout_marginStart="18dp">
 
             <LinearLayout
                 android:layout_width="157.5dp"
-                android:layout_height="322.5dp"
-                android:layout_marginStart="18dp"
+                android:layout_height="350dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="14.5dp"
                 android:background="@drawable/launcher_left_bg"
                 android:orientation="vertical">
@@ -104,6 +105,7 @@
 
 
                 <TextView
+                    android:id="@+id/tv_mathematics_launcher"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -113,6 +115,7 @@
 
 
                 <TextView
+                    android:id="@+id/tv_english_launcher"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -122,6 +125,7 @@
 
 
                 <TextView
+                    android:id="@+id/tv_quality_launcher"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -131,45 +135,49 @@
 
             </LinearLayout>
 
-            <!--     <ImageView
+            <ImageView
                 android:id="@+id/iv_ar_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ar_launcher_left" />
 
             <ImageView
                 android:id="@+id/iv_chinese_launcher"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48.5dp"
+                android:layout_marginTop="65dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/chinese_launcher_left" />
+                android:src="@drawable/chinese_launcher_left"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_mathematics_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="105dp"
+                android:layout_marginTop="135dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/mathematics_launcher_left" />
+                android:src="@drawable/mathematics_launcher_left"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_english_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="163dp"
+                android:layout_marginTop="205dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/english_launcher_left" />
+                android:src="@drawable/english_launcher_left"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_quality_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="224.5dp"
+                android:layout_marginTop="275dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/quality_development_launcher_left" />
--->
+                android:src="@drawable/quality_development_launcher_left"
+                android:visibility="gone" />
         </FrameLayout>
     </LinearLayout>
 </FrameLayout>
