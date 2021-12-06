@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/launcher_bg_new">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="23.5dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/top_ip_img" />
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="37.5dp"
+            android:layout_marginStart="14.5dp"
+            android:layout_marginBottom="24.5dp"
+            android:background="@drawable/new_launcher_top_text_bg"
+            android:gravity="center"
+            android:text="今天有10项学习计划，已完成3/10项目，加油哟!"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="174dp"
+            android:layout_marginTop="15dp"
+            android:drawableTop="@drawable/task"
+            android:drawablePadding="3dp"
+            android:text="任务挑战"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="93.5dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="31.5dp"
+            android:background="@drawable/white_bg_oval"
+            android:gravity="center"
+            android:text="一年级上"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="27.5dp"
+            android:layout_marginTop="27.5dp"
+            android:src="@drawable/splash_boy" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10.5dp"
+            android:text="深小光"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="86.5dp"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="165dp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="157.5dp"
+                android:layout_height="322.5dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="14.5dp"
+                android:background="@drawable/launcher_left_bg"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/tv_ar_launcher"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="AR学"
+                    android:textSize="18sp" />
+
+
+                <TextView
+                    android:id="@+id/tv_chinese_launcher"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="语文"
+                    android:textSize="18sp" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="数学"
+                    android:textSize="18sp" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="英语"
+                    android:textSize="18sp" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="素质拓展"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <!--     <ImageView
+                android:id="@+id/iv_ar_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ar_launcher_left" />
+
+            <ImageView
+                android:id="@+id/iv_chinese_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48.5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/chinese_launcher_left" />
+
+            <ImageView
+                android:id="@+id/iv_mathematics_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="105dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/mathematics_launcher_left" />
+
+            <ImageView
+                android:id="@+id/iv_english_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="163dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/english_launcher_left" />
+
+            <ImageView
+                android:id="@+id/iv_quality_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="224.5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/quality_development_launcher_left" />
+-->
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

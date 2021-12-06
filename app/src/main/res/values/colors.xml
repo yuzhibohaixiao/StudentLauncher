@@ -16,5 +16,7 @@
     <color name="launcher_purple">#545492</color>
     <color name="gray_bg">#1a000000</color>
     <color name="transparent">#00000000</color>
+    <color name="celadon">#E2F7F4</color>
+    <color name="blue_green">#28BCB6</color>
 
 </resources>

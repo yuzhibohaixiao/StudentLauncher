@@ -27,9 +27,13 @@ public class UpgradeApkReceiver extends BroadcastReceiver {
                 myIntent.setComponent(componentName);
                 context.startService(myIntent);
             } else if (packageName.equals(AppConstants.LAUNCHER_PACKAGE_NAME)) {
-                Intent myIntent = new Intent(context, LauncherActivity.class);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(myIntent);
+                try {
+                    Intent myIntent = new Intent(context, LauncherActivity.class);
+                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(myIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
