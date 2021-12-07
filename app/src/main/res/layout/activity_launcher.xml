@@ -185,11 +185,45 @@
                 android:visibility="gone" />
         </FrameLayout>
 
+        <FrameLayout
+            android:visibility="gone"
+            android:id="@+id/fl_center_launcher"
+            android:layout_width="wrap_content"
+            android:layout_height="350dp"
+            android:layout_marginStart="18dp"
+            android:background="@drawable/launcher_syn_learn_bg">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_center_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginTop="70dp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:visibility="gone"
+            android:id="@+id/fl_right_launcher"
+            android:layout_width="wrap_content"
+            android:layout_height="350dp"
+            android:layout_marginStart="45.5dp"
+            android:background="@drawable/launcher_instruction_after_class_bg">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_right_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="63dp" />
+        </FrameLayout>
+
         <LinearLayout
+            android:id="@+id/ll_ar_launcher1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="33dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -237,19 +271,23 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/iv_ip_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="91.5dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ip_img" />
+            android:src="@drawable/ip_img"
+            android:visibility="visible" />
 
         <LinearLayout
+            android:id="@+id/ll_ar_launcher2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:gravity="end"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -298,11 +336,13 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_ar_launcher3"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:layout_marginStart="38dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -340,9 +380,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/btn_red_normal"
                 android:paddingStart="19.5dp"
                 android:paddingTop="12.5dp"
-                android:background="@drawable/btn_red_normal"
                 android:text="收藏夹"
                 android:textColor="@color/white"
                 android:textSize="14sp" />

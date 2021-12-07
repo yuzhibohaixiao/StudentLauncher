@@ -47,6 +47,7 @@ import java.util.*
 
 
 /**
+ * @author wangzhe
  * Launcher主页
  */
 class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener, INetEvent {

@@ -53,5 +53,11 @@ class AppConstants {
 
         //配置文件的解压路径
         const val CONFIG_PATH = "/data/media/0/ansystem"
+
+        const val LAUNCHER_TYPE_AR = "launcher_type_ar"
+        const val LAUNCHER_TYPE_CHINESE = "launcher_type_chinese"
+        const val LAUNCHER_TYPE_MATHEMATICS = "launcher_type_mathematics"
+        const val LAUNCHER_TYPE_ENGLISH = "launcher_type_english"
+        const val LAUNCHER_TYPE_QUALITY = "launcher_type_quality"
     }
 }
