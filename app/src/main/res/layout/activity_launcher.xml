@@ -186,28 +186,29 @@
         </FrameLayout>
 
         <FrameLayout
-            android:visibility="gone"
             android:id="@+id/fl_center_launcher"
             android:layout_width="wrap_content"
-            android:layout_height="350dp"
+            android:layout_height="365dp"
             android:layout_marginStart="18dp"
-            android:background="@drawable/launcher_syn_learn_bg">
+            android:background="@drawable/launcher_syn_learn_bg"
+            android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_center_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="44dp"
-                android:layout_marginTop="70dp" />
+                android:layout_marginTop="70dp"
+                android:scrollbars="vertical" />
         </FrameLayout>
 
         <FrameLayout
-            android:visibility="gone"
             android:id="@+id/fl_right_launcher"
             android:layout_width="wrap_content"
-            android:layout_height="350dp"
+            android:layout_height="360dp"
             android:layout_marginStart="45.5dp"
-            android:background="@drawable/launcher_instruction_after_class_bg">
+            android:background="@drawable/launcher_instruction_after_class_bg"
+            android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_right_launcher"
@@ -242,7 +243,7 @@
                 android:background="@drawable/btn_purple_top_small"
                 android:paddingStart="21.5dp"
                 android:paddingTop="12.5dp"
-                android:text="查单词"
+                android:text="查字词"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 

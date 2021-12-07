@@ -2,11 +2,14 @@ package com.alight.android.aoa_launcher.activity
 
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.LauncherCenterAdapter
+import com.alight.android.aoa_launcher.ui.adapter.LauncherQualityCenterAdapter
+import com.alight.android.aoa_launcher.ui.adapter.LauncherRightAdapter
 import kotlinx.android.synthetic.main.activity_launcher.*
 
 
@@ -17,6 +20,8 @@ import kotlinx.android.synthetic.main.activity_launcher.*
 class NewLauncherActivity : BaseActivity(), View.OnClickListener {
 
     private var launcherCenterAdapter: LauncherCenterAdapter? = null
+    private var launcherQualityCenterAdapter: LauncherQualityCenterAdapter? = null
+    private var launcherRightAdapter: LauncherRightAdapter? = null
 
     override fun setListener() {
     }
@@ -93,25 +98,46 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener {
         fl_right_launcher.visibility = if (isShow) View.GONE else View.VISIBLE
         //不为Ar页面
         if (!isShow) {
-            setAdapterUI(launcherType)
             if (launcherType == AppConstants.LAUNCHER_TYPE_QUALITY) {
                 fl_center_launcher.setBackgroundResource(R.drawable.launcher_art_bg)
                 fl_right_launcher.setBackgroundResource(R.drawable.launcher_think_bg)
+                setQualityAdapterUI()
             } else {
                 fl_center_launcher.setBackgroundResource(R.drawable.launcher_syn_learn_bg)
                 fl_right_launcher.setBackgroundResource(R.drawable.launcher_instruction_after_class_bg)
+                setAdapterUI(launcherType)
             }
+            setRightAdapter(launcherType)
         }
     }
 
     private fun setAdapterUI(launcherType: String) {
         if (launcherCenterAdapter == null) {
             launcherCenterAdapter = LauncherCenterAdapter()
-            rv_center_launcher.layoutManager = GridLayoutManager(this, 3)
-            rv_center_launcher.adapter = launcherCenterAdapter
         }
+        rv_center_launcher.layoutManager = GridLayoutManager(this, 3)
+        rv_center_launcher.adapter = launcherCenterAdapter
         launcherCenterAdapter?.setShowType(launcherType)
 
+    }
+
+    private fun setRightAdapter(launcherType: String) {
+        if (launcherRightAdapter == null) {
+            val linearLayoutManager = LinearLayoutManager(this)
+            linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+            rv_right_launcher.layoutManager = linearLayoutManager
+            launcherRightAdapter = LauncherRightAdapter()
+            rv_right_launcher.adapter = launcherRightAdapter
+        }
+        launcherRightAdapter?.setShowType(launcherType)
+    }
+
+    private fun setQualityAdapterUI() {
+        if (launcherQualityCenterAdapter == null) {
+            launcherQualityCenterAdapter = LauncherQualityCenterAdapter()
+        }
+        rv_center_launcher.layoutManager = GridLayoutManager(this, 2)
+        rv_center_launcher.adapter = launcherQualityCenterAdapter
     }
 
     private fun showLeftSelectUI(id: Int) {
