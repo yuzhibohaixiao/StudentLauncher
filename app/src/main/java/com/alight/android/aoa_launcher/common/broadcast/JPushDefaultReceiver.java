@@ -36,7 +36,7 @@ public class JPushDefaultReceiver extends BroadcastReceiver {
                 CallArBean callArBean = new Gson().fromJson(json, CallArBean.class);
                 Intent intent2 = new Intent("com.alight.trtcav.WindowActivity");
                 intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent2.putExtra("parentId", callArBean.getMessage().getFromUserInfo().toString());
+                intent2.putExtra("parentId", callArBean.getMessage().getFromUserId() + "");
                 intent2.putExtra("parentName", callArBean.getMessage().getFromUserInfo().getName());
                 intent2.putExtra("parentAvatar", callArBean.getMessage().getFromUserInfo().getAvatar());
                 intent2.putExtra("roomId", callArBean.getMessage().getRoomId());
