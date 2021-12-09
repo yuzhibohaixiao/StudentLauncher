@@ -115,6 +115,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         tv_favorite_launcher.setOnClickListener(this)
         tv_study_plan.setOnClickListener(this)
         tv_call_parent.setOnClickListener(this)
+
+        iv_user_icon_new_launcher.setOnClickListener(this)
+        tv_user_name_new_launcher.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -416,7 +419,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
             }
             //呼叫家长
-            R.id.tv_call_parent
+            R.id.tv_call_parent, R.id.iv_user_icon_new_launcher, R.id.tv_user_name_new_launcher
             -> {
                 if (tokenPair == null) return
                 var intent = Intent(this, PersonCenterActivity::class.java)
