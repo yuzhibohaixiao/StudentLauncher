@@ -715,6 +715,15 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
+    fun startAoaApp(context: Context, appId: String, route: String) {
+        var intent = Intent("com.alight.android.aoa.entry")
+        intent.putExtra("action", "aos.app.open")
+        intent.putExtra("appId", appId)
+        intent.putExtra("route", route)
+        intent.putExtra("params", "")
+        context.startActivity(intent)
+    }
+
     /**
      * 更新解析器
      */
