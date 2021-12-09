@@ -53,6 +53,10 @@ import org.greenrobot.eventbus.EventBus
  */
 class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener, INetEvent {
 
+    companion object {
+        lateinit var mINetEvent: INetEvent
+    }
+
     private var netState = 1
     private var tokenPair: TokenPair? = null
     private var launcherCenterAdapter: LauncherCenterAdapter? = null
@@ -185,6 +189,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
 
     override fun initData() {
+        mINetEvent = this
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         if (tokenPairCache.isNotEmpty()) {
             tokenPair = Gson().fromJson(tokenPairCache, TokenPair::class.java)
@@ -545,13 +550,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         when (netWorkState) {
             NetTools.NETWORK_NONE -> {
                 netState = 0
-                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa_offline)
                 EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络异常"));
                 Log.e(TAG, "onNetChanged:没有网络 ")
             }
             NetTools.NETWORK_MOBILE, NetTools.NETWORK_WIFI -> {
                 netState = 1
-                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
                 initAccountUtil()
                 EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
                 Log.e(TAG, "onNetChanged:网络正常 ")

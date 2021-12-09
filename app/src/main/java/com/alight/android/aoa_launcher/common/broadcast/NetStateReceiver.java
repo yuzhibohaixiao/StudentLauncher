@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
-import com.alight.android.aoa_launcher.activity.LauncherActivity;
+import com.alight.android.aoa_launcher.activity.NewLauncherActivity;
 import com.alight.android.aoa_launcher.net.INetEvent;
 import com.alight.android.aoa_launcher.net.NetTools;
 
@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class NetStateReceiver extends BroadcastReceiver {
     private static final String TAG = "NetStateReceiver";
-    private INetEvent mINetEvent = LauncherActivity.mINetEvent;
+    private INetEvent mINetEvent = NewLauncherActivity.mINetEvent;
 
     private static long WIFI_TIME = 0;
     private static long ETHERNET_TIME = 0;
