@@ -21,8 +21,11 @@ import com.alight.android.aoa_launcher.common.bean.JPushBindBean
 import com.alight.android.aoa_launcher.common.bean.TokenMessage
 import com.alight.android.aoa_launcher.common.bean.TokenPair
 import com.alight.android.aoa_launcher.common.constants.AppConstants
+import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.common.i.LauncherListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
+import com.alight.android.aoa_launcher.net.INetEvent
+import com.alight.android.aoa_launcher.net.NetTools
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.LauncherCenterAdapter
@@ -41,13 +44,14 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
+import org.greenrobot.eventbus.EventBus
 
 
 /**
  * @author wangzhe
  * 新的Launcher主页
  */
-class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener {
+class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener, INetEvent {
 
     private var netState = 1
     private var tokenPair: TokenPair? = null
@@ -533,6 +537,25 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             e.stackTraceToString()
         }
     }
+
+    override fun onNetChange(netWorkState: Int) {
+        when (netWorkState) {
+            NetTools.NETWORK_NONE -> {
+                netState = 0
+                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa_offline)
+                EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络异常"));
+                Log.e(TAG, "onNetChanged:没有网络 ")
+            }
+            NetTools.NETWORK_MOBILE, NetTools.NETWORK_WIFI -> {
+                netState = 1
+                iv_aoa_launcher.setImageResource(R.drawable.launcher_aoa)
+                initAccountUtil()
+                EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
+                Log.e(TAG, "onNetChanged:网络正常 ")
+            }
+        }
+    }
+
 
     override fun onConnect() {
     }
