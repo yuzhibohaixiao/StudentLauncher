@@ -403,16 +403,13 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
     }
 
     override fun onClick(view: View) {    //弹出自定义dialog
-        if (dialog == null)
-            dialog = CustomDialog(this, R.layout.dialog_app_launcher)
         when (view.id) {
             //教育
             R.id.iv_education_launcher -> getPresenter().showDialog(
-                dialog!!,
                 AppConstants.EDUCATION_APP
             )
             //游戏
-            R.id.iv_game_launcher -> getPresenter().showDialog(dialog!!, AppConstants.GAME_APP)
+            R.id.iv_game_launcher -> getPresenter().showDialog(AppConstants.GAME_APP)
 /*
             R.id.iv_game_launcher -> {
                 var intent = Intent("com.alight.trtcav.WindowActivity")
@@ -463,9 +460,9 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
             }
 */
             //其他
-            R.id.iv_other_launcher -> getPresenter().showDialog(dialog!!, AppConstants.OTHER_APP)
+            R.id.iv_other_launcher -> getPresenter().showDialog(AppConstants.OTHER_APP)
             //音视频
-            R.id.iv_video_launcher -> getPresenter().showDialog(dialog!!, AppConstants.MEDIA_APP)
+            R.id.iv_video_launcher -> getPresenter().showDialog(AppConstants.MEDIA_APP)
             //设置　
             R.id.iv_setting_launcher -> getPresenter().showSystemSetting()
             // 打开应用市场（安智）

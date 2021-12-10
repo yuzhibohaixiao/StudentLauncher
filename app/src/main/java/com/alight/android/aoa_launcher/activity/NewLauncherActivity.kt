@@ -53,10 +53,6 @@ import org.greenrobot.eventbus.EventBus
  */
 class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener, INetEvent {
 
-    companion object {
-        lateinit var mINetEvent: INetEvent
-    }
-
     private var netState = 1
     private var tokenPair: TokenPair? = null
     private var launcherCenterAdapter: LauncherCenterAdapter? = null
@@ -66,6 +62,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var TAG = "NewLauncherActivity"
     private var uri: Uri? = null
     private var splashCloseFlag = false
+
+    companion object {
+        lateinit var mINetEvent: INetEvent
+    }
 
     private val handler =
         Handler { msg ->
@@ -122,6 +122,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
         iv_user_icon_new_launcher.setOnClickListener(this)
         tv_user_name_new_launcher.setOnClickListener(this)
+        tv_all_app_launcher.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -431,6 +432,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 intent.putExtra("userInfo", tokenPair)
                 intent.putExtra("netState", netState)
                 activityResultLauncher?.launch(intent)
+            }
+            R.id.tv_all_app_launcher -> {
+                getPresenter().showDialog(AppConstants.ALL_APP)
             }
         }
     }

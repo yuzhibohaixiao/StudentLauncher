@@ -7,6 +7,7 @@ class AppConstants {
         const val EDUCATION_APP = "education_app"
         const val OTHER_APP = "other_app"
         const val NEW_USER = "new_user"
+        const val ALL_APP = "all_app"
 
         const val REGISTRATION_ID = "registration_id"
 

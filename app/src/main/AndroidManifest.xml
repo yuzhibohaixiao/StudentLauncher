@@ -49,6 +49,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
+        android:largeHeap="true"
         android:name=".application.LauncherApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
