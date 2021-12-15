@@ -13,6 +13,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cn.jpush.android.api.JPushInterface
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
@@ -495,7 +496,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 rv_quality_launcher.visibility = View.VISIBLE
                 if (qualityHorizontalAdapter == null) {
                     qualityHorizontalAdapter = QualityHorizontalAdapter()
-                    rv_quality_launcher.layoutManager = LinearLayoutManager(this)
+                    val linearLayoutManager = LinearLayoutManager(this)
+                    linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                    rv_quality_launcher.layoutManager = linearLayoutManager
                     rv_quality_launcher.adapter = qualityHorizontalAdapter
                 }
             }
