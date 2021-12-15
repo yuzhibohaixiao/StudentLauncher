@@ -456,7 +456,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 showArUI(AppConstants.LAUNCHER_TYPE_ENGLISH)
             }
             R.id.tv_quality_launcher -> {
-//                showArUI(AppConstants.LAUNCHER_TYPE_QUALITY)
+                showArUI(AppConstants.LAUNCHER_TYPE_QUALITY)
             }
         }
     }
@@ -497,15 +497,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     qualityHorizontalAdapter = QualityHorizontalAdapter()
                     rv_quality_launcher.layoutManager = LinearLayoutManager(this)
                     rv_quality_launcher.adapter = qualityHorizontalAdapter
-/*
-                    rv_quality_launcher.registerOnPageChangeCallback(object :
-                        ViewPager2.OnPageChangeCallback() {
-                        override fun onPageSelected(position: Int) {
-                            Log.d("vp2.onPage", position.toString());
-                            super.onPageSelected(position);
-                        }
-                    })
-*/
                 }
             }
 
