@@ -31,6 +31,7 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.LauncherCenterAdapter
 import com.alight.android.aoa_launcher.ui.adapter.LauncherQualityCenterAdapter
 import com.alight.android.aoa_launcher.ui.adapter.LauncherRightAdapter
+import com.alight.android.aoa_launcher.ui.adapter.QualityHorizontalAdapter
 import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -62,6 +63,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var TAG = "NewLauncherActivity"
     private var uri: Uri? = null
     private var splashCloseFlag = false
+    private var qualityHorizontalAdapter: QualityHorizontalAdapter? = null
 
     companion object {
         lateinit var mINetEvent: INetEvent
@@ -375,23 +377,23 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //查单词
             R.id.tv_cdc_launcher -> {
-                getPresenter().startAoaApp(this, "135", "/home")
+                getPresenter().startAoaApp(this, 135, "/home")
             }
             //查字词
             R.id.tv_czc_launcher -> {
-                getPresenter().startAoaApp(this, "134", "/home")
+                getPresenter().startAoaApp(this, 134, "/home")
             }
             //翻译-AOA翻译
             R.id.tv_translate_launcher -> {
-                getPresenter().startAoaApp(this, "138", "/app/138/home")
+                getPresenter().startAoaApp(this, 138, "/app/138/home")
             }
             //求助老师-AOA 的远程辅导页面
             R.id.tv_seek_help_launcher -> {
-                getPresenter().startAoaApp(this, "140", "/home/140")
+                getPresenter().startAoaApp(this, 140, "/home/140")
             }
             //答题-AOA搜题
             R.id.tv_answer_launcher -> {
-                getPresenter().startAoaApp(this, "139", "/apps/139/main")
+                getPresenter().startAoaApp(this, 139, "/apps/139/main")
             }
             //书本指读-九学王-AR指读
             R.id.tv_read_book_launcher -> {
@@ -401,23 +403,23 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //错题本-AOA收藏夹
             R.id.tv_wrong_topic_launcher -> {
-                getPresenter().startAoaApp(this, "141", "/app/141/home")
+                getPresenter().startAoaApp(this, 141, "/app/141/home")
             }
             //口算批改
             R.id.tv_kspg_launcher -> {
-                getPresenter().startAoaApp(this, "142", "/app/142/home")
+                getPresenter().startAoaApp(this, 142, "/app/142/home")
             }
             //语文作文批改
             R.id.tv_ywzwpg_launcher -> {
-                getPresenter().startAoaApp(this, "143", "/app/143/home")
+                getPresenter().startAoaApp(this, 143, "/app/143/home")
             }
             //英语作文批改
             R.id.tv_yyzwpg_launcher -> {
-                getPresenter().startAoaApp(this, "144", "/app/144/home")
+                getPresenter().startAoaApp(this, 144, "/app/144/home")
             }
             //收藏夹-AOA收藏夹
             R.id.tv_favorite_launcher -> {
-                getPresenter().startAoaApp(this, "141", "/app/141/home")
+                getPresenter().startAoaApp(this, 141, "/app/141/home")
             }
             //学习计划-AOA学习计划
             R.id.tv_study_plan
@@ -442,43 +444,71 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private fun showSelectUI(id: Int) {
         when (id) {
             R.id.tv_ar_launcher -> {
-                showArUI(true, AppConstants.LAUNCHER_TYPE_AR)
+                showArUI(AppConstants.LAUNCHER_TYPE_AR)
             }
             R.id.tv_chinese_launcher -> {
-                showArUI(false, AppConstants.LAUNCHER_TYPE_CHINESE)
+                showArUI(AppConstants.LAUNCHER_TYPE_CHINESE)
             }
             R.id.tv_mathematics_launcher -> {
-                showArUI(false, AppConstants.LAUNCHER_TYPE_MATHEMATICS)
+                showArUI(AppConstants.LAUNCHER_TYPE_MATHEMATICS)
             }
             R.id.tv_english_launcher -> {
-                showArUI(false, AppConstants.LAUNCHER_TYPE_ENGLISH)
+                showArUI(AppConstants.LAUNCHER_TYPE_ENGLISH)
             }
             R.id.tv_quality_launcher -> {
-                showArUI(false, AppConstants.LAUNCHER_TYPE_QUALITY)
+//                showArUI(AppConstants.LAUNCHER_TYPE_QUALITY)
             }
         }
     }
 
-    private fun showArUI(isShow: Boolean, launcherType: String) {
-        //隐藏ar的UI
-        ll_ar_launcher1.visibility = if (isShow) View.VISIBLE else View.GONE
-        ll_ar_launcher2.visibility = if (isShow) View.VISIBLE else View.GONE
-        ll_ar_launcher3.visibility = if (isShow) View.VISIBLE else View.GONE
-        iv_ip_image.visibility = if (isShow) View.VISIBLE else View.GONE
-        fl_center_launcher.visibility = if (isShow) View.GONE else View.VISIBLE
-        fl_right_launcher.visibility = if (isShow) View.GONE else View.VISIBLE
-        //不为Ar页面
-        if (!isShow) {
-            if (launcherType == AppConstants.LAUNCHER_TYPE_QUALITY) {
-                fl_center_launcher.setBackgroundResource(R.drawable.launcher_art_bg)
-                fl_right_launcher.setBackgroundResource(R.drawable.launcher_think_bg)
-                setQualityAdapterUI()
-            } else {
+    private fun showArUI(launcherType: String) {
+        when (launcherType) {
+            AppConstants.LAUNCHER_TYPE_AR -> {
+                ll_ar_launcher1.visibility = View.VISIBLE
+                ll_ar_launcher2.visibility = View.VISIBLE
+                ll_ar_launcher3.visibility = View.VISIBLE
+                iv_ip_image.visibility = View.VISIBLE
+                fl_center_launcher.visibility = View.GONE
+                fl_right_launcher.visibility = View.GONE
+                rv_quality_launcher.visibility = View.GONE
+            }
+            AppConstants.LAUNCHER_TYPE_CHINESE, AppConstants.LAUNCHER_TYPE_MATHEMATICS, AppConstants.LAUNCHER_TYPE_ENGLISH -> {
+                ll_ar_launcher1.visibility = View.GONE
+                ll_ar_launcher2.visibility = View.GONE
+                ll_ar_launcher3.visibility = View.GONE
+                iv_ip_image.visibility = View.GONE
+                fl_center_launcher.visibility = View.VISIBLE
+                fl_right_launcher.visibility = View.VISIBLE
+                rv_quality_launcher.visibility = View.GONE
                 fl_center_launcher.setBackgroundResource(R.drawable.launcher_syn_learn_bg)
                 fl_right_launcher.setBackgroundResource(R.drawable.launcher_instruction_after_class_bg)
                 setAdapterUI(launcherType)
+                setRightAdapter(launcherType)
             }
-            setRightAdapter(launcherType)
+            AppConstants.LAUNCHER_TYPE_QUALITY -> {
+                ll_ar_launcher1.visibility = View.GONE
+                ll_ar_launcher2.visibility = View.GONE
+                ll_ar_launcher3.visibility = View.GONE
+                iv_ip_image.visibility = View.GONE
+                fl_center_launcher.visibility = View.GONE
+                fl_right_launcher.visibility = View.GONE
+                rv_quality_launcher.visibility = View.VISIBLE
+                if (qualityHorizontalAdapter == null) {
+                    qualityHorizontalAdapter = QualityHorizontalAdapter()
+                    rv_quality_launcher.layoutManager = LinearLayoutManager(this)
+                    rv_quality_launcher.adapter = qualityHorizontalAdapter
+/*
+                    rv_quality_launcher.registerOnPageChangeCallback(object :
+                        ViewPager2.OnPageChangeCallback() {
+                        override fun onPageSelected(position: Int) {
+                            Log.d("vp2.onPage", position.toString());
+                            super.onPageSelected(position);
+                        }
+                    })
+*/
+                }
+            }
+
         }
     }
 

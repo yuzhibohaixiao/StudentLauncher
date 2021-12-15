@@ -219,11 +219,18 @@
                 android:layout_marginTop="63dp" />
         </FrameLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_quality_launcher"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:id="@+id/ll_ar_launcher1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="33dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -234,7 +241,7 @@
                 android:background="@drawable/btn_purple_top_big"
                 android:paddingStart="21.5dp"
                 android:paddingTop="12.5dp"
-                android:text="查单词"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -242,11 +249,11 @@
                 android:id="@+id/tv_czc_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="21dp"
                 android:background="@drawable/btn_purple_top_small"
                 android:paddingStart="21.5dp"
                 android:paddingTop="12.5dp"
-                android:text="查字词"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -254,11 +261,11 @@
                 android:id="@+id/tv_translate_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="21dp"
                 android:background="@drawable/btn_purple_bottom_small"
                 android:paddingStart="21.5dp"
                 android:paddingTop="12.5dp"
-                android:text="翻译"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -266,11 +273,11 @@
                 android:id="@+id/tv_seek_help_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="21dp"
                 android:background="@drawable/btn_purple_bottom_big"
                 android:paddingStart="21.5dp"
                 android:paddingTop="12.5dp"
-                android:text="求助"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -291,6 +298,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:gravity="end"
             android:orientation="vertical"
             android:visibility="visible">
@@ -302,7 +310,7 @@
                 android:background="@drawable/btn_blue_top_big"
                 android:paddingStart="21.5dp"
                 android:paddingTop="12.5dp"
-                android:text="答题"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -310,11 +318,11 @@
                 android:id="@+id/tv_read_book_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="21dp"
                 android:background="@drawable/btn_blue_top_small"
                 android:paddingStart="21.5dp"
                 android:paddingTop="12.5dp"
-                android:text="书本指读"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -323,11 +331,11 @@
                 android:id="@+id/tv_fun_card_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="21dp"
                 android:background="@drawable/btn_blue_bottom_small"
                 android:paddingStart="34dp"
                 android:paddingTop="12.5dp"
-                android:text="趣味卡牌"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -335,11 +343,11 @@
                 android:id="@+id/tv_wrong_topic_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="21dp"
                 android:background="@drawable/btn_blue_bottom_big"
                 android:paddingStart="43dp"
                 android:paddingTop="12.5dp"
-                android:text="错题本"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -352,16 +360,17 @@
             android:layout_gravity="end"
             android:layout_marginStart="38dp"
             android:orientation="vertical"
+            android:paddingTop="10dp"
             android:visibility="visible">
 
             <TextView
                 android:id="@+id/tv_kspg_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_red_ar"
+                android:background="@drawable/btn_oral_arithmetic_ar"
                 android:paddingStart="19.5dp"
                 android:paddingTop="12.5dp"
-                android:text="口算批改"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -369,11 +378,11 @@
                 android:id="@+id/tv_ywzwpg_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/btn_red_ar"
+                android:layout_marginTop="21dp"
+                android:background="@drawable/btn_chinese_ar"
                 android:paddingStart="19.5dp"
                 android:paddingTop="12.5dp"
-                android:text="语文作文批改"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -381,11 +390,11 @@
                 android:id="@+id/tv_yyzwpg_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/btn_red_ar"
+                android:layout_marginTop="21dp"
+                android:background="@drawable/btn_english_ar"
                 android:paddingStart="19.5dp"
                 android:paddingTop="12.5dp"
-                android:text="英语作文批改"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -393,11 +402,11 @@
                 android:id="@+id/tv_favorite_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/btn_red_normal"
+                android:layout_marginTop="21dp"
+                android:background="@drawable/btn_collect_ar"
                 android:paddingStart="19.5dp"
                 android:paddingTop="12.5dp"
-                android:text="收藏夹"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 

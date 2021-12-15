@@ -24,6 +24,7 @@ abstract class BaseFragment : Fragment(), IContract.IView {
     ): View? {
         inflate = View.inflate(context, getLayout(), null)
         initView()
+        setListener()
         return inflate
     }
 
@@ -34,6 +35,9 @@ abstract class BaseFragment : Fragment(), IContract.IView {
         mPresenter!!.onAttach(this)
         initData()
     }
+
+    //设置监听器
+    abstract fun setListener()
 
     abstract fun initPresenter(): PresenterImpl
 

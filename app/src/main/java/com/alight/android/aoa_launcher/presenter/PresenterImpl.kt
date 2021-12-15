@@ -722,13 +722,13 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
-    fun startAoaApp(context: Context, appId: String, route: String) {
+    fun startAoaApp(context: Context, appId: Int, route: String) {
         try {
             var intent = Intent("com.alight.android.aoa.entry")
             intent.putExtra("action", "aos.app.open")
             intent.putExtra("appId", appId)
             intent.putExtra("route", route)
-            intent.putExtra("params", "")
+            intent.putExtra("params", "{}")
             context.startActivity(intent)
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
