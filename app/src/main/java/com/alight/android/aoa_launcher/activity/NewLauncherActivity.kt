@@ -13,7 +13,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import cn.jpush.android.api.JPushInterface
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
@@ -120,12 +119,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         tv_ywzwpg_launcher.setOnClickListener(this)
         tv_yyzwpg_launcher.setOnClickListener(this)
         tv_favorite_launcher.setOnClickListener(this)
-        tv_study_plan.setOnClickListener(this)
-        tv_call_parent.setOnClickListener(this)
+        iv_study_plan.setOnClickListener(this)
+        iv_call_parent.setOnClickListener(this)
 
         iv_user_icon_new_launcher.setOnClickListener(this)
         tv_user_name_new_launcher.setOnClickListener(this)
-        tv_all_app_launcher.setOnClickListener(this)
+        iv_all_app_launcher.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -423,12 +422,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 getPresenter().startAoaApp(this, 141, "/app/141/home")
             }
             //学习计划-AOA学习计划
-            R.id.tv_study_plan
+            R.id.iv_study_plan
             -> {
 
             }
             //呼叫家长
-            R.id.tv_call_parent, R.id.iv_user_icon_new_launcher, R.id.tv_user_name_new_launcher
+            R.id.iv_call_parent, R.id.iv_user_icon_new_launcher, R.id.tv_user_name_new_launcher
             -> {
                 if (tokenPair == null) return
                 var intent = Intent(this, PersonCenterActivity::class.java)
@@ -436,7 +435,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 intent.putExtra("netState", netState)
                 activityResultLauncher?.launch(intent)
             }
-            R.id.tv_all_app_launcher -> {
+            R.id.iv_all_app_launcher -> {
                 getPresenter().showDialog(AppConstants.ALL_APP)
             }
         }

@@ -253,7 +253,6 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             sc_next_launcher_splash.visibility = View.VISIBLE
             tv_date_splash.visibility = View.GONE
             tv_skip_splash.visibility = View.VISIBLE
-            iv_splash_earth.visibility = View.GONE
             rv_select_child_splash.visibility = View.GONE
             sc_next_launcher_splash.visibility = View.VISIBLE
         } else {

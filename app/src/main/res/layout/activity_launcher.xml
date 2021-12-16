@@ -221,9 +221,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_quality_launcher"
-            android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/ll_ar_launcher1"
@@ -418,65 +418,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="8.5dp"
+        android:layout_marginBottom="27.5dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_study_plan"
+        <ImageView
+            android:id="@+id/iv_study_plan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/launcher_bottom_bg"
-            android:drawablePadding="7dp"
             android:gravity="center_horizontal"
-            android:text="学习计划"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:src="@drawable/launcher_study_plan" />
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/launcher_bottom_bg"
-            android:drawablePadding="7dp"
             android:gravity="center_horizontal"
-            android:text="音视频类"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:src="@drawable/launcher_av" />
 
-        <TextView
-            android:id="@+id/tv_call_parent"
+        <ImageView
+            android:id="@+id/iv_call_parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/launcher_bottom_bg"
-            android:drawablePadding="7dp"
             android:gravity="center_horizontal"
-            android:text="呼叫家长"
+            android:src="@drawable/launcher_call_parent"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="12sp" />
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/launcher_bottom_bg"
-            android:drawablePadding="7dp"
             android:gravity="center_horizontal"
-            android:text="应用市场"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:src="@drawable/launcher_app_store_bottom" />
 
-        <TextView
-            android:id="@+id/tv_all_app_launcher"
+        <ImageView
+            android:id="@+id/iv_all_app_launcher"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@drawable/launcher_bottom_bg"
-            android:drawablePadding="7dp"
             android:gravity="center_horizontal"
-            android:text="全部应用"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:src="@drawable/launcher_all_app" />
     </LinearLayout>
 </FrameLayout>
