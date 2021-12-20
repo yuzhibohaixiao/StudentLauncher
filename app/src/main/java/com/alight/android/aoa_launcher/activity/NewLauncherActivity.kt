@@ -155,6 +155,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     private fun initAccountUtil() {
+        if (AccountUtil.currentUserId != null)
+            return
         AccountUtil.register(this)
         val userId = SPUtils.getData(AppConstants.USER_ID, -1) as Int
         if (userId != -1) {
@@ -200,7 +202,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         //获取用户信息之前必须调用的初始化方法
         AccountUtil.run()
-//        initAccountUtil()
+        initAccountUtil()
         //初始化权限
         initPermission()
         //监听contentProvider是否被操作
