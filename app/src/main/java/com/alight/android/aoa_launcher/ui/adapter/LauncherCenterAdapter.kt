@@ -40,7 +40,8 @@ class LauncherCenterAdapter :
         AppTypeBean(R.drawable.gjyb, ""),
         AppTypeBean(R.drawable.wwjdc, ""),
         AppTypeBean(R.drawable.lccj, ""),
-        AppTypeBean(R.drawable.yyyf, "")
+        AppTypeBean(R.drawable.yyyf, ""),
+        AppTypeBean(R.drawable.aicp, "")
     )
     private val appTypeList4: ArrayList<AppTypeBean> = arrayListOf(
         AppTypeBean(R.drawable.launcher_yxkw, ""),
