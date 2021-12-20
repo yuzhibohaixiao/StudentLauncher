@@ -19,18 +19,18 @@ class LauncherRightAdapter :
             R.drawable.launcher_small_video,
             "",
             "精选素养视频",
-            R.drawable.launcher_small_video,
+            R.drawable.jxyd,
             "",
             "精选阅读"
         ), AppRightDoubleDataBean(
-            R.drawable.launcher_small_video,
+            R.drawable.zwsx,
             "",
             "作文赏析",
-            R.drawable.launcher_small_video,
+            R.drawable.jfyc,
             "",
             "近反义词"
         ), AppRightDoubleDataBean(
-            R.drawable.launcher_small_video,
+            R.drawable.zhbd,
             "",
             "中华宝典",
             0,
@@ -42,48 +42,27 @@ class LauncherRightAdapter :
         AppRightDoubleDataBean(
             R.drawable.launcher_small_video,
             "",
-            "精选素养视频",
-            R.drawable.launcher_small_video,
+            "精选奥数视频",
+            R.drawable.asxl,
             "",
-            "精选阅读"
+            "奥数训练"
         ), AppRightDoubleDataBean(
-            R.drawable.launcher_small_video,
+            R.drawable.yytxl,
             "",
-            "作文赏析",
-            R.drawable.launcher_small_video,
+            "应用题训练",
+            R.drawable.sdys,
             "",
-            "近反义词"
-        ), AppRightDoubleDataBean(
-            R.drawable.launcher_small_video,
-            "",
-            "中华宝典",
-            0,
-            "",
-            ""
+            "数的运算"
         )
     )
     private val appList3: ArrayList<AppRightDoubleDataBean> = arrayListOf(
         AppRightDoubleDataBean(
-            R.drawable.launcher_small_video,
+            R.drawable.wjdnxyy,
             "",
-            "精选素养视频",
-            R.drawable.launcher_small_video,
+            "外教带你学英语",
+            R.drawable.kyjj,
             "",
-            "精选阅读"
-        ), AppRightDoubleDataBean(
-            R.drawable.launcher_small_video,
-            "",
-            "作文赏析",
-            R.drawable.launcher_small_video,
-            "",
-            "近反义词"
-        ), AppRightDoubleDataBean(
-            R.drawable.launcher_small_video,
-            "",
-            "中华宝典",
-            0,
-            "",
-            ""
+            "口语交际"
         )
     )
     private val appList4: ArrayList<AppRightDoubleDataBean> = arrayListOf(
