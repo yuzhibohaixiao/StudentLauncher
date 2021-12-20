@@ -321,7 +321,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      */
     private fun getAppData(
         appType: String,
-        activity: LauncherActivity,
+        activity: Activity,
         pageSize: Int = 12
     ): List<List<AppBean>> {
         val datas: MutableList<AppBean> = ArrayList()
@@ -355,6 +355,14 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 "getAppData: ${resolveInfo.loadLabel(packageManager)} packageName${packageName} "
             )
             when {
+                appType == AppConstants.ALL_APP -> {
+                    datas.add(
+                        AppBean(
+                            resolveInfo.loadLabel(packageManager), packageName,
+                            resolveInfo.loadIcon(packageManager)
+                        )
+                    )
+                }
                 appType == AppConstants.MEDIA_APP && mediaAppPackageNames.contains(packageName) -> {
                     datas.add(
                         AppBean(
@@ -420,8 +428,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         return maps
     }
 
-    fun showDialog(dialog: CustomDialog, appType: String) {
-        val activity = getView() as LauncherActivity
+    fun showDialog(appType: String) {
+        val activity = getView() as Activity
+        var dialog = CustomDialog(activity, R.layout.dialog_app_launcher)
         val appBeans: List<List<AppBean>> = getAppData(appType, activity)
         if (appBeans.isEmpty()) {
             Toast.makeText(activity, R.string.no_app, Toast.LENGTH_LONG).show()
@@ -432,8 +441,6 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 activity,
                 appBeans
             )
-
-        val launcherActivity = getView() as LauncherActivity
 
         val viewPager = dialog.findViewById<ViewPager>(R.id.horizontalScrollView)
         val circlePageIndicator = dialog.findViewById<CirclePageIndicator>(R.id.circleIndicator)
@@ -712,6 +719,19 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
         close.setOnClickListener {
             updateDialog.dismiss()
+        }
+    }
+
+    fun startAoaApp(context: Context, appId: Int, route: String) {
+        try {
+            var intent = Intent("com.alight.android.aoa.entry")
+            intent.putExtra("action", "aos.app.open")
+            intent.putExtra("appId", appId)
+            intent.putExtra("route", route)
+            intent.putExtra("params", "{}")
+            context.startActivity(intent)
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
         }
     }
 

@@ -7,6 +7,7 @@ class AppConstants {
         const val EDUCATION_APP = "education_app"
         const val OTHER_APP = "other_app"
         const val NEW_USER = "new_user"
+        const val ALL_APP = "all_app"
 
         const val REGISTRATION_ID = "registration_id"
 
@@ -53,5 +54,16 @@ class AppConstants {
 
         //配置文件的解压路径
         const val CONFIG_PATH = "/data/media/0/ansystem"
+
+        const val LAUNCHER_TYPE_AR = "launcher_type_ar"
+        const val LAUNCHER_TYPE_CHINESE = "launcher_type_chinese"
+        const val LAUNCHER_TYPE_MATHEMATICS = "launcher_type_mathematics"
+        const val LAUNCHER_TYPE_ENGLISH = "launcher_type_english"
+        const val LAUNCHER_TYPE_QUALITY = "launcher_type_quality"
+
+        const val LAUNCHER_TYPE_QUALITY1 = "launcher_type_quality1"
+        const val LAUNCHER_TYPE_QUALITY2 = "launcher_type_quality2"
+        const val LAUNCHER_TYPE_QUALITY3 = "launcher_type_quality3"
+        const val LAUNCHER_TYPE_QUALITY4 = "launcher_type_quality4"
     }
 }

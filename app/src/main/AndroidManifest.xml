@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.alight.android.aoa_launcher"
-    android:sharedUserId="android.uid.system"
     android:persistent="true">
 
     <!--   android:sharedUserId="android.uid.system"-->
@@ -49,6 +48,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
+        android:largeHeap="true"
         android:name=".application.LauncherApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -65,7 +65,7 @@
             android:value="540" />
 
         <activity
-            android:name=".activity.LauncherActivity"
+            android:name=".activity.NewLauncherActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="landscape">
@@ -76,17 +76,40 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!--请添加这里的整个intent-filter区块，并确保其中只有一个data字段-->
             <intent-filter>
                 <data android:scheme="tingyun.42759" />
-                <!--请将 scheme 中的“tingyun.xxxx”替换为听云报表设置页面中的 URL Scheme-->
+<!--                &lt;!&ndash;请将 scheme 中的“tingyun.xxxx”替换为听云报表设置页面中的 URL Scheme&ndash;&gt;-->
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-
         </activity>
+        <!-- <activity
+              android:name=".activity.LauncherActivity"
+              android:configChanges="keyboardHidden|orientation|screenSize"
+              android:launchMode="singleTask"
+              android:screenOrientation="landscape">
+
+                          <intent-filter>
+                              <action android:name="android.intent.action.MAIN" />
+
+                              <category android:name="android.intent.category.HOME" />
+                              <category android:name="android.intent.category.DEFAULT" />
+                              <category android:name="android.intent.category.LAUNCHER" />
+                          </intent-filter>
+
+                &lt;!&ndash;请添加这里的整个intent-filter区块，并确保其中只有一个data字段&ndash;&gt;
+                <intent-filter>
+                    <data android:scheme="tingyun.42759" />
+                    &lt;!&ndash;请将 scheme 中的“tingyun.xxxx”替换为听云报表设置页面中的 URL Scheme&ndash;&gt;
+                    <action android:name="android.intent.action.VIEW" />
+
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                </intent-filter>
+
+            </activity>-->
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
