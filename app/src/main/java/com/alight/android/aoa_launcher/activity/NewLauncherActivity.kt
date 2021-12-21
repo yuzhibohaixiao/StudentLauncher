@@ -29,13 +29,13 @@ import com.alight.android.aoa_launcher.net.NetTools
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.LauncherCenterAdapter
-import com.alight.android.aoa_launcher.ui.adapter.LauncherQualityCenterAdapter
 import com.alight.android.aoa_launcher.ui.adapter.LauncherRightAdapter
 import com.alight.android.aoa_launcher.ui.adapter.QualityHorizontalAdapter
 import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_launcher.*
@@ -57,7 +57,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var netState = 1
     private var tokenPair: TokenPair? = null
     private var launcherCenterAdapter: LauncherCenterAdapter? = null
-    private var launcherQualityCenterAdapter: LauncherQualityCenterAdapter? = null
     private var launcherRightAdapter: LauncherRightAdapter? = null
     private var activityResultLauncher: ActivityResultLauncher<Intent>? = null
     private var TAG = "NewLauncherActivity"
@@ -127,6 +126,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         tv_user_name_new_launcher.setOnClickListener(this)
         iv_all_app_launcher.setOnClickListener(this)
         tv_dialog_launcher.setOnClickListener(this)
+        tv_read_book_launcher.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -379,6 +379,14 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 showLeftSelectUI(v.id)
                 showSelectUI(v.id)
             }
+            //书本指读（AR指读）
+            R.id.tv_read_book_launcher -> {
+                getPresenter().startActivity(
+                    this,
+                    "com.jxw.huiben",
+                    "com.jxw.huiben.activity.SplashActivity"
+                )
+            }
             //查单词
             R.id.tv_cdc_launcher -> {
                 getPresenter().startAoaApp(this, 135, "/home")
@@ -444,7 +452,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //选年级
             R.id.tv_dialog_launcher -> {
-                getPresenter().showSelectGradeDialog(this,tv_dialog_launcher)
+                getPresenter().showSelectGradeDialog(this, tv_dialog_launcher)
 
             }
         }
@@ -517,6 +525,13 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private fun setAdapterUI(launcherType: String) {
         if (launcherCenterAdapter == null) {
             launcherCenterAdapter = LauncherCenterAdapter()
+            launcherCenterAdapter?.setOnItemClickListener { adapter, view, position ->
+                val appPackName = launcherCenterAdapter!!.data[position].appPackName
+                val className = launcherCenterAdapter!!.data[position].className
+                if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className)){
+                    getPresenter().startActivity(this, appPackName, className)
+                }
+            }
         }
         rv_center_launcher.layoutManager = GridLayoutManager(this, 3)
         rv_center_launcher.adapter = launcherCenterAdapter

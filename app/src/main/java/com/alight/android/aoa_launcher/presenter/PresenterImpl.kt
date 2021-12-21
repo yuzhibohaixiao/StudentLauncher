@@ -729,6 +729,18 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
+    fun startActivity(context: Context, packName: String, className: String) {
+        try {
+            val intent = Intent()
+            val componentName =
+                ComponentName(packName, className)
+            intent.component = componentName
+            context.startActivity(intent)
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun startAoaApp(context: Context, appId: Int, route: String) {
         try {
             var intent = Intent("com.alight.android.aoa.entry")

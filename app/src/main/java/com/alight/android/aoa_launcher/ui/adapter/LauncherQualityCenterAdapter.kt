@@ -9,11 +9,11 @@ class LauncherQualityCenterAdapter :
     BaseQuickAdapter<AppTypeBean, BaseViewHolder>(R.layout.item_quality_art) {
 
     private val appList: ArrayList<AppTypeBean> = arrayListOf(
-        AppTypeBean(R.drawable.launcher_quality_art, ""),
-        AppTypeBean(R.drawable.launcher_quality_art, ""),
-        AppTypeBean(R.drawable.launcher_quality_art, ""),
-        AppTypeBean(R.drawable.launcher_quality_art, ""),
-        AppTypeBean(R.drawable.launcher_quality_art, "")
+        AppTypeBean(R.drawable.launcher_quality_art, "", ""),
+        AppTypeBean(R.drawable.launcher_quality_art, "", ""),
+        AppTypeBean(R.drawable.launcher_quality_art, "", ""),
+        AppTypeBean(R.drawable.launcher_quality_art, "", ""),
+        AppTypeBean(R.drawable.launcher_quality_art, "", "")
     )
 
     init {

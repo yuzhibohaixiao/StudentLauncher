@@ -191,7 +191,7 @@
             android:id="@+id/fl_center_launcher"
             android:layout_width="wrap_content"
             android:layout_height="365dp"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="28dp"
             android:background="@drawable/launcher_syn_learn_bg"
             android:visibility="gone">
 
@@ -210,7 +210,7 @@
             android:id="@+id/fl_right_launcher"
             android:layout_width="wrap_content"
             android:layout_height="360dp"
-            android:layout_marginStart="45.5dp"
+            android:layout_marginStart="55.5dp"
             android:background="@drawable/launcher_instruction_after_class_bg"
             android:visibility="gone">
 
@@ -232,7 +232,7 @@
             android:id="@+id/ll_ar_launcher1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="33dp"
+            android:layout_marginStart="43dp"
             android:layout_marginTop="10dp"
             android:orientation="vertical"
             android:visibility="visible">
@@ -290,7 +290,7 @@
             android:id="@+id/iv_ip_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="91.5dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ip_img"
@@ -300,7 +300,7 @@
             android:id="@+id/ll_ar_launcher2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:gravity="end"
             android:orientation="vertical"
@@ -361,7 +361,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:layout_marginStart="38dp"
+            android:layout_marginStart="48dp"
             android:orientation="vertical"
             android:paddingTop="10dp"
             android:visibility="visible">
