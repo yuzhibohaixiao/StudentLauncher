@@ -436,7 +436,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //学习计划-AOA学习计划
             R.id.iv_study_plan
             -> {
-
+                getPresenter().startAoaApp(this, 33, "/home")
             }
             //呼叫家长
             R.id.iv_call_parent, R.id.iv_user_icon_new_launcher, R.id.tv_user_name_new_launcher
@@ -528,7 +528,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             launcherCenterAdapter?.setOnItemClickListener { adapter, view, position ->
                 val appPackName = launcherCenterAdapter!!.data[position].appPackName
                 val className = launcherCenterAdapter!!.data[position].className
-                if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className)){
+                if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className)) {
                     getPresenter().startActivity(this, appPackName, className)
                 }
             }
