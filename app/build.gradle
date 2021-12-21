@@ -167,6 +167,8 @@ dependencies {
 
     implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
 
+    implementation 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'
+
 //    implementation 'com.github.rubensousa:previewseekbar:3.0.0'
     implementation 'com.xw.repo:bubbleseekbar:3.20-lite'
     implementation 'org.greenrobot:eventbus:3.1.1'

@@ -65,6 +65,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var splashCloseFlag = false
     private var qualityHorizontalAdapter: QualityHorizontalAdapter? = null
 
+
     companion object {
         lateinit var mINetEvent: INetEvent
     }
@@ -125,6 +126,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         iv_user_icon_new_launcher.setOnClickListener(this)
         tv_user_name_new_launcher.setOnClickListener(this)
         iv_all_app_launcher.setOnClickListener(this)
+        tv_dialog_launcher.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -440,6 +442,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             R.id.iv_all_app_launcher -> {
                 getPresenter().showDialog(AppConstants.ALL_APP)
             }
+            //选年级
+            R.id.tv_dialog_launcher -> {
+                getPresenter().showSelectGradeDialog(this,tv_dialog_launcher)
+
+            }
         }
     }
 
@@ -514,7 +521,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         rv_center_launcher.layoutManager = GridLayoutManager(this, 3)
         rv_center_launcher.adapter = launcherCenterAdapter
         launcherCenterAdapter?.setShowType(launcherType)
-
     }
 
     private fun setRightAdapter(launcherType: String) {
@@ -526,14 +532,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             rv_right_launcher.adapter = launcherRightAdapter
         }
         launcherRightAdapter?.setShowType(launcherType)
-    }
-
-    private fun setQualityAdapterUI() {
-        if (launcherQualityCenterAdapter == null) {
-            launcherQualityCenterAdapter = LauncherQualityCenterAdapter()
-        }
-        rv_center_launcher.layoutManager = GridLayoutManager(this, 2)
-        rv_center_launcher.adapter = launcherQualityCenterAdapter
     }
 
     private fun showLeftSelectUI(id: Int) {

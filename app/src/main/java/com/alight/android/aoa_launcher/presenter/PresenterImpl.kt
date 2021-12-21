@@ -16,6 +16,8 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -37,6 +39,7 @@ import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.*
+import com.example.zhouwei.library.CustomPopWindow
 import com.google.gson.Gson
 import com.qweather.sdk.bean.base.Code
 import com.qweather.sdk.bean.base.Lang
@@ -51,6 +54,7 @@ import com.viewpagerindicator.CirclePageIndicator
 import com.xuexiang.xupdate.entity.UpdateEntity
 import com.xuexiang.xupdate.listener.IUpdateParseCallback
 import com.xuexiang.xupdate.proxy.IUpdateParser
+import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.android.synthetic.main.dialog_update.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -64,6 +68,9 @@ import kotlin.collections.ArrayList
  * Created on 2021/5/12
  */
 class PresenterImpl : BasePresenter<IContract.IView>() {
+
+    private var mCustomPopWindow: CustomPopWindow? = null
+    private var gradeContent = "一年级上"
 
     private var TAG = "PresenterImpl"
     override fun <T> getModel(url: String, map: HashMap<String, Any>, cls: Class<T>) {
@@ -733,6 +740,92 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     * 处理弹出显示内容、点击事件等逻辑
+     * @param contentView
+     */
+    private fun handleLogic(contentView: View, tv_dialog_launcher: TextView) {
+        val listener = View.OnClickListener {
+            if (mCustomPopWindow != null) {
+                mCustomPopWindow?.dissmiss();
+            }
+            when (it.id) {
+                R.id.tv_grade1_up_launcher -> {
+                    gradeContent = "一年级上"
+                }
+                R.id.tv_grade1_down_launcher -> {
+                    gradeContent = "一年级下"
+                }
+                R.id.tv_grade2_up_launcher -> {
+                    gradeContent = "二年级上"
+                }
+                R.id.tv_grade2_down_launcher -> {
+                    gradeContent = "二年级下"
+                }
+                R.id.tv_grade3_up_launcher -> {
+                    gradeContent = "三年级上"
+                }
+                R.id.tv_grade3_down_launcher -> {
+                    gradeContent = "三年级下"
+                }
+                R.id.tv_grade4_up_launcher -> {
+                    gradeContent = "四年级上"
+                }
+                R.id.tv_grade4_down_launcher -> {
+                    gradeContent = "四年级下"
+                }
+                R.id.tv_grade5_up_launcher -> {
+                    gradeContent = "五年级上"
+                }
+                R.id.tv_grade5_down_launcher -> {
+                    gradeContent = "五年级下"
+                }
+                R.id.tv_grade6_up_launcher -> {
+                    gradeContent = "六年级上"
+                }
+                R.id.tv_grade6_down_launcher -> {
+                    gradeContent = "六年级下"
+                }
+            }
+            tv_dialog_launcher.text = "$gradeContent      ▲"
+        }
+        contentView.findViewById<TextView>(R.id.tv_grade1_up_launcher).setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade1_down_launcher)
+            .setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade2_up_launcher).setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade2_down_launcher)
+            .setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade3_up_launcher).setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade3_down_launcher)
+            .setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade4_up_launcher).setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade4_down_launcher)
+            .setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade5_up_launcher).setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade5_down_launcher)
+            .setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade6_up_launcher).setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_grade6_down_launcher)
+            .setOnClickListener(listener)
+    }
+
+    fun showSelectGradeDialog(activity: Activity, tv_dialog_launcher: TextView) {
+        val contentView: View = LayoutInflater.from(activity).inflate(R.layout.pop_menu, null)
+        //处理popWindow 显示内容
+        handleLogic(contentView, tv_dialog_launcher)
+        //创建并显示popWindow
+        mCustomPopWindow = CustomPopWindow.PopupWindowBuilder(activity)
+            .setView(contentView)
+            .setOnDissmissListener {
+                tv_dialog_launcher.text = "$gradeContent      ▲"
+                tv_dialog_launcher.setBackgroundResource(R.drawable.white_bg_oval)
+            }
+            .create()
+            .showAsDropDown(tv_dialog_launcher, 0, 0)
+        tv_dialog_launcher.text = "$gradeContent      ▼"
+        tv_dialog_launcher.setBackgroundResource(R.drawable.launcher_dialog_top)
     }
 
     /**
