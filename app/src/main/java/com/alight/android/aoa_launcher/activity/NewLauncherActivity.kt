@@ -8,6 +8,7 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,7 +36,6 @@ import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
-import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_launcher.*
@@ -608,5 +608,15 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     override fun onDisconnect() {
     }
 
-
+    /**
+     * 屏蔽系统返回按钮
+     */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        return if (event.keyCode == KeyEvent.KEYCODE_BACK) {
+            //do something.
+            true;//系统层不做处理 就可以了
+        } else {
+            super.dispatchKeyEvent(event)
+        }
+    }
 }
