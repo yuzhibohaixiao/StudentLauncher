@@ -407,9 +407,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             R.id.tv_answer_launcher -> {
                 getPresenter().startAoaApp(this, 139, "/apps/139/main")
             }
-            //书本指读-九学王-AR指读
-            R.id.tv_read_book_launcher -> {
-            }
             //趣味卡牌-自己做的卡牌游戏
             R.id.tv_fun_card_launcher -> {
             }
