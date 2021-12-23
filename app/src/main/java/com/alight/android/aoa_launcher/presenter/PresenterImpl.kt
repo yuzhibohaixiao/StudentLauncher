@@ -24,6 +24,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.viewpager.widget.ViewPager
+import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.activity.UpdateActivity
@@ -739,6 +740,20 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     * @param interactiveMode
+     *  PEN_POINT 交互笔点读模式
+     *  PEN_RECT 交互笔划选区模式
+     *  FINGER_TOUCH 手触控模式
+     *  UNKOWN 未知状态
+     */
+    fun startInteractionWindow(
+        ability: InteractionAbility,
+        interactiveMode: InteractionAbility.InteractiveMode
+    ) {
+        ability.setInteractiveMode(interactiveMode)
     }
 
     fun startAoaApp(context: Context, appId: Int, route: String) {

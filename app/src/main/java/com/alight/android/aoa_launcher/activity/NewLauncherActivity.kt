@@ -7,6 +7,7 @@ import android.content.Intent
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -15,6 +16,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.jpush.android.api.JPushInterface
+import com.alight.ahwcx.ahwsdk.AbilityManager
+import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
+import com.alight.ahwcx.ahwsdk.abilities.PanelAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.BaseBean
@@ -63,7 +67,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var uri: Uri? = null
     private var splashCloseFlag = false
     private var qualityHorizontalAdapter: QualityHorizontalAdapter? = null
-
+    private var interactionAbility: InteractionAbility? = null
+    private val abilityManager = AbilityManager("launcher", "3", "123")
 
     companion object {
         lateinit var mINetEvent: INetEvent
@@ -154,6 +159,19 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             tv_user_name_new_launcher.text = tokenPair?.name
         }
         splashCloseFlag = false
+        //回到launcher时自动切回手触
+        if (interactionAbility != null) {
+            //回到launcher时自动切回手触
+            if (interactionAbility != null) {
+                GlobalScope.launch(Dispatchers.IO) {
+                    delay(100)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.FINGER_TOUCH
+                    )
+                }
+            }
+        }
     }
 
     private fun initAccountUtil() {
@@ -197,6 +215,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     override fun initData() {
         mINetEvent = this
+        interactionAbility =
+            abilityManager.getAbility(InteractionAbility::class.java, true, applicationContext)
+        interactionAbility?.bindLooper(Looper.myLooper()!!)
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         if (tokenPairCache.isNotEmpty()) {
             tokenPair = Gson().fromJson(tokenPairCache, TokenPair::class.java)
@@ -386,57 +407,110 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     "com.jxw.huiben",
                     "com.jxw.huiben.activity.SplashActivity"
                 )
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
             }
             //查单词
             R.id.tv_cdc_launcher -> {
                 getPresenter().startAoaApp(this, 135, "/home")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
             }
             //查字词
             R.id.tv_czc_launcher -> {
                 getPresenter().startAoaApp(this, 134, "/home")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
             }
             //翻译-AOA翻译
             R.id.tv_translate_launcher -> {
                 getPresenter().startAoaApp(this, 138, "/app/138/home")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_RECT
+                )
             }
             //求助老师-AOA 的远程辅导页面
             R.id.tv_seek_help_launcher -> {
                 getPresenter().startAoaApp(this, 140, "/home/140")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
             }
             //答题-AOA搜题
             R.id.tv_answer_launcher -> {
                 getPresenter().startAoaApp(this, 139, "/apps/139/main")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_RECT
+                )
             }
             //趣味卡牌-自己做的卡牌游戏
             R.id.tv_fun_card_launcher -> {
+//                getPresenter().startInteractionWindow(interactionAbility!!,InteractionAbility.InteractiveMode.FINGER_TOUCH)
             }
             //错题本-AOA收藏夹
             R.id.tv_wrong_topic_launcher -> {
                 getPresenter().startAoaApp(this, 141, "/app/141/home")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
             }
             //口算批改
             R.id.tv_kspg_launcher -> {
                 getPresenter().startAoaApp(this, 142, "/app/142/home")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
             }
             //语文作文批改
             R.id.tv_ywzwpg_launcher -> {
                 getPresenter().startAoaApp(this, 143, "/app/143/home")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
             }
             //英语作文批改
             R.id.tv_yyzwpg_launcher -> {
                 getPresenter().startAoaApp(this, 144, "/app/144/home")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
             }
             //收藏夹-AOA收藏夹
             R.id.tv_favorite_launcher -> {
                 getPresenter().startAoaApp(this, 141, "/app/141/home")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
             }
             //学习计划-AOA学习计划
             R.id.iv_study_plan
             -> {
                 getPresenter().startAoaApp(this, 33, "/home")
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
             }
             //呼叫家长
-            R.id.iv_call_parent, R.id.iv_user_icon_new_launcher, R.id.tv_user_name_new_launcher
+            R.id.iv_call_parent -> {
+
+            }
+            //个人中心
+            R.id.iv_user_icon_new_launcher, R.id.tv_user_name_new_launcher
             -> {
                 if (tokenPair == null) return
                 var intent = Intent(this, PersonCenterActivity::class.java)
@@ -527,6 +601,20 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 val className = launcherCenterAdapter!!.data[position].className
                 if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className)) {
                     getPresenter().startActivity(this, appPackName, className)
+                    if (interactionAbility != null) {
+                        //听写和AI测评为笔点击模式 其他都为手触模式
+                        if (appPackName == "com.jxw.examcenter.activity" || appPackName == "com.jxw.handwrite") {
+                            getPresenter().startInteractionWindow(
+                                interactionAbility!!,
+                                InteractionAbility.InteractiveMode.PEN_POINT
+                            )
+                        } else {
+                            getPresenter().startInteractionWindow(
+                                interactionAbility!!,
+                                InteractionAbility.InteractiveMode.FINGER_TOUCH
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -618,5 +706,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         } else {
             super.dispatchKeyEvent(event)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        abilityManager.onStop()
     }
 }
