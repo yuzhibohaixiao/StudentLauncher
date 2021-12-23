@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cn.jpush.android.api.JPushInterface
 import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
-import com.alight.ahwcx.ahwsdk.abilities.PanelAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.BaseBean
@@ -505,7 +504,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //呼叫家长
             R.id.iv_call_parent -> {
-
+                getPresenter().startAoaApp(this, 36, "/mine")
             }
             //个人中心
             R.id.iv_user_icon_new_launcher, R.id.tv_user_name_new_launcher
