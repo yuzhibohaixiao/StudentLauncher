@@ -11,22 +11,22 @@
 
         <ImageView
             android:id="@+id/iv_quality_launcher_item1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="62.5dp"
+            android:layout_height="62.5dp"
             android:layout_weight="1"
             android:src="@drawable/launcher_quality_think" />
 
         <ImageView
             android:id="@+id/iv_quality_launcher_item2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="62.5dp"
+            android:layout_height="62.5dp"
             android:layout_weight="1"
             android:src="@drawable/launcher_quality_think" />
 
         <ImageView
             android:id="@+id/iv_quality_launcher_item3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="62.5dp"
+            android:layout_height="62.5dp"
             android:layout_weight="1"
             android:src="@drawable/launcher_quality_think" />
     </LinearLayout>
