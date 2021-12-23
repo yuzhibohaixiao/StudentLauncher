@@ -12,14 +12,14 @@ class LauncherCenterAdapter :
     private val appTypeList1: ArrayList<AppTypeBean> = arrayListOf(
         AppTypeBean(R.drawable.yxkw, "", ""),
         AppTypeBean(R.drawable.tx, "com.jxw.handwrite", "com.jxw.handwrite.ZymsActivity"),
-        AppTypeBean(R.drawable.xpy, "", ""),
+        AppTypeBean(R.drawable.xpy, "com.jxw.learnchinesepinyin", "com.jxw.learnchinesepinyin.activity.MainActivity"),
         AppTypeBean(
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
             "com.jxw.mskt.filelist.activity.FileListActivity"
         ),
-        AppTypeBean(R.drawable.xbh, "", ""),
-        AppTypeBean(R.drawable.xbs, "", ""),
+        AppTypeBean(R.drawable.xbh, "com.jxw.bihuamingcheng", "com.example.viewpageindicator.MainActivity"),
+        AppTypeBean(R.drawable.xbs, "com.jxw.bishunguize", "com.example.viewpageindicator.MainActivity"),
         AppTypeBean(
             R.drawable.xsz,
             "com.jxw.characterlearning",
@@ -34,16 +34,16 @@ class LauncherCenterAdapter :
     )
     private val appTypeList2: ArrayList<AppTypeBean> = arrayListOf(
         AppTypeBean(R.drawable.yxjc, "", ""),
-        AppTypeBean(R.drawable.rssz, "", ""),
+        AppTypeBean(R.drawable.rssz, "com.jxw.studydigital", "com.jxw.studydigital.StuDydigitalActivity"),
         AppTypeBean(R.drawable.szys, "com.jxw.jxwcalculator", "com.jxw.jxwcalculator.MainActivity"),
         AppTypeBean(
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
             "com.jxw.mskt.filelist.activity.FileListActivity"
         ),
-        AppTypeBean(R.drawable.sskj, "", ""),
+        AppTypeBean(R.drawable.sskj, "com.example.arithmeticformula", "com.example.arithmeticformula.MainActivity"),
         AppTypeBean(R.drawable.sxgs, "", ""),
-        AppTypeBean(R.drawable.zzxl, "", ""),
+        AppTypeBean(R.drawable.zzxl, "com.jxw.schultegrid", "com.jxw.schultegrid.SettingActivity"),
         AppTypeBean(R.drawable.qwsx, "", ""),
         AppTypeBean(
             R.drawable.aicp,
@@ -53,7 +53,7 @@ class LauncherCenterAdapter :
     )
     private val appTypeList3: ArrayList<AppTypeBean> = arrayListOf(
         AppTypeBean(R.drawable.yxkw, "", ""),
-        AppTypeBean(R.drawable.kycp, "", ""),
+        AppTypeBean(R.drawable.kycp, "com.jxw.singsound", "com.jxw.singsound.ui.MainActivity"),
         AppTypeBean(R.drawable.tlxl, "", ""),
         AppTypeBean(
             R.drawable.ktbsp,

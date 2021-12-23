@@ -6,8 +6,10 @@ package com.alight.android.aoa_launcher.common.bean
 data class AppRightDoubleDataBean(
     var appIcon1: Int,
     var appPackName1: String,
+    var appClassName1: String,
     var appName1: String,
     var appIcon2: Int,
     var appPackName2: String,
+    var appClassName2: String,
     var appName2: String
 )

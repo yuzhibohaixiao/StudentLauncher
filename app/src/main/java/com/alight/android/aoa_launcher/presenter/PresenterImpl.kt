@@ -738,6 +738,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             intent.component = componentName
             context.startActivity(intent)
         } catch (e: java.lang.Exception) {
+            ToastUtils.showShort(context, "该应用缺失，请安装后重试")
             e.printStackTrace()
         }
     }
