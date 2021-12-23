@@ -162,14 +162,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         //回到launcher时自动切回手触
         if (interactionAbility != null) {
             //回到launcher时自动切回手触
-            if (interactionAbility != null) {
-                GlobalScope.launch(Dispatchers.IO) {
-                    delay(100)
-                    getPresenter().startInteractionWindow(
-                        interactionAbility!!,
-                        InteractionAbility.InteractiveMode.FINGER_TOUCH
-                    )
-                }
+            GlobalScope.launch(Dispatchers.IO) {
+                delay(100)
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.FINGER_TOUCH
+                )
             }
         }
     }
