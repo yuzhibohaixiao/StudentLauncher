@@ -7,7 +7,6 @@ import android.content.Intent
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -65,6 +64,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var qualityHorizontalAdapter: QualityHorizontalAdapter? = null
     private var interactionAbility: InteractionAbility? = null
     private val abilityManager = AbilityManager("launcher", "3", "123")
+    private var abilityInitSuccessful = false
 
     companion object {
         lateinit var mINetEvent: INetEvent
@@ -156,18 +156,38 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             tv_user_name_new_launcher.text = tokenPair?.name
         }
         splashCloseFlag = false
-        //回到launcher时自动切回手触
-        if (interactionAbility != null) {
-            //回到launcher时自动切回手触
-            GlobalScope.launch(Dispatchers.IO) {
-                try {
-                    getPresenter().startInteractionWindow(
-                        interactionAbility!!,
-                        InteractionAbility.InteractiveMode.FINGER_TOUCH
-                    )
-                } catch (e: Exception) {
-                    e.printStackTrace()
+        setInteraction()
+    }
+
+    /**
+     * 交互模式初始化
+     */
+    private fun setInteraction() {
+        if (interactionAbility == null) {
+            interactionAbility =
+                abilityManager.getAbility(InteractionAbility::class.java, true, applicationContext)
+            GlobalScope.launch(Dispatchers.Main) {
+                abilityInitSuccessful = interactionAbility?.waitConnectionAsync()!!
+                if (abilityInitSuccessful) {
+                    try {
+                        getPresenter().startInteractionWindow(
+                            interactionAbility!!,
+                            InteractionAbility.InteractiveMode.FINGER_TOUCH
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
+            }
+            //回到launcher时自动切回手触
+        } else if (interactionAbility != null && abilityInitSuccessful) {
+            try {
+                getPresenter().startInteractionWindow(
+                    interactionAbility!!,
+                    InteractionAbility.InteractiveMode.FINGER_TOUCH
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
@@ -219,9 +239,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     override fun initData() {
         mINetEvent = this
-        interactionAbility =
-            abilityManager.getAbility(InteractionAbility::class.java, true, applicationContext)
-        interactionAbility?.bindLooper(Looper.myLooper()!!)
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         if (tokenPairCache.isNotEmpty()) {
             tokenPair = Gson().fromJson(tokenPairCache, TokenPair::class.java)
