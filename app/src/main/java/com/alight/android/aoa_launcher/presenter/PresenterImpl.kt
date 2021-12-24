@@ -698,9 +698,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             intent.putExtra("otherApp", otherAppList)
             activity.startActivity(intent)
         }
-
-        if (updateDialog != null) {
+        try {
             updateDialog.show()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
         unbind.setOnClickListener {

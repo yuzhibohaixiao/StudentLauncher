@@ -161,7 +161,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //回到launcher时自动切回手触
             GlobalScope.launch(Dispatchers.IO) {
                 try {
-                    delay(500)
                     getPresenter().startInteractionWindow(
                         interactionAbility!!,
                         InteractionAbility.InteractiveMode.FINGER_TOUCH

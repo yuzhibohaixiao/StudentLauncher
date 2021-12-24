@@ -53,17 +53,21 @@ public class UpdateService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String url = intent.getStringExtra("url");
-                String filename = intent.getStringExtra("filename");
-                String id = intent.getStringExtra("id");
-                int seq = intent.getIntExtra("seq", 0);
-                int type = intent.getIntExtra("type", 1);
-                Log.d(TAG, "onStartCommand: " + url);
-                Log.d(TAG, "onStartCommand: " + filename);
-                //开启下载进度
-                sharedPreferences = getSharedPreferences("download", MODE_PRIVATE);
+                try {
+                    String url = intent.getStringExtra("url");
+                    String filename = intent.getStringExtra("filename");
+                    String id = intent.getStringExtra("id");
+                    int seq = intent.getIntExtra("seq", 0);
+                    int type = intent.getIntExtra("type", 1);
+                    Log.d(TAG, "onStartCommand: " + url);
+                    Log.d(TAG, "onStartCommand: " + filename);
+                    //开启下载进度
+                    sharedPreferences = getSharedPreferences("download", MODE_PRIVATE);
 //                deleteDownloadFile(AppConstants.SYSTEM_ZIP_PATH + filename);
-                download(filename, url, id, seq, type);
+                    download(filename, url, id, seq, type);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }).start();
         return super.onStartCommand(intent, flags, startId);
