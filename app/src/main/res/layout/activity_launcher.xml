@@ -17,13 +17,14 @@
             android:src="@drawable/top_ip_img" />
 
         <TextView
+            android:id="@+id/tv_study_plan_launcher"
             android:layout_width="300dp"
             android:layout_height="37.5dp"
             android:layout_marginStart="14.5dp"
             android:layout_marginBottom="24.5dp"
             android:background="@drawable/new_launcher_top_text_bg"
             android:gravity="center"
-            android:text="今天有10项学习计划，已完成3/10项目，加油哟!"
+            android:text="今天暂无学习计划，快去创建学习计划吧！"
             android:textColor="@color/black"
             android:textSize="12sp" />
 
@@ -451,6 +452,7 @@
             android:textSize="12sp" />
 
         <ImageView
+            android:id="@+id/iv_az_store"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

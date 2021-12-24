@@ -471,7 +471,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      * 打开安智市场
      */
     fun showAZMarket() {
-        var activity = getView() as LauncherActivity
+        var activity = getView() as Activity
         try {
             var intent =
                 activity.packageManager.getLaunchIntentForPackage(AppConstants.AZ_PACKAGE_NAME)

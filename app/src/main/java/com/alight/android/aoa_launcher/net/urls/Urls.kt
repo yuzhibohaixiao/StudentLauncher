@@ -31,4 +31,8 @@ object Urls {
     //  GET 在线状态打点
     const val HEART_BEAT = "/state/v1/heartbeat"
 
+    //学习计划
+    const val STUDY_PLAN = "/study_plan/v1/student/plan/status/"
+
+
 }

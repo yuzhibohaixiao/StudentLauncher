@@ -20,10 +20,7 @@ import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
-import com.alight.android.aoa_launcher.common.bean.BaseBean
-import com.alight.android.aoa_launcher.common.bean.JPushBindBean
-import com.alight.android.aoa_launcher.common.bean.TokenMessage
-import com.alight.android.aoa_launcher.common.bean.TokenPair
+import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.common.i.LauncherListener
@@ -131,6 +128,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         iv_all_app_launcher.setOnClickListener(this)
         tv_dialog_launcher.setOnClickListener(this)
         tv_read_book_launcher.setOnClickListener(this)
+        iv_az_store.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -162,11 +160,15 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         if (interactionAbility != null) {
             //回到launcher时自动切回手触
             GlobalScope.launch(Dispatchers.IO) {
-                delay(100)
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.FINGER_TOUCH
-                )
+                try {
+                    delay(500)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.FINGER_TOUCH
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
@@ -183,6 +185,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     allToken.forEach {
                         if (it.userId == userId) {
                             AccountUtil.selectUser(it.userId)
+                            // 获取学习计划
+                            getPresenter().getModel(
+                                "${Urls.STUDY_PLAN}${it.userId}",
+                                hashMapOf(),
+                                StudyPlanBean::class.java
+                            )
                         }
                     }
                     //设置用户信息
@@ -369,6 +377,13 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 if (any.code == 201) {
                     heartbeat()
                 }
+            } else if (any is StudyPlanBean) {
+                val planCompleteTotal = any.data.plan_complete_total
+                val planTotal = any.data.plan_total
+                if (planTotal > 0) {
+                    tv_study_plan_launcher.text =
+                        "今天有${planTotal}项学习计划，已完成${planCompleteTotal}/${planTotal}项目，加油哟!"
+                }
             }
         }
     }
@@ -521,7 +536,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //选年级
             R.id.tv_dialog_launcher -> {
                 getPresenter().showSelectGradeDialog(this, tv_dialog_launcher)
-
+            }
+            //应用商店
+            R.id.iv_az_store -> {
+                getPresenter().showAZMarket()
             }
         }
     }
