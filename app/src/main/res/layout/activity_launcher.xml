@@ -29,6 +29,7 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/tv_task_challenges"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="169.5dp"
@@ -434,6 +435,7 @@
             android:src="@drawable/launcher_study_plan" />
 
         <ImageView
+            android:id="@+id/iv_av_launcher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

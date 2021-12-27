@@ -131,7 +131,7 @@ class LauncherRightAdapter :
             intent.component = componentName
             context.startActivity(intent)
         } catch (e: java.lang.Exception) {
-            ToastUtils.showShort(context, "该应用缺失，请安装后重试")
+            ToastUtils.showLong(context, "该应用正在开发中，敬请期待！")
             e.printStackTrace()
         }
     }

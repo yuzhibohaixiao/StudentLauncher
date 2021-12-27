@@ -132,6 +132,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         tv_dialog_launcher.setOnClickListener(this)
         tv_read_book_launcher.setOnClickListener(this)
         iv_az_store.setOnClickListener(this)
+        tv_task_challenges.setOnClickListener(this)
+        iv_av_launcher.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -560,6 +562,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             R.id.iv_az_store -> {
                 getPresenter().showAZMarket()
             }
+            R.id.iv_av_launcher, R.id.tv_task_challenges -> {
+                ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
+            }
         }
     }
 
@@ -684,7 +689,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         startScaleAnim(iv_english_launcher)
         startScaleAnim(iv_quality_launcher)
     }
-    private fun startScaleAnim(id:View){
+
+    private fun startScaleAnim(id: View) {
         if (id.isVisible) {
             val animator = ObjectAnimator.ofFloat(id, "scaleY", 0.3f, 1.0f)
             animator.setDuration(500).interpolator = OvershootInterpolator()

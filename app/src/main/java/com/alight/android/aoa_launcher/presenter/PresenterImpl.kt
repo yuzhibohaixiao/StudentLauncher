@@ -739,7 +739,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             intent.component = componentName
             context.startActivity(intent)
         } catch (e: java.lang.Exception) {
-            ToastUtils.showShort(context, "该应用缺失，请安装后重试")
+            ToastUtils.showLong(context, "该应用正在开发中，敬请期待！")
             e.printStackTrace()
         }
     }
@@ -755,7 +755,11 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         ability: InteractionAbility,
         interactiveMode: InteractionAbility.InteractiveMode
     ) {
-        ability.setInteractiveMode(interactiveMode)
+        try {
+            ability.setInteractiveMode(interactiveMode)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun startAoaApp(context: Context, appId: Int, route: String) {
