@@ -654,6 +654,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                             )
                         }
                     }
+                } else {
+                    ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
                 }
             }
         }
