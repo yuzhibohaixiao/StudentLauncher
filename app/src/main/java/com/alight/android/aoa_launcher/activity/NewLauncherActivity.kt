@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.content.ComponentName
 import android.content.ContentValues
 import android.content.Intent
@@ -10,8 +11,10 @@ import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.animation.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.jpush.android.api.JPushInterface
@@ -675,6 +678,18 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             if (id == R.id.tv_english_launcher) View.VISIBLE else View.GONE
         iv_quality_launcher.visibility =
             if (id == R.id.tv_quality_launcher) View.VISIBLE else View.GONE
+        startScaleAnim(iv_ar_launcher)
+        startScaleAnim(iv_chinese_launcher)
+        startScaleAnim(iv_mathematics_launcher)
+        startScaleAnim(iv_english_launcher)
+        startScaleAnim(iv_quality_launcher)
+    }
+    private fun startScaleAnim(id:View){
+        if (id.isVisible) {
+            val animator = ObjectAnimator.ofFloat(id, "scaleY", 0.3f, 1.0f)
+            animator.setDuration(500).interpolator = OvershootInterpolator()
+            animator.start()
+        }
     }
 
     override fun onReceive(tokenMessage: TokenMessage) {
