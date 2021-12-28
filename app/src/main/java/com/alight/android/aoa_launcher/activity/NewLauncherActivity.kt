@@ -162,6 +162,14 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         splashCloseFlag = false
         setInteraction()
+        // 获取学习计划
+        if (AccountUtil.currentUserId != null) {
+            getPresenter().getModel(
+                "${Urls.STUDY_PLAN}${AccountUtil.currentUserId}",
+                hashMapOf(),
+                StudyPlanBean::class.java
+            )
+        }
     }
 
     /**
@@ -403,7 +411,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 val planTotal = any.data.plan_total
                 if (planTotal > 0) {
                     tv_study_plan_launcher.text =
-                        "今天有${planTotal}项学习计划，已完成${planCompleteTotal}/${planTotal}项目，加油哟!"
+                        "今天有${planTotal}项学习计划，已完成${planCompleteTotal}项，加油哟!"
                 }
             }
         }
