@@ -198,7 +198,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     private fun initAccountUtil() {
-        if (AccountUtil.currentUserId != null)
+        if (AccountUtil.currentUserId != null && !splashCloseFlag && tokenPair == null)
             return
         AccountUtil.register(this)
         val userId = SPUtils.getData(AppConstants.USER_ID, -1) as Int
@@ -487,6 +487,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //趣味卡牌-自己做的卡牌游戏
             R.id.tv_fun_card_launcher -> {
+                ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
 //                getPresenter().startInteractionWindow(interactionAbility!!,InteractionAbility.InteractiveMode.FINGER_TOUCH)
             }
             //错题本-AOA收藏夹
