@@ -1,7 +1,6 @@
 package com.alight.android.aoa_launcher.ui.adapter
 
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.ImageView
@@ -22,52 +21,61 @@ class LauncherRightAdapter :
         AppRightDoubleDataBean(
             R.drawable.launcher_small_video,
             "com.jxw.special.video",
-            "com.jxw.special.activity.SpecialCateListActivity",
+            "com.jxw.special.activity.SpecialCateListActivity", null,
             "精选素养视频",
             R.drawable.jxyd,
             "com.jxw.jxwbook",
-            "com.jxw.jxwbook.MainActivity", "精选阅读"
+            "com.jxw.jxwbook.MainActivity", "精选阅读", null
+
         ), AppRightDoubleDataBean(
             R.drawable.zwsx,
             "com.jxw.yuwenxiezuo",
-            "com.jxw.yuwenxiezuo.MainActivity", "作文赏析",
-            R.drawable.jfyc,
-            "com.jxw.jinfangyici", "com.jxw.jinfangyici.MainActivity",
-            "近反义词"
+            "com.jxw.yuwenxiezuo.MainActivity", null,
+            "作文赏析",
+            R.drawable.jfyc, "com.jxw.jinfangyici",
+            "com.jxw.jinfangyici.MainActivity",
+            "近反义词",
+            null
         ), AppRightDoubleDataBean(
             R.drawable.zhbd,
             "",
-            "", "中华宝典",
+            "", null,
+            "中华宝典",
             0,
-            "",
-            "", ""
+            "", "", "", null
         )
     )
     private val appList2: ArrayList<AppRightDoubleDataBean> = arrayListOf(
         AppRightDoubleDataBean(
             R.drawable.launcher_small_video,
             "com.jxw.special.video", "com.jxw.special.activity.SpecialCateListActivity",
+            null,
             "精选奥数视频",
-            R.drawable.asxl,
-            "", "",
-            "奥数训练"
+            R.drawable.asxl, "",
+            "",
+            "奥数训练",
+            null
         ), AppRightDoubleDataBean(
             R.drawable.yytxl,
             "", "",
+            null,
             "应用题训练",
-            R.drawable.sdys,
-            "", "",
-            "数的运算"
+            R.drawable.sdys, "",
+            "",
+            "数的运算",
+            null
         )
     )
     private val appList3: ArrayList<AppRightDoubleDataBean> = arrayListOf(
         AppRightDoubleDataBean(
             R.drawable.wjdnxyy,
             "com.jxw.special.video", "com.jxw.special.activity.SpecialCateListActivity",
+            null,
             "外教带你学英语",
-            R.drawable.kyjj,
-            "", "",
-            "口语交际"
+            R.drawable.kyjj, "",
+            "",
+            "口语交际",
+            null
         )
     )
 
@@ -116,18 +124,31 @@ class LauncherRightAdapter :
             ivItem2.visibility = View.VISIBLE
         }
         holder.getView<ImageView>(R.id.iv_right_launcher_item1).setOnClickListener {
-            startActivity(item.appPackName1, item.appClassName1)
+            startActivity(item.appPackName1, item.appClassName1, item.params1)
         }
         holder.getView<ImageView>(R.id.iv_right_launcher_item2).setOnClickListener {
-            startActivity(item.appPackName2, item.appClassName2)
+            startActivity(item.appPackName2, item.appClassName2, item.params2)
         }
     }
 
-    private fun startActivity(packName: String, className: String) {
+    private fun startActivity(packName: String, className: String, params: Map<String, Any>?) {
         try {
             val intent = Intent()
             val componentName =
                 ComponentName(packName, className)
+            params?.forEach {
+                when (it.value) {
+                    is String -> {
+                        intent.putExtra(it.key, it.value.toString())
+                    }
+                    is Boolean -> {
+                        intent.putExtra(it.key, it.value as? Boolean)
+                    }
+                    is Int -> {
+                        intent.putExtra(it.key, it.value as? Int)
+                    }
+                }
+            }
             intent.component = componentName
             context.startActivity(intent)
         } catch (e: java.lang.Exception) {
