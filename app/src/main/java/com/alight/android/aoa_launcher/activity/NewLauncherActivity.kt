@@ -446,7 +446,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 getPresenter().startActivity(
                     this,
                     "com.jxw.huiben",
-                    "com.jxw.huiben.activity.SplashActivity"
+                    "com.jxw.huiben.activity.SplashActivity",
+                    null
                 )
                 getPresenter().startInteractionWindow(
                     interactionAbility!!,
@@ -647,8 +648,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             launcherCenterAdapter?.setOnItemClickListener { adapter, view, position ->
                 val appPackName = launcherCenterAdapter!!.data[position].appPackName
                 val className = launcherCenterAdapter!!.data[position].className
+                val params = launcherCenterAdapter!!.data[position].params
                 if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className)) {
-                    getPresenter().startActivity(this, appPackName, className)
+                    getPresenter().startActivity(this, appPackName, className, params)
                     if (interactionAbility != null) {
                         //听写和AI测评为笔点击模式 其他都为手触模式
                         if (appPackName == "com.jxw.examcenter.activity" || appPackName == "com.jxw.handwrite") {

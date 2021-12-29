@@ -10,65 +10,144 @@ class LauncherCenterAdapter :
     BaseQuickAdapter<AppTypeBean, BaseViewHolder>(R.layout.item_study_type) {
 
     private val appTypeList1: ArrayList<AppTypeBean> = arrayListOf(
-        AppTypeBean(R.drawable.yxkw, "", ""),
-        AppTypeBean(R.drawable.tx, "com.jxw.handwrite", "com.jxw.handwrite.ZymsActivity"),
-        AppTypeBean(R.drawable.xpy, "com.jxw.learnchinesepinyin", "com.jxw.learnchinesepinyin.activity.MainActivity"),
+        AppTypeBean(
+            R.drawable.yxkw,
+            "com.jxw.online_study",
+            "com.jxw.online_study.activity.BookCaseWrapperActivity",
+            mapOf("StartArgs" to "d:/同步学习/语文|e:JWFD")
+        ),
+        AppTypeBean(
+            R.drawable.tx,
+            "com.jxw.handwrite",
+            "com.jxw.handwrite.MainActivity",
+            null
+        ),
+        AppTypeBean(
+            R.drawable.xpy,
+            "com.jxw.learnchinesepinyin",
+            "com.jxw.learnchinesepinyin.activity.MainActivity",
+            null
+        ),
         AppTypeBean(
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
-            "com.jxw.mskt.filelist.activity.FileListActivity"
+            "com.jxw.mskt.filelist.activity.FileListActivity",
+            mapOf("StartArgs" to "d:小学|e:语文")
         ),
-        AppTypeBean(R.drawable.xbh, "com.jxw.bihuamingcheng", "com.example.viewpageindicator.MainActivity"),
-        AppTypeBean(R.drawable.xbs, "com.jxw.bishunguize", "com.example.viewpageindicator.MainActivity"),
+        AppTypeBean(
+            R.drawable.xbh,
+            "com.jxw.bihuamingcheng",
+            "com.example.viewpageindicator.MainActivity",
+            null
+        ),
+        AppTypeBean(
+            R.drawable.xbs,
+            "com.jxw.bishunguize",
+            "com.example.viewpageindicator.MainActivity",
+            null
+        ),
         AppTypeBean(
             R.drawable.xsz,
             "com.jxw.characterlearning",
-            "com.jxw.characterlearning.MainActivity"
+            "com.jxw.characterlearning.MainActivity",
+            null
         ),
-        AppTypeBean(R.drawable.bgs, "", ""),
+        AppTypeBean(
+            R.drawable.bgs, "com.jxw.vanhondictionary",
+            "com.jxw.vanhondictionary.MainActivity",
+            mapOf("StartArgs" to "汉语词典")
+        ),
         AppTypeBean(
             R.drawable.aicp,
             "com.jxw.examcenter.activity",
-            "com.jxw.examcenter.activity.AppStartActivity"
+            "com.jxw.examcenter.activity.AppStartActivity",
+            null
         )
     )
     private val appTypeList2: ArrayList<AppTypeBean> = arrayListOf(
-        AppTypeBean(R.drawable.yxjc, "", ""),
-        AppTypeBean(R.drawable.rssz, "com.jxw.studydigital", "com.jxw.studydigital.StuDydigitalActivity"),
-        AppTypeBean(R.drawable.szys, "com.jxw.jxwcalculator", "com.jxw.jxwcalculator.MainActivity"),
+        AppTypeBean(
+            R.drawable.yxjc, "com.jxw.online_study",
+            "com.jxw.online_study.activity.BookCaseWrapperActivity",
+            mapOf("StartArgs" to "d:/同步学习/数学|e:JWFD")
+        ),
+        AppTypeBean(
+            R.drawable.rssz,
+            "com.jxw.studydigital",
+            "com.jxw.studydigital.StuDydigitalActivity",
+            null
+        ),
+        AppTypeBean(
+            R.drawable.szys,
+            "com.jxw.jxwcalculator",
+            "com.jxw.jxwcalculator.MainActivity",
+            null
+        ),
         AppTypeBean(
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
-            "com.jxw.mskt.filelist.activity.FileListActivity"
+            "com.jxw.mskt.filelist.activity.FileListActivity",
+            null
         ),
-        AppTypeBean(R.drawable.sskj, "com.example.arithmeticformula", "com.example.arithmeticformula.MainActivity"),
-        AppTypeBean(R.drawable.sxgs, "", ""),
-        AppTypeBean(R.drawable.zzxl, "com.jxw.schultegrid", "com.jxw.schultegrid.SettingActivity"),
-        AppTypeBean(R.drawable.qwsx, "", ""),
+        AppTypeBean(
+            R.drawable.sskj,
+            "com.example.arithmeticformula",
+            "com.example.arithmeticformula.MainActivity",
+            null
+        ),
+        AppTypeBean(
+            R.drawable.sxgs,
+            "com.oirsdfg89.flg",
+            "com.nsc.mathformulas.MainActivity",
+            null
+        ),
+        AppTypeBean(
+            R.drawable.zzxl,
+            "com.jxw.schultegrid",
+            "com.jxw.schultegrid.SettingActivity",
+            null
+        ),
+        AppTypeBean(R.drawable.qwsx, "", "", null),
         AppTypeBean(
             R.drawable.aicp,
             "com.jxw.examcenter.activity",
-            "com.jxw.examcenter.activity.AppStartActivity"
+            "com.jxw.examcenter.activity.AppStartActivity",
+            null
         ),
     )
     private val appTypeList3: ArrayList<AppTypeBean> = arrayListOf(
-        AppTypeBean(R.drawable.yxkw, "", ""),
-        AppTypeBean(R.drawable.kycp, "com.jxw.singsound", "com.jxw.singsound.ui.MainActivity"),
-        AppTypeBean(R.drawable.tlxl, "", ""),
+        AppTypeBean(
+            R.drawable.yxkw, "com.jxw.online_study",
+            "com.jxw.online_study.activity.BookCaseWrapperActivity",
+            mapOf("StartArgs" to "d:/同步学习/英语|e:JWFD")
+        ),
+        AppTypeBean(
+            R.drawable.kycp,
+            "com.jxw.singsound",
+            "com.jxw.singsound.ui.MainActivity",
+            null
+        ),
+        AppTypeBean(R.drawable.tlxl, "", "", null),
         AppTypeBean(
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
-            "com.jxw.mskt.filelist.activity.FileListActivity"
+            "com.jxw.mskt.filelist.activity.FileListActivity",
+            null
         ),
-        AppTypeBean(R.drawable.yyzm, "", ""),
-        AppTypeBean(R.drawable.gjyb, "", ""),
-        AppTypeBean(R.drawable.wwjdc, "com.jxw.wuweijidanci", "com.jxw.wuweijidanci.MainActivity"),
-        AppTypeBean(R.drawable.lccj, "", ""),
-        AppTypeBean(R.drawable.yyyf, "", ""),
+        AppTypeBean(R.drawable.yyzm, "", "", null),
+        AppTypeBean(R.drawable.gjyb, "", "", null),
+        AppTypeBean(
+            R.drawable.wwjdc,
+            "com.jxw.wuweijidanci",
+            "com.jxw.wuweijidanci.MainActivity",
+            null
+        ),
+        AppTypeBean(R.drawable.lccj, "", "", null),
+        AppTypeBean(R.drawable.yyyf, "", "", null),
         AppTypeBean(
             R.drawable.aicp,
             "com.jxw.examcenter.activity",
-            "com.jxw.examcenter.activity.AppStartActivity"
+            "com.jxw.examcenter.activity.AppStartActivity",
+            null
         )
     )
 

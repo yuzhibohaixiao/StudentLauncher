@@ -25,6 +25,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.viewpager.widget.ViewPager
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
+import com.alight.ahwcx.ahwsdk.utils.numberToInt
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.activity.UpdateActivity
@@ -731,11 +732,29 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
-    fun startActivity(context: Context, packName: String, className: String) {
+    fun startActivity(
+        context: Context,
+        packName: String,
+        className: String,
+        params: Map<String, Any>?
+    ) {
         try {
             val intent = Intent()
             val componentName =
                 ComponentName(packName, className)
+            params?.forEach {
+                when (it.value) {
+                    is String -> {
+                        intent.putExtra(it.key, it.value.toString())
+                    }
+                    is Boolean -> {
+                        intent.putExtra(it.key, it.value as? Boolean)
+                    }
+                    is Int -> {
+                        intent.putExtra(it.key, it.value as? Int)
+                    }
+                }
+            }
             intent.component = componentName
             context.startActivity(intent)
         } catch (e: java.lang.Exception) {
