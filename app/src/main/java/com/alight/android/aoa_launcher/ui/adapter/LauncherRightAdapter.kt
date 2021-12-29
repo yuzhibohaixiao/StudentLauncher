@@ -51,17 +51,17 @@ class LauncherRightAdapter :
             "com.jxw.special.video", "com.jxw.special.activity.SpecialCateListActivity",
             null,
             "精选奥数视频",
-            R.drawable.asxl, "",
-            "",
+            R.drawable.asxl, "com.jxw.special.video",
+            "com.jxw.special.activity.SpecialCateListActivity",
             "奥数训练",
-            null
+            mapOf("StartArgs" to "超越奥数")
         ), AppRightDoubleDataBean(
             R.drawable.yytxl,
             "", "",
             null,
             "应用题训练",
-            R.drawable.sdys, "",
-            "",
+            R.drawable.sdys, "com.jxw.jxwcalculator",
+            "com.jxw.jxwcalculator.MainActivity",
             "数的运算",
             null
         )
@@ -72,7 +72,7 @@ class LauncherRightAdapter :
             "com.jxw.special.video", "com.jxw.special.activity.SpecialCateListActivity",
             null,
             "外教带你学英语",
-            R.drawable.kyjj, "",
+            R.drawable.kyjj, "com.jxw.singsound",
             "",
             "口语交际",
             null

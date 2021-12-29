@@ -123,25 +123,25 @@ class LauncherCenterAdapter :
         AppTypeBean(
             R.drawable.kycp,
             "com.jxw.singsound",
-            "com.jxw.singsound.ui.MainActivity",
+            "com.jxw.singsound.ui.SplashActivity",
             null
         ),
-        AppTypeBean(R.drawable.tlxl, "", "", null),
+        AppTypeBean(R.drawable.tlxl, "com.jxw.schultegrid", "com.jxw.schultegrid.SettingActivity", null),
         AppTypeBean(
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
             "com.jxw.mskt.filelist.activity.FileListActivity",
             null
         ),
-        AppTypeBean(R.drawable.yyzm, "", "", null),
-        AppTypeBean(R.drawable.gjyb, "", "", null),
+        AppTypeBean(R.drawable.yyzm, "com.jxw.letterstudynew", "com.jxw.letterstudynew.MainActivity", null),
+        AppTypeBean(R.drawable.gjyb, "com.jxw.englishsoundmark", "com.jxw.englishsoundmark.Activity.MainActivity", null),
         AppTypeBean(
             R.drawable.wwjdc,
             "com.jxw.wuweijidanci",
             "com.jxw.wuweijidanci.MainActivity",
             null
         ),
-        AppTypeBean(R.drawable.lccj, "", "", null),
+        AppTypeBean(R.drawable.lccj, "com.jxw.liancichengju", "com.jxw.liancichengju.MainActivity", null),
         AppTypeBean(R.drawable.yyyf, "", "", null),
         AppTypeBean(
             R.drawable.aicp,
