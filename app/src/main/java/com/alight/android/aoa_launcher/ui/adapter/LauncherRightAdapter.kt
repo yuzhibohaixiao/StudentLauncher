@@ -20,8 +20,8 @@ class LauncherRightAdapter :
     private val appList1: ArrayList<AppRightDoubleDataBean> = arrayListOf(
         AppRightDoubleDataBean(
             R.drawable.launcher_small_video,
-            "com.jxw.special.video",
-            "com.jxw.special.activity.SpecialCateListActivity", null,
+            "",
+            "", null,
             "精选素养视频",
             R.drawable.jxyd,
             "com.jxw.jxwbook",
@@ -48,13 +48,13 @@ class LauncherRightAdapter :
     private val appList2: ArrayList<AppRightDoubleDataBean> = arrayListOf(
         AppRightDoubleDataBean(
             R.drawable.launcher_small_video,
-            "com.jxw.special.video", "com.jxw.special.activity.SpecialCateListActivity",
+            "", "",
             null,
             "精选奥数视频",
-            R.drawable.asxl, "com.jxw.special.video",
-            "com.jxw.special.activity.SpecialCateListActivity",
+            R.drawable.asxl, "",
+            "",
             "奥数训练",
-            mapOf("StartArgs" to "超越奥数")
+            null
         ), AppRightDoubleDataBean(
             R.drawable.yytxl,
             "", "",
@@ -69,10 +69,10 @@ class LauncherRightAdapter :
     private val appList3: ArrayList<AppRightDoubleDataBean> = arrayListOf(
         AppRightDoubleDataBean(
             R.drawable.wjdnxyy,
-            "com.jxw.special.video", "com.jxw.special.activity.SpecialCateListActivity",
+            "", "",
             null,
             "外教带你学英语",
-            R.drawable.kyjj, "com.jxw.singsound",
+            R.drawable.kyjj, "",
             "",
             "口语交际",
             null

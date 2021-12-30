@@ -126,7 +126,7 @@ class LauncherCenterAdapter :
             "com.jxw.singsound.ui.SplashActivity",
             null
         ),
-        AppTypeBean(R.drawable.tlxl, "com.jxw.schultegrid", "com.jxw.schultegrid.SettingActivity", null),
+        AppTypeBean(R.drawable.tlxl, "", "", null),
         AppTypeBean(
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
