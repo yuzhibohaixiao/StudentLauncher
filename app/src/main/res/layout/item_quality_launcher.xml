@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/white_right_launcher">
+        android:background="@drawable/launcher_center_bottom_item">
 
         <TextView
             android:id="@+id/tv_quality_app_name_item1"

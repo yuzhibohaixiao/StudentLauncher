@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_gravity="bottom"
-        android:background="@drawable/white_right_launcher"
+        android:background="@drawable/launcher_right_bottom_item"
         android:visibility="visible">
 
         <TextView
@@ -61,7 +61,7 @@
         android:layout_width="88dp"
         android:layout_height="25dp"
         android:layout_gravity="bottom"
-        android:background="@drawable/white_right_launcher"
+        android:background="@drawable/launcher_right_bottom_item_small"
         android:visibility="gone">
 
         <TextView
