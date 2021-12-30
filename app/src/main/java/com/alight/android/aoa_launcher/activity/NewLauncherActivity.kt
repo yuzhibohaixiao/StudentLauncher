@@ -649,7 +649,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 val appPackName = launcherCenterAdapter!!.data[position].appPackName
                 val className = launcherCenterAdapter!!.data[position].className
                 val params = launcherCenterAdapter!!.data[position].params
-                if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className)) {
+                if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className) && appPackName != "com.jxw.mskt.video" && appPackName != "com.jxw.mskt.video") {
                     getPresenter().startActivity(this, appPackName, className, params)
                     if (interactionAbility != null) {
                         //听写和AI测评为笔点击模式 其他都为手触模式

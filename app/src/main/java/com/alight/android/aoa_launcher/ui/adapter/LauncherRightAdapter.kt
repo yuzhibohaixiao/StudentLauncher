@@ -60,8 +60,8 @@ class LauncherRightAdapter :
             "", "",
             null,
             "应用题训练",
-            R.drawable.sdys, "com.jxw.jxwcalculator",
-            "com.jxw.jxwcalculator.MainActivity",
+            R.drawable.sdys, "",
+            "",
             "数的运算",
             null
         )

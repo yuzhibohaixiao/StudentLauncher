@@ -78,8 +78,8 @@ class LauncherCenterAdapter :
         ),
         AppTypeBean(
             R.drawable.szys,
-            "com.jxw.jxwcalculator",
-            "com.jxw.jxwcalculator.MainActivity",
+            "",
+            "",
             null
         ),
         AppTypeBean(
