@@ -570,7 +570,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //应用商店
             R.id.iv_az_store -> {
-                getPresenter().showAZMarket()
+                getPresenter().showKAMarket()
             }
             R.id.iv_av_launcher, R.id.tv_task_challenges -> {
                 ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")

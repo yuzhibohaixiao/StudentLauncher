@@ -33,7 +33,7 @@ class AppConstants {
         const val AV_PACKAGE_NAME = "com.tencent.trtcav"
 
         //安智市场包名
-        const val AZ_PACKAGE_NAME = "com.coolapk.market"
+        const val KA_PACKAGE_NAME = "com.coolapk.market"
 
         //sqlite 用户信息存储 key
         const val AOA_LAUNCHER_USER_INFO_TOKEN = "aoa_launcher_user_info_token"

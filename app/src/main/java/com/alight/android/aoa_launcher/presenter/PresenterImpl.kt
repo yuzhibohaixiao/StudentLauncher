@@ -25,7 +25,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.viewpager.widget.ViewPager
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
-import com.alight.ahwcx.ahwsdk.utils.numberToInt
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.activity.UpdateActivity
@@ -469,13 +468,13 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     /**
-     * 打开安智市场
+     * 打开酷安市场
      */
-    fun showAZMarket() {
+    fun showKAMarket() {
         var activity = getView() as Activity
         try {
             var intent =
-                activity.packageManager.getLaunchIntentForPackage(AppConstants.AZ_PACKAGE_NAME)
+                activity.packageManager.getLaunchIntentForPackage(AppConstants.KA_PACKAGE_NAME)
             activity.startActivity(intent)
         } catch (e: Exception) {
             Log.e("showAZMarket", "没有安装")

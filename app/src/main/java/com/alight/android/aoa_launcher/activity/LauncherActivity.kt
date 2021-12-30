@@ -466,7 +466,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
             //设置　
             R.id.iv_setting_launcher -> getPresenter().showSystemSetting()
             // 打开应用市场（安智）
-            R.id.iv_app_store -> getPresenter().showAZMarket()
+            R.id.iv_app_store -> getPresenter().showKAMarket()
             //打开aoa星仔伴学
             R.id.iv_aoa_launcher -> {
                 if (netState == 1) {
