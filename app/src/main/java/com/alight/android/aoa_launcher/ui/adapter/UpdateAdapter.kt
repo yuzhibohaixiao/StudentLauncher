@@ -213,6 +213,10 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
         }
     }
 
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
     private fun getIcon(packName: String): Drawable? {
         val pm: PackageManager = context.packageManager
         try {
