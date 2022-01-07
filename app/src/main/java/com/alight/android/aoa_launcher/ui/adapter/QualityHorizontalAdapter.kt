@@ -87,7 +87,7 @@ class QualityHorizontalAdapter :
             R.drawable.launcher_quality_think,
             "com.xueersi.parentsmeeting",
             "学而思网课",
-            0,
+            R.drawable.launcher_quality_think,
             "com.zjy.zjyeduandroid",
             "人教智能教辅HD",
             0,

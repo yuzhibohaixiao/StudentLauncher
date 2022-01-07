@@ -407,11 +407,15 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     heartbeat()
                 }
             } else if (any is StudyPlanBean) {
-                val planCompleteTotal = any.data.plan_complete_total
-                val planTotal = any.data.plan_total
-                if (planTotal > 0) {
-                    tv_study_plan_launcher.text =
-                        "今天有${planTotal}项学习计划，已完成${planCompleteTotal}项，加油哟!"
+                try {
+                    val planCompleteTotal = any.data.plan_complete_total
+                    val planTotal = any.data.plan_total
+                    if (planTotal > 0) {
+                        tv_study_plan_launcher.text =
+                            "今天有${planTotal}项学习计划，已完成${planCompleteTotal}项，加油哟!"
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }

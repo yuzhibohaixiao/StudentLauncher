@@ -14,6 +14,8 @@
             android:layout_width="62.5dp"
             android:layout_height="62.5dp"
             android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
             android:src="@drawable/launcher_quality_think" />
 
         <ImageView
@@ -21,11 +23,15 @@
             android:layout_width="62.5dp"
             android:layout_height="62.5dp"
             android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
             android:src="@drawable/launcher_quality_think" />
 
         <ImageView
             android:id="@+id/iv_quality_launcher_item3"
             android:layout_width="62.5dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
             android:layout_height="62.5dp"
             android:layout_weight="1"
             android:src="@drawable/launcher_quality_think" />
