@@ -7,9 +7,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * 接收用户登出的广播
+ * 接收用户登陆的广播
  */
-public class LogoutBroadcastReceiver extends BroadcastReceiver {
+public class LoginBroadcastReceiver extends BroadcastReceiver {
 
     // context 上下文对象 intent 接收的意图对象
     @Override

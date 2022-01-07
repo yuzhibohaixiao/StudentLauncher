@@ -128,9 +128,9 @@
             android:authorities="com.alight.android.aoa_launcher.common.provider.LauncherContentProvider"
             android:exported="true" />
 
-        <receiver android:name=".common.broadcast.LogoutBroadcastReceiver">
+        <receiver android:name=".common.broadcast.LoginBroadcastReceiver">
             <intent-filter>
-                <action android:name="com.alight.android.user_logout" />
+                <action android:name="com.alight.android.user_login" />
             </intent-filter>
         </receiver>
 

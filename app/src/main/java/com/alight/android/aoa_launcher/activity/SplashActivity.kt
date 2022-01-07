@@ -50,6 +50,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         R.drawable.launcher_splash5
     )
     private var userSplashNumber = 0
+    private val USER_LOGIN_ACTION = "com.alight.android.user_login" // 自定义ACTION
 
     //初始化控件
     override fun initView() {
@@ -88,6 +89,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 getSystemDate()
             }
         }
+    }
+
+    /**
+     * 发送用户登出的广播
+     */
+    private fun sendUserLoginBroadcast() {
+        val intent = Intent()
+        intent.action = USER_LOGIN_ACTION
+        intent.putExtra("message", "用户登陆") // 设置广播的消息
+        sendBroadcast(intent)
+
     }
 
     private fun showQRCode(isRebinding: Boolean) {
@@ -191,6 +203,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                             GlobalScope.launch(Dispatchers.Main) {
                                                 //保存用户信息
                                                 writeUserInfo(tokenPair)
+                                                //发送用户登陆的广播
+                                                sendUserLoginBroadcast()
                                                 val onlyShowSelectChild =
                                                     SPUtils.getData(
                                                         "onlyShowSelectChild",

@@ -48,7 +48,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private var tokenPair: TokenPair? = null
     private lateinit var familyAdapter: PersonalCenterFamilyAdapter
     private var familyId: Int? = null
-    private val USER_LOGOUT_ACTION = "com.alight.android.user_logout" // 自定义ACTION
     private val abilityManager = AbilityManager("launcher", "3", "123")
     private var calibrationAbility: CalibrationAbility? = null
     private var panelAbility: PanelAbility? = null
@@ -356,24 +355,12 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         ToastUtils.showShort(this, "网络请求错误")
     }
 
-    /**
-     * 发送用户登出的广播
-     */
-    private fun sendSendUserLogoutBroadcast() {
-        val intent = Intent()
-        intent.action = USER_LOGOUT_ACTION
-        intent.putExtra("message", "用户退出") // 设置广播的消息
-        sendBroadcast(intent)
-
-    }
-
     override fun onClick(v: View) {
         when (v.id) {
             R.id.ll_back_personal_center ->
                 finish()
             //用户注销
             R.id.ll_exit_personal_center -> {
-                sendSendUserLogoutBroadcast()
                 SPUtils.syncPutData("onlyShowSelectChild", true)
                 setResult(AppConstants.RESULT_CODE_LAUNCHER_START_SELECT_USER)
                 finish()
