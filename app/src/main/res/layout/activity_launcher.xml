@@ -147,15 +147,15 @@
             <ImageView
                 android:id="@+id/iv_ar_launcher"
                 android:layout_width="195dp"
-                android:layout_height="110dp"
+                android:layout_height="115dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ar_launcher_left"
                 android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/iv_chinese_launcher"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="195dp"
+                android:layout_height="115dp"
                 android:layout_marginTop="65dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/chinese_launcher_left"
@@ -163,8 +163,8 @@
 
             <ImageView
                 android:id="@+id/iv_mathematics_launcher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="195dp"
+                android:layout_height="115dp"
                 android:layout_marginTop="135dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/mathematics_launcher_left"
@@ -172,8 +172,8 @@
 
             <ImageView
                 android:id="@+id/iv_english_launcher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="195dp"
+                android:layout_height="115dp"
                 android:layout_marginTop="205dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/english_launcher_left"
@@ -181,8 +181,8 @@
 
             <ImageView
                 android:id="@+id/iv_quality_launcher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="195dp"
+                android:layout_height="115dp"
                 android:layout_marginTop="275dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/quality_development_launcher_left"
@@ -191,7 +191,7 @@
 
         <FrameLayout
             android:id="@+id/fl_center_launcher"
-            android:layout_width="wrap_content"
+            android:layout_width="424dp"
             android:layout_height="365dp"
             android:layout_marginStart="28dp"
             android:background="@drawable/launcher_syn_learn_bg"
@@ -210,8 +210,8 @@
 
         <FrameLayout
             android:id="@+id/fl_right_launcher"
-            android:layout_width="wrap_content"
-            android:layout_height="360dp"
+            android:layout_width="195.5dp"
+            android:layout_height="365dp"
             android:layout_marginStart="55.5dp"
             android:background="@drawable/launcher_instruction_after_class_bg"
             android:visibility="gone">

@@ -5,8 +5,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.bean.AppTrebleDataBean
 import com.alight.android.aoa_launcher.common.bean.AppTreblePackDataBean
-import com.alight.android.aoa_launcher.common.constants.AppConstants
-import com.alight.android.aoa_launcher.common.fragment.QualityFragment
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
@@ -97,13 +95,7 @@ class QualityHorizontalAdapter :
     )
 
     init {
-        val drawableList = arrayListOf(
-            R.drawable.quality_art,
-            R.drawable.quality_thinking,
-            R.drawable.quality_happy_kids,
-            R.drawable.quality_happy_study
-        )
-        var appTreblePackDataList =
+        val appTreblePackDataList =
             arrayListOf(
                 AppTreblePackDataBean(R.drawable.quality_art, appList1),
                 AppTreblePackDataBean(R.drawable.quality_thinking, appList2),
