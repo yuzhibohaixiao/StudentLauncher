@@ -189,9 +189,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
-            if (status.online == 0) {
+            if (status.jpush_online == 0) {
                 ToastUtils.showShort(this, "当前用户离线")
-            } else if (status.online == 1 && status.av == 0) {
+            } else if (status.jpush_online == 1 && status.av == 0) {
                 startPhoneWindow(position)
             } else {
                 ToastUtils.showShort(this, "当前用户忙碌中")

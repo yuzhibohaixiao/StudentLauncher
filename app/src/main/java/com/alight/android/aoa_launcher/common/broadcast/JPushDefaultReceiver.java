@@ -44,7 +44,11 @@ public class JPushDefaultReceiver extends BroadcastReceiver {
                 intent2.putExtra("called", 2);
                 intent2.putExtra("token", AccountUtil.INSTANCE.getCurrentUser().getToken());
                 intent2.putExtra("callType", callArBean.getMessage().getType());
-                intent2.putExtra("isCallAr", true);
+                if (callArBean.getIntent_url().contains("ar")) {
+                    intent2.putExtra("isCallAr", true);
+                } else {
+                    intent2.putExtra("isCallAr", false);
+                }
                 context.startActivity(intent2);
             } catch (Exception e) {
                 e.printStackTrace();

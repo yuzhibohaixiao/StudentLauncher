@@ -59,6 +59,8 @@ data class Parent(
 ) : Serializable
 
 data class ParentStatus(
+    val jpush_online: Int,
     val online: Int,
     val av: Int,
+
 )

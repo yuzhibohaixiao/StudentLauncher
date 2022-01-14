@@ -31,9 +31,9 @@ class PersonalCenterFamilyAdapter :
             }
         )
         holder.setImageResource(
-            R.id.iv_online_state_family_item, if (parent.status.online == 0) {
+            R.id.iv_online_state_family_item, if (parent.status.jpush_online == 0) {
                 R.drawable.online_state_gray
-            } else if (parent.status.online == 1 && parent.status.av == 0) {
+            } else if (parent.status.jpush_online == 1 && parent.status.av == 0) {
                 R.drawable.online_state_green
             } else {
                 R.drawable.online_state_yellow
