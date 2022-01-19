@@ -417,6 +417,16 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
+            } else if (any is BaseBean) {
+                if (any.code == 401) {
+                    SPUtils.syncPutData("onlyShowSelectChild", true)
+                    activityResultLauncher?.launch(
+                        Intent(
+                            this@NewLauncherActivity,
+                            SplashActivity::class.java
+                        )
+                    )
+                }
             }
         }
     }

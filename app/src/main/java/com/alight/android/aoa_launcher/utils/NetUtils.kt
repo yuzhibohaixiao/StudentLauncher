@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher.utils
 
 import com.alight.android.aoa_launcher.application.LauncherApplication
+import com.alight.android.aoa_launcher.common.bean.BaseBean
 import com.alight.android.aoa_launcher.net.apiservice.Apiservice
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.google.gson.Gson
@@ -14,6 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 /**
  * 协程 类似于rxjava 是一个异步处理库
@@ -70,10 +72,19 @@ class NetUtils private constructor() {
                 override fun onNext(t: ResponseBody) {
                     var gson = Gson()
                     try {
-                        var any = gson.fromJson(t.string(), cls)
-                        if (callback != null && any != null) {
-                            //回调到model层
-                            callback.onSuccess(any)
+                        val baseBean = gson.fromJson(
+                            t.string(),
+                            BaseBean::class.java
+                        ) //拦截code非401情况
+                        if (baseBean.code != 401) {
+                            var any = gson.fromJson(t.string(), cls)
+                            if (callback != null && any != null) {
+                                //回调到model层
+                                callback.onSuccess(any)
+                            }
+                        } else {
+                            //表示用户离线
+                            callback.onSuccess(baseBean)
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -89,10 +100,11 @@ class NetUtils private constructor() {
             })
     }
 
-    fun <T> postInfo(url: String,
-                     requestBody: RequestBody,
-                     cls: Class<T>,
-                     callback: NetCallback
+    fun <T> postInfo(
+        url: String,
+        requestBody: RequestBody,
+        cls: Class<T>,
+        callback: NetCallback
     ) {
         apiService.postAllInfo(url, requestBody).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
