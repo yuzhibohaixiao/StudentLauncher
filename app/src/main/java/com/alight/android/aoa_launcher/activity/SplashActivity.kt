@@ -379,6 +379,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         when (any) {
             is DeviceBindBean -> {
                 if (any.data.exists) {
+                    //todo 检测升级
                     showChildUser()
                 } else {
                     GlobalScope.launch {
