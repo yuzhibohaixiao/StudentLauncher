@@ -50,6 +50,17 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_ota_app"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:background="@drawable/update_app_type_bg_selector"
+                    android:gravity="center"
+                    android:text="固件更新"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
+
+                <TextView
                     android:id="@+id/tv_system_app"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"

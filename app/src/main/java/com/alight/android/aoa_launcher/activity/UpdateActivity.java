@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -82,6 +83,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private HashMap<String, DownloadReceiver> downloadReceiverMap = new HashMap<>();
     private List<File> appList = new ArrayList<>();
     private List<File> otherList = new ArrayList<>();
+    private TextView tvOtaApp;
     private TextView tvSystemApp;
     private TextView tvOtherApp;
     private View llBackUpdate;
@@ -140,6 +142,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
      */
 
 // 第一个参数就是需要解压的文件，第二个就是解压的目录
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public boolean upZipFile(String zipFile, String folderPath) {
         ZipFile zfile = null;
 
@@ -629,6 +632,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void setListener() {
+        tvOtaApp.setOnClickListener(this);
         tvSystemApp.setOnClickListener(this);
         tvOtherApp.setOnClickListener(this);
         llBackUpdate.setOnClickListener(this);
@@ -637,6 +641,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initView() {
+        tvOtaApp = findViewById(R.id.tv_ota_app);
         tvSystemApp = findViewById(R.id.tv_system_app);
         tvOtherApp = findViewById(R.id.tv_other_app);
         llBackUpdate = findViewById(R.id.ll_back_update);
@@ -675,18 +680,19 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_ota_app:
+                setSelect(tvOtaApp);
+                break;
             case R.id.tv_system_app:
                 otherRecyclerView.setVisibility(View.GONE);
                 systemRecyclerView.setVisibility(View.VISIBLE);
-                tvSystemApp.setSelected(true);
-                tvOtherApp.setSelected(false);
                 tvUpdateAll.setVisibility(View.VISIBLE);
+                setSelect(tvSystemApp);
                 break;
             case R.id.tv_other_app:
                 otherRecyclerView.setVisibility(View.VISIBLE);
                 systemRecyclerView.setVisibility(View.GONE);
-                tvOtherApp.setSelected(true);
-                tvSystemApp.setSelected(false);
+                setSelect(tvOtherApp);
                 tvUpdateAll.setVisibility(View.GONE);
                 if (otherList.size() == 0) {
                     getData(2);
@@ -706,6 +712,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 break;
             default:
         }
+    }
+
+    private void setSelect(TextView textView) {
+        tvOtaApp.setSelected(textView == tvOtaApp);
+        tvSystemApp.setSelected(textView == tvSystemApp);
+        tvOtherApp.setSelected(textView == tvOtherApp);
     }
 
     class DownloadReceiver extends BroadcastReceiver {

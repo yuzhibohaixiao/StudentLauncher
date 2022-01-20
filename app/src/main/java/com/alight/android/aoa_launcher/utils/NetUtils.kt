@@ -2,6 +2,7 @@ package com.alight.android.aoa_launcher.utils
 
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.bean.BaseBean
+import com.alight.android.aoa_launcher.common.bean.HeartBean
 import com.alight.android.aoa_launcher.net.apiservice.Apiservice
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.google.gson.Gson
@@ -72,23 +73,33 @@ class NetUtils private constructor() {
                 override fun onNext(t: ResponseBody) {
                     var gson = Gson()
                     try {
-                        val baseBean = gson.fromJson(
-                            t.string(),
-                            BaseBean::class.java
-                        ) //拦截code非401情况
-                        if (baseBean.code != 401) {
-                            var any = gson.fromJson(t.string(), cls)
-                            if (callback != null && any != null) {
-                                //回调到model层
-                                callback.onSuccess(any)
-                            }
-                        } else {
-                            //表示用户离线
-                            callback.onSuccess(baseBean)
+                        var any = gson.fromJson(t.string(), cls)
+                        if (callback != null && any != null) {
+                            //回调到model层
+                            callback.onSuccess(any)
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
+                    /*  try {
+                          val baseBean = gson.fromJson(
+                              t.string(),
+                              BaseBean::class.java
+                          ) //拦截code非401情况
+                          if (baseBean.code != 401) {
+                              val T = GenericsUtils.getSuperClassGenricType(cls)
+                              var any = baseBean.data as T
+                              if (callback != null && any != null) {
+                                  //回调到model层
+                                  callback.onSuccess(any)
+                              }
+                          } else {
+                              //表示用户离线
+                              callback.onSuccess(baseBean)
+                          }
+                      } catch (e: Exception) {
+                          e.printStackTrace()
+                      }*/
                 }
 
                 override fun onError(e: Throwable) {

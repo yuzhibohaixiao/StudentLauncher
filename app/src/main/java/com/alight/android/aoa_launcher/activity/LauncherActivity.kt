@@ -364,7 +364,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
 
     private fun heartbeat() {
         GlobalScope.launch(Dispatchers.IO) {
-            getPresenter().getModel(Urls.HEART_BEAT, hashMapOf(), BaseBean::class.java)
+            getPresenter().getModel(Urls.HEART_BEAT, hashMapOf(), HeartBean::class.java)
             //每15秒调用一次打点接口
             delay(1000 * 15)
             heartbeat()
