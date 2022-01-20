@@ -4,7 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.alight.android.aoa_launcher.common.bean.CallArBean;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;
@@ -19,6 +24,14 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class JPushDefaultReceiver extends BroadcastReceiver {
     private String TAG = "JPushDefaultReceiver";
+    private String USER_USE_AV = "com.alight.android.use_av"; // 自定义ACTION
+
+    Handler handler = new Handler(Looper.myLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -49,11 +62,29 @@ public class JPushDefaultReceiver extends BroadcastReceiver {
                 } else {
                     intent2.putExtra("isCallAr", false);
                 }
-                context.startActivity(intent2);
+                sendUserUseAv(context);
+                handler.postDelayed(() -> {
+                    context.startActivity(intent2);
+                }, 100);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    /**
+     * 发送用户使用音视频的广播
+     *
+     * @param context
+     */
+    private void sendUserUseAv(Context context) {
+        Intent intent = new Intent();
+        intent.setAction(USER_USE_AV);
+        intent.putExtra("state", true);
+        intent.putExtra("message", "用户使用音视频");// 设置广播的消息
+        context.sendBroadcast(intent);
     }
 
 }

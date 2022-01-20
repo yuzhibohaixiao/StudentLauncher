@@ -78,8 +78,8 @@ class LauncherCenterAdapter :
         ),
         AppTypeBean(
             R.drawable.szys,
-            "",
-            "",
+            "com.jxw.jxwcalculator",
+            "com.jxw.jxwcalculator.LancherActivity",
             null
         ),
         AppTypeBean(
@@ -133,15 +133,30 @@ class LauncherCenterAdapter :
             "com.jxw.mskt.filelist.activity.FileListActivity",
             null
         ),
-        AppTypeBean(R.drawable.yyzm, "com.jxw.letterstudynew", "com.jxw.letterstudynew.MainActivity", null),
-        AppTypeBean(R.drawable.gjyb, "com.jxw.englishsoundmark", "com.jxw.englishsoundmark.Activity.MainActivity", null),
+        AppTypeBean(
+            R.drawable.yyzm,
+            "com.jxw.letterstudynew",
+            "com.jxw.letterstudynew.MainActivity",
+            null
+        ),
+        AppTypeBean(
+            R.drawable.gjyb,
+            "com.jxw.englishsoundmark",
+            "com.jxw.englishsoundmark.Activity.MainActivity",
+            null
+        ),
         AppTypeBean(
             R.drawable.wwjdc,
             "com.jxw.wuweijidanci",
             "com.jxw.wuweijidanci.MainActivity",
             null
         ),
-        AppTypeBean(R.drawable.lccj, "com.jxw.liancichengju", "com.jxw.liancichengju.MainActivity", null),
+        AppTypeBean(
+            R.drawable.lccj,
+            "com.jxw.liancichengju",
+            "com.jxw.liancichengju.MainActivity",
+            null
+        ),
         AppTypeBean(R.drawable.yyyf, "", "", null),
         AppTypeBean(
             R.drawable.aicp,
