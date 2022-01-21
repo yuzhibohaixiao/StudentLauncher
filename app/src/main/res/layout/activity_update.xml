@@ -134,6 +134,7 @@
                     android:src="@drawable/logo_ota_update" />
 
                 <TextView
+                    android:id="@+id/tv_local_ota_app"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
@@ -142,6 +143,7 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/tv_new_ota_app"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -149,6 +151,7 @@
                     android:textColor="@color/white" />
 
                 <TextView
+                    android:id="@+id/tv_ota_app_update"
                     android:layout_width="85dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="30dp"

@@ -97,6 +97,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private int appType = 1;
     //是否包含需要解压的配置文件
     private boolean containsConfigFile = false;
+    private TextView tvLocalOtaApp;
+    private TextView tvNewOtaApp;
+    private TextView tvOtaAppUpdate;
 
     @Override
     public void initData() {
@@ -150,6 +153,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 llBackUpdate.setVisibility(View.GONE);
             }
         }
+        tvLocalOtaApp.setText("版本：" + Build.DISPLAY);
+        tvNewOtaApp.setText("发现新版本:2.293.27.4478" + otaUpdateBean.getVersion_name());
     }
 
     /**
@@ -654,6 +659,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvOtherApp.setOnClickListener(this);
         llBackUpdate.setOnClickListener(this);
         tvUpdateAll.setOnClickListener(this);
+        tvOtaAppUpdate.setOnClickListener(this);
     }
 
     @Override
@@ -666,6 +672,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         systemRecyclerView = findViewById(R.id.rv_system_app_update);
         otherRecyclerView = findViewById(R.id.rv_other_app_update);
         tvUpdateAll = findViewById(R.id.tv_update_all);
+        tvLocalOtaApp = findViewById(R.id.tv_local_ota_app);
+        tvNewOtaApp = findViewById(R.id.tv_new_ota_app);
+        tvOtaAppUpdate = findViewById(R.id.tv_ota_app_update);
     }
 
     @Nullable
@@ -726,6 +735,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.ll_back_update:
                 finish();
+                break;
+            case R.id.tv_ota_app_update:
+                ToastUtils.showShort(this, "开始OTA固件更新");
                 break;
             default:
         }
