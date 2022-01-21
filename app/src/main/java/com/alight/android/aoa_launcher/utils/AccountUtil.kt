@@ -187,11 +187,11 @@ object AccountUtil : LauncherProvider {
 
     override fun run() {
         Log.i(LOG_TAG, "asf run")
-        SocketIOHandler.initSocketIo()
+//        SocketIOHandler.initSocketIo()
     }
 
     override fun register(obj: LauncherListener) {
-        SocketIOHandler.register(obj)
+//        SocketIOHandler.register(obj)
     }
 
     override fun getQrCode(): ByteArray {
