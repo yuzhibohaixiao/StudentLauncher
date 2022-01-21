@@ -33,7 +33,6 @@ import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
 import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.SYSTEM_ZIP_FULL_PATH
-import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.common.event.SplashEvent
 import com.alight.android.aoa_launcher.common.listener.DownloadListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider

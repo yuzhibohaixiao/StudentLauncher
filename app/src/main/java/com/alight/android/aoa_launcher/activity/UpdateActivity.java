@@ -91,17 +91,25 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private Intent serviceIntent;
     private ArrayList<UpdateBeanData> systemAppList;
     private ArrayList<UpdateBeanData> otherAppList;
+    //ota包数据封装
+    private UpdateBeanData otaUpdateBean;
     //1为系统应用 2是预置应用
     private int appType = 1;
     //是否包含需要解压的配置文件
     private boolean containsConfigFile = false;
 
     @Override
-
     public void initData() {
         systemAppList = (ArrayList<UpdateBeanData>) getIntent().getSerializableExtra("systemApp");
         otherAppList = (ArrayList<UpdateBeanData>) getIntent().getSerializableExtra("otherApp");
 
+        for (int i = 0; i < systemAppList.size(); i++) {
+            if (systemAppList.get(i).getFormat() == 3) {
+                //筛选OTA包
+                otaUpdateBean = systemAppList.get(i);
+                systemAppList.remove(i);
+            }
+        }
         checkExtrnalStorage();
         getData(appType);
 
@@ -133,6 +141,15 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 startSingleDownload(position);
             }
         });
+        String source = getIntent().getStringExtra("source");
+        Boolean newSplash = getIntent().getBooleanExtra("new_splash", true);
+        if (source.equals("splash")) {
+            tvSystemApp.setVisibility(View.GONE);
+            tvOtherApp.setVisibility(View.GONE);
+            if (newSplash) {
+                llBackUpdate.setVisibility(View.GONE);
+            }
+        }
     }
 
     /**

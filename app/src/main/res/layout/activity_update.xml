@@ -57,8 +57,7 @@
                     android:gravity="center"
                     android:text="固件更新"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:visibility="gone" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_system_app"
@@ -116,12 +115,50 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <LinearLayout
+                android:id="@+id/ll_ota_update"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="227.5dp"
+                    android:layout_height="135dp"
+                    android:layout_marginTop="68dp"
+                    android:src="@drawable/logo_ota_update" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="版本：1.2.432.2.2"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="发现新版本:2.293.27.4478"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="85dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/launcher_ota_update"
+                    android:gravity="center"
+                    android:text="更新"
+                    android:textColor="#598E97" />
+            </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_system_app_update"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="18dp"
-                android:layout_marginTop="18dp" />
+                android:layout_marginTop="18dp"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_other_app_update"
