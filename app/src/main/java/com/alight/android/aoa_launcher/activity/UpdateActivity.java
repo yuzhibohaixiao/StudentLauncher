@@ -143,7 +143,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         });
         String source = getIntent().getStringExtra("source");
         Boolean newSplash = getIntent().getBooleanExtra("new_splash", true);
-        if (source.equals("splash")) {
+        if (!StringUtils.isEmpty(source) && source.equals("splash")) {
             tvSystemApp.setVisibility(View.GONE);
             tvOtherApp.setVisibility(View.GONE);
             if (newSplash) {
@@ -662,7 +662,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvSystemApp = findViewById(R.id.tv_system_app);
         tvOtherApp = findViewById(R.id.tv_other_app);
         llBackUpdate = findViewById(R.id.ll_back_update);
-        tvSystemApp.setSelected(true);
+        tvOtaApp.setSelected(true);
         systemRecyclerView = findViewById(R.id.rv_system_app_update);
         otherRecyclerView = findViewById(R.id.rv_other_app_update);
         tvUpdateAll = findViewById(R.id.tv_update_all);

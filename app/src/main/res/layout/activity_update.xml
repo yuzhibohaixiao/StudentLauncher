@@ -119,6 +119,11 @@
                 android:id="@+id/ll_ota_update"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="22.5dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="55.5dp"
+                android:layout_marginBottom="27dp"
+                android:background="@drawable/launcher_ota_update_bg"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -139,6 +144,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:text="发现新版本:2.293.27.4478"
                     android:textColor="@color/white" />
 
