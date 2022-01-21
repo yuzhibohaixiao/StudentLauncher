@@ -33,6 +33,8 @@ import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
 import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.SYSTEM_ZIP_FULL_PATH
+import com.alight.android.aoa_launcher.common.event.NetMessageEvent
+import com.alight.android.aoa_launcher.common.event.SplashEvent
 import com.alight.android.aoa_launcher.common.listener.DownloadListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.contract.IContract
@@ -59,6 +61,7 @@ import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.android.synthetic.main.dialog_update.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -632,6 +635,59 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             }
             boyCursor.close()
         }
+    }
+
+    fun splashStartUpdateActivity(
+        any: UpdateBean,
+        activity: Activity
+    ) {
+        //系统应用
+        var systemAppList: ArrayList<UpdateBeanData> = arrayListOf()
+        //预置应用
+        var otherAppList: ArrayList<UpdateBeanData> = arrayListOf()
+        var systemApp: UpdateBeanData? = null
+        if (any.data == null) return
+        for (position in any.data.indices) {
+            val updateBeanData = any.data[position]
+            //把ota单独抽出放到最后
+            if (updateBeanData.format == 3) {
+                systemApp = updateBeanData
+                continue
+            }
+            if (updateBeanData.app_info.type == 1) {
+                systemAppList.add(updateBeanData)
+            } else if (updateBeanData.app_info.type == 2) {
+                otherAppList.add(updateBeanData)
+            }
+        }
+
+        if (systemApp?.app_info?.type == 1) {
+            systemAppList.add(systemApp)
+        } else if (systemApp?.app_info?.type == 2) {
+            otherAppList.add(systemApp)
+        }
+        //newSplash true表示使用新用户第一次开启ota升级
+        val newSplash = SPUtils.getData("new_splash", true) as Boolean
+        var intent = Intent(activity, UpdateActivity::class.java)
+        intent.putExtra("source", "splash")
+        intent.putExtra("new_splash", newSplash)
+        intent.putExtra("systemApp", systemAppList)
+        intent.putExtra("otherApp", otherAppList)
+
+        SPUtils.syncPutData("new_splash", false)
+        var localOtaVersionName = ""
+        systemAppList.forEach {
+            if (it.format == 3) {
+                localOtaVersionName = it.version_name
+            }
+        }
+        val newSystemVersionName = Build.DISPLAY
+        if (!newSystemVersionName.equals(localOtaVersionName)) {
+            activity.startActivity(intent)
+        } else {
+            EventBus.getDefault().post(SplashEvent.getInstance(true))
+        }
+
     }
 
     fun showUpdateDialog(

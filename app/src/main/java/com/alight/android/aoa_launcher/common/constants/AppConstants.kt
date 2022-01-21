@@ -60,10 +60,5 @@ class AppConstants {
         const val LAUNCHER_TYPE_MATHEMATICS = "launcher_type_mathematics"
         const val LAUNCHER_TYPE_ENGLISH = "launcher_type_english"
         const val LAUNCHER_TYPE_QUALITY = "launcher_type_quality"
-
-        const val LAUNCHER_TYPE_QUALITY1 = "launcher_type_quality1"
-        const val LAUNCHER_TYPE_QUALITY2 = "launcher_type_quality2"
-        const val LAUNCHER_TYPE_QUALITY3 = "launcher_type_quality3"
-        const val LAUNCHER_TYPE_QUALITY4 = "launcher_type_quality4"
     }
 }

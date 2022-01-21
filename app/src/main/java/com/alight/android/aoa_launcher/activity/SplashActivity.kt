@@ -9,11 +9,11 @@ import android.view.KeyEvent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cn.jpush.android.api.JPushInterface
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
+import com.alight.android.aoa_launcher.common.event.SplashEvent
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
@@ -32,6 +32,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.net.SocketTimeoutException
 import java.util.*
 
@@ -67,6 +70,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
+        EventBus.getDefault().register(this)
         //仅重选用户
         val onlyShowSelectChild = SPUtils.getData("onlyShowSelectChild", false) as Boolean
         //开启用户引导
@@ -102,14 +106,20 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onGetSplashEvent(event: SplashEvent) {
+        if (event.showSelectChild) {
+            //网络正常 展示选择孩子
+            showChildUser()
+        }
+    }
+
     private fun showQRCode(isRebinding: Boolean) {
         if (!isRebinding && !wifiFlag) {
             return
         }
         //判断网络是否连接
         if (InternetUtil.isNetworkAvalible(this)) {
-            //检测系统更新
-            getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
             fl_splash1.visibility = View.GONE
             ll_splash2.visibility = View.VISIBLE
             GlobalScope.launch(Dispatchers.IO) {
@@ -379,8 +389,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         when (any) {
             is DeviceBindBean -> {
                 if (any.data.exists) {
-                    //todo 检测升级
-                    showChildUser()
+                    //检测系统更新
+                    getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
                 } else {
                     GlobalScope.launch {
                         try {
@@ -400,10 +410,15 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 }
             }
             is UpdateBean -> {
-                //获取App和系统固件更新
-                getPresenter().updateSystem(this@SplashActivity, any)
+                //展示系统固件更新
+                getPresenter().splashStartUpdateActivity(any, this)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
 
