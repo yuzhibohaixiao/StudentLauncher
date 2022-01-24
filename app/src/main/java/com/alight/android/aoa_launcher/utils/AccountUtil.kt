@@ -297,7 +297,7 @@ object AccountUtil : LauncherProvider {
             if (state== STATE_CONNECTTED){
                 state= STATE_CONNECTING
                 Log.e(LOG_TAG, "disconnect")
-                initSocketIo()
+//                initSocketIo()
             }
 
         }

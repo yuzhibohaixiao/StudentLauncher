@@ -2,7 +2,6 @@ package com.alight.android.aoa_launcher.utils
 
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.bean.BaseBean
-import com.alight.android.aoa_launcher.common.bean.HeartBean
 import com.alight.android.aoa_launcher.net.apiservice.Apiservice
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.google.gson.Gson
@@ -103,8 +102,12 @@ class NetUtils private constructor() {
                 }
 
                 override fun onError(e: Throwable) {
-                    if (callback != null) {
-                        callback.onError(e.message!!)
+                    try {
+                        if (callback != null) {
+                            callback.onError(e.message!!)
+                        }
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
                     }
                 }
 

@@ -187,6 +187,7 @@
                         android:textSize="15sp" />
 
                     <TextView
+                        android:id="@+id/tv_ota_update_text"
                         android:layout_width="87dp"
                         android:layout_height="17dp"
                         android:layout_marginTop="20dp"
@@ -201,7 +202,7 @@
                         android:layout_height="7.5dp"
                         android:layout_marginTop="12.5dp"
                         android:max="100"
-                        android:progressDrawable="@drawable/pb_update_bg" />
+                        android:progressDrawable="@drawable/pb_ota_update_bg" />
                 </LinearLayout>
 
 

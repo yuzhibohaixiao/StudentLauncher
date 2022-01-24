@@ -104,6 +104,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private View llOtaUpdateBtn;
     private View llOtaUpdateProgress;
     private ProgressBar pbUpdateOta;
+    private TextView tvOtaUpdateText;
 
     @Override
     public void initData() {
@@ -165,7 +166,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvNewOtaApp.setText("发现新版本:2.293.27.4478" + otaUpdateBean.getVersion_name());
         IntentFilter filter = new IntentFilter();
         DownloadReceiver receiver = new DownloadReceiver();
-        filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + otaUpdateBean.getId() + otaUpdateBean.getApp_info().getType());
+        filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + otaUpdateBean.getId() + 3);
         registerReceiver(receiver, filter);
         downloadReceiverMap.put(String.valueOf(otaUpdateBean.getId()), receiver);
     }
@@ -463,8 +464,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             List<String> downloadedFileIds = getDownloadedFileIds();
             List<File> fileList = selectDownloadedFiles();
             File file = new File();
-            file.setId("" + otaUpdateBean.getId());
-            file.setSeq(otaUpdateBean.getId());
+            file.setId("0");
+            file.setSeq(0);
             file.setFormat(otaUpdateBean.getFormat());
             file.setFileName("update.zip");
             file.setVersionCode(otaUpdateBean.getVersion_code());
@@ -490,7 +491,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
             serviceIntent.putExtra("filename", file.getFileName());
             serviceIntent.putExtra("url", file.getUrl());
-            serviceIntent.putExtra("id", file.getId());
+            serviceIntent.putExtra("id", otaUpdateBean.getId() + "");
             serviceIntent.putExtra("seq", file.getSeq());
             serviceIntent.putExtra("type", 3);
             startService(serviceIntent);
@@ -738,6 +739,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         llOtaUpdateBtn = findViewById(R.id.ll_ota_update_btn);
         llOtaUpdateProgress = findViewById(R.id.ll_ota_update_progress);
         pbUpdateOta = findViewById(R.id.pb_update_ota);
+        tvOtaUpdateText = findViewById(R.id.tv_ota_update_text);
     }
 
     @Nullable
@@ -939,7 +941,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
             } else {
                 File file = otaFile;
-                if (intent.getAction().equals(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + type)) {
+                if (intent.getAction().equals(AppConstants.LAUNCHER_PACKAGE_NAME + otaUpdateBean.getId() + type)) {
                     String speedS = intent.getStringExtra("speed");
                     String sizeS = intent.getStringExtra("size");
                     String totalSize = intent.getStringExtra("totalSize");
@@ -950,6 +952,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         file.setSpeed(speedS);
                         file.setProgress(pencent);
                         file.setSizeStr(sizeS);
+                        tvOtaUpdateText.setText("更新进度：" + file.getProgress() + "%");
                         pbUpdateOta.setProgress(file.getProgress());
                     }
                     if (status == File.DOWNLOAD_COMPLETE) {//完成
@@ -957,6 +960,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         file.setProgress(pencent);
                         file.setSizeStr(totalSize);
                         file.setPath(filePath);
+                        tvOtaUpdateText.setText("更新进度：" + file.getProgress() + "%");
                         pbUpdateOta.setProgress(file.getProgress());
                         LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                         String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
