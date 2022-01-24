@@ -638,7 +638,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     fun splashStartUpdateActivity(
-        any: UpdateBean,
+        isNewUser:Boolean,any: UpdateBean,
         activity: Activity
     ) {
         //系统应用
@@ -667,14 +667,13 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             otherAppList.add(systemApp)
         }
         //newSplash true表示使用新用户第一次开启ota升级
-        val newSplash = SPUtils.getData("new_splash", true) as Boolean
+//        val newSplash = SPUtils.getData("new_splash", true) as Boolean
         var intent = Intent(activity, UpdateActivity::class.java)
         intent.putExtra("source", "splash")
-        intent.putExtra("new_splash", newSplash)
+        intent.putExtra("new_splash", isNewUser)
         intent.putExtra("systemApp", systemAppList)
         intent.putExtra("otherApp", otherAppList)
 
-        SPUtils.syncPutData("new_splash", false)
         var localOtaVersionName = ""
         systemAppList.forEach {
             if (it.format == 3) {

@@ -159,8 +159,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 .error(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
                 .into(iv_user_icon_new_launcher)
             tv_user_name_new_launcher.text = tokenPair?.name
+            //检测系统更新
+            getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
         }
-        splashCloseFlag = false
         setInteraction()
         // 获取学习计划
         if (AccountUtil.currentUserId != null) {
@@ -170,6 +171,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 StudyPlanBean::class.java
             )
         }
+        splashCloseFlag = false
     }
 
     /**
@@ -427,6 +429,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         )
                     )
                 }
+            } else if (any is UpdateBean) {
+                //展示系统固件更新
+                getPresenter().splashStartUpdateActivity(false,any, this@NewLauncherActivity)
             }
         }
     }

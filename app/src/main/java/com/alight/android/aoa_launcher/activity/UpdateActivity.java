@@ -36,6 +36,7 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl;
 import com.alight.android.aoa_launcher.service.DownloadService;
 import com.alight.android.aoa_launcher.service.UpdateService;
 import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
+import com.alight.android.aoa_launcher.ui.view.CustomDialog;
 import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
 import com.alight.android.aoa_launcher.utils.SPUtils;
@@ -109,6 +110,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private TextView tvOtaUpdateText;
     private boolean otaInstall = false;
     private View ivOtaLogo;
+    //true表示是否第一次进行引导更新
+    private boolean newSplash;
+    private String source;
+    private boolean isShowDialog = false;
 
     @Override
     public void initData() {
@@ -153,14 +158,18 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 startSingleDownload(position);
             }
         });
-        String source = getIntent().getStringExtra("source");
-        Boolean newSplash = getIntent().getBooleanExtra("new_splash", true);
+        source = getIntent().getStringExtra("source");
+        newSplash = getIntent().getBooleanExtra("new_splash", true);
         if (!StringUtils.isEmpty(source) && source.equals("splash")) {
             tvSystemApp.setVisibility(View.GONE);
             tvOtherApp.setVisibility(View.GONE);
             if (newSplash) {
                 llBackUpdate.setVisibility(View.GONE);
+            } else {
+                isShowDialog = true;
             }
+        } else {
+            isShowDialog = true;
         }
         initOtaUpdate();
     }
@@ -817,16 +826,42 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 if (otaInstall) {
                     installSystem(this);
                 } else {
-                    ToastUtils.showShort(this, "开始OTA固件更新");
-                    llOtaUpdateBtn.setVisibility(View.GONE);
-                    llOtaUpdateProgress.setVisibility(View.VISIBLE);
-                    setBanOnBack(true);
-                    //开启ota升级
-                    startOtaDownload();
+                    if (!isShowDialog) {
+                        startOtaUpdate();
+                    } else {
+                        showUpdateOtaDialog();
+
+                    }
                 }
                 break;
             default:
         }
+    }
+
+    private void showUpdateOtaDialog() {
+        CustomDialog customDialog = new CustomDialog(this, R.layout.dialog_confirm_new);
+        TextView tvOtaVersion = customDialog.findViewById(R.id.tv_ota_version);
+        tvOtaVersion.setText("确定要更新版本吗？");
+        customDialog.findViewById(R.id.cancel).setOnClickListener(v -> {
+            customDialog.dismiss();
+        });
+        customDialog.findViewById(R.id.confirm).setOnClickListener(v -> {
+            customDialog.dismiss();
+            startOtaUpdate();
+        });
+        customDialog.show();
+    }
+
+    /**
+     * 开始下载固件更新
+     */
+    private void startOtaUpdate() {
+        ToastUtils.showShort(this, "开始OTA固件更新");
+        llOtaUpdateBtn.setVisibility(View.GONE);
+        llOtaUpdateProgress.setVisibility(View.VISIBLE);
+        setBanOnBack(true);
+        //开启ota升级
+        startOtaDownload();
     }
 
     /**

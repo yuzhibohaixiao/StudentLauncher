@@ -410,7 +410,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             is UpdateBean -> {
                 //展示系统固件更新
-                getPresenter().splashStartUpdateActivity(any, this)
+                getPresenter().splashStartUpdateActivity(true, any, this)
             }
         }
     }
