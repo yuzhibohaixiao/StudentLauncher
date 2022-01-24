@@ -32,6 +32,7 @@ import com.alight.android.aoa_launcher.common.base.BasePresenter
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
+import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.OLD_AOA_PACKAGE_NAME
 import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.SYSTEM_ZIP_FULL_PATH
 import com.alight.android.aoa_launcher.common.event.SplashEvent
 import com.alight.android.aoa_launcher.common.listener.DownloadListener
@@ -365,7 +366,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 "getAppData: ${resolveInfo.loadLabel(packageManager)} packageName${packageName} "
             )
             when {
-                appType == AppConstants.ALL_APP -> {
+                appType == AppConstants.ALL_APP && packageName != OLD_AOA_PACKAGE_NAME -> {
                     datas.add(
                         AppBean(
                             resolveInfo.loadLabel(packageManager), packageName,
@@ -837,7 +838,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     fun startAoaApp(context: Context, appId: Int, route: String) {
         try {
-            var intent = Intent("com.alight.android.aoa.entry")
+            var intent = Intent("com.alight.android.aoax.entry")
             intent.putExtra("action", "aos.app.open")
             intent.putExtra("appId", appId)
             intent.putExtra("route", route)

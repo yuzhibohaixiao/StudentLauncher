@@ -19,7 +19,9 @@ class AppConstants {
 
         const val USER_ID = "user_id"
 
-        //AOA星仔伴学包名
+        //AOA星仔伴学旧包名
+        const val OLD_AOA_PACKAGE_NAME = "com.alight.android.aoa"
+        //AOA星仔伴学新包名
         const val AOA_PACKAGE_NAME = "com.alight.android.aoax"
 
         //硬件控制包名
