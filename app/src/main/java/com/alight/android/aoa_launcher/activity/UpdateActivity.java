@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -77,11 +78,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private RecyclerView otherRecyclerView;
     private UpdateAdapter systemAdapter;
     private UpdateAdapter otherAdapter;
-    private ArrayList<File> files = new ArrayList<>();
 
     private HashMap<String, DownloadReceiver> downloadReceiverMap = new HashMap<>();
     private List<File> appList = new ArrayList<>();
     private List<File> otherList = new ArrayList<>();
+    private File otaFile = new File();
     private TextView tvOtaApp;
     private TextView tvSystemApp;
     private TextView tvOtherApp;
@@ -100,6 +101,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private TextView tvNewOtaApp;
     private TextView tvOtaAppUpdate;
     private View llOtaUpdate;
+    private View llOtaUpdateBtn;
+    private View llOtaUpdateProgress;
+    private ProgressBar pbUpdateOta;
 
     @Override
     public void initData() {
@@ -460,11 +464,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             List<File> fileList = selectDownloadedFiles();
             File file = new File();
             file.setId("" + otaUpdateBean.getId());
-//            file.setSeq(otaUpdateBean.get);
+            file.setSeq(otaUpdateBean.getId());
             file.setFormat(otaUpdateBean.getFormat());
-            file.setFileName(otaUpdateBean.getApp_name() + ".zip");
+            file.setFileName("update.zip");
             file.setVersionCode(otaUpdateBean.getVersion_code());
-            file.setFileName("ansystem.zip");
             if (downloadedFileIds.contains(file.getId())) {
                 File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
                 System.out.println(file1);
@@ -483,17 +486,16 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 file.setPackName(otaUpdateBean.getApp_info().getPackage_name());
             }
             file.setFormat(otaUpdateBean.getFormat());
-            file.setSizeStr("请稍等");
             file.setSpeed("");
-            file.setFileName(otaUpdateBean.getApp_name() + ".zip");
             serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
             serviceIntent.putExtra("filename", file.getFileName());
             serviceIntent.putExtra("url", file.getUrl());
             serviceIntent.putExtra("id", file.getId());
             serviceIntent.putExtra("seq", file.getSeq());
-            serviceIntent.putExtra("type", 2);
+            serviceIntent.putExtra("type", 3);
             startService(serviceIntent);
             file.setStatus(File.DOWNLOAD_PROCEED);
+            otaFile = file;
         }
     }
 
@@ -733,6 +735,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvNewOtaApp = findViewById(R.id.tv_new_ota_app);
         tvOtaAppUpdate = findViewById(R.id.tv_ota_app_update);
         llOtaUpdate = findViewById(R.id.ll_ota_update);
+        llOtaUpdateBtn = findViewById(R.id.ll_ota_update_btn);
+        llOtaUpdateProgress = findViewById(R.id.ll_ota_update_progress);
+        pbUpdateOta = findViewById(R.id.pb_update_ota);
     }
 
     @Nullable
@@ -791,6 +796,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.tv_ota_app_update:
                 ToastUtils.showShort(this, "开始OTA固件更新");
+                llOtaUpdateBtn.setVisibility(View.GONE);
+                llOtaUpdateProgress.setVisibility(View.VISIBLE);
                 setBanOnBack(true);
                 //开启ota升级
                 startOtaDownload();
@@ -890,7 +897,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         e.printStackTrace();
                     }
                 }
-            } else {
+            } else if (type == 2) {
                 //预装应用
                 for (int i = 0; i < otherList.size(); i++) {
                     File file = otherList.get(i);
@@ -930,6 +937,42 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     }
                 }
 
+            } else {
+                File file = otaFile;
+                if (intent.getAction().equals(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + type)) {
+                    String speedS = intent.getStringExtra("speed");
+                    String sizeS = intent.getStringExtra("size");
+                    String totalSize = intent.getStringExtra("totalSize");
+                    int pencent = intent.getIntExtra("percent", 0);
+                    int status = intent.getIntExtra("status", 0);
+                    String filePath = intent.getStringExtra("filePath");
+                    if (status == File.DOWNLOAD_PROCEED) {//下载进行中
+                        file.setSpeed(speedS);
+                        file.setProgress(pencent);
+                        file.setSizeStr(sizeS);
+                        pbUpdateOta.setProgress(file.getProgress());
+                    }
+                    if (status == File.DOWNLOAD_COMPLETE) {//完成
+                        file.setStatus(File.DOWNLOAD_COMPLETE);
+                        file.setProgress(pencent);
+                        file.setSizeStr(totalSize);
+                        file.setPath(filePath);
+                        pbUpdateOta.setProgress(file.getProgress());
+                        LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
+                        String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
+                        if (file.getFormat() == 2) {
+                            ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+                        } else if (file.getFormat() == 1) {
+                            if (!StringUtils.isEmpty(apkPath)) {
+                                loadZip(apkPath, file.getVersionCode());
+                            }
+                        }
+                    }
+                    if (status == File.DOWNLOAD_ERROR) {
+                        LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
+                        file.setStatus(File.DOWNLOAD_ERROR);
+                    }
+                }
             }
         }
 
