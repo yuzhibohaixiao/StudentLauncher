@@ -37,7 +37,6 @@ import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
 import com.alight.android.aoa_launcher.utils.SPUtils;
 import com.alight.android.aoa_launcher.utils.StringUtils;
-import com.alight.android.aoa_launcher.utils.ToastUtil;
 import com.alight.android.aoa_launcher.utils.ToastUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -100,6 +99,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private TextView tvLocalOtaApp;
     private TextView tvNewOtaApp;
     private TextView tvOtaAppUpdate;
+    private View llOtaUpdate;
 
     @Override
     public void initData() {
@@ -153,8 +153,17 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 llBackUpdate.setVisibility(View.GONE);
             }
         }
+        initOtaUpdate();
+    }
+
+    private void initOtaUpdate() {
         tvLocalOtaApp.setText("版本：" + Build.DISPLAY);
         tvNewOtaApp.setText("发现新版本:2.293.27.4478" + otaUpdateBean.getVersion_name());
+        IntentFilter filter = new IntentFilter();
+        DownloadReceiver receiver = new DownloadReceiver();
+        filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + otaUpdateBean.getId() + otaUpdateBean.getApp_info().getType());
+        registerReceiver(receiver, filter);
+        downloadReceiverMap.put(String.valueOf(otaUpdateBean.getId()), receiver);
     }
 
     /**
@@ -332,6 +341,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void loadZip(String zipPath, int versionCode) {
         try {
             String string = new String();
@@ -441,10 +451,57 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    /**
+     * ota下载
+     */
+    private void startOtaDownload() {
+        if (otaUpdateBean != null) {
+            List<String> downloadedFileIds = getDownloadedFileIds();
+            List<File> fileList = selectDownloadedFiles();
+            File file = new File();
+            file.setId("" + otaUpdateBean.getId());
+//            file.setSeq(otaUpdateBean.get);
+            file.setFormat(otaUpdateBean.getFormat());
+            file.setFileName(otaUpdateBean.getApp_name() + ".zip");
+            file.setVersionCode(otaUpdateBean.getVersion_code());
+            file.setFileName("ansystem.zip");
+            if (downloadedFileIds.contains(file.getId())) {
+                File file1 = fileList.get(downloadedFileIds.indexOf(file.getId()));
+                System.out.println(file1);
+                Log.d(TAG, "getData: " + file1.getStatus());
+//                file.setStatus(file1.getStatus());
+                //状态始终保持初始
+                file.setStatus(File.DOWNLOAD_REDYA);
+                file.setSizeStr(file1.getSizeStr());
+                file.setCreateTime(file1.getCreateTime());
+            } else {
+                file.setStatus(File.DOWNLOAD_REDYA);
+                file.setCreateTime(new Date());
+            }
+            file.setUrl(otaUpdateBean.getApp_url());
+            if (!StringUtils.isEmpty(otaUpdateBean.getApp_info().getPackage_name())) {
+                file.setPackName(otaUpdateBean.getApp_info().getPackage_name());
+            }
+            file.setFormat(otaUpdateBean.getFormat());
+            file.setSizeStr("请稍等");
+            file.setSpeed("");
+            file.setFileName(otaUpdateBean.getApp_name() + ".zip");
+            serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
+            serviceIntent.putExtra("filename", file.getFileName());
+            serviceIntent.putExtra("url", file.getUrl());
+            serviceIntent.putExtra("id", file.getId());
+            serviceIntent.putExtra("seq", file.getSeq());
+            serviceIntent.putExtra("type", 2);
+            startService(serviceIntent);
+            file.setStatus(File.DOWNLOAD_PROCEED);
+        }
+    }
+
+
     private void startDownload() {
         for (int i = 0; i < appList.size(); i++) {
             File file = appList.get(i);
-            if (file.getFormat() == 3 || file.getFormat() == 4) {
+            if (file.getFormat() == 4) {
                 continue;
             }
             file.setSizeStr("请稍等");
@@ -675,6 +732,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvLocalOtaApp = findViewById(R.id.tv_local_ota_app);
         tvNewOtaApp = findViewById(R.id.tv_new_ota_app);
         tvOtaAppUpdate = findViewById(R.id.tv_ota_app_update);
+        llOtaUpdate = findViewById(R.id.ll_ota_update);
     }
 
     @Nullable
@@ -707,19 +765,13 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_ota_app:
-                setSelect(tvOtaApp);
+                setSelectRefreshUI(tvOtaApp);
                 break;
             case R.id.tv_system_app:
-                otherRecyclerView.setVisibility(View.GONE);
-                systemRecyclerView.setVisibility(View.VISIBLE);
-                tvUpdateAll.setVisibility(View.VISIBLE);
-                setSelect(tvSystemApp);
+                setSelectRefreshUI(tvSystemApp);
                 break;
             case R.id.tv_other_app:
-                otherRecyclerView.setVisibility(View.VISIBLE);
-                systemRecyclerView.setVisibility(View.GONE);
-                setSelect(tvOtherApp);
-                tvUpdateAll.setVisibility(View.GONE);
+                setSelectRefreshUI(tvOtherApp);
                 if (otherList.size() == 0) {
                     getData(2);
                     otherAdapter.setNewInstance(otherList);
@@ -728,6 +780,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 break;
             //开始下载
             case R.id.tv_update_all:
+                ToastUtils.showShort(this, "开始一键更新");
                 tvUpdateAll.setTextColor(Color.parseColor("#50ffffff"));
                 tvUpdateAll.setEnabled(false);
                 tvUpdateAll.setClickable(false);
@@ -738,19 +791,48 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.tv_ota_app_update:
                 ToastUtils.showShort(this, "开始OTA固件更新");
+                setBanOnBack(true);
+                //开启ota升级
+                startOtaDownload();
                 break;
             default:
         }
     }
 
-    private void setSelect(TextView textView) {
-        tvOtaApp.setSelected(textView == tvOtaApp);
-        tvSystemApp.setSelected(textView == tvSystemApp);
-        tvOtherApp.setSelected(textView == tvOtherApp);
+    /**
+     * 禁止返回的方法
+     *
+     * @param b true表示禁止返回 false可以返回
+     */
+    private void setBanOnBack(boolean b) {
+        if (b) {
+            //禁止返回
+            llBackUpdate.setVisibility(View.GONE);
+        } else {
+            //可以返回
+            llBackUpdate.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 设置点击后的UI刷新
+     *
+     * @param view 点击触发的控件
+     */
+    private void setSelectRefreshUI(View view) {
+        tvOtaApp.setSelected(view == tvOtaApp);
+        tvSystemApp.setSelected(view == tvSystemApp);
+        tvOtherApp.setSelected(view == tvOtherApp);
+
+        systemRecyclerView.setVisibility(view == tvSystemApp ? View.VISIBLE : View.GONE);
+        otherRecyclerView.setVisibility(view == tvOtherApp ? View.VISIBLE : View.GONE);
+        tvUpdateAll.setVisibility(view == tvSystemApp ? View.VISIBLE : View.GONE);
+        llOtaUpdate.setVisibility(view == tvOtaApp ? View.VISIBLE : View.GONE);
     }
 
     class DownloadReceiver extends BroadcastReceiver {
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onReceive(Context context, Intent intent) {
             int type = intent.getIntExtra("type", 1);
