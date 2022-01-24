@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -105,6 +107,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private View llOtaUpdateProgress;
     private ProgressBar pbUpdateOta;
     private TextView tvOtaUpdateText;
+    private boolean otaInstall = false;
 
     @Override
     public void initData() {
@@ -679,17 +682,21 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void installSystem(Context context) {
-        Intent intent = new Intent();
-        intent.setComponent(new ComponentName(
-                "android.rockchip.update.service",
-                "android.rockchip.update.service.FirmwareUpdatingActivity"
-        ));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(
-                EXTRA_IMAGE_PATH,
-                SYSTEM_ZIP_FULL_PATH
-        );
-        context.startActivity(intent);
+        try {
+            Intent intent = new Intent();
+            intent.setComponent(new ComponentName(
+                    "android.rockchip.update.service",
+                    "android.rockchip.update.service.FirmwareUpdatingActivity"
+            ));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(
+                    EXTRA_IMAGE_PATH,
+                    SYSTEM_ZIP_FULL_PATH
+            );
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -797,12 +804,16 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 finish();
                 break;
             case R.id.tv_ota_app_update:
-                ToastUtils.showShort(this, "开始OTA固件更新");
-                llOtaUpdateBtn.setVisibility(View.GONE);
-                llOtaUpdateProgress.setVisibility(View.VISIBLE);
-                setBanOnBack(true);
-                //开启ota升级
-                startOtaDownload();
+                if (otaInstall) {
+                    installSystem(this);
+                } else {
+                    ToastUtils.showShort(this, "开始OTA固件更新");
+                    llOtaUpdateBtn.setVisibility(View.GONE);
+                    llOtaUpdateProgress.setVisibility(View.VISIBLE);
+                    setBanOnBack(true);
+                    //开启ota升级
+                    startOtaDownload();
+                }
                 break;
             default:
         }
@@ -817,11 +828,25 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         if (b) {
             //禁止返回
             llBackUpdate.setVisibility(View.GONE);
+            tvOtherApp.setVisibility(View.GONE);
+            tvSystemApp.setVisibility(View.GONE);
         } else {
             //可以返回
             llBackUpdate.setVisibility(View.VISIBLE);
+            tvSystemApp.setVisibility(View.VISIBLE);
+            tvOtherApp.setVisibility(View.VISIBLE);
         }
     }
+
+  /*  @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            //do something.
+            return true;//系统层不做处理 就可以了
+        } else {
+            return super.dispatchKeyEvent(event);
+        }
+    }*/
 
     /**
      * 设置点击后的UI刷新
@@ -960,17 +985,16 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         file.setProgress(pencent);
                         file.setSizeStr(totalSize);
                         file.setPath(filePath);
-                        tvOtaUpdateText.setText("更新进度：" + file.getProgress() + "%");
+                        tvOtaUpdateText.setText("更新进度：100%");
                         pbUpdateOta.setProgress(file.getProgress());
                         LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                         String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
-                        if (file.getFormat() == 2) {
-                            ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
-                        } else if (file.getFormat() == 1) {
-                            if (!StringUtils.isEmpty(apkPath)) {
-                                loadZip(apkPath, file.getVersionCode());
-                            }
-                        }
+                        installSystem(context);
+                        setBanOnBack(false);
+                        llOtaUpdateProgress.setVisibility(View.GONE);
+                        llOtaUpdateBtn.setVisibility(View.VISIBLE);
+                        tvOtaAppUpdate.setText("安装");
+                        otaInstall = true;
                     }
                     if (status == File.DOWNLOAD_ERROR) {
                         LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
@@ -981,6 +1005,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         }
 
     }
+
 
     /**
      * 检查外部scard读写权限
