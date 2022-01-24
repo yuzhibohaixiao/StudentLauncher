@@ -108,6 +108,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private ProgressBar pbUpdateOta;
     private TextView tvOtaUpdateText;
     private boolean otaInstall = false;
+    private View ivOtaLogo;
 
     @Override
     public void initData() {
@@ -166,12 +167,20 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
     private void initOtaUpdate() {
         tvLocalOtaApp.setText("版本：" + Build.DISPLAY);
-        tvNewOtaApp.setText("发现新版本:2.293.27.4478" + otaUpdateBean.getVersion_name());
-        IntentFilter filter = new IntentFilter();
-        DownloadReceiver receiver = new DownloadReceiver();
-        filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + otaUpdateBean.getId() + 3);
-        registerReceiver(receiver, filter);
-        downloadReceiverMap.put(String.valueOf(otaUpdateBean.getId()), receiver);
+        if (otaUpdateBean != null && !otaUpdateBean.getVersion_name().equals(Build.DISPLAY)) {
+            //有新版
+            tvNewOtaApp.setText("发现新版本:" + otaUpdateBean.getVersion_name());
+            IntentFilter filter = new IntentFilter();
+            DownloadReceiver receiver = new DownloadReceiver();
+            filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + otaUpdateBean.getId() + 3);
+            registerReceiver(receiver, filter);
+            downloadReceiverMap.put(String.valueOf(otaUpdateBean.getId()), receiver);
+        } else {
+            //无新版
+            tvNewOtaApp.setText("已是最新版本");
+            tvOtaAppUpdate.setVisibility(View.GONE);
+            ivOtaLogo.setPadding(0, 80, 0, 0);
+        }
     }
 
     /**
@@ -747,6 +756,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         llOtaUpdateProgress = findViewById(R.id.ll_ota_update_progress);
         pbUpdateOta = findViewById(R.id.pb_update_ota);
         tvOtaUpdateText = findViewById(R.id.tv_ota_update_text);
+        ivOtaLogo = findViewById(R.id.iv_ota_logo);
     }
 
     @Nullable

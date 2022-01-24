@@ -103,7 +103,6 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         intent.action = USER_LOGIN_ACTION
         intent.putExtra("message", "用户登陆") // 设置广播的消息
         sendBroadcast(intent)
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
