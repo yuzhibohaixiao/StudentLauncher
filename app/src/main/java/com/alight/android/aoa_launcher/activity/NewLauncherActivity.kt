@@ -155,12 +155,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         } else {
-            if (!splashCloseFlag && !guideUserUpdate)  //检测系统更新
-            {
-                getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+//            if (!splashCloseFlag && !guideUserUpdate)  //检测系统更新
+//            {
+//                getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
                 //表示引导过用户升级
-                guideUserUpdate = true
-            }
+//                guideUserUpdate = true
+//            }
         }
         if (!splashCloseFlag && tv_user_name_new_launcher.text.isNullOrEmpty()) {
             Glide.with(this@NewLauncherActivity)
@@ -781,6 +781,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 netState = 1
                 initAccountUtil()
                 EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
+                if (!guideUserUpdate)  //检测系统更新
+                {
+                    getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+                    //表示引导过用户升级
+                    guideUserUpdate = true
+                }
                 Log.e(TAG, "onNetChanged:网络正常 ")
             }
         }

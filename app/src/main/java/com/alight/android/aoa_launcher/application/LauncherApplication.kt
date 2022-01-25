@@ -31,8 +31,8 @@ class LauncherApplication : Application() {
         super.onCreate()
         context = this
         x.Ext.init(this)
-        val rootDir = MMKV.initialize(this)
-        Log.i(TAG, "mmkv root: $rootDir")
+//        val rootDir = MMKV.initialize(this)
+//        Log.i(TAG, "mmkv root: $rootDir")
         init()
     }
 

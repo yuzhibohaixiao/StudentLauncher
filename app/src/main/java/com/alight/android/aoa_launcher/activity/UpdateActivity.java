@@ -856,6 +856,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
      * 开始下载固件更新
      */
     private void startOtaUpdate() {
+        sendMenuEnableBroadcast(false);
         ToastUtils.showShort(this, "开始OTA固件更新");
         llOtaUpdateBtn.setVisibility(View.GONE);
         llOtaUpdateProgress.setVisibility(View.VISIBLE);
@@ -1037,6 +1038,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         installSystem(context);
                         if (StringUtils.isEmpty(source)) {
                             setBanOnBack(false);
+                            sendMenuEnableBroadcast(true);
+                        } else if (source.equals("splash") && !newSplash) {
+                            sendMenuEnableBroadcast(true);
                         }
                         llOtaUpdateProgress.setVisibility(View.GONE);
                         llOtaUpdateBtn.setVisibility(View.VISIBLE);
@@ -1122,4 +1126,14 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         return ids;
     }
 
+    /**
+     * @param isEnable true表示可用 false表示禁用
+     *                 发送菜单禁用的广播
+     */
+    private void sendMenuEnableBroadcast(boolean isEnable) {
+        Intent intent = new Intent();
+        intent.setAction("com.alight.android.menu");
+        intent.putExtra("state", isEnable);
+        sendBroadcast(intent);
+    }
 }
