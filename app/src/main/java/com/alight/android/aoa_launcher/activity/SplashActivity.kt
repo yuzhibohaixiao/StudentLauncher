@@ -390,6 +390,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 if (any.data.exists) {
                     //检测系统更新
                     getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+//                    showChildUser()
                 } else {
                     GlobalScope.launch {
                         try {

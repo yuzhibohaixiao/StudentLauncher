@@ -69,6 +69,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private val abilityManager = AbilityManager("launcher", "3", "123")
     private var abilityInitSuccessful = false
 
+    //引导过用户升级为 true
+    private var guideUserUpdate = false
+
     companion object {
         lateinit var mINetEvent: INetEvent
     }
@@ -151,6 +154,13 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             Log.i(TAG, "展示引导页")
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
+        } else {
+            if (!splashCloseFlag && !guideUserUpdate)  //检测系统更新
+            {
+                getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+                //表示引导过用户升级
+                guideUserUpdate = true
+            }
         }
         if (!splashCloseFlag && tv_user_name_new_launcher.text.isNullOrEmpty()) {
             Glide.with(this@NewLauncherActivity)
@@ -159,8 +169,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 .error(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
                 .into(iv_user_icon_new_launcher)
             tv_user_name_new_launcher.text = tokenPair?.name
-            //检测系统更新
-            getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+
         }
         setInteraction()
         // 获取学习计划
@@ -283,6 +292,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 //选择用户后的用户刷新逻辑
                 AppConstants.RESULT_CODE_SELECT_USER_BACK -> {
                     splashCloseFlag = true
+                    guideUserUpdate = true
                     val syncPutData = SPUtils.syncPutData("splashClose", true)
                     Log.i(TAG, "initAccountUtil")
                     //初始化用户工具及展示用户数据
@@ -431,7 +441,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 }
             } else if (any is UpdateBean) {
                 //展示系统固件更新
-                getPresenter().splashStartUpdateActivity(false,any, this@NewLauncherActivity)
+                getPresenter().splashStartUpdateActivity(false, any, this@NewLauncherActivity)
             }
         }
     }
