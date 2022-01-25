@@ -1035,7 +1035,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                         String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
                         installSystem(context);
-                        setBanOnBack(false);
+                        if (StringUtils.isEmpty(source)) {
+                            setBanOnBack(false);
+                        }
                         llOtaUpdateProgress.setVisibility(View.GONE);
                         llOtaUpdateBtn.setVisibility(View.VISIBLE);
                         tvOtaAppUpdate.setText("安装");
