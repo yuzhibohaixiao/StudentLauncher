@@ -155,6 +155,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         } else {
+            getPresenter().sendMenuEnableBroadcast(this, true)
 //            if (!splashCloseFlag && !guideUserUpdate)  //检测系统更新
 //            {
 //                getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
@@ -181,7 +182,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             )
         }
         splashCloseFlag = false
-        getPresenter().sendMenuEnableBroadcast(this,true)
     }
 
     /**
@@ -531,11 +531,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //错题本-AOA收藏夹
             R.id.tv_wrong_topic_launcher -> {
-                getPresenter().startAoaApp(this, 141, "/app/141/home")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_POINT
-                )
+                ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
+//                getPresenter().startAoaApp(this, 141, "/app/141/home")
+//                getPresenter().startInteractionWindow(
+//                    interactionAbility!!,
+//                    InteractionAbility.InteractiveMode.PEN_POINT
+//                )
             }
             //口算批改
             R.id.tv_kspg_launcher -> {
@@ -555,11 +556,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //英语作文批改
             R.id.tv_yyzwpg_launcher -> {
-                getPresenter().startAoaApp(this, 144, "/app/144/home")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_POINT
-                )
+                ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
+//                getPresenter().startAoaApp(this, 144, "/app/144/home")
+//                getPresenter().startInteractionWindow(
+//                    interactionAbility!!,
+//                    InteractionAbility.InteractiveMode.PEN_POINT
+//                )
             }
             //收藏夹-AOA收藏夹
             R.id.tv_favorite_launcher -> {
