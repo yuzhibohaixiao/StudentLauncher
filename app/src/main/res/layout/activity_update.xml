@@ -26,10 +26,10 @@
             android:layout_height="30dp"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="38.5dp"
-            android:background="@drawable/update_oval"
+            android:background="@drawable/launcher_ota_update"
             android:gravity="center"
             android:text="一键更新"
-            android:textColor="@color/white"
+            android:textColor="#598E97"
             android:textSize="9sp"
             android:textStyle="bold"
             android:visibility="gone" />

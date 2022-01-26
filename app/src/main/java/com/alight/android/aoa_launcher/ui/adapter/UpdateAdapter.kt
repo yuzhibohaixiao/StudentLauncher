@@ -164,7 +164,8 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 } else {
                     tvUpdate.isEnabled = true
                     tvUpdate.text = "可更新"
-                    tvUpdate.setTextColor(Color.WHITE)
+                    tvUpdate.setTextColor(Color.parseColor("#598E97"))
+                    tvUpdate.setBackgroundResource(R.drawable.launcher_ota_update)
                     tvSize.visibility = View.VISIBLE
                 }
                 //表示已经加载过图片
@@ -186,6 +187,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                         pbUpdate.visibility = View.VISIBLE
                         pbUpdate.progress = file.progress
                         tvUpdate.setTextColor(Color.WHITE)
+                        tvUpdate.setBackgroundResource(R.drawable.update_oval_trans20)
                         tvUpdate.text = "${pbUpdate.progress}%";
 
                     }
@@ -217,6 +219,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
     override fun getItemViewType(position: Int): Int {
         return position
     }
+
     private fun getIcon(packName: String): Drawable? {
         val pm: PackageManager = context.packageManager
         try {
