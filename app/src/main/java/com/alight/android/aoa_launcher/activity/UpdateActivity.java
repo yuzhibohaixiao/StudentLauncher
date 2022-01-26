@@ -814,6 +814,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             //开始下载
             case R.id.tv_update_all:
                 ToastUtils.showShort(this, "开始一键更新");
+                tvUpdateAll.setBackgroundResource(R.drawable.update_oval);
                 tvUpdateAll.setTextColor(Color.parseColor("#50ffffff"));
                 tvUpdateAll.setEnabled(false);
                 tvUpdateAll.setClickable(false);
