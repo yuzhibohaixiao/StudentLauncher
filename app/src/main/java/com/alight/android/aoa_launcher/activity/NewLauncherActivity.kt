@@ -158,7 +158,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //            if (!splashCloseFlag && !guideUserUpdate)  //检测系统更新
 //            {
 //                getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
-                //表示引导过用户升级
+            //表示引导过用户升级
 //                guideUserUpdate = true
 //            }
         }
@@ -181,6 +181,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             )
         }
         splashCloseFlag = false
+        getPresenter().sendMenuEnableBroadcast(this,true)
     }
 
     /**

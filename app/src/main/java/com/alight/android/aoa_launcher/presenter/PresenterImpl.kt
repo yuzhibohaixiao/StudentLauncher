@@ -637,8 +637,19 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
+    /**
+     * @param isEnable true表示可用 false表示禁用
+     * 发送菜单禁用的广播
+     */
+    fun sendMenuEnableBroadcast(context: Context, isEnable: Boolean) {
+        val intent = Intent()
+        intent.action = "com.alight.android.menu"
+        intent.putExtra("state", isEnable);
+        context.sendBroadcast(intent)
+    }
+
     fun splashStartUpdateActivity(
-        isNewUser:Boolean,any: UpdateBean,
+        isNewUser: Boolean, any: UpdateBean,
         activity: Activity
     ) {
         //系统应用

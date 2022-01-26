@@ -90,7 +90,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 getSystemDate()
             }
             else -> {
-                sendMenuEnableBroadcast(false)
+                getPresenter().sendMenuEnableBroadcast(this,false)
                 getSystemDate()
             }
         }
@@ -103,17 +103,6 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         val intent = Intent()
         intent.action = USER_LOGIN_ACTION
         intent.putExtra("message", "用户登陆") // 设置广播的消息
-        sendBroadcast(intent)
-    }
-
-    /**
-     * @param isEnable true表示可用 false表示禁用
-     * 发送菜单禁用的广播
-     */
-    private fun sendMenuEnableBroadcast(isEnable: Boolean) {
-        val intent = Intent()
-        intent.action = "com.alight.android.menu"
-        intent.putExtra("state", isEnable);
         sendBroadcast(intent)
     }
 
@@ -268,7 +257,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun finishSplash() {
-        sendMenuEnableBroadcast(true)
+        getPresenter().sendMenuEnableBroadcast(this,true)
         val syncPutData = SPUtils.syncPutData("splashClose", true)
         if (syncPutData) {
             setResult(AppConstants.RESULT_CODE_SELECT_USER_BACK)
