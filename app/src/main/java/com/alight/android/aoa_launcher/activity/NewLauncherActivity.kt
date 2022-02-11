@@ -19,7 +19,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.jpush.android.api.JPushInterface
 import com.alight.ahwcx.ahwsdk.AbilityManager
+import com.alight.ahwcx.ahwsdk.abilities.AudioAbility
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
+import com.alight.ahwcx.ahwsdk.common.AbilityConnectionHandler
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
@@ -66,8 +68,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var splashCloseFlag = false
     private var qualityHorizontalAdapter: QualityHorizontalAdapter? = null
     private var interactionAbility: InteractionAbility? = null
-    private val abilityManager = AbilityManager("launcher", "3", "123")
+    private var audioAbility: AudioAbility? = null
+    private val abilityManager = AbilityManager("launcher", "5", "234")
     private var abilityInitSuccessful = false
+    private var audioInitSuccessful = false
 
     companion object {
         lateinit var mINetEvent: INetEvent
@@ -151,6 +155,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             Log.i(TAG, "展示引导页")
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
+        } else {
+            if (audioInitSuccessful){
+                audioAbility?.startRecording()
+            }
         }
         if (!splashCloseFlag && tv_user_name_new_launcher.text.isNullOrEmpty()) {
             Glide.with(this@NewLauncherActivity)
@@ -170,6 +178,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 StudyPlanBean::class.java
             )
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        audioAbility?.stopRecording()
     }
 
     /**
@@ -306,7 +319,81 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         if (!InternetUtil.isNetworkAvalible(this)) {
             netState = 0
         }
+        initAbility()
     }
+
+    private fun initAbility() {
+        if (audioAbility == null) {
+            audioAbility = abilityManager.getAbility(AudioAbility::class.java, true, applicationContext)
+            GlobalScope.launch(Dispatchers.Main) {
+                audioAbility?.waitConnection(object : AbilityConnectionHandler {
+                    override fun onServerConnected() {
+                        audioAbility?.startRecording()
+                        try {
+                            audioInitSuccessful  = true
+                            audioAbility?.subOpenAppResult(object : AudioAbility.OpenAppCallback {
+                                override fun onReceive(appArgs: MutableList<AudioAbility.ToApp>?) {
+                                    appArgs?.forEach {
+                                        if (it.type == AudioAbility.ParamType.AOA) {
+                                            val aoaParam = it.aoaParam
+                                            getPresenter().startAoaApp(
+                                                this@NewLauncherActivity,
+                                                aoaParam?.appId!!.toInt(),
+                                                aoaParam.route!!
+                                            )
+                                        } else if (it.type == AudioAbility.ParamType.THIRD) {
+                                            val thirdPartyParam = it.thirdPartyParam
+                                            getPresenter().startActivity(
+                                                this@NewLauncherActivity,
+                                                thirdPartyParam?.packetName!!,
+                                                thirdPartyParam.className!!,
+                                                thirdPartyParam.param
+                                            )
+                                        }
+                                    }
+                                }
+                            })
+                        } catch (e: java.lang.Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                })
+
+//                audioInitSuccessful = audioAbility?.waitConnectionAsync()!!
+/*
+                if (abilityInitSuccessful) {
+                    try {
+                        audioAbility?.subOpenAppResult(object : AudioAbility.OpenAppCallback {
+                            override fun onReceive(appArgs: MutableList<AudioAbility.ToApp>?) {
+                                appArgs?.forEach {
+                                    if (it.type == AudioAbility.ParamType.AOA) {
+                                        val aoaParam = it.aoaParam
+                                        getPresenter().startAoaApp(
+                                            this@NewLauncherActivity,
+                                            aoaParam?.appId!!.toInt(),
+                                            aoaParam.route!!
+                                        )
+                                    } else if (it.type == AudioAbility.ParamType.THIRD) {
+                                        val thirdPartyParam = it.thirdPartyParam
+                                        getPresenter().startActivity(
+                                            this@NewLauncherActivity,
+                                            thirdPartyParam?.packetName!!,
+                                            thirdPartyParam.className!!,
+                                            thirdPartyParam.param
+                                        )
+                                    }
+                                }
+                            }
+                        })
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
+                    }
+                }
+*/
+            }
+        }
+    }
+
 
     private fun initPermission() {
         PermissionUtils.isGrantExternalRW(this, 1)
