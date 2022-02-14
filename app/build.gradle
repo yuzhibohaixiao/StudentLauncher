@@ -163,7 +163,7 @@ dependencies {
     implementation 'org.xutils:xutils:3.8.2'
 
     implementation 'com.alight.ahwcx:bridge:1.0.2'
-    implementation 'com.alight.ahwcx:ahwsdk:1.0.2'
+    implementation 'com.alight.ahwcx:ahwsdk:1.0.3'
 
     implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
 
