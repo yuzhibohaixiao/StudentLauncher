@@ -72,6 +72,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private val abilityManager = AbilityManager("launcher", "5", "234")
     private var abilityInitSuccessful = false
     private var audioInitSuccessful = false
+    private var stopHeart = false
 
     //引导过用户升级为 true
     private var guideUserUpdate = false
@@ -242,6 +243,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     allToken.forEach {
                         if (it.userId == userId) {
                             AccountUtil.selectUser(it.userId)
+                            stopHeart = false
                             // 获取学习计划
                             getPresenter().getModel(
                                 "${Urls.STUDY_PLAN}${it.userId}",
@@ -520,6 +522,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 }
             } else if (any is BaseBean) {
                 if (any.code == 401) {
+                    stopHeart = true
                     SPUtils.syncPutData("onlyShowSelectChild", true)
                     activityResultLauncher?.launch(
                         Intent(
@@ -536,11 +539,13 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     private fun heartbeat() {
-        GlobalScope.launch(Dispatchers.IO) {
-            getPresenter().getModel(Urls.HEART_BEAT, hashMapOf(), HeartBean::class.java)
-            //每15秒调用一次打点接口
-            delay(1000 * 15)
-            heartbeat()
+        if (!stopHeart) {
+            GlobalScope.launch(Dispatchers.IO) {
+                getPresenter().getModel(Urls.HEART_BEAT, hashMapOf(), HeartBean::class.java)
+                //每15秒调用一次打点接口
+                delay(1000 * 15)
+                heartbeat()
+            }
         }
     }
 
