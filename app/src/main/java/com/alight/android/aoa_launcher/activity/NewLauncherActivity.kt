@@ -159,7 +159,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         } else {
-            if (audioInitSuccessful){
+            if (audioInitSuccessful) {
                 audioAbility?.startRecording()
             }
             getPresenter().sendMenuEnableBroadcast(this, true)
@@ -192,7 +192,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     override fun onPause() {
         super.onPause()
-        audioAbility?.stopRecording()
+        if (audioInitSuccessful) {
+            audioAbility?.stopRecording()
+        }
     }
 
     /**
@@ -335,13 +337,14 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     private fun initAbility() {
         if (audioAbility == null) {
-            audioAbility = abilityManager.getAbility(AudioAbility::class.java, true, applicationContext)
+            audioAbility =
+                abilityManager.getAbility(AudioAbility::class.java, true, applicationContext)
             GlobalScope.launch(Dispatchers.Main) {
                 audioAbility?.waitConnection(object : AbilityConnectionHandler {
                     override fun onServerConnected() {
                         audioAbility?.startRecording()
                         try {
-                            audioInitSuccessful  = true
+                            audioInitSuccessful = true
                             audioAbility?.subOpenAppResult(object : AudioAbility.OpenAppCallback {
                                 override fun onReceive(appArgs: MutableList<AudioAbility.ToApp>?) {
                                     appArgs?.forEach {
@@ -766,7 +769,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 val appPackName = launcherCenterAdapter!!.data[position].appPackName
                 val className = launcherCenterAdapter!!.data[position].className
                 val params = launcherCenterAdapter!!.data[position].params
-                if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className) && appPackName != "com.jxw.mskt.video" && appPackName != "com.jxw.mskt.video"
+                if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className) && appPackName != "com.jxw.mskt.video"
                     && appPackName != "com.jxw.online_study"//语数英 预习课文
                     && appPackName != "com.jxw.wuweijidanci"//五维记单词
                 ) {

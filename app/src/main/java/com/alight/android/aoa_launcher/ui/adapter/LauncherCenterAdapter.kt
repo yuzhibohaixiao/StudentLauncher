@@ -32,7 +32,7 @@ class LauncherCenterAdapter :
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
             "com.jxw.mskt.filelist.activity.FileListActivity",
-            mapOf("StartArgs" to "d:小学|e:语文")
+            mapOf("StartArgs" to "d: 小学|e: 数学")
         ),
         AppTypeBean(
             R.drawable.xbh,
@@ -53,9 +53,9 @@ class LauncherCenterAdapter :
             null
         ),
         AppTypeBean(
-            R.drawable.bgs, "com.jxw.vanhondictionary",
-            "com.jxw.vanhondictionary.MainActivity",
-            mapOf("StartArgs" to "汉语词典")
+            R.drawable.bgs, "com.jxw.online_study",
+            "com.jxw.online_study.activity.XBookStudyActivity",
+            mapOf("StartArgs" to "f:/ansystem/固化数据/小学古诗词.JXW")
         ),
         AppTypeBean(
             R.drawable.aicp,
