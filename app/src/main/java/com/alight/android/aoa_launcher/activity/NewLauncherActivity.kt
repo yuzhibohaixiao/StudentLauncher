@@ -775,7 +775,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 val className = launcherCenterAdapter!!.data[position].className
                 val params = launcherCenterAdapter!!.data[position].params
                 if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className)
-                    && appPackName != "com.jxw.wuweijidanci"//五维记单词
                 ) {
                     getPresenter().startActivity(this, appPackName, className, params)
                     if (interactionAbility != null) {
