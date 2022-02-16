@@ -20,8 +20,9 @@ class LauncherRightAdapter :
     private val appList1: ArrayList<AppRightDoubleDataBean> = arrayListOf(
         AppRightDoubleDataBean(
             R.drawable.launcher_small_video,
-            "",
-            "", null,
+            "com.jxw.special.video",
+            "com.jxw.special.activity.SpecialCateListActivity",
+            mapOf("StartArgs" to "语文阅读与写作", "tag" to "小学"),
             "精选素养视频",
             R.drawable.jxyd,
             "com.jxw.jxwbook",
@@ -38,8 +39,8 @@ class LauncherRightAdapter :
             null
         ), AppRightDoubleDataBean(
             R.drawable.zhbd,
-            "",
-            "", null,
+            "com.jxw.online_study",
+            "com.jxw.online_study.activity.XBookStudyActivity", mapOf("StartArgs" to "f:/ansystem/固化数据/小学中华宝典.JXW"),
             "中华宝典",
             0,
             "", "", "", null
@@ -48,34 +49,37 @@ class LauncherRightAdapter :
     private val appList2: ArrayList<AppRightDoubleDataBean> = arrayListOf(
         AppRightDoubleDataBean(
             R.drawable.launcher_small_video,
-            "", "",
-            null,
+            "com.jxw.special.video",
+            "com.jxw.special.activity.SpecialCateListActivity",
+            mapOf("StartArgs" to "超越奥数"),
             "精选奥数视频",
-            R.drawable.asxl, "",
-            "",
+            R.drawable.asxl, "com.jxw.online_study",
+            "com.jxw.online_study.activity.XBookStudyActivity",
             "奥数训练",
-            null
+            mapOf("StartArgs" to "f:/ansystem/固化数据/小学奥数训练.JXW")
         ), AppRightDoubleDataBean(
             R.drawable.yytxl,
-            "", "",
-            null,
+            "com.jxw.online_study",
+            "com.jxw.online_study.activity.XBookStudyActivity",
+            mapOf("StartArgs" to "f:/ansystem/固化数据/小学应用题训练.JXW"),
             "应用题训练",
-            R.drawable.sdys, "",
-            "",
+            R.drawable.sdys, "com.jxw.online_study",
+            "com.jxw.online_study.activity.XBookStudyActivity",
             "数的运算",
-            null
+            mapOf("StartArgs" to "f:/ansystem/固化数据/小学数的运算.JXW")
         )
     )
     private val appList3: ArrayList<AppRightDoubleDataBean> = arrayListOf(
         AppRightDoubleDataBean(
             R.drawable.wjdnxyy,
-            "", "",
-            null,
+            "com.jxw.special.video",
+            "com.jxw.special.activity.SpecialCateListActivity",
+            mapOf("StartArgs" to "外教带你学英语"),
             "外教带你学英语",
-            R.drawable.kyjj, "",
-            "",
+            R.drawable.kyjj, "com.jxw.online_study",
+            "com.jxw.online_study.activity.XBookStudyActivity",
             "口语交际",
-            null
+            mapOf("StartArgs" to "f:/ansystem/固化数据/小学口语交际.JXW")
         )
     )
 

@@ -79,7 +79,7 @@ class LauncherCenterAdapter :
         AppTypeBean(
             R.drawable.szys,
             "com.jxw.jxwcalculator",
-            "com.jxw.jxwcalculator.LancherActivity",
+            "com.jxw.jxwcalculator.MainActivity",
             null
         ),
         AppTypeBean(
@@ -96,9 +96,9 @@ class LauncherCenterAdapter :
         ),
         AppTypeBean(
             R.drawable.sxgs,
-            "com.oirsdfg89.flg",
-            "com.nsc.mathformulas.MainActivity",
-            null
+            "com.jxw.online_study",
+            "com.jxw.online_study.activity.XBookStudyActivity",
+            mapOf("StartArgs" to "f:/ansystem/固化数据/小学数学公式.JXW")
         ),
         AppTypeBean(
             R.drawable.zzxl,
@@ -106,7 +106,11 @@ class LauncherCenterAdapter :
             "com.jxw.schultegrid.SettingActivity",
             null
         ),
-        AppTypeBean(R.drawable.qwsx, "", "", null),
+        AppTypeBean(
+            R.drawable.qwsx, "com.jxw.online_study",
+            "com.jxw.online_study.activity.XBookStudyActivity",
+            mapOf("StartArgs" to "f:/ansystem/固化数据/小学趣味数学.JXW")
+        ),
         AppTypeBean(
             R.drawable.aicp,
             "com.jxw.examcenter.activity",
@@ -126,7 +130,11 @@ class LauncherCenterAdapter :
             "com.jxw.singsound.ui.SplashActivity",
             null
         ),
-        AppTypeBean(R.drawable.tlxl, "", "", null),
+        AppTypeBean(
+            R.drawable.tlxl, "com.jxw.online_study",
+            "com.jxw.online_study.activity.XBookStudyActivity",
+            mapOf("StartArgs" to "f:/ansystem/固化数据/中学听力训练.JXW")
+        ),
         AppTypeBean(
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
@@ -157,7 +165,11 @@ class LauncherCenterAdapter :
             "com.jxw.liancichengju.MainActivity",
             null
         ),
-        AppTypeBean(R.drawable.yyyf, "", "", null),
+        AppTypeBean(
+            R.drawable.yyyf, "com.jxw.online_study",
+            "com.jxw.online_study.activity.XBookStudyActivity",
+            mapOf("StartArgs" to "f:/ansystem/固化数据/小学英语语法.JXW")
+        ),
         AppTypeBean(
             R.drawable.aicp,
             "com.jxw.examcenter.activity",
