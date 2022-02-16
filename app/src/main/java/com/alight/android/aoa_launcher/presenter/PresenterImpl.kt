@@ -906,7 +906,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     gradeContent = "六年级下"
                 }
             }
-            tv_dialog_launcher.text = "$gradeContent      ▲"
+            tv_dialog_launcher.text = "$gradeContent      ▼"
         }
         contentView.findViewById<TextView>(R.id.tv_grade1_up_launcher).setOnClickListener(listener)
         contentView.findViewById<TextView>(R.id.tv_grade1_down_launcher)
@@ -936,12 +936,12 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         mCustomPopWindow = CustomPopWindow.PopupWindowBuilder(activity)
             .setView(contentView)
             .setOnDissmissListener {
-                tv_dialog_launcher.text = "$gradeContent      ▲"
+                tv_dialog_launcher.text = "$gradeContent      ▼"
                 tv_dialog_launcher.setBackgroundResource(R.drawable.white_bg_oval)
             }
             .create()
             .showAsDropDown(tv_dialog_launcher, 0, 0)
-        tv_dialog_launcher.text = "$gradeContent      ▼"
+        tv_dialog_launcher.text = "$gradeContent      ▲"
         tv_dialog_launcher.setBackgroundResource(R.drawable.launcher_dialog_top)
     }
 

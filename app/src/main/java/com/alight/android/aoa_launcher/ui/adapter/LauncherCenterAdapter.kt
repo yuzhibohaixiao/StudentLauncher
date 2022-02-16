@@ -32,7 +32,7 @@ class LauncherCenterAdapter :
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
             "com.jxw.mskt.filelist.activity.FileListActivity",
-            mapOf("StartArgs" to "d: 小学|e: 数学")
+            mapOf("StartArgs" to "d: 小学|e: 语文")
         ),
         AppTypeBean(
             R.drawable.xbh,
@@ -86,7 +86,7 @@ class LauncherCenterAdapter :
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
             "com.jxw.mskt.filelist.activity.FileListActivity",
-            null
+            mapOf("StartArgs" to "d: 小学|e: 数学")
         ),
         AppTypeBean(
             R.drawable.sskj,
@@ -131,7 +131,7 @@ class LauncherCenterAdapter :
             R.drawable.ktbsp,
             "com.jxw.mskt.video",
             "com.jxw.mskt.filelist.activity.FileListActivity",
-            null
+            mapOf("StartArgs" to "d: 小学|e: 英语")
         ),
         AppTypeBean(
             R.drawable.yyzm,
