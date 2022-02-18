@@ -627,6 +627,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     InteractionAbility.InteractiveMode.PEN_POINT
                 )
             }
+
             //答题-AOA搜题
             R.id.tv_answer_launcher -> {
                 getPresenter().startAoaApp(this, 139, "/apps/139/main")
