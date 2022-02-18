@@ -59,6 +59,9 @@ import com.xuexiang.xupdate.listener.IUpdateParseCallback
 import com.xuexiang.xupdate.proxy.IUpdateParser
 import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.android.synthetic.main.dialog_update.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
@@ -823,7 +826,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             intent.component = componentName
             context.startActivity(intent)
         } catch (e: java.lang.Exception) {
-            ToastUtils.showLong(context, "该应用正在开发中，敬请期待！")
+            GlobalScope.launch(Dispatchers.Main) {
+                ToastUtils.showLong(context, "该应用正在开发中，敬请期待！")
+            }
             e.printStackTrace()
         }
     }

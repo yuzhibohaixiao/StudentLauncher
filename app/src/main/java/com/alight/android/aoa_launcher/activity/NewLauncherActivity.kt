@@ -352,19 +352,37 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                     appArgs?.forEach {
                                         if (it.type == AudioAbility.ParamType.AOA) {
                                             val aoaParam = it.aoaParam
-                                            getPresenter().startAoaApp(
-                                                this@NewLauncherActivity,
-                                                aoaParam?.appId!!.toInt(),
-                                                aoaParam.route!!
-                                            )
+                                            if (!StringUtils.isEmpty(aoaParam?.appId)) {
+                                                getPresenter().startAoaApp(
+                                                    this@NewLauncherActivity,
+                                                    aoaParam?.appId!!.toInt(),
+                                                    aoaParam.route!!
+                                                )
+                                            } else {
+                                                GlobalScope.launch (Dispatchers.Main){
+                                                    ToastUtils.showLong(
+                                                        this@NewLauncherActivity,
+                                                        "该应用正在开发中，敬请期待！"
+                                                    )
+                                                }
+                                            }
                                         } else if (it.type == AudioAbility.ParamType.THIRD) {
                                             val thirdPartyParam = it.thirdPartyParam
-                                            getPresenter().startActivity(
-                                                this@NewLauncherActivity,
-                                                thirdPartyParam?.packetName!!,
-                                                thirdPartyParam.className!!,
-                                                thirdPartyParam.param
-                                            )
+                                            if (!StringUtils.isEmpty(thirdPartyParam?.className)) {
+                                                getPresenter().startActivity(
+                                                    this@NewLauncherActivity,
+                                                    thirdPartyParam?.packetName!!,
+                                                    thirdPartyParam.className!!,
+                                                    thirdPartyParam.param
+                                                )
+                                            } else {
+                                                GlobalScope.launch (Dispatchers.Main){
+                                                    ToastUtils.showLong(
+                                                        this@NewLauncherActivity,
+                                                        "该应用正在开发中，敬请期待！"
+                                                    )
+                                                }
+                                            }
                                         }
                                     }
                                 }
