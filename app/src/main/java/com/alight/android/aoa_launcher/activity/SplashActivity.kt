@@ -70,6 +70,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
+        getPresenter().sendMenuEnableBroadcast(this,false)
         EventBus.getDefault().register(this)
         //仅重选用户
         val onlyShowSelectChild = SPUtils.getData("onlyShowSelectChild", false) as Boolean
@@ -90,7 +91,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 getSystemDate()
             }
             else -> {
-                getPresenter().sendMenuEnableBroadcast(this,false)
+//                getPresenter().sendMenuEnableBroadcast(this,false)
                 getSystemDate()
             }
         }

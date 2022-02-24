@@ -29,11 +29,17 @@ public class SerialUtils {
 
     /**
      * 获取DSN
+     *
      * @return
      */
     public static String getCPUSerial() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return Build.getSerial();
+            try {
+                return Build.getSerial();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "88888888";
+            }
         }
         //读取CPU信息
         InputStreamReader inputStreamReader = null;

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:sharedUserId="android.uid.system"
     package="com.alight.android.aoa_launcher"
     android:persistent="true"
     >
@@ -176,7 +175,6 @@
                 <action android:name="cn.jpush.android.intent.PUSH_TIME" />
             </intent-filter>
         </service>
-
 
         <!-- since 3.0.9 Required SDK 核心功能-->
         <provider

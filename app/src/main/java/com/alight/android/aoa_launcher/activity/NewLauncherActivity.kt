@@ -250,6 +250,16 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                 hashMapOf(),
                                 StudyPlanBean::class.java
                             )
+                            if (!guideUserUpdate)  //检测系统更新
+                            {
+                                getPresenter().getModel(
+                                    Urls.UPDATE,
+                                    hashMapOf(),
+                                    UpdateBean::class.java
+                                )
+                                //表示引导过用户升级
+                                guideUserUpdate = true
+                            }
                         }
                     }
                     //设置用户信息
@@ -359,7 +369,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                                     aoaParam.route!!
                                                 )
                                             } else {
-                                                GlobalScope.launch (Dispatchers.Main){
+                                                GlobalScope.launch(Dispatchers.Main) {
                                                     ToastUtils.showLong(
                                                         this@NewLauncherActivity,
                                                         "该应用正在开发中，敬请期待！"
@@ -376,7 +386,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                                     thirdPartyParam.param
                                                 )
                                             } else {
-                                                GlobalScope.launch (Dispatchers.Main){
+                                                GlobalScope.launch(Dispatchers.Main) {
                                                     ToastUtils.showLong(
                                                         this@NewLauncherActivity,
                                                         "该应用正在开发中，敬请期待！"
@@ -894,12 +904,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 netState = 1
                 initAccountUtil()
                 EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
-                if (!guideUserUpdate)  //检测系统更新
-                {
-                    getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
-                    //表示引导过用户升级
-                    guideUserUpdate = true
-                }
+                /*  if (!guideUserUpdate && splashCloseFlag)  //检测系统更新
+                  {
+                      getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+                      //表示引导过用户升级
+                      guideUserUpdate = true
+                  }*/
                 Log.e(TAG, "onNetChanged:网络正常 ")
             }
         }
