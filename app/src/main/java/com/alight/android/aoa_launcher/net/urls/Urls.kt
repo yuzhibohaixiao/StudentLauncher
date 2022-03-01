@@ -4,7 +4,7 @@ object Urls {
 
     //          android 9 以上需要使用https
 //  const val BASEURL = "https://api.alight-sys.com"   //正式服务（生产）
-  const val BASEURL = "https://test.api.alight-sys.com" //测试服务
+    const val BASEURL = "https://test.api.alight-sys.com" //测试服务
 
 //  const val BASEURL = "http://api.alight-sys.com"   //正式服务（生产）
 //  const val BASEURL = "http://test.api.alight-sys.com" //测试服务
@@ -15,6 +15,7 @@ object Urls {
     const val BANNER = "tool/v2/banner"
     const val BANNER2 = "tool/v2/banne"
     const val UPDATE = "/device/v1/app-version"
+    const val PLAY_TIME = "/device/v1/student/app/playtime"
 
     //家庭信息
     const val FAMILY_INFO = "/family/v1/student/families"

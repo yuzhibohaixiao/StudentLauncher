@@ -1,14 +1,11 @@
 package com.alight.android.aoa_launcher.common.db;
 
-import android.util.Log;
+import static org.xutils.x.getDb;
 
-import com.alight.android.aoa_launcher.application.LauncherApplication;
+import android.util.Log;
 
 import org.xutils.DbManager;
 import org.xutils.db.table.TableEntity;
-import org.xutils.ex.DbException;
-
-import static org.xutils.x.getDb;
 
 
 public class DbHelper {
@@ -55,7 +52,7 @@ public class DbHelper {
                     });
             DbManager db = getDb(daoConfig);
             return db;
-        }catch (DbException e){
+        }catch (Exception e){
             e.printStackTrace();
         }
         return null;

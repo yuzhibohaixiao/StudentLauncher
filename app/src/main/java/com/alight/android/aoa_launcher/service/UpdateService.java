@@ -18,6 +18,7 @@ import com.alight.android.aoa_launcher.application.LauncherApplication;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;
 import com.alight.android.aoa_launcher.common.db.DbHelper;
 import com.alight.android.aoa_launcher.utils.NotifyUtils;
+import com.alight.android.aoa_launcher.utils.ToastUtils;
 import com.liulishuo.okdownload.DownloadTask;
 import com.liulishuo.okdownload.SpeedCalculator;
 import com.liulishuo.okdownload.core.Util;
@@ -216,10 +217,11 @@ public class UpdateService extends Service {
      */
     private void insertOrUpdate(com.alight.android.aoa_launcher.net.model.File file) {
         Log.d(TAG, "insertOrUpdate: " + file);
-        DbManager db = DbHelper.getDbManager();
         try {
+            DbManager db = DbHelper.getDbManager();
             db.saveOrUpdate(file);
-        } catch (DbException e) {
+        } catch (Exception e) {
+            ToastUtils.showLong(getBaseContext(), "安装失败，请查看存储空间是否充足");
             e.printStackTrace();
         }
     }
@@ -278,6 +280,7 @@ public class UpdateService extends Service {
                 0, new Intent(this, UpdateActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
         notifyUtils.notifyCustomView(remoteViews, contentIntent,
                 R.drawable.file, 0, "文件下载", seq + 10001, false, false, false);
+        ToastUtils.showLong(this, "下载失败，请查看存储空间是否充足");
     }
 
 

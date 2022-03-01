@@ -73,6 +73,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var abilityInitSuccessful = false
     private var audioInitSuccessful = false
     private var stopHeart = false
+    private var playTimeBean: PlayTimeBean? = null
 
     //引导过用户升级为 true
     private var guideUserUpdate = false
@@ -341,6 +342,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             ),
             JPushBindBean::class.java
         )
+        getPresenter().getModel(
+            Urls.PLAY_TIME,
+            hashMapOf("user_id" to tokenPair?.userId.toString()),
+            PlayTimeBean::class.java
+        )
         if (!InternetUtil.isNetworkAvalible(this)) {
             netState = 0
         }
@@ -562,6 +568,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             } else if (any is UpdateBean) {
                 //展示系统固件更新
                 getPresenter().splashStartUpdateActivity(false, any, this@NewLauncherActivity)
+            } else if (any is PlayTimeBean) {
+                Log.i(TAG, "onSuccess: ")
+                playTimeBean = any
             }
         }
     }
