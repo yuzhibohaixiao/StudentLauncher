@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -997,7 +998,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                             String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
                             if (file.getFormat() == 2) {
-                                ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+                                //剩余容量大于100M时执行安装
+                                if (getAvailableSize() > 100) {
+                                    ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+                                } else {
+                                    ToastUtils.showLong(context, "安装失败，请查看存储空间是否充足");
+                                }
                             } else if (file.getFormat() == 1) {
                                 if (!StringUtils.isEmpty(apkPath)) {
                                     loadZip(apkPath, file.getVersionCode());
@@ -1058,6 +1064,31 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
     }
 
+    /**
+     * 计算Sdcard的剩余大小
+     *
+     * @return MB
+     */
+    private long getAvailableSize() {
+        String sdcard = Environment.getExternalStorageState();
+        //外部储存sdcard存在的情况
+        String state = Environment.MEDIA_MOUNTED;
+        //获取Sdcard的路径
+        //获得路径
+        java.io.File file = Environment.getExternalStorageDirectory();
+        StatFs statFs = new StatFs(file.getPath());
+        if (sdcard.equals(state)) {
+            //获得Sdcard上每个block的size
+            long blockSize = statFs.getBlockSize();
+            //获取可供程序使用的Block数量
+            long blockavailable = statFs.getAvailableBlocks();
+            //计算标准大小使用：1024，当然使用1000也可以
+            long blockavailableTotal = blockSize * blockavailable / 1000 / 1000;
+            return blockavailableTotal;
+        } else {
+            return -1;
+        }
+    }
 
     /**
      * 检查外部scard读写权限
