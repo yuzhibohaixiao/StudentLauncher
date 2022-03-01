@@ -53,6 +53,7 @@ import com.qweather.sdk.view.HeConfig
 import com.qweather.sdk.view.QWeather
 import com.qweather.sdk.view.QWeather.OnResultGeoListener
 import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
+import com.tencent.mmkv.MMKV
 import com.viewpagerindicator.CirclePageIndicator
 import com.xuexiang.xupdate.entity.UpdateEntity
 import com.xuexiang.xupdate.listener.IUpdateParseCallback
@@ -66,7 +67,6 @@ import okhttp3.MediaType
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -852,6 +852,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     fun startAoaApp(context: Context, appId: Int, route: String) {
+        val mmkv = MMKV.defaultMMKV()
+//        val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
+//        val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
+//        if (playTimeBean.data.ar_manage.)
         try {
             var intent = Intent("com.alight.android.aoax.entry")
             intent.putExtra("action", "aos.app.open")

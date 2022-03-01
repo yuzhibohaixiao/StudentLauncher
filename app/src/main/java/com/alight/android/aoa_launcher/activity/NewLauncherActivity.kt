@@ -11,7 +11,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.view.animation.*
+import android.view.animation.OvershootInterpolator
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -42,8 +42,8 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
+import com.tencent.mmkv.MMKV
 import kotlinx.android.synthetic.main.activity_launcher.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -571,6 +571,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             } else if (any is PlayTimeBean) {
                 Log.i(TAG, "onSuccess: ")
                 playTimeBean = any
+                val mmkv = MMKV.defaultMMKV()
+                mmkv.encode(AppConstants.PLAY_TIME, Gson().toJson(playTimeBean))
             }
         }
     }

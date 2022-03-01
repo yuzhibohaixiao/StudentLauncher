@@ -129,7 +129,7 @@ dependencies {
     //BRVAH
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
     //MMKV
-    implementation 'com.tencent:mmkv-static:1.2.9'
+    implementation 'com.tencent:mmkv-static:1.2.12'
 
     //XUpdate
     implementation 'com.github.xuexiangjys:XUpdate:2.0.7'

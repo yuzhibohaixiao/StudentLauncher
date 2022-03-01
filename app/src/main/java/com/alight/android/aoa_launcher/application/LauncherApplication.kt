@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import cn.jpush.android.api.JPushInterface
+import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.liulishuo.okdownload.DownloadTask
 import com.networkbench.agent.impl.NBSAppAgent
 import com.tencent.mmkv.MMKV
@@ -31,8 +32,8 @@ class LauncherApplication : Application() {
         super.onCreate()
         context = this
         x.Ext.init(this)
-//        val rootDir = MMKV.initialize(this)
-//        Log.i(TAG, "mmkv root: $rootDir")
+        val rootDir = MMKV.initialize(this, AppConstants.SYSTEM_MMKV_PATH)
+        Log.i(TAG, "mmkv root: $rootDir")
         init()
     }
 

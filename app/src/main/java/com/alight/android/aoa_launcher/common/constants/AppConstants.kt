@@ -9,6 +9,8 @@ class AppConstants {
         const val NEW_USER = "new_user"
         const val ALL_APP = "all_app"
 
+        const val PLAY_TIME = "play_time"
+
         const val REGISTRATION_ID = "registration_id"
 
         const val RESULT_CODE_SELECT_USER_BACK = 100
@@ -51,6 +53,8 @@ class AppConstants {
         //系统固件升级包下载｜安装路径
         const val SYSTEM_ZIP_FULL_PATH = "/data/media/0/update.zip"
         const val SYSTEM_ZIP_PATH = "/data/media/0/"
+
+        const val SYSTEM_MMKV_PATH = "/data/media/0/mmkv/"
 
         const val APP_DOWNLOAD_PATH = "/storage/emulated/0/"
 
