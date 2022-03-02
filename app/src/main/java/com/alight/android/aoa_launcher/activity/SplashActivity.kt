@@ -69,8 +69,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         ll_no_child_splash.setOnClickListener(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+        getPresenter().sendMenuEnableBroadcast(this, false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        getPresenter().sendMenuEnableBroadcast(this, true)
+    }
+
     override fun initData() {
-        getPresenter().sendMenuEnableBroadcast(this,false)
         EventBus.getDefault().register(this)
         //仅重选用户
         val onlyShowSelectChild = SPUtils.getData("onlyShowSelectChild", false) as Boolean
@@ -258,7 +267,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun finishSplash() {
-        getPresenter().sendMenuEnableBroadcast(this,true)
+        getPresenter().sendMenuEnableBroadcast(this, true)
         val syncPutData = SPUtils.syncPutData("splashClose", true)
         if (syncPutData) {
             setResult(AppConstants.RESULT_CODE_SELECT_USER_BACK)
