@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.bean.AppTrebleDataBean
+import com.alight.android.aoa_launcher.utils.StartAppUtils
 import com.alight.android.aoa_launcher.utils.StringUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
@@ -23,7 +24,9 @@ class QualityAdapter :
         val imageView1 = holder.getView<ImageView>(R.id.iv_quality_launcher_item1)
         val imageView2 = holder.getView<ImageView>(R.id.iv_quality_launcher_item2)
         val imageView3 = holder.getView<ImageView>(R.id.iv_quality_launcher_item3)
-        if (!StringUtils.isEmpty(item.appPackName1)) {
+        if (item.params1 != null && !StringUtils.isEmpty(item.className1)) {
+            imageView1.setImageResource(item.appIcon1)
+        } else if (!StringUtils.isEmpty(item.appPackName1)) {
             setRoundImage(getIcon(item.appPackName1), imageView1)
         } else if (item.appIcon1 != 0) {
             imageView1.setImageResource(item.appIcon1)
@@ -31,14 +34,18 @@ class QualityAdapter :
             imageView1.visibility =
                 View.INVISIBLE
         }
-        if (!StringUtils.isEmpty(item.appPackName2)) {
+        if (item.params2 != null && !StringUtils.isEmpty(item.className2)) {
+            imageView2.setImageResource(item.appIcon2)
+        } else if (!StringUtils.isEmpty(item.appPackName2)) {
             setRoundImage(getIcon(item.appPackName2), imageView2)
         } else if (item.appIcon2 != 0) {
             imageView2.setImageResource(item.appIcon2)
         } else {
             imageView2.visibility = View.INVISIBLE
         }
-        if (!StringUtils.isEmpty(item.appPackName3)) {
+        if (item.params3 != null && !StringUtils.isEmpty(item.className3)) {
+            imageView3.setImageResource(item.appIcon3)
+        } else if (!StringUtils.isEmpty(item.appPackName3)) {
             setRoundImage(getIcon(item.appPackName3), imageView3)
         } else if (item.appIcon3 != 0) {
             imageView3.setImageResource(item.appIcon3)
@@ -50,22 +57,77 @@ class QualityAdapter :
         holder.setText(R.id.tv_quality_app_name_item2, item.appName2)
         holder.setText(R.id.tv_quality_app_name_item3, item.appName3)
         holder.itemView.iv_quality_launcher_item1.setOnClickListener {
-            startApp(item.appPackName1)
+            if (!StringUtils.isEmpty(item.className1) && item.params1 != null) {
+                StartAppUtils.startNormalApp(
+                    context,
+                    item.appPackName1,
+                    item.className1!!,
+                    item.params1
+                )
+            } else {
+                startApp(item.appPackName1)
+            }
+
         }
         holder.itemView.tv_quality_app_name_item1.setOnClickListener {
-            startApp(item.appPackName1)
+            if (!StringUtils.isEmpty(item.className1) && item.params1 != null) {
+                StartAppUtils.startNormalApp(
+                    context,
+                    item.appPackName1,
+                    item.className1!!,
+                    item.params1
+                )
+            } else {
+                startApp(item.appPackName1)
+            }
         }
         holder.itemView.iv_quality_launcher_item2.setOnClickListener {
-            startApp(item.appPackName2)
+            if (!StringUtils.isEmpty(item.className2) && item.params2 != null) {
+                StartAppUtils.startNormalApp(
+                    context,
+                    item.appPackName2,
+                    item.className2!!,
+                    item.params2
+                )
+            } else {
+                startApp(item.appPackName2)
+            }
         }
         holder.itemView.tv_quality_app_name_item2.setOnClickListener {
-            startApp(item.appPackName2)
+            if (!StringUtils.isEmpty(item.className2) && item.params2 != null) {
+                StartAppUtils.startNormalApp(
+                    context,
+                    item.appPackName2,
+                    item.className2!!,
+                    item.params2
+                )
+            } else {
+                startApp(item.appPackName2)
+            }
         }
         holder.itemView.iv_quality_launcher_item3.setOnClickListener {
-            startApp(item.appPackName3)
+            if (!StringUtils.isEmpty(item.className3) && item.params3 != null) {
+                StartAppUtils.startNormalApp(
+                    context,
+                    item.appPackName3,
+                    item.className3!!,
+                    item.params3
+                )
+            } else {
+                startApp(item.appPackName3)
+            }
         }
         holder.itemView.tv_quality_app_name_item3.setOnClickListener {
-            startApp(item.appPackName3)
+            if (!StringUtils.isEmpty(item.className3) && item.params3 != null) {
+                StartAppUtils.startNormalApp(
+                    context,
+                    item.appPackName3,
+                    item.className3!!,
+                    item.params3
+                )
+            } else {
+                startApp(item.appPackName3)
+            }
         }
     }
 

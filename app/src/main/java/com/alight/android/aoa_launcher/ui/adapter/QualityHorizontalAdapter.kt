@@ -12,25 +12,26 @@ class QualityHorizontalAdapter :
     BaseQuickAdapter<AppTreblePackDataBean, BaseViewHolder>(R.layout.item_quality_horizontal) {
     private val appList1: ArrayList<AppTrebleDataBean> = arrayListOf(
         AppTrebleDataBean(
+            R.drawable.moral, "com.jxw.online_study", "道德与法治",
+            "com.jxw.online_study.activity.BookCaseWrapperActivity",
+            mapOf<String, Any>("StartArgs" to "d:/同步学习/政治|e:JWFD"),
+            R.drawable.science, "com.jxw.online_study", "科学",
+            "com.jxw.online_study.activity.BookCaseWrapperActivity",
+            mapOf<String, Any>("StartArgs" to "d:/同步学习/科学|e:JWFD"),
             R.drawable.launcher_quality_think,
             "com.zane.childdraw",
             "儿童启蒙画画",
-            R.drawable.launcher_quality_think,
-            "com.gamestar.xdrum",
-            "X架子鼓",
-            R.drawable.launcher_quality_think,
-            "com.gamestar.perfectpiano",
-            "完美钢琴",
+            null, null
         ), AppTrebleDataBean(
             R.drawable.launcher_quality_think,
+            "com.gamestar.xdrum",
+            "X架子鼓", null, null,
+            R.drawable.launcher_quality_think,
+            "com.gamestar.perfectpiano",
+            "完美钢琴", null, null,
+            R.drawable.launcher_quality_think,
             "com.honghesoft.calligrapher",
-            "大书法家",
-            0,
-            "",
-            "",
-            0,
-            "",
-            "",
+            "大书法家", null, null
         )
     )
 
@@ -38,59 +39,59 @@ class QualityHorizontalAdapter :
         AppTrebleDataBean(
             R.drawable.launcher_quality_think,
             "com.hongen.app.word",
-            "洪恩识字",
+            "洪恩识字", null, null,
             R.drawable.launcher_quality_think,
             "com.qinlin.ahaschool",
-            "ahakid",
+            "ahakid", null, null,
             R.drawable.launcher_quality_think,
             "com.ubestkid.sightwords.a",
-            "贝乐虎英语",
+            "贝乐虎英语", null, null
         ), AppTrebleDataBean(
             R.drawable.launcher_quality_think,
             "com.leleketang.SchoolFantasy",
-            "天天练",
+            "天天练", null, null,
             R.drawable.launcher_quality_think,
             "com.duwo.reading",
-            "伴鱼绘本",
+            "伴鱼绘本", null, null,
             0,
             "",
-            "",
+            "", null, null
         )
     )
     private val appList3: ArrayList<AppTrebleDataBean> = arrayListOf(
         AppTrebleDataBean(
             R.drawable.launcher_quality_think,
             "com.android.abustory",
-            "阿布睡前故事",
+            "阿布睡前故事", null, null,
             R.drawable.launcher_quality_think,
             "com.mampod.ergedd",
-            "儿歌点点",
+            "儿歌点点", null, null,
             R.drawable.launcher_quality_think,
             "com.lotfun.svmAndroid",
-            "科魔大战",
+            "科魔大战", null, null
         )
     )
     private val appList4: ArrayList<AppTrebleDataBean> = arrayListOf(
         AppTrebleDataBean(
             R.drawable.launcher_quality_think,
             "com.yangcong345.android.phone",
-            "洋葱学园",
+            "洋葱学园", null, null,
             R.drawable.launcher_quality_think,
             "com.youdao.course",
-            "有道精品课",
+            "有道精品课", null, null,
             R.drawable.launcher_quality_think,
             "com.yuantiku.tutor",
-            "猿辅导",
+            "猿辅导", null, null
         ), AppTrebleDataBean(
             R.drawable.launcher_quality_think,
             "com.xueersi.parentsmeeting",
-            "学而思网课",
+            "学而思网课", null, null,
             R.drawable.launcher_quality_think,
             "com.zjy.zjyeduandroid",
-            "人教智能教辅HD",
+            "人教智能教辅HD", null, null,
             0,
             "",
-            "",
+            "", null, null
         )
     )
 
