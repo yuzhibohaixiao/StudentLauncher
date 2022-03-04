@@ -28,7 +28,7 @@ data class AppManage(
     val app_id: Int,
     val app_info: AppManageInfo,
     val app_permission: Int,
-    val args: Any,
+    val args: String,
     val category_id: Int,
     val class_name: Any,
     val create_time: String,

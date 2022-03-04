@@ -342,11 +342,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             ),
             JPushBindBean::class.java
         )
-        getPresenter().getModel(
+      /*  getPresenter().getModel(
             Urls.PLAY_TIME,
             hashMapOf("user_id" to tokenPair?.userId.toString()),
             PlayTimeBean::class.java
-        )
+        )*/
         if (!InternetUtil.isNetworkAvalible(this)) {
             netState = 0
         }
@@ -374,6 +374,13 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                                     aoaParam?.appId!!.toInt(),
                                                     aoaParam.route!!
                                                 )
+                                                if (it.touchMode != null) {
+                                                    getPresenter().startInteractionWindow(
+                                                        interactionAbility!!,
+                                                        it.touchMode!!
+                                                    )
+                                                }
+
                                             } else {
                                                 GlobalScope.launch(Dispatchers.Main) {
                                                     ToastUtils.showLong(
@@ -391,6 +398,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                                     thirdPartyParam.className!!,
                                                     thirdPartyParam.param
                                                 )
+                                                if (it.touchMode != null) {
+                                                    getPresenter().startInteractionWindow(
+                                                        interactionAbility!!,
+                                                        it.touchMode!!
+                                                    )
+                                                }
                                             } else {
                                                 GlobalScope.launch(Dispatchers.Main) {
                                                     ToastUtils.showLong(

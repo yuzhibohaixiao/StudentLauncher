@@ -39,7 +39,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应 cpu 类型的 .so 库。
-            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a','x86', 'x86_64'
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
 //             还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
         manifestPlaceholders = [
@@ -163,7 +163,7 @@ dependencies {
     implementation 'org.xutils:xutils:3.8.2'
 
     implementation 'com.alight.ahwcx:bridge:1.0.2'
-    implementation 'com.alight.ahwcx:ahwsdk:1.0.3'
+    implementation 'com.alight.ahwcx:ahwsdk:1.0.5'
 
     implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
 

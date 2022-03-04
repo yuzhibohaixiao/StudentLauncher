@@ -807,6 +807,43 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         params: Map<String, Any>?
     ) {
         try {
+            /*         val mmkv = MMKV.defaultMMKV()
+                     val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
+                     val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
+
+                     var calendar = Calendar.getInstance()
+                     calendar.timeZone = TimeZone.getDefault();//默认当前时区
+                     var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
+                     var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
+         //            var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
+         //            var startTime = playTimeBean.data.playtime.start_playtime
+         //            var endTime = playTimeBean.data.playtime.stop_playtime
+         //            var tempString = " {StartArgs:f:/ansystem/固化数据/小学古诗词.JXW}"
+         //            val split = tempString.split(":", "}")
+
+                     playTimeBean.data.app_manage.forEach {
+                         if (packName == it.app_info.package_name && className == it.class_name && (params == null || params.values.indexOf(
+                                 split
+                             ) != -1)
+                         ) {
+                             if ((it.app_permission == 3)) {
+                                 ToastUtils.showLong(context, "该应用已被禁用")
+                                 return@startActivity
+                             } else if (it.app_permission == 2 && TimeUtils.inTimeInterval(
+                                     startTime,
+                                     endTime,
+                                     sysTime
+                                 )
+                             ) {
+                                 //限时禁用
+                                 ToastUtils.showLong(context, "该应用已被限时禁用")
+                                 return@startActivity
+                             }
+                             return@forEach
+                         }
+                     }
+         */
+
             val intent = Intent()
             val componentName =
                 ComponentName(packName, className)
@@ -852,11 +889,16 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     fun startAoaApp(context: Context, appId: Int, route: String) {
-        val mmkv = MMKV.defaultMMKV()
-//        val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
-//        val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
-//        if (playTimeBean.data.ar_manage.)
         try {
+            /*      val mmkv = MMKV.defaultMMKV()
+              val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
+          val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
+              playTimeBean.data.ar_manage.forEach {
+                  if (it.aoa_id == appId && !it.app_ar_permission) {
+                      ToastUtils.showLong(context, "该AR学应用已被禁用")
+                      return@forEach
+                  }
+              }*/
             var intent = Intent("com.alight.android.aoax.entry")
             intent.putExtra("action", "aos.app.open")
             intent.putExtra("appId", appId)
