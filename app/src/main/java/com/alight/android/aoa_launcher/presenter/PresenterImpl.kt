@@ -829,7 +829,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     if ((it.app_permission == 3)) {
                         ToastUtils.showLong(context, "该应用已被禁用")
                         return@startActivity
-                    } else if (it.app_permission == 2 && TimeUtils.inTimeInterval(
+                    } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
                             startTime,
                             endTime,
                             sysTime
@@ -895,7 +895,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             playTimeBean.data.ar_manage.forEach {
                 if (it.aoa_id == appId && !it.app_ar_permission) {
                     ToastUtils.showLong(context, "该AR学应用已被禁用")
-                    return@forEach
+                    return@startAoaApp
                 }
             }
             var intent = Intent("com.alight.android.aoax.entry")

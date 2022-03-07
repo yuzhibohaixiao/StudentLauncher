@@ -169,7 +169,7 @@ class LauncherRightAdapter :
                     if ((it.app_permission == 3)) {
                         ToastUtils.showLong(context, "该应用已被禁用")
                         return@startActivity
-                    } else if (it.app_permission == 2 && TimeUtils.inTimeInterval(
+                    } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
                             startTime,
                             endTime,
                             sysTime

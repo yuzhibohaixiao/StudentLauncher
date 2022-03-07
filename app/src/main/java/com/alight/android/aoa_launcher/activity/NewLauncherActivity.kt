@@ -251,6 +251,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                 hashMapOf(),
                                 StudyPlanBean::class.java
                             )
+                            getPresenter().getModel(
+                                Urls.PLAY_TIME,
+                                hashMapOf("user_id" to tokenPair?.userId.toString()),
+                                PlayTimeBean::class.java
+                            )
                             if (!guideUserUpdate)  //检测系统更新
                             {
                                 getPresenter().getModel(

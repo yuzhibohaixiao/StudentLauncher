@@ -17,7 +17,7 @@ object TimeUtils {
             var startTime = format.parse(startTime).time
             var endTime = format.parse(endTime).time
             var time = format.parse(time).time
-            return time > startTime && startTime < endTime
+            return time > startTime && time < endTime
 
         } catch (e: Exception) {
             e.printStackTrace()
