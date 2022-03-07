@@ -314,7 +314,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
      */
     private fun writeUserInfo(tokenPair: TokenPair) {
         //插入数据前清除之前的数据
-        contentResolver.delete(LauncherContentProvider.URI, null, null)
+//        contentResolver.delete(LauncherContentProvider.URI, null, null)
         val contentValues = ContentValues()
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN, tokenPair.token)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR, tokenPair.avatar)

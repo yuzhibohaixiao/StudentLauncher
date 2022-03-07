@@ -342,11 +342,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             ),
             JPushBindBean::class.java
         )
-      /*  getPresenter().getModel(
+        getPresenter().getModel(
             Urls.PLAY_TIME,
             hashMapOf("user_id" to tokenPair?.userId.toString()),
             PlayTimeBean::class.java
-        )*/
+        )
         if (!InternetUtil.isNetworkAvalible(this)) {
             netState = 0
         }

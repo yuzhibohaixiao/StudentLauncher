@@ -6,15 +6,21 @@ import android.view.View
 import android.widget.ImageView
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.bean.AppTrebleDataBean
+import com.alight.android.aoa_launcher.common.bean.PlayTimeBean
+import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.utils.StartAppUtils
 import com.alight.android.aoa_launcher.utils.StringUtils
+import com.alight.android.aoa_launcher.utils.TimeUtils
 import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.google.gson.Gson
+import com.tencent.mmkv.MMKV
 import kotlinx.android.synthetic.main.item_quality_launcher.view.*
+import java.util.*
 
 
 class QualityAdapter :
@@ -58,7 +64,7 @@ class QualityAdapter :
         holder.setText(R.id.tv_quality_app_name_item3, item.appName3)
         holder.itemView.iv_quality_launcher_item1.setOnClickListener {
             if (!StringUtils.isEmpty(item.className1) && item.params1 != null) {
-                StartAppUtils.startNormalApp(
+                StartAppUtils.startNineApp(
                     context,
                     item.appPackName1,
                     item.className1!!,
@@ -71,7 +77,7 @@ class QualityAdapter :
         }
         holder.itemView.tv_quality_app_name_item1.setOnClickListener {
             if (!StringUtils.isEmpty(item.className1) && item.params1 != null) {
-                StartAppUtils.startNormalApp(
+                StartAppUtils.startNineApp(
                     context,
                     item.appPackName1,
                     item.className1!!,
@@ -83,7 +89,7 @@ class QualityAdapter :
         }
         holder.itemView.iv_quality_launcher_item2.setOnClickListener {
             if (!StringUtils.isEmpty(item.className2) && item.params2 != null) {
-                StartAppUtils.startNormalApp(
+                StartAppUtils.startNineApp(
                     context,
                     item.appPackName2,
                     item.className2!!,
@@ -95,7 +101,7 @@ class QualityAdapter :
         }
         holder.itemView.tv_quality_app_name_item2.setOnClickListener {
             if (!StringUtils.isEmpty(item.className2) && item.params2 != null) {
-                StartAppUtils.startNormalApp(
+                StartAppUtils.startNineApp(
                     context,
                     item.appPackName2,
                     item.className2!!,
@@ -107,7 +113,7 @@ class QualityAdapter :
         }
         holder.itemView.iv_quality_launcher_item3.setOnClickListener {
             if (!StringUtils.isEmpty(item.className3) && item.params3 != null) {
-                StartAppUtils.startNormalApp(
+                StartAppUtils.startNineApp(
                     context,
                     item.appPackName3,
                     item.className3!!,
@@ -119,7 +125,7 @@ class QualityAdapter :
         }
         holder.itemView.tv_quality_app_name_item3.setOnClickListener {
             if (!StringUtils.isEmpty(item.className3) && item.params3 != null) {
-                StartAppUtils.startNormalApp(
+                StartAppUtils.startNineApp(
                     context,
                     item.appPackName3,
                     item.className3!!,
@@ -133,6 +139,40 @@ class QualityAdapter :
 
     private fun startApp(appPackName: String) {
         try {
+            val mmkv = MMKV.defaultMMKV()
+            val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
+            val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
+
+            var calendar = Calendar.getInstance()
+            calendar.timeZone = TimeZone.getDefault();//默认当前时区
+            var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
+            var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
+            var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
+            var startTime = playTimeBean.data.playtime.start_playtime
+            var endTime = playTimeBean.data.playtime.stop_playtime
+//            var tempString = " {StartArgs:f:/ansystem/固化数据/小学古诗词.JXW}"
+//            val split = tempString.split(":", "}")
+
+            playTimeBean.data.app_manage.forEach {
+                if (appPackName == it.app_info.package_name
+                ) {
+                    if ((it.app_permission == 3)) {
+                        ToastUtils.showLong(context, "该应用已被禁用")
+                        return@startApp
+                    } else if (it.app_permission == 2 && TimeUtils.inTimeInterval(
+                            startTime,
+                            endTime,
+                            sysTime
+                        )
+                    ) {
+                        //限时禁用
+                        ToastUtils.showLong(context, "该应用已被限时禁用")
+                        return@startApp
+                    }
+                    return@forEach
+                }
+            }
+
             val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
             context.startActivity(intent)
         } catch (e: Exception) {
