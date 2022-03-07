@@ -508,6 +508,16 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
 
     private fun writeUserInfo(tokenPair: TokenPair) {
+        //mmkv存储用户数据
+        val mmkv = MMKV.defaultMMKV()
+        mmkv.encode(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN, tokenPair.token)
+        mmkv.encode(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR, tokenPair.avatar)
+        mmkv.encode(AppConstants.AOA_LAUNCHER_USER_INFO_NAME, tokenPair.name)
+        mmkv.encode(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID, tokenPair.userId)
+        mmkv.encode(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER, tokenPair.gender!!)
+        mmkv.encode(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME, tokenPair.expireTime!!)
+        mmkv.encode(AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE, tokenPair.gradeType!!)
+
         //插入数据前清除之前的数据
         contentResolver.delete(LauncherContentProvider.URI, null, null)
         val contentValues = ContentValues()
