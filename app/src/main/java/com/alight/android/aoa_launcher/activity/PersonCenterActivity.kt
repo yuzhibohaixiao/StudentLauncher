@@ -334,8 +334,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 //                familyAdapter.setOnlineState(any.data)
             }
             is DeviceRelationBean -> {
-                ToastUtils.showShort(this, any.data)
                 //重新绑定
+                ToastUtils.showShort(this, any.data)
+                SPUtils.syncPutData("onlyShowSelectChild", false)
                 SPUtils.syncPutData("rebinding", true)
                 //让引导再次开启
                 SPUtils.syncPutData("splashClose", false)

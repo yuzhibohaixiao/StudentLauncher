@@ -102,9 +102,9 @@ public class SPUtils {
         return null;
     }
 
-    public static void clearData(Context context) {
+    public static void clearData() {
 
-        SharedPreferences sharedPreferences = context
+        SharedPreferences sharedPreferences = LauncherApplication.Companion.getContext()
                 .getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (editor != null) {

@@ -149,14 +149,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         super.onResume()
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
         Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
-        val rebinding = SPUtils.getData("rebinding", false) as Boolean
-        //用户重新绑定
-        if (rebinding) {
-            initAccountUtil()
-            SPUtils.syncPutData("rebinding", false)
-        }
+
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
-        if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty()) {
+        val rebinding = SPUtils.getData("rebinding", false) as Boolean
+        if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || rebinding && !splashClose) {
             Log.i(TAG, "展示引导页")
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
@@ -171,6 +167,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //表示引导过用户升级
 //                guideUserUpdate = true
 //            }
+        }
+        //用户重新绑定
+        if (rebinding) {
+            initAccountUtil()
+//            SPUtils.syncPutData("rebinding", false)
         }
         if (!splashCloseFlag && tv_user_name_new_launcher.text.isNullOrEmpty()) {
             Glide.with(this@NewLauncherActivity)
@@ -325,6 +326,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 AppConstants.RESULT_CODE_SELECT_USER_BACK -> {
                     splashCloseFlag = true
                     guideUserUpdate = true
+                    SPUtils.syncPutData("rebinding", false)
                     val syncPutData = SPUtils.syncPutData("splashClose", true)
                     Log.i(TAG, "initAccountUtil")
                     //初始化用户工具及展示用户数据
