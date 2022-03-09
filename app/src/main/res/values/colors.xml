@@ -10,7 +10,8 @@
     <color name="launcher_cambridge_blue">#4183D7</color>
     <color name="launcher_dark_blue">#3367AB</color>
     <color name="launcher_dialog_bg">#50CCCCCC</color>
-    <color name="launcher_trans_white">#33ffffff</color>
+    <color name="launcher_trans_white">#80ffffff</color>
+    <color name="launcher_trans65_white">#65ffffff</color>
     <color name="launcher_trans_dark_white">#80ffffff</color>
     <color name="launcher_transparent">#00000000</color>
     <color name="launcher_purple">#545492</color>
@@ -19,5 +20,7 @@
     <color name="transparent">#00000000</color>
     <color name="celadon">#E2F7F4</color>
     <color name="blue_green">#28BCB6</color>
+
+    <color name="person_center_text_black">#215558</color>
 
 </resources>

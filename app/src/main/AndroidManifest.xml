@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.alight.android.aoa_launcher"
     android:persistent="true"
-    android:sharedUserId="android.uid.system"
     >
 
     <!--   android:sharedUserId="android.uid.system"-->

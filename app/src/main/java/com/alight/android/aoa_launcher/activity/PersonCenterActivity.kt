@@ -29,8 +29,9 @@ import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.google.gson.Gson
+import com.tencent.mmkv.MMKV
 import com.xw.repo.BubbleSeekBar
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_personal_center.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -39,7 +40,6 @@ import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.*
 
 
 class PersonCenterActivity : BaseActivity(), View.OnClickListener {
@@ -134,6 +134,20 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         netState = intent.getIntExtra("netState", 0)
         getNetStateShowUI(netState)
 
+        try {
+            val mmkv = MMKV.defaultMMKV()
+            val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
+            val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
+            tv_control_today.text = "今天：" + if (playTimeBean.data.is_rest_day) "休息日" else "上学日"
+            tv_control_time.text =
+                playTimeBean.data.playtime.start_playtime + "-" + playTimeBean.data.playtime.stop_playtime
+            tv_control_total_time.text = TimeUtils.timeDifference(
+                playTimeBean.data.playtime.start_playtime,
+                playTimeBean.data.playtime.stop_playtime
+            )
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
 
         /* ApkController.slienceInstallWithSysSign(
              LauncherApplication.getContext(),
@@ -163,7 +177,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             rv_family_info.visibility = View.VISIBLE
             ll_family_info_offline.visibility = View.GONE
             tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting, 0, 0)
-            tv_set.setTextColor(Color.parseColor("#ffffff"))
+            resources.getColor(R.color.person_center_text_black)
             ll_exit_personal_center.visibility = View.VISIBLE
         } else if (netState == 0) {
             rv_family_info.visibility = View.GONE
