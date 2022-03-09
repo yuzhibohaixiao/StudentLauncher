@@ -376,12 +376,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                         if (it.type == AudioAbility.ParamType.AOA) {
                                             val aoaParam = it.aoaParam
                                             if (!StringUtils.isEmpty(aoaParam?.appId)) {
-                                                getPresenter().startAoaApp(
+                                                val startAoaApp = getPresenter().startAoaApp(
                                                     this@NewLauncherActivity,
                                                     aoaParam?.appId!!.toInt(),
                                                     aoaParam.route!!
                                                 )
-                                                if (it.touchMode != null) {
+                                                if (it.touchMode != null && startAoaApp) {
                                                     getPresenter().startInteractionWindow(
                                                         interactionAbility!!,
                                                         it.touchMode!!
@@ -399,13 +399,13 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                         } else if (it.type == AudioAbility.ParamType.THIRD) {
                                             val thirdPartyParam = it.thirdPartyParam
                                             if (!StringUtils.isEmpty(thirdPartyParam?.className)) {
-                                                getPresenter().startActivity(
+                                                val startActivity = getPresenter().startActivity(
                                                     this@NewLauncherActivity,
                                                     thirdPartyParam?.packetName!!,
                                                     thirdPartyParam.className!!,
                                                     thirdPartyParam.param
                                                 )
-                                                if (it.touchMode != null) {
+                                                if (it.touchMode != null && startActivity) {
                                                     getPresenter().startInteractionWindow(
                                                         interactionAbility!!,
                                                         it.touchMode!!
@@ -635,57 +635,63 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //书本指读（AR指读）
             R.id.tv_read_book_launcher -> {
-                getPresenter().startActivity(
+                val startActivity = getPresenter().startActivity(
                     this,
                     "com.jxw.huiben",
                     "com.jxw.huiben.activity.SplashActivity",
                     null
                 )
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_POINT
-                )
+                if (startActivity)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.PEN_POINT
+                    )
             }
             //查单词
             R.id.tv_cdc_launcher -> {
-                getPresenter().startAoaApp(this, 135, "/home")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_POINT
-                )
+                val startAoaApp = getPresenter().startAoaApp(this, 135, "/home")
+                if (startAoaApp)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.PEN_POINT
+                    )
             }
             //查字词
             R.id.tv_czc_launcher -> {
-                getPresenter().startAoaApp(this, 134, "/home")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_POINT
-                )
+                val startAoaApp = getPresenter().startAoaApp(this, 134, "/home")
+                if (startAoaApp)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.PEN_POINT
+                    )
             }
             //翻译-AOA翻译
             R.id.tv_translate_launcher -> {
-                getPresenter().startAoaApp(this, 138, "/app/138/home")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_RECT
-                )
+                val startAoaApp = getPresenter().startAoaApp(this, 138, "/app/138/home")
+                if (startAoaApp)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.PEN_RECT
+                    )
             }
             //求助老师-AOA 的远程辅导页面
             R.id.tv_seek_help_launcher -> {
-                getPresenter().startAoaApp(this, 140, "/home/140")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_POINT
-                )
+                val startAoaApp = getPresenter().startAoaApp(this, 140, "/home/140")
+                if (startAoaApp)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.PEN_POINT
+                    )
             }
 
             //答题-AOA搜题
             R.id.tv_answer_launcher -> {
-                getPresenter().startAoaApp(this, 139, "/apps/139/main")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_RECT
-                )
+                val startAoaApp = getPresenter().startAoaApp(this, 139, "/apps/139/main")
+                if (startAoaApp)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.PEN_RECT
+                    )
             }
             //趣味卡牌-自己做的卡牌游戏
             R.id.tv_fun_card_launcher -> {
@@ -703,19 +709,21 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //口算批改
             R.id.tv_kspg_launcher -> {
-                getPresenter().startAoaApp(this, 142, "/app/142/home")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_POINT
-                )
+                val startAoaApp = getPresenter().startAoaApp(this, 142, "/app/142/home")
+                if (startAoaApp)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.PEN_POINT
+                    )
             }
             //语文作文批改
             R.id.tv_ywzwpg_launcher -> {
-                getPresenter().startAoaApp(this, 143, "/app/143/home")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_POINT
-                )
+                val startAoaApp = getPresenter().startAoaApp(this, 143, "/app/143/home")
+                if (startAoaApp)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.PEN_POINT
+                    )
             }
             //英语作文批改
             R.id.tv_yyzwpg_launcher -> {
@@ -728,20 +736,22 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //收藏夹-AOA收藏夹
             R.id.tv_favorite_launcher -> {
-                getPresenter().startAoaApp(this, 141, "/app/141/home")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_POINT
-                )
+                val startAoaApp = getPresenter().startAoaApp(this, 141, "/app/141/home")
+                if (startAoaApp)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.PEN_POINT
+                    )
             }
             //学习计划-AOA学习计划
             R.id.iv_study_plan
             -> {
-                getPresenter().startAoaApp(this, 33, "/home")
-                getPresenter().startInteractionWindow(
-                    interactionAbility!!,
-                    InteractionAbility.InteractiveMode.PEN_POINT
-                )
+                val startAoaApp = getPresenter().startAoaApp(this, 33, "/home")
+                if (startAoaApp)
+                    getPresenter().startInteractionWindow(
+                        interactionAbility!!,
+                        InteractionAbility.InteractiveMode.PEN_POINT
+                    )
             }
             //呼叫家长
             R.id.iv_call_parent -> {
@@ -846,19 +856,22 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 val params = launcherCenterAdapter!!.data[position].params
                 if (!StringUtils.isEmpty(appPackName) && !StringUtils.isEmpty(className)
                 ) {
-                    getPresenter().startActivity(this, appPackName, className, params)
+                    val startActivity =
+                        getPresenter().startActivity(this, appPackName, className, params)
                     if (interactionAbility != null) {
                         //听写和AI测评为笔点击模式 其他都为手触模式
                         if (appPackName == "com.jxw.examcenter.activity" || appPackName == "com.jxw.handwrite") {
-                            getPresenter().startInteractionWindow(
-                                interactionAbility!!,
-                                InteractionAbility.InteractiveMode.PEN_POINT
-                            )
+                            if (startActivity)
+                                getPresenter().startInteractionWindow(
+                                    interactionAbility!!,
+                                    InteractionAbility.InteractiveMode.PEN_POINT
+                                )
                         } else {
-                            getPresenter().startInteractionWindow(
-                                interactionAbility!!,
-                                InteractionAbility.InteractiveMode.FINGER_TOUCH
-                            )
+                            if (startActivity)
+                                getPresenter().startInteractionWindow(
+                                    interactionAbility!!,
+                                    InteractionAbility.InteractiveMode.FINGER_TOUCH
+                                )
                         }
                     }
                 } else {

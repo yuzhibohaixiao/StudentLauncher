@@ -17,6 +17,9 @@ import java.util.*
  */
 object StartAppUtils {
 
+    /**
+     * 开启AOA的模块
+     */
     fun startAoaApp(context: Context, appId: Int, route: String) {
         try {
             var intent = Intent("com.alight.android.aoax.entry")
@@ -31,7 +34,10 @@ object StartAppUtils {
     }
 
 
-    fun startNineApp(
+    /**
+     * 开启一个应用，支持传参
+     */
+    fun startActivity(
         context: Context,
         packName: String,
         className: String,
@@ -59,7 +65,7 @@ object StartAppUtils {
                 ) {
                     if ((it.app_permission == 3)) {
                         ToastUtils.showLong(context, "该应用已被禁用")
-                        return@startNineApp
+                        return@startActivity
                     } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
                             startTime,
                             endTime,
@@ -68,7 +74,7 @@ object StartAppUtils {
                     ) {
                         //限时禁用
                         ToastUtils.showLong(context, "该应用已被限时禁用")
-                        return@startNineApp
+                        return@startActivity
                     }
                     return@forEach
                 }

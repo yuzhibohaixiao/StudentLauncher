@@ -805,7 +805,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         packName: String,
         className: String,
         params: Map<String, Any>?
-    ) {
+    ): Boolean {
         try {
             val mmkv = MMKV.defaultMMKV()
             val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
@@ -818,8 +818,6 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
             var startTime = playTimeBean.data.playtime.start_playtime
             var endTime = playTimeBean.data.playtime.stop_playtime
-//            var tempString = " {StartArgs:f:/ansystem/固化数据/小学古诗词.JXW}"
-//            val split = tempString.split(":", "}")
 
             playTimeBean.data.app_manage.forEach {
                 if (packName == it.app_info.package_name && className == it.class_name && (params == null || params.values.indexOf(
@@ -828,7 +826,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 ) {
                     if ((it.app_permission == 3)) {
                         ToastUtils.showLong(context, "该应用已被禁用")
-                        return@startActivity
+                        return false
                     } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
                             startTime,
                             endTime,
@@ -837,7 +835,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     ) {
                         //限时禁用
                         ToastUtils.showLong(context, "该应用已被限时禁用")
-                        return@startActivity
+                        return false
                     }
                     return@forEach
                 }
@@ -861,11 +859,13 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             }
             intent.component = componentName
             context.startActivity(intent)
+            return true
         } catch (e: java.lang.Exception) {
             GlobalScope.launch(Dispatchers.Main) {
                 ToastUtils.showLong(context, "该应用正在开发中，敬请期待！")
             }
             e.printStackTrace()
+            return false
         }
     }
 
@@ -887,7 +887,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
-    fun startAoaApp(context: Context, appId: Int, route: String) {
+    fun startAoaApp(context: Context, appId: Int, route: String): Boolean {
         try {
             val mmkv = MMKV.defaultMMKV()
             val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
@@ -895,7 +895,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             playTimeBean.data.ar_manage.forEach {
                 if (it.aoa_id == appId && !it.app_ar_permission) {
                     ToastUtils.showLong(context, "该AR学应用已被禁用")
-                    return@startAoaApp
+                    return false
                 }
             }
             var intent = Intent("com.alight.android.aoax.entry")
@@ -904,8 +904,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             intent.putExtra("route", route)
             intent.putExtra("params", "{}")
             context.startActivity(intent)
+            return true
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
+            return false
         }
     }
 

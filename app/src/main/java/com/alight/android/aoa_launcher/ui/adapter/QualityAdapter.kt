@@ -64,7 +64,7 @@ class QualityAdapter :
         holder.setText(R.id.tv_quality_app_name_item3, item.appName3)
         holder.itemView.iv_quality_launcher_item1.setOnClickListener {
             if (!StringUtils.isEmpty(item.className1) && item.params1 != null) {
-                StartAppUtils.startNineApp(
+                StartAppUtils.startActivity(
                     context,
                     item.appPackName1,
                     item.className1!!,
@@ -77,7 +77,7 @@ class QualityAdapter :
         }
         holder.itemView.tv_quality_app_name_item1.setOnClickListener {
             if (!StringUtils.isEmpty(item.className1) && item.params1 != null) {
-                StartAppUtils.startNineApp(
+                StartAppUtils.startActivity(
                     context,
                     item.appPackName1,
                     item.className1!!,
@@ -89,7 +89,7 @@ class QualityAdapter :
         }
         holder.itemView.iv_quality_launcher_item2.setOnClickListener {
             if (!StringUtils.isEmpty(item.className2) && item.params2 != null) {
-                StartAppUtils.startNineApp(
+                StartAppUtils.startActivity(
                     context,
                     item.appPackName2,
                     item.className2!!,
@@ -101,7 +101,7 @@ class QualityAdapter :
         }
         holder.itemView.tv_quality_app_name_item2.setOnClickListener {
             if (!StringUtils.isEmpty(item.className2) && item.params2 != null) {
-                StartAppUtils.startNineApp(
+                StartAppUtils.startActivity(
                     context,
                     item.appPackName2,
                     item.className2!!,
@@ -113,7 +113,7 @@ class QualityAdapter :
         }
         holder.itemView.iv_quality_launcher_item3.setOnClickListener {
             if (!StringUtils.isEmpty(item.className3) && item.params3 != null) {
-                StartAppUtils.startNineApp(
+                StartAppUtils.startActivity(
                     context,
                     item.appPackName3,
                     item.className3!!,
@@ -125,7 +125,7 @@ class QualityAdapter :
         }
         holder.itemView.tv_quality_app_name_item3.setOnClickListener {
             if (!StringUtils.isEmpty(item.className3) && item.params3 != null) {
-                StartAppUtils.startNineApp(
+                StartAppUtils.startActivity(
                     context,
                     item.appPackName3,
                     item.className3!!,
@@ -150,8 +150,6 @@ class QualityAdapter :
             var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
             var startTime = playTimeBean.data.playtime.start_playtime
             var endTime = playTimeBean.data.playtime.stop_playtime
-//            var tempString = " {StartArgs:f:/ansystem/固化数据/小学古诗词.JXW}"
-//            val split = tempString.split(":", "}")
 
             playTimeBean.data.app_manage.forEach {
                 if (appPackName == it.app_info.package_name

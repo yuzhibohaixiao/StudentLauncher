@@ -2,10 +2,8 @@ package com.alight.android.aoa_launcher.common.base
 
 import android.content.IntentFilter
 import android.os.Bundle
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import com.alight.android.aoa_launcher.common.broadcast.NetStateReceiver
-import com.alight.android.aoa_launcher.net.INetEvent
 import com.alight.android.aoa_launcher.net.contract.IContract
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 
