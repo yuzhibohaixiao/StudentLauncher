@@ -27,6 +27,7 @@ import java.net.URI
 object AccountUtil : LauncherProvider {
     //    const val DSN = "d7f0c2f9-3b2f-4193-9e7d-7fea378d5932"
     private var DSN: String = SerialUtils.getCPUSerial()
+    var isShutdown = false
 
     override fun getDSN(): String {
         return DSN
@@ -168,7 +169,9 @@ object AccountUtil : LauncherProvider {
     }
 
     override fun selectUser(userId: Int) {
-        declareUser(userId)
+        //关机时不再调用用户信息接口
+        if (!isShutdown)
+            declareUser(userId)
     }
 
     override fun getCurrentUser(): TokenPair {
@@ -176,7 +179,8 @@ object AccountUtil : LauncherProvider {
     }
 
     override fun getAllToken(): List<TokenPair> {
-        updateAllToken()
+        if (!isShutdown)
+            updateAllToken()
         return ArrayList<TokenPair>(tokenMap.values)
 
     }
@@ -232,9 +236,9 @@ object AccountUtil : LauncherProvider {
     }
 
     object SocketIOHandler {
-        const val STATE_INIT=4
-        const val STATE_CONNECTTED=0
-        const val STATE_CONNECTING=1
+        const val STATE_INIT = 4
+        const val STATE_CONNECTTED = 0
+        const val STATE_CONNECTING = 1
         const val LOG_TAG = "asf socketio"
 
         //        private val asfUrl = "https://api.alight-sys.com"
@@ -243,7 +247,7 @@ object AccountUtil : LauncherProvider {
         //        private val asfUrl = "http://192.168.4.92:48001"
         private lateinit var socket: Socket
         private var handler: LauncherListener? = null
-        private var state= STATE_INIT
+        private var state = STATE_INIT
         fun initSocketIo() {
             Log.i(LOG_TAG, "ws init")
             val opts = IO.Options()
@@ -259,7 +263,7 @@ object AccountUtil : LauncherProvider {
                     onConnectFail()
 
                 }
-                socket.on(Socket.EVENT_CONNECT_ERROR){
+                socket.on(Socket.EVENT_CONNECT_ERROR) {
                     onConnectFail()
                 }
                 socket.on(io.socket.client.Socket.EVENT_CONNECT) {
@@ -294,8 +298,8 @@ object AccountUtil : LauncherProvider {
         // TODO use CAS or Lock
         fun onConnectFail() {
             handler?.onDisconnect()
-            if (state== STATE_CONNECTTED){
-                state= STATE_CONNECTING
+            if (state == STATE_CONNECTTED) {
+                state = STATE_CONNECTING
                 Log.e(LOG_TAG, "disconnect")
 //                initSocketIo()
             }
@@ -305,7 +309,7 @@ object AccountUtil : LauncherProvider {
 
         fun onConnect() {
 //            Log.e(LOG_TAG,"connect")
-            state= STATE_CONNECTTED
+            state = STATE_CONNECTTED
 
             socket.emit(
                 "ASF.AOSBindDSN",

@@ -23,6 +23,7 @@ class AppConstants {
 
         //AOA星仔伴学旧包名
         const val OLD_AOA_PACKAGE_NAME = "com.alight.android.aoa"
+
         //AOA星仔伴学新包名
         const val AOA_PACKAGE_NAME = "com.alight.android.aoax"
 
@@ -66,5 +67,7 @@ class AppConstants {
         const val LAUNCHER_TYPE_MATHEMATICS = "launcher_type_mathematics"
         const val LAUNCHER_TYPE_ENGLISH = "launcher_type_english"
         const val LAUNCHER_TYPE_QUALITY = "launcher_type_quality"
+
+        const val SHUTDOWN = "shutdown"
     }
 }

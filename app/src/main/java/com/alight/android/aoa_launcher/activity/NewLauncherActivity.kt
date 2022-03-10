@@ -2,9 +2,8 @@ package com.alight.android.aoa_launcher.activity
 
 import android.Manifest
 import android.animation.ObjectAnimator
-import android.content.ComponentName
-import android.content.ContentValues
-import android.content.Intent
+import android.content.*
+import android.content.Intent.ACTION_SHUTDOWN
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
@@ -77,6 +76,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var audioInitSuccessful = false
     private var stopHeart = false
     private var playTimeBean: PlayTimeBean? = null
+    private var shutdownReceiver: ShutdownReceiver? = null
 
     //引导过用户升级为 true
     private var guideUserUpdate = false
@@ -247,6 +247,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     val allToken = AccountUtil.getAllToken()
                     allToken.forEach {
                         if (it.userId == userId) {
+                            //重新选择用户的逻辑可以写在这里
                             AccountUtil.selectUser(it.userId)
                             stopHeart = false
                             // 获取学习计划
@@ -257,7 +258,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                             )
                             getPresenter().getModel(
                                 Urls.PLAY_TIME,
-                                hashMapOf("user_id" to tokenPair?.userId.toString()),
+                                hashMapOf("user_id" to it.userId),
                                 PlayTimeBean::class.java
                             )
                             if (!guideUserUpdate)  //检测系统更新
@@ -274,20 +275,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     }
                     //设置用户信息
                     getPresenter().setPersonInfo(this@NewLauncherActivity)
-                    // 用户绑定极光推送
-                    getPresenter().postModel(
-                        Urls.BIND_PUSH,
-                        RequestBody.create(
-                            null,
-                            mapOf(
-                                AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(
-                                    this@NewLauncherActivity
-                                )
-                            ).toJson()
-                        ),
-                        JPushBindBean::class.java
-                    )
-
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -362,6 +349,45 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             netState = 0
         }
         initAbility()
+        initShutdownReceiver()
+    }
+
+    private fun initShutdownReceiver() {
+        if (shutdownReceiver == null) {
+            shutdownReceiver = ShutdownReceiver()
+            val intentFilter = IntentFilter()
+            intentFilter.addAction(ACTION_SHUTDOWN)
+            registerReceiver(shutdownReceiver, intentFilter)
+        }
+    }
+
+    inner class ShutdownReceiver : BroadcastReceiver() {
+
+        private val TAG = "ShutDownBroadcastReceiver"
+
+        override fun onReceive(context: Context, intent: Intent) {
+            AccountUtil.isShutdown = true
+            Log.i("TAG", "即将关机")
+            val mmkv = MMKV.defaultMMKV()
+            mmkv.encode(AppConstants.SHUTDOWN, true)
+//        Toast.makeText(context, intent.getStringExtra("message"), Toast.LENGTH_SHORT).show();
+            NetUtils.intance.postInfo(
+                Urls.SHUTDOWN, RequestBody.create(
+                    null,
+                    mapOf(
+                        "dsn" to AccountUtil.getDSN()
+                    ).toJson()
+                ), BaseBean::class.java, object : NetUtils.NetCallback {
+                    override fun onSuccess(any: Any) {
+                        Log.i(TAG, "onSuccess: 关机接口调用")
+                    }
+
+                    override fun onError(error: String) {
+
+                    }
+                }
+            );
+        }
     }
 
     private fun initAbility() {
@@ -962,6 +988,19 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 netState = 1
                 initAccountUtil()
                 EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
+                // 用户绑定极光推送
+                getPresenter().postModel(
+                    Urls.BIND_PUSH,
+                    RequestBody.create(
+                        null,
+                        mapOf(
+                            AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(
+                                this@NewLauncherActivity
+                            )
+                        ).toJson()
+                    ),
+                    JPushBindBean::class.java
+                )
                 /*  if (!guideUserUpdate && splashCloseFlag)  //检测系统更新
                   {
                       getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
@@ -1008,5 +1047,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         super.onDestroy()
         abilityManager.onStop()
         EventBus.getDefault().unregister(this)
+        unregisterReceiver(shutdownReceiver)
     }
 }

@@ -17,6 +17,8 @@ object Urls {
     const val UPDATE = "/device/v1/app-version"
     const val PLAY_TIME = "/device/v1/student/app/playtime"
 
+    const val SHUTDOWN = "/device/v1/student/device/shutdown"
+
     //家庭信息
     const val FAMILY_INFO = "/family/v1/student/families"
 
