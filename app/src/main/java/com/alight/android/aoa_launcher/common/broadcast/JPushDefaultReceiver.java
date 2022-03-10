@@ -13,10 +13,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.alight.android.aoa_launcher.common.bean.CallArBean;
+import com.alight.android.aoa_launcher.common.bean.ParentControlBean;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;
+import com.alight.android.aoa_launcher.common.event.ParentControlEvent;
 import com.alight.android.aoa_launcher.utils.AccountUtil;
 import com.alight.android.aoa_launcher.utils.SPUtils;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -43,7 +47,20 @@ public class JPushDefaultReceiver extends BroadcastReceiver {
             Log.d(TAG, "[MyReceiver] 接收 Registration Id : " + regId);
             SPUtils.syncPutData(AppConstants.REGISTRATION_ID, regId);
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
+            Log.d(TAG, "收到了自定义消息。消息内容是：" + bundle.getString(JPushInterface.EXTRA_TITLE));         // 自定义消息不会展示在通知栏，完全要开发者写代码去处理     } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {         Log.d(TAG, "收到了通知");         // 在这里可以做些统计，或者做些其他工作     } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {         Log.d(TAG, "用户点击打开了通知");         // 在这里可以自己写代码去定义用户点击后的行为         Intent i = new Intent(context, TestActivity.class);  //自定义打开的界面         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);         context.startActivity(i);     } else {         Log.d(TAG, "Unhandled intent - " + intent.getAction());    } }
             Log.d(TAG, "收到了自定义消息。消息内容是：" + bundle.getString(JPushInterface.EXTRA_MESSAGE));         // 自定义消息不会展示在通知栏，完全要开发者写代码去处理     } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {         Log.d(TAG, "收到了通知");         // 在这里可以做些统计，或者做些其他工作     } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {         Log.d(TAG, "用户点击打开了通知");         // 在这里可以自己写代码去定义用户点击后的行为         Intent i = new Intent(context, TestActivity.class);  //自定义打开的界面         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);         context.startActivity(i);     } else {         Log.d(TAG, "Unhandled intent - " + intent.getAction());    } }
+            Log.d(TAG, "收到了自定义消息。消息内容是：" + bundle.getString(JPushInterface.EXTRA_EXTRA));         // 自定义消息不会展示在通知栏，完全要开发者写代码去处理     } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {         Log.d(TAG, "收到了通知");         // 在这里可以做些统计，或者做些其他工作     } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {         Log.d(TAG, "用户点击打开了通知");         // 在这里可以自己写代码去定义用户点击后的行为         Intent i = new Intent(context, TestActivity.class);  //自定义打开的界面         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);         context.startActivity(i);     } else {         Log.d(TAG, "Unhandled intent - " + intent.getAction());    } }
+            Log.d(TAG, "收到了自定义消息。消息内容是：" + bundle.getString(JPushInterface.EXTRA_MSG_ID));         // 自定义消息不会展示在通知栏，完全要开发者写代码去处理     } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {         Log.d(TAG, "收到了通知");         // 在这里可以做些统计，或者做些其他工作     } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {         Log.d(TAG, "用户点击打开了通知");         // 在这里可以自己写代码去定义用户点击后的行为         Intent i = new Intent(context, TestActivity.class);  //自定义打开的界面         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);         context.startActivity(i);     } else {         Log.d(TAG, "Unhandled intent - " + intent.getAction());    } }
+            try {
+                ParentControlBean parentControlBean = new Gson().fromJson(bundle.getString(JPushInterface.EXTRA_EXTRA), ParentControlBean.class);
+                //收到App家长管控修改
+                if (parentControlBean.getIntent_url().equals("90://parental_controls")) {
+                    EventBus.getDefault().post(ParentControlEvent.getInstance(bundle.getString("childId"), bundle.getString("parentId"), bundle.getString("title")));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
             Log.d(TAG, "收到了音视频。消息内容是：" + bundle.getString(JPushInterface.EXTRA_MESSAGE));
             String json = bundle.getString(JPushInterface.EXTRA_EXTRA);

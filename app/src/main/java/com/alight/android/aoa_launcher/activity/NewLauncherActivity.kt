@@ -27,6 +27,7 @@ import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.NetMessageEvent
+import com.alight.android.aoa_launcher.common.event.ParentControlEvent
 import com.alight.android.aoa_launcher.common.i.LauncherListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.INetEvent
@@ -50,6 +51,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 /**
@@ -296,6 +299,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     override fun initData() {
         mINetEvent = this
+        EventBus.getDefault().register(this)
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         if (tokenPairCache.isNotEmpty()) {
             tokenPair = Gson().fromJson(tokenPairCache, TokenPair::class.java)
@@ -969,6 +973,18 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
     }
 
+    /**
+     * App端修改了家长管控
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onParentControlEvent(event: ParentControlEvent) {
+        if (tokenPair != null)
+            getPresenter().getModel(
+                Urls.PLAY_TIME,
+                hashMapOf("user_id" to tokenPair?.userId.toString()),
+                PlayTimeBean::class.java
+            )
+    }
 
     override fun onConnect() {
     }
@@ -991,5 +1007,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     override fun onDestroy() {
         super.onDestroy()
         abilityManager.onStop()
+        EventBus.getDefault().unregister(this)
     }
 }
