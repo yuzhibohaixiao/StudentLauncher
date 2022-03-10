@@ -256,6 +256,19 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                 hashMapOf(),
                                 StudyPlanBean::class.java
                             )
+                            // 用户绑定极光推送
+                            getPresenter().postModel(
+                                Urls.BIND_PUSH,
+                                RequestBody.create(
+                                    null,
+                                    mapOf(
+                                        AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(
+                                            this@NewLauncherActivity
+                                        )
+                                    ).toJson()
+                                ),
+                                JPushBindBean::class.java
+                            )
                             getPresenter().getModel(
                                 Urls.PLAY_TIME,
                                 hashMapOf("user_id" to it.userId),
