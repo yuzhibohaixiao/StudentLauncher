@@ -290,8 +290,8 @@
 
         <ImageView
             android:id="@+id/iv_ip_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="162.5dp"
+            android:layout_height="215dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="91.5dp"
             android:scaleType="centerCrop"
