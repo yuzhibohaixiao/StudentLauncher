@@ -825,7 +825,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     ) != -1)
                 ) {
                     if ((it.app_permission == 3)) {
-                        ToastUtils.showLong(context, "该应用已被禁用")
+                        GlobalScope.launch(Dispatchers.Main) {
+                            ToastUtils.showLong(context, "该应用已被禁用")
+                        }
                         return false
                     } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
                             startTime,
@@ -833,8 +835,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                             sysTime
                         )
                     ) {
-                        //限时禁用
-                        ToastUtils.showLong(context, "该应用已被限时禁用")
+                        GlobalScope.launch(Dispatchers.Main) {
+                            //限时禁用
+                            ToastUtils.showLong(context, "该应用已被限时禁用")
+                        }
                         return false
                     }
                     return@forEach
@@ -894,7 +898,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
             playTimeBean.data.ar_manage.forEach {
                 if (it.aoa_id == appId && !it.app_ar_permission) {
-                    ToastUtils.showLong(context, "该AR学应用已被禁用")
+                    GlobalScope.launch(Dispatchers.Main) {
+                        ToastUtils.showLong(context, "该AR学应用已被禁用")
+                    }
                     return false
                 }
             }
