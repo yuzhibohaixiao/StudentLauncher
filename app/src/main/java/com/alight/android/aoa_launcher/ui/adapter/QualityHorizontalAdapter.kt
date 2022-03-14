@@ -12,7 +12,7 @@ class QualityHorizontalAdapter :
     BaseQuickAdapter<AppTreblePackDataBean, BaseViewHolder>(R.layout.item_quality_horizontal) {
     private val appList1: ArrayList<AppTrebleDataBean> = arrayListOf(
         AppTrebleDataBean(
-            R.drawable.moral, "com.jxw.online_study", "道德与法治",
+            R.drawable.moral, "com.jxw.online_study", "思想品德",
             "com.jxw.online_study.activity.BookCaseWrapperActivity",
             mapOf<String, Any>("StartArgs" to "d:/同步学习/政治|e:JWFD"),
             R.drawable.science, "com.jxw.online_study", "科学",
