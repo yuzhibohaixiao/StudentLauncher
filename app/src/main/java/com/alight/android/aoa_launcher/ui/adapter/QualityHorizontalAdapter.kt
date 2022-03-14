@@ -17,7 +17,7 @@ class QualityHorizontalAdapter :
             mapOf<String, Any>("StartArgs" to "d:/同步学习/政治|e:JWFD"),
             R.drawable.science, "com.jxw.online_study", "科学",
             "com.jxw.online_study.activity.BookCaseWrapperActivity",
-            mapOf<String, Any>("StartArgs" to "d:/同步学习/科学|e:JWFD"),
+            mapOf<String, Any>("StartArgs" to "d:/同步学习/科学|e:JWFD"),//StartArgs -> d:/同步学习/科学|e:JWFD
             R.drawable.launcher_quality_think,
             "com.zane.childdraw",
             "儿童启蒙画画",

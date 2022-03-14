@@ -801,6 +801,48 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
+    private fun startApp(context: Context, appPackName: String) {
+        try {
+            val mmkv = LauncherApplication.getMMKV()
+            val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
+            val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
+
+            var calendar = Calendar.getInstance()
+            calendar.timeZone = TimeZone.getDefault();//默认当前时区
+            var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
+            var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
+            var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
+            var startTime = playTimeBean.data.playtime.start_playtime
+            var endTime = playTimeBean.data.playtime.stop_playtime
+
+            playTimeBean.data.app_manage.forEach {
+                if (appPackName == it.app_info.package_name
+                ) {
+                    if ((it.app_permission == 3)) {
+                        ToastUtils.showLong(context, "该应用已被禁用")
+                        return@startApp
+                    } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
+                            startTime,
+                            endTime,
+                            sysTime
+                        )
+                    ) {
+                        //限时禁用
+                        ToastUtils.showLong(context, "该应用已被限时禁用")
+                        return@startApp
+                    }
+                    return@forEach
+                }
+            }
+
+            val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            ToastUtils.showShort(context, "该应用缺失，请安装后重试")
+            e.printStackTrace()
+        }
+    }
+
     fun startActivity(
         context: Context,
         packName: String,
@@ -845,25 +887,31 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     return@forEach
                 }
             }
-
-            val intent = Intent()
-            val componentName =
-                ComponentName(packName, className)
-            params?.forEach {
-                when (it.value) {
-                    is String -> {
-                        intent.putExtra(it.key, it.value.toString())
-                    }
-                    is Boolean -> {
-                        intent.putExtra(it.key, it.value as? Boolean)
-                    }
-                    is Int -> {
-                        intent.putExtra(it.key, it.value as? Int)
+            //只带包名的开启方式
+            if ((params == null || params.isEmpty()) && className.isEmpty()) {
+                val intent = context.packageManager.getLaunchIntentForPackage(packName)
+                context.startActivity(intent)
+            } else {
+                //通过包名和类名的开启方式
+                val intent = Intent()
+                val componentName =
+                    ComponentName(packName, className)
+                params?.forEach {
+                    when (it.value) {
+                        is String -> {
+                            intent.putExtra(it.key, it.value.toString())
+                        }
+                        is Boolean -> {
+                            intent.putExtra(it.key, it.value as? Boolean)
+                        }
+                        is Int -> {
+                            intent.putExtra(it.key, it.value as? Int)
+                        }
                     }
                 }
+                intent.component = componentName
+                context.startActivity(intent)
             }
-            intent.component = componentName
-            context.startActivity(intent)
             return true
         } catch (e: java.lang.Exception) {
             GlobalScope.launch(Dispatchers.Main) {

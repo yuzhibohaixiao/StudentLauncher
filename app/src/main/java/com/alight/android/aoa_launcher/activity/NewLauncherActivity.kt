@@ -442,7 +442,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                             }
                                         } else if (it.type == AudioAbility.ParamType.THIRD) {
                                             val thirdPartyParam = it.thirdPartyParam
-                                            if (!StringUtils.isEmpty(thirdPartyParam?.className)) {
+                                            if (!StringUtils.isEmpty(thirdPartyParam?.packetName)) {
                                                 val startActivity = getPresenter().startActivity(
                                                     this@NewLauncherActivity,
                                                     thirdPartyParam?.packetName!!,
