@@ -17,6 +17,7 @@ import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
 import com.alight.ahwcx.ahwsdk.abilities.PanelAbility
 import com.alight.ahwcx.ahwsdk.abilities.PanelAbility.HardwareStatusHandler
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -135,7 +136,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         getNetStateShowUI(netState)
 
         try {
-            val mmkv = MMKV.defaultMMKV()
+            val mmkv = LauncherApplication.getMMKV()
             val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
             val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
             tv_control_today.text = "今天：" + if (playTimeBean.data.is_rest_day) "休息日" else "上学日"

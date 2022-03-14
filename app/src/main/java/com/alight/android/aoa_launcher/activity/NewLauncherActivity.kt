@@ -22,6 +22,7 @@ import com.alight.ahwcx.ahwsdk.abilities.AudioAbility
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
 import com.alight.ahwcx.ahwsdk.common.AbilityConnectionHandler
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -381,7 +382,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         override fun onReceive(context: Context, intent: Intent) {
             AccountUtil.isShutdown = true
             Log.i("TAG", "即将关机")
-            val mmkv = MMKV.defaultMMKV()
+            val mmkv = LauncherApplication.getMMKV()
             mmkv.encode(AppConstants.SHUTDOWN, true)
 //        Toast.makeText(context, intent.getStringExtra("message"), Toast.LENGTH_SHORT).show();
             NetUtils.intance.postInfo(
@@ -559,7 +560,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     private fun writeUserInfo(tokenPair: TokenPair) {
         //mmkv存储用户数据
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = LauncherApplication.getMMKV()
         mmkv.encode(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN, tokenPair.token)
         mmkv.encode(AppConstants.AOA_LAUNCHER_USER_INFO_AVATAR, tokenPair.avatar)
         mmkv.encode(AppConstants.AOA_LAUNCHER_USER_INFO_NAME, tokenPair.name)
@@ -644,7 +645,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             } else if (any is PlayTimeBean) {
                 Log.i(TAG, "onSuccess: ")
                 playTimeBean = any
-                val mmkv = MMKV.defaultMMKV()
+                val mmkv = LauncherApplication.getMMKV()
                 mmkv.encode(AppConstants.PLAY_TIME, Gson().toJson(playTimeBean))
             }
         }

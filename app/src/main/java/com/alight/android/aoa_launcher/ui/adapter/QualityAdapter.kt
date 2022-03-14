@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.bean.AppTrebleDataBean
 import com.alight.android.aoa_launcher.common.bean.PlayTimeBean
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -139,7 +140,7 @@ class QualityAdapter :
 
     private fun startApp(appPackName: String) {
         try {
-            val mmkv = MMKV.defaultMMKV()
+            val mmkv = LauncherApplication.getMMKV()
             val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
             val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
 

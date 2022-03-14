@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.bean.AppRightDoubleDataBean
 import com.alight.android.aoa_launcher.common.bean.PlayTimeBean
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -147,7 +148,7 @@ class LauncherRightAdapter :
 
     private fun startActivity(packName: String, className: String, params: Map<String, Any>?) {
         try {
-            val mmkv = MMKV.defaultMMKV()
+            val mmkv = LauncherApplication.getMMKV()
             val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
             val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
 
@@ -158,11 +159,9 @@ class LauncherRightAdapter :
             var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
             var startTime = playTimeBean.data.playtime.start_playtime
             var endTime = playTimeBean.data.playtime.stop_playtime
-//            var tempString = " {StartArgs:f:/ansystem/固化数据/小学古诗词.JXW}"
-//            val split = tempString.split(":", "}")
 
             playTimeBean.data.app_manage.forEach {
-                if (packName == it.app_info.package_name && className == it.class_name && (params == null || params.values.indexOf(
+                if (packName == it.app_info.package_name && className == it.class_name && (params == null || params.isEmpty() || params.values.indexOf(
                         it.args
                     ) != -1)
                 ) {

@@ -28,6 +28,7 @@ import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.activity.UpdateActivity
+import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BasePresenter
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -807,7 +808,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         params: Map<String, Any>?
     ): Boolean {
         try {
-            val mmkv = MMKV.defaultMMKV()
+            val mmkv = LauncherApplication.getMMKV()
             val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
             val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
 
@@ -820,7 +821,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             var endTime = playTimeBean.data.playtime.stop_playtime
 
             playTimeBean.data.app_manage.forEach {
-                if (packName == it.app_info.package_name && className == it.class_name && (params == null || params.values.indexOf(
+                if (packName == it.app_info.package_name && className == it.class_name && (params == null || params.isEmpty() || params.values.indexOf(
                         it.args
                     ) != -1)
                 ) {
@@ -893,7 +894,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     fun startAoaApp(context: Context, appId: Int, route: String): Boolean {
         try {
-            val mmkv = MMKV.defaultMMKV()
+            val mmkv = LauncherApplication.getMMKV()
             val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
             val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
             playTimeBean.data.ar_manage.forEach {

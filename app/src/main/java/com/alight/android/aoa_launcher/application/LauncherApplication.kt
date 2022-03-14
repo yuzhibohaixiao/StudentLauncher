@@ -26,14 +26,17 @@ class LauncherApplication : Application() {
             return context!!
         }
 
+        private var mmkv: MMKV? = null
+        fun getMMKV(): MMKV {
+            return mmkv!!
+        }
+
     }
 
     override fun onCreate() {
         super.onCreate()
         context = this
         x.Ext.init(this)
-        val rootDir = MMKV.initialize(this, AppConstants.SYSTEM_MMKV_PATH)
-        Log.i(TAG, "mmkv root: $rootDir")
         init()
     }
 
@@ -80,33 +83,15 @@ class LauncherApplication : Application() {
                     Log.i(TAG, "XUpdate ILogger: $error")
                 }
             }.init(this) //这个必须初始化
-//            .setIUpdateHttpService(object : IUpdateHttpService {
-//                override fun download(
-//                    url: String,
-//                    path: String,
-//                    fileName: String,
-//                    callback: IUpdateHttpService.DownloadCallback
-//                ) {
-//                }
-//
-//                override fun asyncGet(
-//                    url: String,
-//                    params: MutableMap<String, Any>,
-//                    callBack: IUpdateHttpService.Callback
-//                ) {
-//                }
-//
-//                override fun cancelDownload(url: String) {
-//                }
-//
-//                override fun asyncPost(
-//                    url: String,
-//                    params: MutableMap<String, Any>,
-//                    callBack: IUpdateHttpService.Callback
-//                ) {
-//                }
-//            }) //这个必须设置！实现网络请求功能。
 
+        //MMKV
+        val rootDir = MMKV.initialize(this, AppConstants.SYSTEM_MMKV_PATH)
+        mmkv = MMKV.mmkvWithID(
+            AppConstants.MMKV_MMAP_ID,
+            MMKV.MULTI_PROCESS_MODE,
+            AppConstants.MMKV_KEY
+        )
+        Log.i(TAG, "mmkv root: $rootDir")
     }
 
 }

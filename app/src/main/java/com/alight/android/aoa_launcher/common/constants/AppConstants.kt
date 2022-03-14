@@ -68,6 +68,11 @@ class AppConstants {
         const val LAUNCHER_TYPE_ENGLISH = "launcher_type_english"
         const val LAUNCHER_TYPE_QUALITY = "launcher_type_quality"
 
+        const val MMKV_MMAP_ID = "shared_aoa_launcher"
+
+        const val MMKV_KEY = "ALIGHT_CRYPTO"
+
+
         const val SHUTDOWN = "shutdown"
     }
 }
