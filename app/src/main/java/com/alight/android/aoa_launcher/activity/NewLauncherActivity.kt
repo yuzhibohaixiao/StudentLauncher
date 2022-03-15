@@ -629,7 +629,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     e.printStackTrace()
                 }
             } else if (any is BaseBean) {
-                if (any.code == 401) {
+                if (any.code == 401 && tokenPair != null) {
                     stopHeart = true
                     SPUtils.syncPutData("onlyShowSelectChild", true)
                     activityResultLauncher?.launch(
@@ -640,8 +640,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     )
                 }
             } else if (any is UpdateBean) {
+                //重新绑定
+                val isRebinding = SPUtils.getData("rebinding", false) as Boolean
+                if (!isRebinding)
                 //展示系统固件更新
-                getPresenter().splashStartUpdateActivity(false, any, this@NewLauncherActivity)
+                    getPresenter().splashStartUpdateActivity(false, any, this@NewLauncherActivity)
             } else if (any is PlayTimeBean) {
                 Log.i(TAG, "onSuccess: ")
                 playTimeBean = any

@@ -52,6 +52,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         R.drawable.launcher_splash4,
         R.drawable.launcher_splash5
     )
+    private var isForceUpdate = false
+    private var isRebinding = false
     private var userSplashNumber = 0
     private val USER_LOGIN_ACTION = "com.alight.android.user_login" // 自定义ACTION
 
@@ -76,7 +78,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     override fun onPause() {
         super.onPause()
-        getPresenter().sendMenuEnableBroadcast(this, true)
+        if (!isForceUpdate)
+            getPresenter().sendMenuEnableBroadcast(this, true)
     }
 
     override fun initData() {
@@ -86,7 +89,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         //开启用户引导
         val openUserSplash = intent.getBooleanExtra("openUserSplash", false)
         //重新绑定
-        var isRebinding = SPUtils.getData("rebinding", false) as Boolean
+        isRebinding = SPUtils.getData("rebinding", false) as Boolean
         when {
             isRebinding -> {
                 showQRCode(isRebinding)
@@ -401,8 +404,12 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             is DeviceBindBean -> {
                 if (any.data.exists) {
                     //检测系统更新
-                    getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
-//                    showChildUser()
+                    if (isRebinding) {
+                        showChildUser()
+                    } else {
+                        getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+                    }
+//
                 } else {
                     GlobalScope.launch {
                         try {
@@ -422,8 +429,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 }
             }
             is UpdateBean -> {
+                isForceUpdate = true
+                if (!isRebinding)
                 //展示系统固件更新
-                getPresenter().splashStartUpdateActivity(true, any, this)
+                    getPresenter().splashStartUpdateActivity(true, any, this)
             }
         }
     }
