@@ -417,6 +417,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                             audioAbility?.subOpenAppResult(object : AudioAbility.OpenAppCallback {
                                 override fun onReceive(appArgs: MutableList<AudioAbility.ToApp>?) {
                                     appArgs?.forEach {
+                                        //AOA应用
                                         if (it.type == AudioAbility.ParamType.AOA) {
                                             val aoaParam = it.aoaParam
                                             if (!StringUtils.isEmpty(aoaParam?.appId)) {
@@ -440,6 +441,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                                     )
                                                 }
                                             }
+                                            //九学网和第三方应用
                                         } else if (it.type == AudioAbility.ParamType.THIRD) {
                                             val thirdPartyParam = it.thirdPartyParam
                                             if (!StringUtils.isEmpty(thirdPartyParam?.packetName)) {

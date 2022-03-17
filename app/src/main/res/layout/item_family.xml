@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="23.5dp"
+        android:singleLine="true"
         android:text="张小诚"
         android:textColor="@color/person_center_text_black"
         android:textSize="12sp" />

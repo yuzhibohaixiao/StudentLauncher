@@ -23,12 +23,13 @@ class PersonalCenterFamilyAdapter :
 
         //家长身份
         holder.setText(
-            R.id.tv_name_family_item, when (parent.role_type) {
-                0 -> "妈妈"
-                1 -> "爸爸"
-                2 -> "其他家长"
-                else -> ""
-            }
+            R.id.tv_name_family_item, parent.name
+//            when (parent.role_type) {
+//                0 -> "妈妈"
+//                1 -> "爸爸"
+//                2 -> "其他家长"
+//                else -> ""
+//            }
         )
         holder.setImageResource(
             R.id.iv_online_state_family_item, if (parent.status.jpush_online == 0) {
