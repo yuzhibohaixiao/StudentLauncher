@@ -822,8 +822,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         pbUpdateOta = findViewById(R.id.pb_update_ota);
         tvOtaUpdateText = findViewById(R.id.tv_ota_update_text);
         ivOtaLogo = findViewById(R.id.iv_ota_logo);
-
-        SPUtils.asyncPutData("configVersion", 0);
     }
 
     @Nullable
