@@ -9,6 +9,7 @@ import android.util.Log;
 import com.alight.android.aoa_launcher.activity.LauncherActivity;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;
 import com.alight.android.aoa_launcher.common.event.UpdateEvent;
+import com.alight.android.aoa_launcher.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 

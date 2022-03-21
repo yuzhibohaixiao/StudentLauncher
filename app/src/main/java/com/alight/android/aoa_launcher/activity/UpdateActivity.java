@@ -12,8 +12,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,9 +28,9 @@ import com.alight.android.aoa_launcher.R;
 import com.alight.android.aoa_launcher.application.LauncherApplication;
 import com.alight.android.aoa_launcher.common.base.BaseActivity;
 import com.alight.android.aoa_launcher.common.bean.UpdateBeanData;
+import com.alight.android.aoa_launcher.common.broadcast.UpgradeApkReceiver;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;
 import com.alight.android.aoa_launcher.common.db.DbHelper;
-import com.alight.android.aoa_launcher.common.event.NetMessageEvent;
 import com.alight.android.aoa_launcher.common.event.UpdateEvent;
 import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
@@ -53,7 +51,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
-import org.xutils.view.annotation.Event;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -74,6 +71,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.LAUNCHER_PACKAGE_NAME;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
 
 /**
@@ -121,6 +119,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private boolean newSplash;
     private String source;
     private boolean isShowDialog = false;
+    private UpgradeApkReceiver upgradeApkReceiver;
 
     @Override
     public void initData() {
@@ -196,6 +195,16 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         }
+        if (upgradeApkReceiver == null) {
+            //注册安装结果的广播
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("android.intent.action.PACKAGE_ADDED");
+            intentFilter.addAction("android.intent.action.PACKAGE_REPLACED");
+            intentFilter.addAction("android.intent.action.PACKAGE_INSTALL");
+            upgradeApkReceiver = new UpgradeApkReceiver();
+            registerReceiver(upgradeApkReceiver, intentFilter);
+        }
+
     }
 
     private void initOtaUpdate() {
@@ -219,11 +228,16 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetUpdateEvent(UpdateEvent updateEvent) {
         String packageName = updateEvent.packageName;
+        refreshInstallState(packageName);
+    }
+
+    private void refreshInstallState(String packageName) {
         List<File> systemAdapterData = systemAdapter.getData();
         for (int i = 0; i < systemAdapterData.size(); i++) {
             if (packageName.equals(systemAdapterData.get(i).getPackName())) {
                 TextView tvUpdate = (TextView) systemAdapter.getViewByPosition(i, R.id.tv_update_item);
-                tvUpdate.setText("已完成");
+                if (tvUpdate != null)
+                    tvUpdate.setText("已完成");
                 return;
             }
         }
@@ -231,7 +245,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         for (int i = 0; i < otherAdapterData.size(); i++) {
             if (packageName.equals(otherAdapterData.get(i).getPackName())) {
                 TextView tvUpdate = (TextView) otherAdapter.getViewByPosition(i, R.id.tv_update_item);
-                tvUpdate.setText("已完成");
+                if (tvUpdate != null)
+                    tvUpdate.setText("已完成");
                 return;
             }
         }
@@ -430,7 +445,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 //                deleteFolder(string);
                 if (upZipFile(zipPath, string)) {
                     containsConfigFile = false;
-                    SPUtils.asyncPutData("configVersion", versionCode);
+                    SPUtils.syncPutData("configVersion", versionCode);
                     String launcherApkPath = Environment.getExternalStorageDirectory().getPath() + "/launcher.apk";
 
                     for (int i = 0; i < systemAdapter.getData().size(); i++) {
@@ -444,7 +459,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         tvUpdate.setText("已完成");
                     });
                     if (!StringUtils.isEmpty(launcherApkPath)) {
-                        ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), launcherApkPath);
+                        if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), launcherApkPath)) {
+                            EventBus.getDefault().post(UpdateEvent.getInstance(AppConstants.LAUNCHER_PACKAGE_NAME));
+//                            refreshInstallState(LAUNCHER_PACKAGE_NAME);
+                        }
                     }
                 }
             } else {
@@ -791,6 +809,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         if (serviceIntent != null) {
             stopService(serviceIntent);
         }
+        unregisterReceiver(upgradeApkReceiver);
     }
 
     @Override
@@ -1001,7 +1020,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
                                 if (file.getPackName() != null && file.getPackName().equals(AppConstants.LAUNCHER_PACKAGE_NAME) && containsConfigFile) {
                                 } else if (file.getFormat() == 2) {
-                                    ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+                                    if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)) {
+                                        EventBus.getDefault().post(UpdateEvent.getInstance(file.getPackName()));
+//                                        refreshInstallState(file.getPackName());
+                                    }
+
                                 } else if (file.getFormat() == 1) {
                                     if (!StringUtils.isEmpty(apkPath)) {
                                         ToastUtils.showLong(UpdateActivity.this, "当前正在解压配置文件，请稍等..请不要退出当前页面");
@@ -1055,7 +1078,14 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             if (file.getFormat() == 2) {
                                 //剩余容量大于100M时执行安装
                                 if (getAvailableSize() > 100) {
-                                    ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath);
+                                    if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)) {
+                                        TextView tvUpdate = (TextView) otherAdapter.getViewByPosition(i, R.id.tv_update_item);
+                                        if (tvUpdate != null)
+                                            tvUpdate.setText("已完成");
+//                                        onGetUpdateEvent(UpdateEvent.getInstance(file.getPackName()));
+//                                        EventBus.getDefault().post(UpdateEvent.getInstance(file.getPackName()));
+//                                        refreshInstallState(file.getPackName());
+                                    }
                                 } else {
                                     ToastUtils.showLong(context, "安装失败，请查看存储空间是否充足");
                                 }
