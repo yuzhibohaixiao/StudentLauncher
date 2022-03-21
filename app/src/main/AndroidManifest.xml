@@ -121,6 +121,14 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" />
 
+        <!--
+          ACTION_PACKAGE_ADDED 一个新应用包已经安装在设备上，数据包括包名（最新安装的包程序不能接收到这个广播）
+          ACTION_PACKAGE_REPLACED 一个新版本的应用安装到设备，替换之前已经存在的版本
+          ACTION_PACKAGE_CHANGED 一个已存在的应用程序包已经改变，包括包名
+          ACTION_PACKAGE_REMOVED 一个已存在的应用程序包已经从设备上移除，包括包名（正在被安装的包程序不能接收到这个广播）
+          ACTION_PACKAGE_RESTARTED 用户重新开始一个包，包的所有进程将被杀死，所有与其联系的运行时间状态应该被移除，包括包名（重新开始包程序不能接收到这个广播）
+      -->
+
         <receiver android:name=".common.broadcast.UpgradeApkReceiver">
             <intent-filter android:priority="2147483647">
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
@@ -141,15 +149,6 @@
                 <action android:name="com.alight.android.user_login" />
             </intent-filter>
         </receiver>
-
-        <!--
-            ACTION_PACKAGE_ADDED 一个新应用包已经安装在设备上，数据包括包名（最新安装的包程序不能接收到这个广播）
-            ACTION_PACKAGE_REPLACED 一个新版本的应用安装到设备，替换之前已经存在的版本
-            ACTION_PACKAGE_CHANGED 一个已存在的应用程序包已经改变，包括包名
-            ACTION_PACKAGE_REMOVED 一个已存在的应用程序包已经从设备上移除，包括包名（正在被安装的包程序不能接收到这个广播）
-            ACTION_PACKAGE_RESTARTED 用户重新开始一个包，包的所有进程将被杀死，所有与其联系的运行时间状态应该被移除，包括包名（重新开始包程序不能接收到这个广播）
-        -->
-
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.UpdateService" />
@@ -213,7 +212,6 @@
             </intent-filter>
             <!-- Optional -->
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
                 <data android:scheme="package" />

@@ -82,6 +82,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
             if (pbUpdate.progress == 100) {
                 tvUpdate.text = "安装中"
                 pbUpdate.visibility = View.GONE
+                tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
             } else {
                 when (file.status) {
                     File.DOWNLOAD_PAUSE ->//暂停->开始
@@ -176,7 +177,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
             if (pbUpdate.progress == 100) {
                 tvUpdate.text = "安装中"
                 pbUpdate.visibility = View.GONE
-                return
+                tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
             } else {
                 when (file.status) {
                     File.DOWNLOAD_PAUSE ->//暂停->开始
