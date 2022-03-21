@@ -93,7 +93,9 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                     {
                         pbUpdate.visibility = View.VISIBLE
                         pbUpdate.progress = file.progress
-                        tvUpdate.setTextColor(Color.WHITE)
+                        if (pbUpdate.progress != 100) {
+                            tvUpdate.setTextColor(Color.WHITE)
+                        }
                         tvUpdate.text = "${pbUpdate.progress}%";
                     }
                     File.DOWNLOAD_ERROR ->//出错
@@ -102,7 +104,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                     }
                     File.DOWNLOAD_COMPLETE ->//完成
                     {
-                        tvUpdate.text = "已完成"
+                        tvUpdate.text = "安装中"
                         pbUpdate.visibility = View.GONE
                         tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
                     }
@@ -186,7 +188,9 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                     {
                         pbUpdate.visibility = View.VISIBLE
                         pbUpdate.progress = file.progress
-                        tvUpdate.setTextColor(Color.WHITE)
+                        if (pbUpdate.progress != 100) {
+                            tvUpdate.setTextColor(Color.WHITE)
+                        }
                         tvUpdate.setBackgroundResource(R.drawable.update_oval_trans20)
                         tvUpdate.text = "${pbUpdate.progress}%";
 
@@ -197,7 +201,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                     }
                     File.DOWNLOAD_COMPLETE ->//完成
                     {
-                        tvUpdate.text = "已完成"
+                        tvUpdate.text = "安装中"
                         tvUpdate.isEnabled = false
                         tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
                         pbUpdate.visibility = View.GONE

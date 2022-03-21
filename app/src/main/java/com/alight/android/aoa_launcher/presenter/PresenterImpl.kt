@@ -767,6 +767,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             intent.putExtra("systemApp", systemAppList)
             intent.putExtra("otherApp", otherAppList)
             activity.startActivity(intent)
+            updateDialog.dismiss()
         }
         try {
             updateDialog.show()

@@ -32,6 +32,8 @@ import com.alight.android.aoa_launcher.common.base.BaseActivity;
 import com.alight.android.aoa_launcher.common.bean.UpdateBeanData;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;
 import com.alight.android.aoa_launcher.common.db.DbHelper;
+import com.alight.android.aoa_launcher.common.event.NetMessageEvent;
+import com.alight.android.aoa_launcher.common.event.UpdateEvent;
 import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
 import com.alight.android.aoa_launcher.service.DownloadService;
@@ -44,10 +46,14 @@ import com.alight.android.aoa_launcher.utils.SPUtils;
 import com.alight.android.aoa_launcher.utils.StringUtils;
 import com.alight.android.aoa_launcher.utils.ToastUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
+import org.xutils.view.annotation.Event;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -82,7 +88,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private RecyclerView otherRecyclerView;
     private UpdateAdapter systemAdapter;
     private UpdateAdapter otherAdapter;
-
+    private int zipPosition = 0;
     private HashMap<String, DownloadReceiver> downloadReceiverMap = new HashMap<>();
     private List<File> appList = new ArrayList<>();
     private List<File> otherList = new ArrayList<>();
@@ -118,6 +124,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initData() {
+        EventBus.getDefault().register(this);
         systemAppList = (ArrayList<UpdateBeanData>) getIntent().getSerializableExtra("systemApp");
         otherAppList = (ArrayList<UpdateBeanData>) getIntent().getSerializableExtra("otherApp");
 
@@ -173,6 +180,22 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             isShowDialog = true;
         }
         initOtaUpdate();
+
+        //系统应用没有应用时不提示一键更新
+        if (systemAdapter.getData().size() > 0) {
+            for (int i = 0; i < systemAdapter.getData().size(); i++) {
+                if (systemAdapter.getData().get(i).getFormat() != 3 && systemAdapter.getData().get(i).getFormat() != 4) {
+                    //表示有需要更新的
+                    break;
+                } else if (i == systemAdapter.getData().size() - 1) {
+                    tvUpdateAll.setBackgroundResource(R.drawable.update_oval);
+                    tvUpdateAll.setTextColor(Color.parseColor("#50ffffff"));
+                    tvUpdateAll.setEnabled(false);
+                    tvUpdateAll.setClickable(false);
+                    tvUpdateAll.setText("无需更新");
+                }
+            }
+        }
     }
 
     private void initOtaUpdate() {
@@ -190,6 +213,27 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             tvNewOtaApp.setText("已是最新版本");
             tvOtaAppUpdate.setVisibility(View.GONE);
             ivOtaLogo.setPadding(0, 80, 0, 0);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetUpdateEvent(UpdateEvent updateEvent) {
+        String packageName = updateEvent.packageName;
+        List<File> systemAdapterData = systemAdapter.getData();
+        for (int i = 0; i < systemAdapterData.size(); i++) {
+            if (packageName.equals(systemAdapterData.get(i).getPackName())) {
+                TextView tvUpdate = (TextView) systemAdapter.getViewByPosition(i, R.id.tv_update_item);
+                tvUpdate.setText("已完成");
+                return;
+            }
+        }
+        List<File> otherAdapterData = otherAdapter.getData();
+        for (int i = 0; i < otherAdapterData.size(); i++) {
+            if (packageName.equals(otherAdapterData.get(i).getPackName())) {
+                TextView tvUpdate = (TextView) otherAdapter.getViewByPosition(i, R.id.tv_update_item);
+                tvUpdate.setText("已完成");
+                return;
+            }
         }
     }
 
@@ -388,6 +432,17 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     containsConfigFile = false;
                     SPUtils.asyncPutData("configVersion", versionCode);
                     String launcherApkPath = Environment.getExternalStorageDirectory().getPath() + "/launcher.apk";
+
+                    for (int i = 0; i < systemAdapter.getData().size(); i++) {
+                        if (systemAdapter.getData().get(i).getFormat() == 1) {
+                            zipPosition = i;
+                        }
+                    }
+                    runOnUiThread(() -> {
+                        ToastUtils.showShort(this, "解压完成！");
+                        TextView tvUpdate = (TextView) systemAdapter.getViewByPosition(zipPosition, R.id.tv_update_item);
+                        tvUpdate.setText("已完成");
+                    });
                     if (!StringUtils.isEmpty(launcherApkPath)) {
                         ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), launcherApkPath);
                     }
