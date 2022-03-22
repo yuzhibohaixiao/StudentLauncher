@@ -14,6 +14,10 @@ import com.alight.android.aoa_launcher.utils.StringUtils
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_update) {
@@ -216,6 +220,21 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                     }
                 }
 
+            }
+            if (file.isInstalled)
+                refreshInstallState(file, tvUpdate)
+        }
+    }
+
+    private fun refreshInstallState(file: File, tvUpdate: TextView) {
+        if (file.isInstalled && getIcon(file.packName) != null) {
+            GlobalScope.launch(Dispatchers.Main) {
+                tvUpdate.text = "已完成"
+            }
+        } else {
+            GlobalScope.launch(Dispatchers.IO) {
+                delay(1000 * 1)
+                refreshInstallState(file, tvUpdate)
             }
         }
     }

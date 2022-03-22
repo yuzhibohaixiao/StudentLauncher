@@ -134,6 +134,7 @@
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.PACKAGE_INSTALL" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
@@ -147,6 +148,12 @@
         <receiver android:name=".common.broadcast.LoginBroadcastReceiver">
             <intent-filter>
                 <action android:name="com.alight.android.user_login" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".common.broadcast.UpdateReceiver">
+            <intent-filter>
+                <action android:name="com.alight.android.update" />
             </intent-filter>
         </receiver>
 

@@ -69,6 +69,17 @@ public class File implements Serializable, Comparable<File> {
 
     private boolean checked;
 
+
+    private boolean installed;
+
+    public boolean isInstalled() {
+        return installed;
+    }
+
+    public void setInstalled(boolean installed) {
+        this.installed = installed;
+    }
+
     public int getVersionCode() {
         return versionCode;
     }

@@ -14,7 +14,7 @@ import com.alight.android.aoa_launcher.utils.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
 /**
- * 接收用户安装替换的广播
+ * 接收用户安装的广播
  */
 public class UpgradeApkReceiver extends BroadcastReceiver {
 

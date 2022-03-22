@@ -147,9 +147,7 @@ public class ApkController {
                 method.invoke(packageManager, Uri.fromFile(file), null, 2, null);
 
             }
-
             return true;
-
         } catch (Exception e) {
             ToastUtils.showLong(context, "安装失败，请查看存储空间是否充足");
             e.printStackTrace();

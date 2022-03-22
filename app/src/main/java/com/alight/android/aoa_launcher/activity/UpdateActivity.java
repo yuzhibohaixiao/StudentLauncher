@@ -120,6 +120,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private String source;
     private boolean isShowDialog = false;
     private UpgradeApkReceiver upgradeApkReceiver;
+    private int updatePostion;
 
     @Override
     public void initData() {
@@ -195,16 +196,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         }
-        if (upgradeApkReceiver == null) {
-            //注册安装结果的广播
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction("android.intent.action.PACKAGE_ADDED");
-            intentFilter.addAction("android.intent.action.PACKAGE_REPLACED");
-            intentFilter.addAction("android.intent.action.PACKAGE_INSTALL");
-            upgradeApkReceiver = new UpgradeApkReceiver();
-            registerReceiver(upgradeApkReceiver, intentFilter);
-        }
-
     }
 
     private void initOtaUpdate() {
@@ -460,8 +451,14 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     });
                     if (!StringUtils.isEmpty(launcherApkPath)) {
                         if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), launcherApkPath)) {
-                            EventBus.getDefault().post(UpdateEvent.getInstance(AppConstants.LAUNCHER_PACKAGE_NAME));
-//                            refreshInstallState(LAUNCHER_PACKAGE_NAME);
+                            for (int i = 0; i < systemAdapter.getData().size(); i++) {
+                                if (LAUNCHER_PACKAGE_NAME.equals(systemAdapter.getData().get(i).getPackName())) {
+                                    updatePostion = i;
+                                    appList.get(updatePostion).setInstalled(true);
+                                    runOnUiThread(() -> systemAdapter.notifyItemChanged(updatePostion));
+                                }
+                            }
+//                            sendUpdateBroadcast(LAUNCHER_PACKAGE_NAME);
                         }
                     }
                 }
@@ -809,7 +806,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         if (serviceIntent != null) {
             stopService(serviceIntent);
         }
-        unregisterReceiver(upgradeApkReceiver);
     }
 
     @Override
@@ -1021,8 +1017,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 if (file.getPackName() != null && file.getPackName().equals(AppConstants.LAUNCHER_PACKAGE_NAME) && containsConfigFile) {
                                 } else if (file.getFormat() == 2) {
                                     if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)) {
-                                        EventBus.getDefault().post(UpdateEvent.getInstance(file.getPackName()));
-//                                        refreshInstallState(file.getPackName());
+                                        file.setInstalled(true);
+                                        systemAdapter.notifyItemChanged(i);
+//                                        sendUpdateBroadcast(file.getPackName());
                                     }
 
                                 } else if (file.getFormat() == 1) {
@@ -1079,12 +1076,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 //剩余容量大于100M时执行安装
                                 if (getAvailableSize() > 100) {
                                     if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)) {
-                                        TextView tvUpdate = (TextView) otherAdapter.getViewByPosition(i, R.id.tv_update_item);
-                                        if (tvUpdate != null)
-                                            tvUpdate.setText("已完成");
-//                                        onGetUpdateEvent(UpdateEvent.getInstance(file.getPackName()));
-//                                        EventBus.getDefault().post(UpdateEvent.getInstance(file.getPackName()));
-//                                        refreshInstallState(file.getPackName());
+                                        file.setInstalled(true);
+                                        systemAdapter.notifyItemChanged(i);
+//                                        sendUpdateBroadcast(file.getPackName());
                                     }
                                 } else {
                                     ToastUtils.showLong(context, "安装失败，请查看存储空间是否充足");
@@ -1147,6 +1141,17 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             }
         }
 
+    }
+
+    /**
+     * 发送自定义刷新安装状态的广播
+     */
+    private void sendUpdateBroadcast(String packageName) {
+        Log.i(TAG, "sendUpdateBroadcast: packageName = " + packageName);
+        Intent intent = new Intent();
+        intent.setAction("com.alight.android.update");
+        intent.putExtra("packageName", packageName);// 设置广播的消息
+        sendBroadcast(intent);
     }
 
     /**
