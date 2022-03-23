@@ -303,8 +303,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             intent.putExtra("parentId", parentInfo.user_id.toString())
             intent.putExtra("parentName", parentInfo.name)
             intent.putExtra("parentAvatar", parentInfo.avatar)
-            intent.putExtra("childId", AccountUtil.getCurrentUser().userId.toString())
-            intent.putExtra("token", AccountUtil.getCurrentUser().token)
+            intent.putExtra("childId", tokenPair?.userId.toString())
+            intent.putExtra("token", tokenPair?.token)
         }
         try {
             this.startActivity(intent)
@@ -350,17 +350,17 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             is DeviceRelationBean -> {
 //                if (any.code == 200) {
-                    //重新绑定
-                    ToastUtils.showShort(this, any.data)
-                    SPUtils.syncPutData("onlyShowSelectChild", false)
-                    SPUtils.syncPutData("rebinding", true)
-                    //让引导再次开启
-                    SPUtils.syncPutData("splashClose", false)
-                    finish()
-                    var intent = Intent(this, SplashActivity::class.java)
-                    startActivity(intent)
+                //重新绑定
+                ToastUtils.showShort(this, any.data)
+                SPUtils.syncPutData("onlyShowSelectChild", false)
+                SPUtils.syncPutData("rebinding", true)
+                //让引导再次开启
+                SPUtils.syncPutData("splashClose", false)
+                finish()
+                var intent = Intent(this, SplashActivity::class.java)
+                startActivity(intent)
 //                } else {
-                    //重新绑定
+                //重新绑定
 //                    ToastUtils.showShort(this, "解绑失败")
 //                }
             }

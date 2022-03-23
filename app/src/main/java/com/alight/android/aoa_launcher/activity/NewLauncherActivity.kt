@@ -43,7 +43,6 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
-import com.tencent.mmkv.MMKV
 import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -984,9 +983,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             intent.putExtra("parentName", tokenMessage.message.fromUserInfo.name)
             intent.putExtra("parentAvatar", tokenMessage.message.fromUserInfo.avatar)
             intent.putExtra("roomId", tokenMessage.message.roomId)
-            intent.putExtra("childId", AccountUtil.getCurrentUser().userId.toString())
+            intent.putExtra("childId", tokenPair?.userId.toString())
             intent.putExtra("called", 2)
-            intent.putExtra("token", AccountUtil.getCurrentUser().token)
+            intent.putExtra("token", tokenPair?.token)
             intent.putExtra("callType", tokenMessage.message.type)
         }
         try {
