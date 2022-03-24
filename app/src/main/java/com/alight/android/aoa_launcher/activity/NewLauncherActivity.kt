@@ -213,6 +213,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 touchAbilityInitSuccessful = touchAbility?.waitConnectionAsync()!!
                 if (touchAbilityInitSuccessful) {
                     try {
+                        Log.i(TAG, "乱点监控被启用 enableDisorderlyPointChecker: ")
                         touchAbility?.enableDisorderlyPointChecker()
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -222,6 +223,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         } else if (touchAbilityInitSuccessful) {
             try {
                 touchAbility?.enableDisorderlyPointChecker()
+                Log.i(TAG, "乱点监控被启用 enableDisorderlyPointChecker: ")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -954,7 +956,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                             }
                             if (StartAppUtils.isNeedStopTouchPoint(packName) && touchAbilityInitSuccessful) {
                                 touchAbility?.disableDisorderlyPointChecker()
-                                Log.i(TAG, "onItemClick: 乱点监控被禁用")
+                                Log.i(TAG, "乱点监控被禁用 disableDisorderlyPointChecker: ")
                             }
                         }
 
