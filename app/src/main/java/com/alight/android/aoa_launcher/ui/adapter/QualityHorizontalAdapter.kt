@@ -119,7 +119,29 @@ class QualityHorizontalAdapter :
         val recyclerView = holder.getView<RecyclerView>(R.id.rv_quality_app_content)
         recyclerView.layoutManager = LinearLayoutManager(context)
         val qualityAdapter = QualityAdapter()
+        qualityAdapter.setOnItemClickListener(object : QualityAdapter.OnItemClickListener {
+            override fun onItemClick(
+                packName: String,
+                className: String?,
+                params: Map<String, Any>?
+            ) {
+                if (onItemClickListener != null) {
+                    onItemClickListener?.onItemClick(packName, className, params)
+                }
+            }
+
+        })
         qualityAdapter.setNewInstance(item.appTrebleDataBean)
         recyclerView.adapter = qualityAdapter
+    }
+
+    private var onItemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick(packName: String, className: String?, params: Map<String, Any>?)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
     }
 }

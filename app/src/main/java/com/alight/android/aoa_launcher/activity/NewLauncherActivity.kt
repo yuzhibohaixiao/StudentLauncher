@@ -20,6 +20,8 @@ import cn.jpush.android.api.JPushInterface
 import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.AudioAbility
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
+import com.alight.ahwcx.ahwsdk.abilities.TouchAbility
+import com.alight.ahwcx.ahwsdk.abilityImpl.TouchAbilityImpl
 import com.alight.ahwcx.ahwsdk.common.AbilityConnectionHandler
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
@@ -69,10 +71,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var uri: Uri? = null
     private var splashCloseFlag = false
     private var qualityHorizontalAdapter: QualityHorizontalAdapter? = null
-    private var interactionAbility: InteractionAbility? = null
-    private var audioAbility: AudioAbility? = null
+    private var interactionAbility: InteractionAbility? = null //交互模式相关
+    private var audioAbility: AudioAbility? = null //语音助手相关
+    private var touchAbility: TouchAbility? = null //触控乱点相关
     private val abilityManager = AbilityManager("launcher", "5", "234")
     private var abilityInitSuccessful = false
+    private var touchAbilityInitSuccessful = false
     private var audioInitSuccessful = false
     private var stopHeart = false
     private var playTimeBean: PlayTimeBean? = null
@@ -185,6 +189,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             tv_user_name_new_launcher.text = tokenPair?.name
         }
         setInteraction()
+        resetTouchAbility()
         // 获取学习计划
         if (AccountUtil.currentUserId != null) {
             getPresenter().getModel(
@@ -194,14 +199,36 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             )
         }
         splashCloseFlag = false
+        qualityHorizontalAdapter?.notifyDataSetChanged()
     }
 
-    override fun onPause() {
-        super.onPause()
-        if (audioInitSuccessful) {
-            audioAbility?.stopRecording()
+    /**
+     * 监控触控乱点重启
+     */
+    private fun resetTouchAbility() {
+        if (touchAbility == null) {
+            touchAbility =
+                abilityManager.getAbility(TouchAbility::class.java, true, applicationContext)
+            GlobalScope.launch(Dispatchers.Main) {
+                touchAbilityInitSuccessful = touchAbility?.waitConnectionAsync()!!
+                if (touchAbilityInitSuccessful) {
+                    try {
+                        touchAbility?.enableDisorderlyPointChecker()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        } else if (touchAbilityInitSuccessful) {
+            try {
+                touchAbility?.enableDisorderlyPointChecker()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+
     }
+
 
     /**
      * 交互模式初始化
@@ -209,7 +236,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private fun setInteraction() {
         if (interactionAbility == null) {
             interactionAbility =
-                abilityManager.getAbility(InteractionAbility::class.java, true, applicationContext)
+                abilityManager.getAbility(
+                    InteractionAbility::class.java,
+                    true,
+                    applicationContext
+                )
             GlobalScope.launch(Dispatchers.Main) {
                 abilityInitSuccessful = interactionAbility?.waitConnectionAsync()!!
                 if (abilityInitSuccessful) {
@@ -408,25 +439,31 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private fun initAbility() {
         if (audioAbility == null) {
             audioAbility =
-                abilityManager.getAbility(AudioAbility::class.java, true, applicationContext)
+                abilityManager.getAbility(
+                    AudioAbility::class.java,
+                    true,
+                    applicationContext
+                )
             GlobalScope.launch(Dispatchers.Main) {
                 audioAbility?.waitConnection(object : AbilityConnectionHandler {
                     override fun onServerConnected() {
                         audioAbility?.startRecording()
                         try {
                             audioInitSuccessful = true
-                            audioAbility?.subOpenAppResult(object : AudioAbility.OpenAppCallback {
+                            audioAbility?.subOpenAppResult(object :
+                                AudioAbility.OpenAppCallback {
                                 override fun onReceive(appArgs: MutableList<AudioAbility.ToApp>?) {
                                     appArgs?.forEach {
                                         //AOA应用
                                         if (it.type == AudioAbility.ParamType.AOA) {
                                             val aoaParam = it.aoaParam
                                             if (!StringUtils.isEmpty(aoaParam?.appId)) {
-                                                val startAoaApp = getPresenter().startAoaApp(
-                                                    this@NewLauncherActivity,
-                                                    aoaParam?.appId!!.toInt(),
-                                                    aoaParam.route!!
-                                                )
+                                                val startAoaApp =
+                                                    getPresenter().startAoaApp(
+                                                        this@NewLauncherActivity,
+                                                        aoaParam?.appId!!.toInt(),
+                                                        aoaParam.route!!
+                                                    )
                                                 if (it.touchMode != null && startAoaApp) {
                                                     getPresenter().startInteractionWindow(
                                                         interactionAbility!!,
@@ -446,12 +483,13 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                         } else if (it.type == AudioAbility.ParamType.THIRD) {
                                             val thirdPartyParam = it.thirdPartyParam
                                             if (!StringUtils.isEmpty(thirdPartyParam?.packetName)) {
-                                                val startActivity = getPresenter().startActivity(
-                                                    this@NewLauncherActivity,
-                                                    thirdPartyParam?.packetName!!,
-                                                    thirdPartyParam.className!!,
-                                                    thirdPartyParam.param
-                                                )
+                                                val startActivity =
+                                                    getPresenter().startActivity(
+                                                        this@NewLauncherActivity,
+                                                        thirdPartyParam?.packetName!!,
+                                                        thirdPartyParam.className!!,
+                                                        thirdPartyParam.param
+                                                    )
                                                 if (it.touchMode != null && startActivity) {
                                                     getPresenter().startInteractionWindow(
                                                         interactionAbility!!,
@@ -580,8 +618,14 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_NAME, tokenPair.name)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_USER_ID, tokenPair.userId)
         contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GENDER, tokenPair.gender)
-        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME, tokenPair.expireTime)
-        contentValues.put(AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE, tokenPair.gradeType)
+        contentValues.put(
+            AppConstants.AOA_LAUNCHER_USER_INFO_EXPIRE_TIME,
+            tokenPair.expireTime
+        )
+        contentValues.put(
+            AppConstants.AOA_LAUNCHER_USER_INFO_GRADE_TYPE,
+            tokenPair.gradeType
+        )
         //将登陆的用户数据插入保存
         contentResolver.insert(LauncherContentProvider.URI, contentValues)
     }
@@ -647,7 +691,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 val isRebinding = SPUtils.getData("rebinding", false) as Boolean
                 if (!isRebinding)
                 //展示系统固件更新
-                    getPresenter().splashStartUpdateActivity(false, any, this@NewLauncherActivity)
+                    getPresenter().splashStartUpdateActivity(
+                        false,
+                        any,
+                        this@NewLauncherActivity
+                    )
             } else if (any is PlayTimeBean) {
                 Log.i(TAG, "onSuccess: ")
                 playTimeBean = any
@@ -887,6 +935,30 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 rv_quality_launcher.visibility = View.VISIBLE
                 if (qualityHorizontalAdapter == null) {
                     qualityHorizontalAdapter = QualityHorizontalAdapter()
+                    qualityHorizontalAdapter?.setOnItemClickListener(object :
+                        QualityHorizontalAdapter.OnItemClickListener {
+                        override fun onItemClick(
+                            packName: String,
+                            className: String?,
+                            params: Map<String, Any>?
+                        ) {
+                            if (!StringUtils.isEmpty(className) && params != null) {
+                                StartAppUtils.startActivity(
+                                    this@NewLauncherActivity,
+                                    packName,
+                                    className!!,
+                                    params
+                                )
+                            } else {
+                                StartAppUtils.startApp(this@NewLauncherActivity, packName)
+                            }
+                            if (StartAppUtils.isNeedStopTouchPoint(packName) && touchAbilityInitSuccessful) {
+                                touchAbility?.disableDisorderlyPointChecker()
+                                Log.i(TAG, "onItemClick: 乱点监控被禁用")
+                            }
+                        }
+
+                    })
                     val linearLayoutManager = LinearLayoutManager(this)
                     linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
                     rv_quality_launcher.layoutManager = linearLayoutManager
@@ -946,7 +1018,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     private fun showLeftSelectUI(id: Int) {
-        iv_ar_launcher.visibility = if (id == R.id.tv_ar_launcher) View.VISIBLE else View.GONE
+        iv_ar_launcher.visibility =
+            if (id == R.id.tv_ar_launcher) View.VISIBLE else View.GONE
         iv_chinese_launcher.visibility =
             if (id == R.id.tv_chinese_launcher) View.VISIBLE else View.GONE
         iv_mathematics_launcher.visibility =

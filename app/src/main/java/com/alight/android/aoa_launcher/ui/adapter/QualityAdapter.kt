@@ -64,119 +64,34 @@ class QualityAdapter :
         holder.setText(R.id.tv_quality_app_name_item2, item.appName2)
         holder.setText(R.id.tv_quality_app_name_item3, item.appName3)
         holder.itemView.iv_quality_launcher_item1.setOnClickListener {
-            if (!StringUtils.isEmpty(item.className1) && item.params1 != null) {
-                StartAppUtils.startActivity(
-                    context,
-                    item.appPackName1,
-                    item.className1!!,
-                    item.params1
-                )
-            } else {
-                startApp(item.appPackName1)
+            if (onItemClickListener != null) {
+                onItemClickListener?.onItemClick(item.appPackName1,item.className1,item.params1)
             }
-
         }
         holder.itemView.tv_quality_app_name_item1.setOnClickListener {
-            if (!StringUtils.isEmpty(item.className1) && item.params1 != null) {
-                StartAppUtils.startActivity(
-                    context,
-                    item.appPackName1,
-                    item.className1!!,
-                    item.params1
-                )
-            } else {
-                startApp(item.appPackName1)
+            if (onItemClickListener != null) {
+                onItemClickListener?.onItemClick(item.appPackName1,item.className1,item.params1)
             }
         }
         holder.itemView.iv_quality_launcher_item2.setOnClickListener {
-            if (!StringUtils.isEmpty(item.className2) && item.params2 != null) {
-                StartAppUtils.startActivity(
-                    context,
-                    item.appPackName2,
-                    item.className2!!,
-                    item.params2
-                )
-            } else {
-                startApp(item.appPackName2)
+            if (onItemClickListener != null) {
+                onItemClickListener?.onItemClick(item.appPackName2,item.className2,item.params2)
             }
         }
         holder.itemView.tv_quality_app_name_item2.setOnClickListener {
-            if (!StringUtils.isEmpty(item.className2) && item.params2 != null) {
-                StartAppUtils.startActivity(
-                    context,
-                    item.appPackName2,
-                    item.className2!!,
-                    item.params2
-                )
-            } else {
-                startApp(item.appPackName2)
+            if (onItemClickListener != null) {
+                onItemClickListener?.onItemClick(item.appPackName2,item.className2,item.params2)
             }
         }
         holder.itemView.iv_quality_launcher_item3.setOnClickListener {
-            if (!StringUtils.isEmpty(item.className3) && item.params3 != null) {
-                StartAppUtils.startActivity(
-                    context,
-                    item.appPackName3,
-                    item.className3!!,
-                    item.params3
-                )
-            } else {
-                startApp(item.appPackName3)
+            if (onItemClickListener != null) {
+                onItemClickListener?.onItemClick(item.appPackName3,item.className3,item.params3)
             }
         }
         holder.itemView.tv_quality_app_name_item3.setOnClickListener {
-            if (!StringUtils.isEmpty(item.className3) && item.params3 != null) {
-                StartAppUtils.startActivity(
-                    context,
-                    item.appPackName3,
-                    item.className3!!,
-                    item.params3
-                )
-            } else {
-                startApp(item.appPackName3)
+            if (onItemClickListener != null) {
+                onItemClickListener?.onItemClick(item.appPackName3,item.className3,item.params3)
             }
-        }
-    }
-
-    private fun startApp(appPackName: String) {
-        try {
-            val mmkv = LauncherApplication.getMMKV()
-            val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
-            val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
-
-            var calendar = Calendar.getInstance()
-            calendar.timeZone = TimeZone.getDefault();//默认当前时区
-            var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
-            var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
-            var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
-            var startTime = playTimeBean.data.playtime.start_playtime
-            var endTime = playTimeBean.data.playtime.stop_playtime
-
-            playTimeBean.data.app_manage.forEach {
-                if (appPackName == it.app_info.package_name
-                ) {
-                    if ((it.app_permission == 3)) {
-                        ToastUtils.showLong(context, "该应用已被禁用")
-                        return@startApp
-                    } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
-                            startTime,
-                            endTime,
-                            sysTime
-                        )
-                    ) {
-                        //限时禁用
-                        ToastUtils.showLong(context, "该应用已被限时禁用")
-                        return@startApp
-                    }
-                    return@forEach
-                }
-            }
-
-            val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            ToastUtils.showShort(context, "该应用缺失，请安装后重试")
-            e.printStackTrace()
         }
     }
 
@@ -207,6 +122,16 @@ class QualityAdapter :
             .apply(options)
             .into(imageView)
 
+    }
+
+    private var onItemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick(packName: String, className: String?, params: Map<String, Any>?)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
     }
 
 

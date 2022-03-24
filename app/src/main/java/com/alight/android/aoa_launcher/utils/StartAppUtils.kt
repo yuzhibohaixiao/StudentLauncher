@@ -18,6 +18,15 @@ import java.util.*
 object StartAppUtils {
 
     /**
+     * 乱点弹窗不触发的应用
+     * 科魔大战 完美钢琴 X架子鼓 儿童启蒙画画 大书法家
+     */
+    private val stopTouchPackName = arrayOf(
+        "com.lotfun.svmAndroid", "com.gamestar.perfectpiano", "com.gamestar.xdrum",
+        "com.zane.childdraw", "com.honghesoft.calligrapher"
+    )
+
+    /**
      * 开启AOA的模块
      */
     fun startAoaApp(context: Context, appId: Int, route: String) {
@@ -29,6 +38,51 @@ object StartAppUtils {
             intent.putExtra("params", "{}")
             context.startActivity(intent)
         } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * 开启第三方应用（不带参）
+     */
+    fun startApp(context: Context, appPackName: String) {
+        try {
+            val mmkv = LauncherApplication.getMMKV()
+            val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
+            val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
+
+            var calendar = Calendar.getInstance()
+            calendar.timeZone = TimeZone.getDefault();//默认当前时区
+            var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
+            var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
+            var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
+            var startTime = playTimeBean.data.playtime.start_playtime
+            var endTime = playTimeBean.data.playtime.stop_playtime
+
+            playTimeBean.data.app_manage.forEach {
+                if (appPackName == it.app_info.package_name
+                ) {
+                    if ((it.app_permission == 3)) {
+                        ToastUtils.showLong(context, "该应用已被禁用")
+                        return@startApp
+                    } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
+                            startTime,
+                            endTime,
+                            sysTime
+                        )
+                    ) {
+                        //限时禁用
+                        ToastUtils.showLong(context, "该应用已被限时禁用")
+                        return@startApp
+                    }
+                    return@forEach
+                }
+            }
+
+            val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            ToastUtils.showShort(context, "该应用缺失，请安装后重试")
             e.printStackTrace()
         }
     }
@@ -102,6 +156,10 @@ object StartAppUtils {
             }
             e.printStackTrace()
         }
+    }
+
+    fun isNeedStopTouchPoint(packName: String): Boolean {
+        return stopTouchPackName.contains(packName)
     }
 
 }
