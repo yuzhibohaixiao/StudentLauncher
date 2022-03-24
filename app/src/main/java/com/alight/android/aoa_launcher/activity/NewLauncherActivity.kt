@@ -363,6 +363,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         initAbility()
         initShutdownReceiver()
+//        JPushMessage().
+//        JPushMessageReceiver(JPushMessage())
     }
 
     private fun initShutdownReceiver() {

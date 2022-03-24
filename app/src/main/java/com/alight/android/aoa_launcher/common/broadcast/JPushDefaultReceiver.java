@@ -12,6 +12,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.alight.android.aoa_launcher.application.LauncherApplication;
 import com.alight.android.aoa_launcher.common.bean.CallArBean;
 import com.alight.android.aoa_launcher.common.bean.ParentControlBean;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;
@@ -19,6 +20,7 @@ import com.alight.android.aoa_launcher.common.event.ParentControlEvent;
 import com.alight.android.aoa_launcher.utils.AccountUtil;
 import com.alight.android.aoa_launcher.utils.SPUtils;
 import com.google.gson.Gson;
+import com.tencent.mmkv.MMKV;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -76,9 +78,9 @@ public class JPushDefaultReceiver extends BroadcastReceiver {
                 intent2.putExtra("parentName", callArBean.getMessage().getFromUserInfo().getName());
                 intent2.putExtra("parentAvatar", callArBean.getMessage().getFromUserInfo().getAvatar());
                 intent2.putExtra("roomId", callArBean.getMessage().getRoomId());
-                intent2.putExtra("childId", AccountUtil.INSTANCE.getCurrentUser().getUserId() + "");
+                intent2.putExtra("childId", callArBean.getMessage().getUserId() + "");
                 intent2.putExtra("called", 2);
-                intent2.putExtra("token", AccountUtil.INSTANCE.getCurrentUser().getToken());
+                intent2.putExtra("token", LauncherApplication.Companion.getMMKV().decodeString(AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN));
                 intent2.putExtra("callType", callArBean.getMessage().getType());
                 if (callArBean.getIntent_url().contains("ar")) {
                     intent2.putExtra("isCallAr", true);
