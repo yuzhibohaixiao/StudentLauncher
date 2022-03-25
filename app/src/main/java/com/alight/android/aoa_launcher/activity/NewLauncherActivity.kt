@@ -21,7 +21,6 @@ import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.AudioAbility
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
 import com.alight.ahwcx.ahwsdk.abilities.TouchAbility
-import com.alight.ahwcx.ahwsdk.abilityImpl.TouchAbilityImpl
 import com.alight.ahwcx.ahwsdk.common.AbilityConnectionHandler
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
@@ -396,8 +395,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         initAbility()
         initShutdownReceiver()
-//        JPushMessage().
-//        JPushMessageReceiver(JPushMessage())
+        UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
     }
 
     private fun initShutdownReceiver() {

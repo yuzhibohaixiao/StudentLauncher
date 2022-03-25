@@ -979,39 +979,51 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             when (it.id) {
                 R.id.tv_grade1_up_launcher -> {
                     gradeContent = "一年级上"
+                    UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
                 }
                 R.id.tv_grade1_down_launcher -> {
                     gradeContent = "一年级下"
+                    UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
                 }
                 R.id.tv_grade2_up_launcher -> {
                     gradeContent = "二年级上"
+                    UserDBUtil.keepLastRecord("小学", "二年级", -1, -1, "", null)
                 }
                 R.id.tv_grade2_down_launcher -> {
                     gradeContent = "二年级下"
+                    UserDBUtil.keepLastRecord("小学", "二年级", -1, -1, "", null)
                 }
                 R.id.tv_grade3_up_launcher -> {
                     gradeContent = "三年级上"
+                    UserDBUtil.keepLastRecord("小学", "三年级", -1, -1, "", null)
                 }
                 R.id.tv_grade3_down_launcher -> {
                     gradeContent = "三年级下"
+                    UserDBUtil.keepLastRecord("小学", "三年级", -1, -1, "", null)
                 }
                 R.id.tv_grade4_up_launcher -> {
                     gradeContent = "四年级上"
+                    UserDBUtil.keepLastRecord("小学", "四年级", -1, -1, "", null)
                 }
                 R.id.tv_grade4_down_launcher -> {
                     gradeContent = "四年级下"
+                    UserDBUtil.keepLastRecord("小学", "四年级", -1, -1, "", null)
                 }
                 R.id.tv_grade5_up_launcher -> {
                     gradeContent = "五年级上"
+                    UserDBUtil.keepLastRecord("小学", "五年级", -1, -1, "", null)
                 }
                 R.id.tv_grade5_down_launcher -> {
                     gradeContent = "五年级下"
+                    UserDBUtil.keepLastRecord("小学", "五年级", -1, -1, "", null)
                 }
                 R.id.tv_grade6_up_launcher -> {
                     gradeContent = "六年级上"
+                    UserDBUtil.keepLastRecord("小学", "六年级", -1, -1, "", null)
                 }
                 R.id.tv_grade6_down_launcher -> {
                     gradeContent = "六年级下"
+                    UserDBUtil.keepLastRecord("小学", "六年级", -1, -1, "", null)
                 }
             }
             tv_dialog_launcher.text = "$gradeContent      ▼"

@@ -43,10 +43,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
 
-    <protected-broadcast android:name="android.intent.action.SCREEN_OFF" />
-    <protected-broadcast android:name="android.intent.action.SCREEN_ON" />
-    <protected-broadcast android:name="com.alight.android.use_av" />
-
     <uses-permission
         android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />
