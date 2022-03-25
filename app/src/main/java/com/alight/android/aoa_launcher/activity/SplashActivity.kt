@@ -403,12 +403,12 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         when (any) {
             is DeviceBindBean -> {
                 if (any.data.exists) {
-                    //绕过升级直接进入选择用户
-//                    showChildUser()
                     //检测系统更新
                     if (isRebinding) {
                         showChildUser()
                     } else {
+                        //绕过升级直接进入选择用户
+//                        showChildUser()
                         getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
                     }
 
