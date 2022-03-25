@@ -1,5 +1,7 @@
 package com.alight.android.aoa_launcher.service;
 
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_PATH;
+
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -29,14 +31,11 @@ import com.liulishuo.okdownload.core.listener.DownloadListener4WithSpeed;
 import com.liulishuo.okdownload.core.listener.assist.Listener4SpeedAssistExtend;
 
 import org.xutils.DbManager;
-import org.xutils.ex.DbException;
 
 import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_PATH;
 
 public class UpdateService extends Service {
     private static final String TAG = "DownloadService";

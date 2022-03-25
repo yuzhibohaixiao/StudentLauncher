@@ -51,5 +51,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <!--    解决白屏的问题     -->
+    <style name="theme_Launcher" parent="Theme.AppCompat.Light.NoActionBar.WindowFullscreen">
 
+        <item name="android:windowBackground">@drawable/splash_preview</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+
+    </style>
 </resources>
