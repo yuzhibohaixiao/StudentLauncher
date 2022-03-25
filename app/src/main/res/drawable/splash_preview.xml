@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@android:color/black"></item>
+    <item android:drawable="@drawable/launcher_bg_new"></item>
 
-    <item android:top="30dp">
+    <item>
         <bitmap
             android:gravity="center"
             android:src="@drawable/logo_ota_update"></bitmap>
