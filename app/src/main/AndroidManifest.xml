@@ -12,8 +12,6 @@
         android:name="com.alight.android.aoa_launcher.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.alight.android.aoa_launcher.permission.JPUSH_MESSAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -68,8 +66,8 @@
             android:name=".activity.NewLauncherActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
-            android:theme="@style/theme_Launcher"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/theme_Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -130,7 +128,7 @@
       -->
 
         <receiver android:name=".common.broadcast.UpgradeApkReceiver">
-            <intent-filter android:priority="2147483647">
+            <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.PACKAGE_INSTALL" />
@@ -219,6 +217,7 @@
             </intent-filter>
             <!-- Optional -->
             <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
                 <data android:scheme="package" />
