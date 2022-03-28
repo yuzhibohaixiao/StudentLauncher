@@ -43,7 +43,7 @@ class LauncherApplication : Application() {
     private fun init() {
         //初始化极光推送
         JPushInterface.init(this)
-        JPushInterface.setDebugMode(true)
+//        JPushInterface.setDebugMode(true)
         //初始化听云sdk
         //"Host" 为听云平台「Redirect」服务器地址，无需添加协议头
         NBSAppAgent.setLicenseKey("32c1f7c04eb64c3c95e1c4cd9625aa65")
