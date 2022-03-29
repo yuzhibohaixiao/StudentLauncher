@@ -737,7 +737,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     this,
                     "com.jxw.huiben",
                     "com.jxw.huiben.activity.SplashActivity",
-                    null
+                    mapOf("StartArgs" to "keben")       //课本指读
+//                    mapOf("StartArgs" to "huiben")    //绘本指读
                 )
                 if (startActivity)
                     getPresenter().startInteractionWindow(
