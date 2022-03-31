@@ -32,8 +32,8 @@ android {
         applicationId "com.alight.android.aoa_launcher"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 36
-        versionName "1.0.36"
+        versionCode 37
+        versionName "1.0.37"
         multiDexEnabled true
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
