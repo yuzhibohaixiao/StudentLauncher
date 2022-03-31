@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Looper
 import android.provider.Settings
 import android.text.SpannableString
@@ -408,7 +409,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_set -> {
                 if (netState == 1) {
-                    getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+                    getPresenter().getModel(
+                        Urls.UPDATE,
+                        hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+                        UpdateBean::class.java
+                    )
                 } else {
                     showOfflineDialog()
                 }
