@@ -99,14 +99,13 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
-
                 <TextView
-                    android:id="@+id/tv_chinese_launcher"
+                    android:id="@+id/tv_english_launcher"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="语文"
+                    android:text="英语"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -121,14 +120,13 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
-
                 <TextView
-                    android:id="@+id/tv_english_launcher"
+                    android:id="@+id/tv_chinese_launcher"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="英语"
+                    android:text="语文"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -154,12 +152,12 @@
                 android:visibility="visible" />
 
             <ImageView
-                android:id="@+id/iv_chinese_launcher"
+                android:id="@+id/iv_english_launcher"
                 android:layout_width="195dp"
                 android:layout_height="115dp"
                 android:layout_marginTop="65dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/chinese_launcher_left"
+                android:src="@drawable/english_launcher_left"
                 android:visibility="gone" />
 
             <ImageView
@@ -171,13 +169,14 @@
                 android:src="@drawable/mathematics_launcher_left"
                 android:visibility="gone" />
 
+
             <ImageView
-                android:id="@+id/iv_english_launcher"
+                android:id="@+id/iv_chinese_launcher"
                 android:layout_width="195dp"
                 android:layout_height="115dp"
                 android:layout_marginTop="205dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/english_launcher_left"
+                android:src="@drawable/chinese_launcher_left"
                 android:visibility="gone" />
 
             <ImageView
