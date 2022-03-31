@@ -14,7 +14,8 @@
             android:layout_height="77dp"
             android:layout_marginStart="23.5dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/top_ip_img" />
+            android:src="@drawable/top_ip_img"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_study_plan_launcher"
@@ -26,7 +27,8 @@
             android:gravity="center"
             android:text="今天暂无学习计划，快去创建学习计划吧！"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_task_challenges"
