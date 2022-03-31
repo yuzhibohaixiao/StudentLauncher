@@ -922,8 +922,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 fl_center_launcher.visibility = View.VISIBLE
                 fl_right_launcher.visibility = View.VISIBLE
                 rv_quality_launcher.visibility = View.GONE
-                fl_center_launcher.setBackgroundResource(R.drawable.launcher_syn_learn_bg)
-                fl_right_launcher.setBackgroundResource(R.drawable.launcher_instruction_after_class_bg)
+                fl_center_launcher.setBackgroundResource(R.drawable.launcher_center_bg)
+                fl_right_launcher.setBackgroundResource(R.drawable.launcher_center_bg)
                 setAdapterUI(launcherType)
                 setRightAdapter(launcherType)
             }
@@ -1004,7 +1004,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
         }
         val gridLayoutManager = GridLayoutManager(this, 3)
-        gridLayoutManager.orientation = GridLayoutManager.VERTICAL
+        gridLayoutManager.orientation = GridLayoutManager.HORIZONTAL
         rv_center_launcher.layoutManager = gridLayoutManager
         rv_center_launcher.adapter = launcherCenterAdapter
         launcherCenterAdapter?.setShowType(launcherType)

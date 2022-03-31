@@ -228,7 +228,6 @@
             android:layout_width="424dp"
             android:layout_height="365dp"
             android:layout_marginStart="28dp"
-            android:background="@drawable/launcher_syn_learn_bg"
             android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -247,7 +246,6 @@
             android:layout_width="195.5dp"
             android:layout_height="365dp"
             android:layout_marginStart="55.5dp"
-            android:background="@drawable/launcher_instruction_after_class_bg"
             android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
