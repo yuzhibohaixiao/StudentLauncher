@@ -4,10 +4,31 @@
     android:layout_height="match_parent"
     android:background="@drawable/launcher_bg_new">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_call_parent"
+                android:layout_width="135dp"
+                android:layout_height="57dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="17dp"
+                android:src="@drawable/launcher_top_call_parent" />
+
+            <ImageView
+                android:id="@+id/iv_study_plan"
+                android:layout_width="135dp"
+                android:layout_height="57dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="17dp"
+                android:src="@drawable/launcher_top_study_plan" />
+        </LinearLayout>
 
         <ImageView
             android:layout_width="87.5dp"
@@ -40,7 +61,8 @@
             android:drawablePadding="3dp"
             android:text="任务挑战"
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_dialog_launcher"
@@ -51,25 +73,35 @@
             android:gravity="center"
             android:text="一年级上      ▼"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/iv_user_icon_new_launcher"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="27.5dp"
-            android:layout_marginTop="27.5dp"
-            android:src="@drawable/splash_boy" />
-
-        <TextView
-            android:id="@+id/tv_user_name_new_launcher"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10.5dp"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
-    </LinearLayout>
+            android:layout_gravity="end"
+            android:layout_marginTop="27.5dp"
+            android:layout_marginEnd="45dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_user_icon_new_launcher"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="27.5dp"
+                android:src="@drawable/splash_boy" />
+
+            <TextView
+                android:id="@+id/tv_user_name_new_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10.5dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -429,12 +461,12 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/iv_study_plan"
             android:layout_width="135dp"
             android:layout_height="60dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:src="@drawable/launcher_study_plan" />
+            android:src="@drawable/launcher_study_plan"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_av_launcher"
@@ -442,10 +474,10 @@
             android:layout_height="60dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:src="@drawable/launcher_av" />
+            android:src="@drawable/launcher_av"
+            android:visibility="gone" />
 
         <ImageView
-            android:id="@+id/iv_call_parent"
             android:layout_width="135dp"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -453,7 +485,8 @@
             android:src="@drawable/launcher_call_parent"
             android:text=""
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_az_store"
@@ -461,7 +494,8 @@
             android:layout_height="60dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:src="@drawable/launcher_app_store_bottom" />
+            android:src="@drawable/launcher_app_store_bottom"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_all_app_launcher"
@@ -469,6 +503,7 @@
             android:layout_height="60dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:src="@drawable/launcher_all_app" />
+            android:src="@drawable/launcher_all_app"
+            android:visibility="gone" />
     </LinearLayout>
 </FrameLayout>

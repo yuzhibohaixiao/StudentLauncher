@@ -1003,7 +1003,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 }
             }
         }
-        rv_center_launcher.layoutManager = GridLayoutManager(this, 3)
+        val gridLayoutManager = GridLayoutManager(this, 3)
+        gridLayoutManager.orientation = GridLayoutManager.VERTICAL
+        rv_center_launcher.layoutManager = gridLayoutManager
         rv_center_launcher.adapter = launcherCenterAdapter
         launcherCenterAdapter?.setShowType(launcherType)
     }
