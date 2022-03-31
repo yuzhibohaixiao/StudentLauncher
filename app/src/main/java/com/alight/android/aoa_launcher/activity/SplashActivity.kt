@@ -3,6 +3,7 @@ package com.alight.android.aoa_launcher.activity
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
@@ -409,7 +410,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                     } else {
                         //绕过升级直接进入选择用户
 //                        showChildUser()
-                        getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+                        getPresenter().getModel(
+                            Urls.UPDATE,
+                            hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+                            UpdateBean::class.java
+                        )
                     }
 
                 } else {
