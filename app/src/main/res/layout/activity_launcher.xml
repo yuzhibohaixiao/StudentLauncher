@@ -223,17 +223,20 @@
                 android:visibility="gone" />
         </FrameLayout>
 
-        <com.alight.android.aoa_launcher.ui.view.ScrollInterceptHorizontalScrollView
+        <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scrollbars="none">
 
             <LinearLayout
+                android:id="@+id/ll_center_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <FrameLayout
+                    android:id="@+id/fl_book_launcher"
                     android:layout_width="wrap_content"
                     android:layout_height="365dp">
 
@@ -244,8 +247,9 @@
 
                     <FrameLayout
                         android:layout_width="187.5dp"
-                        android:layout_height="346dp"
-                        android:layout_marginTop="39dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="35dp"
                         android:background="@drawable/launcher_center_bg">
 
                         <FrameLayout
@@ -258,46 +262,90 @@
                             <ImageView
                                 android:layout_width="110dp"
                                 android:layout_height="150dp"
-                                android:layout_gravity="center"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="23dp"
+                                android:scaleType="centerCrop"
                                 android:src="@drawable/launcher_english_book" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal|bottom"
+                                android:layout_marginBottom="20dp"
+                                android:text="四年级英语-下册"
+                                android:textColor="@color/black"
+                                android:textSize="10sp" />
                         </FrameLayout>
+
+                        <TextView
+                            android:layout_width="105dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:layout_marginBottom="26.5dp"
+                            android:background="@drawable/white_bg_oval"
+                            android:gravity="center"
+                            android:text="课本预习"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
                     </FrameLayout>
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/fl_center_launcher"
-                    android:layout_width="424dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="365dp"
-                    android:layout_marginStart="28dp"
-                    android:visibility="gone">
+                    android:layout_marginStart="18dp">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_center_launcher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="44dp"
-                        android:layout_marginTop="70dp"
-                        android:scrollbarSize="5dp"
-                        android:scrollbarThumbVertical="@color/launcher_scroll_bg"
-                        android:scrollbars="vertical" />
+                    <ImageView
+                        android:layout_width="118.5dp"
+                        android:layout_height="27dp"
+                        android:src="@drawable/launcher_study_tools" />
+
+                    <FrameLayout
+                        android:id="@+id/fl_center_launcher"
+                        android:layout_width="424dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="39dp">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_center_launcher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="44dp"
+                            android:layout_marginTop="31dp"
+                            android:scrollbarSize="5dp"
+                            android:scrollbarThumbVertical="@color/launcher_scroll_bg"
+                            android:scrollbars="vertical" />
+                    </FrameLayout>
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/fl_right_launcher"
-                    android:layout_width="195.5dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="365dp"
-                    android:layout_marginStart="55.5dp"
-                    android:visibility="gone">
+                    android:layout_marginStart="18dp"
+                    android:layout_marginEnd="18dp">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_right_launcher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="63dp" />
+                    <ImageView
+                        android:layout_width="118.5dp"
+                        android:layout_height="27dp"
+                        android:src="@drawable/extracurricular_counselling" />
+
+                    <FrameLayout
+                        android:id="@+id/fl_right_launcher"
+                        android:layout_width="195.5dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="39dp">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_right_launcher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="24dp" />
+                    </FrameLayout>
                 </FrameLayout>
             </LinearLayout>
-        </com.alight.android.aoa_launcher.ui.view.ScrollInterceptHorizontalScrollView>
+        </HorizontalScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_quality_launcher"
@@ -498,7 +546,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="27.5dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -545,6 +592,6 @@
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:src="@drawable/launcher_all_app"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </LinearLayout>
 </FrameLayout>

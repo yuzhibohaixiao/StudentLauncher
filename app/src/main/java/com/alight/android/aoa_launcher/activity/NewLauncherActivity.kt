@@ -910,18 +910,17 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 ll_ar_launcher2.visibility = View.VISIBLE
                 ll_ar_launcher3.visibility = View.VISIBLE
                 iv_ip_image.visibility = View.VISIBLE
-                fl_center_launcher.visibility = View.GONE
-                fl_right_launcher.visibility = View.GONE
                 rv_quality_launcher.visibility = View.GONE
+                ll_center_launcher.visibility = View.GONE
             }
             AppConstants.LAUNCHER_TYPE_CHINESE, AppConstants.LAUNCHER_TYPE_MATHEMATICS, AppConstants.LAUNCHER_TYPE_ENGLISH -> {
                 ll_ar_launcher1.visibility = View.GONE
                 ll_ar_launcher2.visibility = View.GONE
                 ll_ar_launcher3.visibility = View.GONE
                 iv_ip_image.visibility = View.GONE
-                fl_center_launcher.visibility = View.VISIBLE
-                fl_right_launcher.visibility = View.VISIBLE
                 rv_quality_launcher.visibility = View.GONE
+                fl_book_launcher.visibility = View.VISIBLE
+                ll_center_launcher.visibility = View.VISIBLE
                 fl_center_launcher.setBackgroundResource(R.drawable.launcher_center_bg)
                 fl_right_launcher.setBackgroundResource(R.drawable.launcher_center_bg)
                 setAdapterUI(launcherType)
@@ -932,9 +931,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 ll_ar_launcher2.visibility = View.GONE
                 ll_ar_launcher3.visibility = View.GONE
                 iv_ip_image.visibility = View.GONE
-                fl_center_launcher.visibility = View.GONE
-                fl_right_launcher.visibility = View.GONE
                 rv_quality_launcher.visibility = View.VISIBLE
+                ll_center_launcher.visibility = View.GONE
                 if (qualityHorizontalAdapter == null) {
                     qualityHorizontalAdapter = QualityHorizontalAdapter()
                     qualityHorizontalAdapter?.setOnItemClickListener(object :
