@@ -122,7 +122,6 @@
                 android:background="@drawable/launcher_left_bg"
                 android:orientation="vertical">
 
-
                 <TextView
                     android:id="@+id/tv_ar_launcher"
                     android:layout_width="match_parent"
@@ -133,6 +132,13 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@color/black" />
+
                 <TextView
                     android:id="@+id/tv_english_launcher"
                     android:layout_width="match_parent"
@@ -142,6 +148,13 @@
                     android:text="英语"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@color/black" />
 
 
                 <TextView
@@ -154,6 +167,14 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@color/black" />
+
+
                 <TextView
                     android:id="@+id/tv_chinese_launcher"
                     android:layout_width="match_parent"
@@ -164,6 +185,12 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_quality_launcher"
@@ -189,7 +216,7 @@
                 android:id="@+id/iv_english_launcher"
                 android:layout_width="195dp"
                 android:layout_height="115dp"
-                android:layout_marginTop="65dp"
+                android:layout_marginTop="70dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/english_launcher_left"
                 android:visibility="gone" />
@@ -198,17 +225,16 @@
                 android:id="@+id/iv_mathematics_launcher"
                 android:layout_width="195dp"
                 android:layout_height="115dp"
-                android:layout_marginTop="135dp"
+                android:layout_marginTop="145dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/mathematics_launcher_left"
                 android:visibility="gone" />
-
 
             <ImageView
                 android:id="@+id/iv_chinese_launcher"
                 android:layout_width="195dp"
                 android:layout_height="115dp"
-                android:layout_marginTop="205dp"
+                android:layout_marginTop="220dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/chinese_launcher_left"
                 android:visibility="gone" />
@@ -217,7 +243,7 @@
                 android:id="@+id/iv_quality_launcher"
                 android:layout_width="195dp"
                 android:layout_height="115dp"
-                android:layout_marginTop="275dp"
+                android:layout_marginTop="300dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/quality_development_launcher_left"
                 android:visibility="gone" />
@@ -227,7 +253,8 @@
             android:id="@+id/rl_ar_launcher"
             android:layout_width="665dp"
             android:layout_height="385dp"
-            android:layout_marginStart="220dp"
+            android:layout_marginStart="230dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/launcher_ar_bg"
             android:visibility="visible">
 
@@ -291,7 +318,6 @@
                 android:layout_height="107.5dp"
                 android:layout_alignStart="@id/iv_article_correction"
                 android:layout_alignTop="@id/iv_title_query"
-                android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/iv_title_query"
                 android:src="@drawable/book_reading" />
 
@@ -299,7 +325,6 @@
                 android:id="@+id/iv_chinese_words"
                 android:layout_width="155dp"
                 android:layout_height="107.5dp"
-                android:layout_alignStart="@id/iv_article_correction"
                 android:layout_alignTop="@id/iv_title_query"
                 android:layout_toEndOf="@id/iv_book_reading"
                 android:src="@drawable/chinese_words" />
