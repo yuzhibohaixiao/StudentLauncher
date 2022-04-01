@@ -234,7 +234,7 @@
                 android:id="@+id/iv_chinese_launcher"
                 android:layout_width="195dp"
                 android:layout_height="115dp"
-                android:layout_marginTop="220dp"
+                android:layout_marginTop="230dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/chinese_launcher_left"
                 android:visibility="gone" />
@@ -359,7 +359,7 @@
                 <FrameLayout
                     android:id="@+id/fl_book_launcher"
                     android:layout_width="wrap_content"
-                    android:layout_height="365dp">
+                    android:layout_height="400dp">
 
                     <ImageView
                         android:id="@+id/iv_classroom_sync"
@@ -372,7 +372,7 @@
                         android:layout_width="187.5dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom"
-                        android:layout_marginTop="35dp"
+                        android:layout_marginTop="39dp"
                         android:background="@drawable/launcher_english_bg">
 
                         <FrameLayout
@@ -417,7 +417,7 @@
 
                 <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="365dp"
+                    android:layout_height="400dp"
                     android:layout_marginStart="18dp">
 
                     <ImageView
@@ -447,7 +447,7 @@
 
                 <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="365dp"
+                    android:layout_height="400dp"
                     android:layout_marginStart="18dp">
 
                     <ImageView
