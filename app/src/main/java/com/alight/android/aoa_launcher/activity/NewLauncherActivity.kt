@@ -127,18 +127,18 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         tv_english_launcher.setOnClickListener(this)
         tv_quality_launcher.setOnClickListener(this)
 
-        tv_cdc_launcher.setOnClickListener(this)
-        tv_czc_launcher.setOnClickListener(this)
-        tv_translate_launcher.setOnClickListener(this)
+        iv_query_word.setOnClickListener(this)
+        iv_chinese_words.setOnClickListener(this)
+        iv_english_translation.setOnClickListener(this)
         tv_seek_help_launcher.setOnClickListener(this)
-        tv_answer_launcher.setOnClickListener(this)
+        iv_title_query.setOnClickListener(this)
         tv_read_book_launcher.setOnClickListener(this)
         tv_fun_card_launcher.setOnClickListener(this)
         tv_wrong_topic_launcher.setOnClickListener(this)
-        tv_kspg_launcher.setOnClickListener(this)
-        tv_ywzwpg_launcher.setOnClickListener(this)
+        iv_oral_correction.setOnClickListener(this)
+        iv_article_correction.setOnClickListener(this)
         tv_yyzwpg_launcher.setOnClickListener(this)
-        tv_favorite_launcher.setOnClickListener(this)
+        iv_favorites.setOnClickListener(this)
         iv_study_plan.setOnClickListener(this)
         iv_call_parent.setOnClickListener(this)
 
@@ -748,7 +748,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     )
             }
             //查单词
-            R.id.tv_cdc_launcher -> {
+            R.id.iv_query_word -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 135, "/home")
                 if (startAoaApp)
                     getPresenter().startInteractionWindow(
@@ -757,7 +757,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     )
             }
             //查字词
-            R.id.tv_czc_launcher -> {
+            R.id.iv_chinese_words -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 134, "/home")
                 if (startAoaApp)
                     getPresenter().startInteractionWindow(
@@ -766,7 +766,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     )
             }
             //翻译-AOA翻译
-            R.id.tv_translate_launcher -> {
+            R.id.iv_english_translation -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 138, "/app/138/home")
                 if (startAoaApp)
                     getPresenter().startInteractionWindow(
@@ -785,7 +785,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
 
             //答题-AOA搜题
-            R.id.tv_answer_launcher -> {
+            R.id.iv_title_query -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 139, "/apps/139/main")
                 if (startAoaApp)
                     getPresenter().startInteractionWindow(
@@ -808,7 +808,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //                )
             }
             //口算批改
-            R.id.tv_kspg_launcher -> {
+            R.id.iv_oral_correction -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 142, "/app/142/home")
                 if (startAoaApp)
                     getPresenter().startInteractionWindow(
@@ -817,7 +817,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     )
             }
             //语文作文批改
-            R.id.tv_ywzwpg_launcher -> {
+            R.id.iv_article_correction -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 143, "/app/143/home")
                 if (startAoaApp)
                     getPresenter().startInteractionWindow(
@@ -835,7 +835,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //                )
             }
             //收藏夹-AOA收藏夹
-            R.id.tv_favorite_launcher -> {
+            R.id.iv_favorites -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 141, "/app/141/home")
                 if (startAoaApp)
                     getPresenter().startInteractionWindow(
@@ -906,21 +906,17 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private fun showArUI(launcherType: String) {
         when (launcherType) {
             AppConstants.LAUNCHER_TYPE_AR -> {
-                ll_ar_launcher1.visibility = View.VISIBLE
-                ll_ar_launcher2.visibility = View.VISIBLE
-                ll_ar_launcher3.visibility = View.VISIBLE
                 iv_ip_image.visibility = View.VISIBLE
                 rv_quality_launcher.visibility = View.GONE
                 ll_center_launcher.visibility = View.GONE
+                rl_ar_launcher.visibility = View.VISIBLE
             }
             AppConstants.LAUNCHER_TYPE_CHINESE, AppConstants.LAUNCHER_TYPE_MATHEMATICS, AppConstants.LAUNCHER_TYPE_ENGLISH -> {
-                ll_ar_launcher1.visibility = View.GONE
-                ll_ar_launcher2.visibility = View.GONE
-                ll_ar_launcher3.visibility = View.GONE
                 iv_ip_image.visibility = View.GONE
                 rv_quality_launcher.visibility = View.GONE
                 fl_book_launcher.visibility = View.VISIBLE
                 ll_center_launcher.visibility = View.VISIBLE
+                rl_ar_launcher.visibility = View.GONE
                 setAdapterUI(launcherType)
                 setRightAdapter(launcherType)
                 var launcherBg = R.drawable.launcher_english_bg
@@ -955,12 +951,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 fl_extracurricular_counselling.setBackgroundResource(launcherBg)
             }
             AppConstants.LAUNCHER_TYPE_QUALITY -> {
-                ll_ar_launcher1.visibility = View.GONE
-                ll_ar_launcher2.visibility = View.GONE
-                ll_ar_launcher3.visibility = View.GONE
                 iv_ip_image.visibility = View.GONE
                 rv_quality_launcher.visibility = View.VISIBLE
                 ll_center_launcher.visibility = View.GONE
+                rl_ar_launcher.visibility = View.GONE
                 if (qualityHorizontalAdapter == null) {
                     qualityHorizontalAdapter = QualityHorizontalAdapter()
                     qualityHorizontalAdapter?.setOnItemClickListener(object :

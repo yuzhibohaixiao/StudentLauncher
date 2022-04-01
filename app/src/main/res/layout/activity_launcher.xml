@@ -103,7 +103,7 @@
         </LinearLayout>
     </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="86.5dp"
@@ -116,7 +116,7 @@
 
             <LinearLayout
                 android:layout_width="157.5dp"
-                android:layout_height="350dp"
+                android:layout_height="385dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="14.5dp"
                 android:background="@drawable/launcher_left_bg"
@@ -223,15 +223,111 @@
                 android:visibility="gone" />
         </FrameLayout>
 
+        <RelativeLayout
+            android:id="@+id/rl_ar_launcher"
+            android:layout_width="665dp"
+            android:layout_height="385dp"
+            android:layout_marginStart="220dp"
+            android:background="@drawable/launcher_ar_bg"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/iv_oral_correction"
+                android:layout_width="155dp"
+                android:layout_height="227dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="19.5dp"
+                android:src="@drawable/oral_correction" />
+
+            <ImageView
+                android:id="@+id/iv_article_correction"
+                android:layout_width="155dp"
+                android:layout_height="227dp"
+                android:layout_alignTop="@id/iv_oral_correction"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/iv_oral_correction"
+                android:src="@drawable/article_correction" />
+
+            <ImageView
+                android:id="@+id/iv_query_word"
+                android:layout_width="155dp"
+                android:layout_height="107.5dp"
+                android:layout_alignTop="@id/iv_oral_correction"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/iv_article_correction"
+                android:src="@drawable/query_word" />
+
+            <ImageView
+                android:id="@+id/iv_english_translation"
+                android:layout_width="155dp"
+                android:layout_height="107.5dp"
+                android:layout_below="@id/iv_query_word"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/iv_article_correction"
+                android:src="@drawable/english_translation" />
+
+            <ImageView
+                android:id="@+id/iv_favorites"
+                android:layout_width="155dp"
+                android:layout_height="107.5dp"
+                android:layout_alignTop="@id/iv_oral_correction"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/iv_query_word"
+                android:src="@drawable/favorites" />
+
+            <ImageView
+                android:id="@+id/iv_title_query"
+                android:layout_width="155dp"
+                android:layout_height="107.5dp"
+                android:layout_below="@id/iv_oral_correction"
+                android:layout_alignStart="@id/iv_oral_correction"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/title_query" />
+
+            <ImageView
+                android:id="@+id/iv_book_reading"
+                android:layout_width="155dp"
+                android:layout_height="107.5dp"
+                android:layout_alignStart="@id/iv_article_correction"
+                android:layout_alignTop="@id/iv_title_query"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/iv_title_query"
+                android:src="@drawable/book_reading" />
+
+            <ImageView
+                android:id="@+id/iv_chinese_words"
+                android:layout_width="155dp"
+                android:layout_height="107.5dp"
+                android:layout_alignStart="@id/iv_article_correction"
+                android:layout_alignTop="@id/iv_title_query"
+                android:layout_toEndOf="@id/iv_book_reading"
+                android:src="@drawable/chinese_words" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_ip_image"
+            android:layout_width="175.5dp"
+            android:layout_height="232dp"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="17.5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ip_img" />
+
         <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="210dp"
             android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/ll_center_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="18dp"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -327,8 +423,7 @@
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="365dp"
-                    android:layout_marginStart="18dp"
-                    android:layout_marginEnd="18dp">
+                    android:layout_marginStart="18dp">
 
                     <ImageView
                         android:id="@+id/iv_extracurricular_counselling"
@@ -357,6 +452,7 @@
             android:id="@+id/rv_quality_launcher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="210dp"
             android:visibility="gone" />
 
         <LinearLayout
@@ -366,7 +462,7 @@
             android:layout_marginStart="43dp"
             android:layout_marginTop="10dp"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_cdc_launcher"
@@ -417,16 +513,6 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_ip_image"
-            android:layout_width="162.5dp"
-            android:layout_height="215dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="91.5dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ip_img"
-            android:visibility="visible" />
-
         <LinearLayout
             android:id="@+id/ll_ar_launcher2"
             android:layout_width="wrap_content"
@@ -435,7 +521,7 @@
             android:layout_marginTop="10dp"
             android:gravity="end"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_answer_launcher"
@@ -495,7 +581,7 @@
             android:layout_marginStart="48dp"
             android:orientation="vertical"
             android:paddingTop="10dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_kspg_launcher"
@@ -546,7 +632,7 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
