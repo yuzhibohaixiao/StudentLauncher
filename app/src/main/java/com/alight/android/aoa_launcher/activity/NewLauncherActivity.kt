@@ -921,10 +921,38 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 rv_quality_launcher.visibility = View.GONE
                 fl_book_launcher.visibility = View.VISIBLE
                 ll_center_launcher.visibility = View.VISIBLE
-                fl_center_launcher.setBackgroundResource(R.drawable.launcher_center_bg)
-                fl_right_launcher.setBackgroundResource(R.drawable.launcher_center_bg)
                 setAdapterUI(launcherType)
                 setRightAdapter(launcherType)
+                var launcherBg = R.drawable.launcher_english_bg
+                when (launcherType) {
+                    AppConstants.LAUNCHER_TYPE_ENGLISH -> {
+                        launcherBg = R.drawable.launcher_english_bg
+                        iv_classroom_sync.setImageResource(R.drawable.text_classroom_sync)
+                        iv_study_tools.setImageResource(R.drawable.text_study_tools)
+                        iv_extracurricular_counselling.setImageResource(R.drawable.text_extracurricular_counselling)
+                        iv_book_launcher.setImageResource(R.drawable.launcher_english_book)
+                        tv_book_text.text = resources.getString(R.string.text_english_book)
+                    }
+                    AppConstants.LAUNCHER_TYPE_MATHEMATICS -> {
+                        launcherBg = R.drawable.launcher_math_bg
+                        iv_classroom_sync.setImageResource(R.drawable.text_math_classroom_sync)
+                        iv_study_tools.setImageResource(R.drawable.text_math_study_tools)
+                        iv_extracurricular_counselling.setImageResource(R.drawable.text_math_extracurricular_counselling)
+                        iv_book_launcher.setImageResource(R.drawable.launcher_math_book)
+                        tv_book_text.text = resources.getString(R.string.text_math_book)
+                    }
+                    AppConstants.LAUNCHER_TYPE_CHINESE -> {
+                        launcherBg = R.drawable.launcher_language_bg
+                        iv_classroom_sync.setImageResource(R.drawable.text_language_classroom_sync)
+                        iv_study_tools.setImageResource(R.drawable.text_language_study_tools)
+                        iv_extracurricular_counselling.setImageResource(R.drawable.text_language_extracurricular_counselling)
+                        iv_book_launcher.setImageResource(R.drawable.launcher_language_book)
+                        tv_book_text.text = resources.getString(R.string.text_language_book)
+                    }
+                }
+                fl_classroom_sync.setBackgroundResource(launcherBg)
+                fl_study_tools.setBackgroundResource(launcherBg)
+                fl_extracurricular_counselling.setBackgroundResource(launcherBg)
             }
             AppConstants.LAUNCHER_TYPE_QUALITY -> {
                 ll_ar_launcher1.visibility = View.GONE

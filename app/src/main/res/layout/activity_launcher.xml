@@ -241,16 +241,18 @@
                     android:layout_height="365dp">
 
                     <ImageView
+                        android:id="@+id/iv_classroom_sync"
                         android:layout_width="118.5dp"
                         android:layout_height="27dp"
-                        android:src="@drawable/launcher_classroom_sync" />
+                        android:src="@drawable/text_classroom_sync" />
 
                     <FrameLayout
+                        android:id="@+id/fl_classroom_sync"
                         android:layout_width="187.5dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom"
                         android:layout_marginTop="35dp"
-                        android:background="@drawable/launcher_center_bg">
+                        android:background="@drawable/launcher_english_bg">
 
                         <FrameLayout
                             android:layout_width="146dp"
@@ -260,6 +262,7 @@
                             android:background="@drawable/white_bg_oval">
 
                             <ImageView
+                                android:id="@+id/iv_book_launcher"
                                 android:layout_width="110dp"
                                 android:layout_height="150dp"
                                 android:layout_gravity="center_horizontal"
@@ -268,6 +271,7 @@
                                 android:src="@drawable/launcher_english_book" />
 
                             <TextView
+                                android:id="@+id/tv_book_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal|bottom"
@@ -296,12 +300,13 @@
                     android:layout_marginStart="18dp">
 
                     <ImageView
+                        android:id="@+id/iv_study_tools"
                         android:layout_width="118.5dp"
                         android:layout_height="27dp"
-                        android:src="@drawable/launcher_study_tools" />
+                        android:src="@drawable/text_study_tools" />
 
                     <FrameLayout
-                        android:id="@+id/fl_center_launcher"
+                        android:id="@+id/fl_study_tools"
                         android:layout_width="424dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom"
@@ -326,12 +331,13 @@
                     android:layout_marginEnd="18dp">
 
                     <ImageView
+                        android:id="@+id/iv_extracurricular_counselling"
                         android:layout_width="118.5dp"
                         android:layout_height="27dp"
-                        android:src="@drawable/extracurricular_counselling" />
+                        android:src="@drawable/text_extracurricular_counselling" />
 
                     <FrameLayout
-                        android:id="@+id/fl_right_launcher"
+                        android:id="@+id/fl_extracurricular_counselling"
                         android:layout_width="195.5dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="39dp">

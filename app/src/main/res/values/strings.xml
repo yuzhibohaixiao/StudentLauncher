@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">aoa_launcher</string>
+    <string name="text_english_book">四年级英语-下册</string>
+    <string name="text_math_book">五年级数学-下册</string>
+    <string name="text_language_book">八年级语文-下册</string>
     <string name="no_app">当前分类没有应用</string>
     <string name="splash_network_connections">将进入wifi连接页面，请你通过wifi设置进行网络连接</string>
     <string name="splash_reconnection">您未连接网络，请点击任意处重新连接</string>
