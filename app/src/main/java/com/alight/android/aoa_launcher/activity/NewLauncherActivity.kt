@@ -82,6 +82,26 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var stopHeart = false
     private var playTimeBean: PlayTimeBean? = null
     private var shutdownReceiver: ShutdownReceiver? = null
+    private var selectBook: AppTypeBean = AppTypeBean(
+        R.drawable.yxkw, "com.jxw.online_study",
+        "com.jxw.online_study.activity.BookCaseWrapperActivity",
+        mapOf("StartArgs" to "d:/同步学习/英语|e:JWFD")
+    )
+    private val bookList = arrayListOf(
+        AppTypeBean(
+            R.drawable.yxkw, "com.jxw.online_study",
+            "com.jxw.online_study.activity.BookCaseWrapperActivity",
+            mapOf("StartArgs" to "d:/同步学习/英语|e:JWFD")
+        ), AppTypeBean(
+            R.drawable.yxkw, "com.jxw.online_study",
+            "com.jxw.online_study.activity.BookCaseWrapperActivity",
+            mapOf("StartArgs" to "d:/同步学习/数学|e:JWFD")
+        ), AppTypeBean(
+            R.drawable.yxkw, "com.jxw.online_study",
+            "com.jxw.online_study.activity.BookCaseWrapperActivity",
+            mapOf("StartArgs" to "d:/同步学习/语文|e:JWFD")
+        )
+    )
 
     //引导过用户升级为 true
     private var guideUserUpdate = false
@@ -151,6 +171,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         iv_az_store.setOnClickListener(this)
         tv_task_challenges.setOnClickListener(this)
         iv_av_launcher.setOnClickListener(this)
+        tv_book_click.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -881,6 +902,15 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             R.id.iv_av_launcher, R.id.tv_task_challenges -> {
                 ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
             }
+            //打开预习课文
+            R.id.tv_book_click -> {
+                StartAppUtils.startActivity(
+                    this,
+                    selectBook.appPackName,
+                    selectBook.className,
+                    selectBook.params
+                )
+            }
         }
     }
 
@@ -929,6 +959,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         iv_extracurricular_counselling.setImageResource(R.drawable.text_extracurricular_counselling)
                         iv_book_launcher.setImageResource(R.drawable.launcher_english_book)
                         tv_book_text.text = resources.getString(R.string.text_english_book)
+                        selectBook = bookList[0]
                     }
                     AppConstants.LAUNCHER_TYPE_MATHEMATICS -> {
                         launcherBg = R.drawable.launcher_math_bg
@@ -937,6 +968,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         iv_extracurricular_counselling.setImageResource(R.drawable.text_math_extracurricular_counselling)
                         iv_book_launcher.setImageResource(R.drawable.launcher_math_book)
                         tv_book_text.text = resources.getString(R.string.text_math_book)
+                        selectBook = bookList[1]
                     }
                     AppConstants.LAUNCHER_TYPE_CHINESE -> {
                         launcherBg = R.drawable.launcher_language_bg
@@ -945,6 +977,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         iv_extracurricular_counselling.setImageResource(R.drawable.text_language_extracurricular_counselling)
                         iv_book_launcher.setImageResource(R.drawable.launcher_language_book)
                         tv_book_text.text = resources.getString(R.string.text_language_book)
+                        selectBook = bookList[2]
                     }
                 }
                 fl_classroom_sync.setBackgroundResource(launcherBg)

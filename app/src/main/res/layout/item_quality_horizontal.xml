@@ -6,7 +6,7 @@
     android:layout_marginEnd="20dp">
 
     <ImageView
-        android:id="@+id/iv_quality_text"
+        android:id="@+id/iv_quality_app_name"
         android:layout_width="119dp"
         android:layout_height="28dp" />
 
@@ -20,6 +20,7 @@
             android:id="@+id/rv_quality_app_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp" />
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="25dp" />
     </FrameLayout>
 </FrameLayout>
