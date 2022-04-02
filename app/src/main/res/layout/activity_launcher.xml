@@ -424,7 +424,7 @@
 
                 <FrameLayout
                     android:id="@+id/fl_study_tools"
-                    android:layout_width="424dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
                     android:layout_marginTop="39dp">
@@ -433,11 +433,11 @@
                         android:id="@+id/rv_center_launcher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="44dp"
-                        android:layout_marginTop="31dp"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="25dp"
                         android:scrollbarSize="5dp"
                         android:scrollbarThumbVertical="@color/launcher_scroll_bg"
-                        android:scrollbars="vertical" />
+                        android:scrollbars="horizontal" />
                 </FrameLayout>
             </FrameLayout>
 
@@ -704,6 +704,6 @@
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:src="@drawable/launcher_all_app"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </LinearLayout>
 </FrameLayout>
