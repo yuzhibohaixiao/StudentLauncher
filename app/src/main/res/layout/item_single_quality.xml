@@ -4,10 +4,12 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="18dp"
     android:layout_marginBottom="25dp"
+    android:background="@drawable/white_quality_oval"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <ImageView
+        android:layout_marginTop="6dp"
         android:id="@+id/iv_quality_icon"
         android:layout_width="47.5dp"
         android:layout_height="47.5dp"
@@ -19,7 +21,6 @@
         android:layout_width="77.5dp"
         android:layout_height="24dp"
         android:layout_marginTop="7dp"
-        android:background="@drawable/white_bg_oval"
         android:gravity="center"
         android:singleLine="true"
         android:text="嘟嘟教学"

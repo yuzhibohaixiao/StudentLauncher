@@ -172,6 +172,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         tv_task_challenges.setOnClickListener(this)
         iv_av_launcher.setOnClickListener(this)
         tv_book_click.setOnClickListener(this)
+        iv_book_launcher.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -903,7 +904,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
             }
             //打开预习课文
-            R.id.tv_book_click -> {
+            R.id.tv_book_click, R.id.iv_book_launcher -> {
                 StartAppUtils.startActivity(
                     this,
                     selectBook.appPackName,

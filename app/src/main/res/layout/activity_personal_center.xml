@@ -5,6 +5,20 @@
     android:layout_height="match_parent"
     android:background="@drawable/launcher_bg_new">
 
+    <TextView
+        android:id="@+id/tv_dialog_launcher"
+        android:layout_width="135dp"
+        android:layout_height="28dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="80dp"
+        android:background="@drawable/white_bg_oval"
+        android:gravity="center"
+        android:text="一年级上      ▼"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:visibility="visible" />
+
     <LinearLayout
         android:id="@+id/ll_back_personal_center"
         android:layout_width="wrap_content"
@@ -306,7 +320,7 @@
                         android:drawablePadding="8dp"
                         android:gravity="center_horizontal"
                         android:paddingTop="14.5dp"
-                        android:text="摄像头校准"
+                        android:text="触控校准"
                         android:textColor="@color/person_center_text_black"
                         android:textSize="12sp" />
 
@@ -527,10 +541,11 @@
                     android:paddingTop="14dp"
                     android:text="触控对焦"
                     android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:visibility="gone" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
                     android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
@@ -538,8 +553,9 @@
 
                     <TextView
                         android:id="@+id/tv_pen_touch"
-                        android:layout_width="69.5dp"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:background="@drawable/touch_mode_selector"
                         android:drawableTop="@drawable/pen_touch"
                         android:drawablePadding="8dp"
@@ -552,8 +568,9 @@
 
                     <TextView
                         android:id="@+id/tv_hand_touch"
-                        android:layout_width="69.5dp"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:background="@drawable/touch_mode_selector"
                         android:drawableTop="@drawable/hand_touch"
                         android:drawablePadding="8dp"

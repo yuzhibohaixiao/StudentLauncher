@@ -34,7 +34,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.tencent.mmkv.MMKV
 import com.xw.repo.BubbleSeekBar
+import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.android.synthetic.main.activity_personal_center.*
+import kotlinx.android.synthetic.main.activity_personal_center.tv_dialog_launcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -202,6 +204,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         tv_splash.setOnClickListener(this)
         tv_pen_touch.setOnClickListener(this)
         tv_hand_touch.setOnClickListener(this)
+        tv_dialog_launcher.setOnClickListener(this)
 
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
@@ -465,6 +468,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 tv_hand_touch.isSelected = true
                 panelAbility?.setTouchMode(PanelAbility.TouchMode.FINGER_MODE)
                 playClickMusic()
+            }
+            R.id.tv_dialog_launcher -> {
+                getPresenter().showSelectGradeDialog(this, tv_dialog_launcher)
             }
         }
     }
