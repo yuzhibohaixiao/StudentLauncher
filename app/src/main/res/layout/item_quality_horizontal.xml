@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fl_quality_bg"
-    android:layout_width="424dp"
-    android:layout_height="365dp"
-    android:layout_marginStart="28dp"
-    android:layout_marginEnd="33dp">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="20dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_quality_app_content"
+    <ImageView
+        android:id="@+id/iv_quality_text"
+        android:layout_width="119dp"
+        android:layout_height="28dp" />
+
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="81dp"
-        android:layout_marginEnd="27dp" />
+        android:layout_marginTop="39dp"
+        android:background="@drawable/launcher_quality_bg">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_quality_app_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp" />
+    </FrameLayout>
 </FrameLayout>

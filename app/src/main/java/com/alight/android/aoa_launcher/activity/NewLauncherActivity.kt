@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.OvershootInterpolator
+import android.widget.HorizontalScrollView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible

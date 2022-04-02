@@ -10,6 +10,12 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 class QualityHorizontalAdapter :
     BaseQuickAdapter<AppTreblePackDataBean, BaseViewHolder>(R.layout.item_quality_horizontal) {
+    private var typeTextList = arrayListOf(
+        R.drawable.text_thinking_enlightenment,
+        R.drawable.text_art,
+        R.drawable.text_language_enlightenment,
+        R.drawable.text_fun_learning
+    )
     private val appList1: ArrayList<AppTrebleDataBean> = arrayListOf(
         AppTrebleDataBean(
             R.drawable.moral, "com.jxw.online_study", "思想品德",
@@ -115,7 +121,8 @@ class QualityHorizontalAdapter :
      * @param item   The item that needs to be displayed.
      */
     override fun convert(holder: BaseViewHolder, item: AppTreblePackDataBean) {
-        holder.itemView.setBackgroundResource(item.drawable)
+//        holder.itemView.setBackgroundResource(item.drawable)
+        holder.setImageResource(R.id.iv_quality_text, typeTextList[holder.layoutPosition])
         val recyclerView = holder.getView<RecyclerView>(R.id.rv_quality_app_content)
         recyclerView.layoutManager = LinearLayoutManager(context)
         val qualityAdapter = QualityAdapter()
