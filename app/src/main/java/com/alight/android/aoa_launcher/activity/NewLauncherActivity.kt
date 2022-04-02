@@ -153,7 +153,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         iv_english_translation.setOnClickListener(this)
         tv_seek_help_launcher.setOnClickListener(this)
         iv_title_query.setOnClickListener(this)
-        tv_read_book_launcher.setOnClickListener(this)
         tv_fun_card_launcher.setOnClickListener(this)
         tv_wrong_topic_launcher.setOnClickListener(this)
         iv_oral_correction.setOnClickListener(this)
@@ -167,7 +166,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         tv_user_name_new_launcher.setOnClickListener(this)
         iv_all_app_launcher.setOnClickListener(this)
         tv_dialog_launcher.setOnClickListener(this)
-        tv_read_book_launcher.setOnClickListener(this)
+        iv_book_reading.setOnClickListener(this)
         iv_az_store.setOnClickListener(this)
         tv_task_challenges.setOnClickListener(this)
         iv_av_launcher.setOnClickListener(this)
@@ -756,7 +755,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 showSelectUI(v.id)
             }
             //书本指读（AR指读）
-            R.id.tv_read_book_launcher -> {
+            R.id.iv_book_reading -> {
                 val startActivity = getPresenter().startActivity(
                     this,
                     "com.jxw.huiben",
