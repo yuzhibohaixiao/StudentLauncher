@@ -395,7 +395,7 @@
                             android:layout_marginBottom="20dp"
                             android:text="四年级英语-下册"
                             android:textColor="@color/black"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
                     </FrameLayout>
 
                     <TextView
@@ -403,7 +403,7 @@
                         android:layout_width="105dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_horizontal|bottom"
-                        android:layout_marginBottom="26.5dp"
+                        android:layout_marginBottom="36dp"
                         android:background="@drawable/white_bg_oval"
                         android:gravity="center"
                         android:text="课本预习"
