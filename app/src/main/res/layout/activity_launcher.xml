@@ -454,7 +454,7 @@
 
                 <FrameLayout
                     android:id="@+id/fl_extracurricular_counselling"
-                    android:layout_width="195.5dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginTop="39dp">
 
@@ -462,8 +462,8 @@
                         android:id="@+id/rv_right_launcher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="24dp" />
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="25dp" />
                 </FrameLayout>
             </FrameLayout>
         </LinearLayout>

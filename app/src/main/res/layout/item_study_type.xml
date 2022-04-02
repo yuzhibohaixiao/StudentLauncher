@@ -8,5 +8,6 @@
     <ImageView
         android:id="@+id/iv_study_type_item"
         android:layout_width="83dp"
-        android:layout_height="80dp" />
+        android:layout_height="80dp"
+        android:scaleType="fitCenter" />
 </FrameLayout>

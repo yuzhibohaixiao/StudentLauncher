@@ -5,23 +5,14 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import com.alight.android.aoa_launcher.R
-import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.bean.AppTrebleDataBean
-import com.alight.android.aoa_launcher.common.bean.PlayTimeBean
-import com.alight.android.aoa_launcher.common.constants.AppConstants
-import com.alight.android.aoa_launcher.utils.StartAppUtils
 import com.alight.android.aoa_launcher.utils.StringUtils
-import com.alight.android.aoa_launcher.utils.TimeUtils
-import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.google.gson.Gson
-import com.tencent.mmkv.MMKV
 import kotlinx.android.synthetic.main.item_quality_launcher.view.*
-import java.util.*
 
 
 class QualityAdapter :

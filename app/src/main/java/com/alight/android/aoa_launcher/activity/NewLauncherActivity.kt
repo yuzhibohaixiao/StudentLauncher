@@ -1033,9 +1033,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     private fun setRightAdapter(launcherType: String) {
         if (launcherRightAdapter == null) {
-            val linearLayoutManager = LinearLayoutManager(this)
-            linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-            rv_right_launcher.layoutManager = linearLayoutManager
+            val gridLayoutManager = GridLayoutManager(this, 3)
+            gridLayoutManager.orientation = GridLayoutManager.HORIZONTAL
+            rv_right_launcher.layoutManager = gridLayoutManager
             launcherRightAdapter = LauncherRightAdapter()
             rv_right_launcher.adapter = launcherRightAdapter
         }
