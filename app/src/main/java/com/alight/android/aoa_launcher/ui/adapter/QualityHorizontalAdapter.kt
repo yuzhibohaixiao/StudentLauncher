@@ -5,12 +5,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.bean.NewAppTypeBean
+import com.alight.android.aoa_launcher.common.constants.AppConstants
+import com.alight.android.aoa_launcher.utils.AppGetUtil
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import java.util.ArrayList
 
 class QualityHorizontalAdapter :
     BaseQuickAdapter<Int, BaseViewHolder>(R.layout.item_quality_horizontal) {
+
     private var typeTextList = arrayListOf(
         R.drawable.text_thinking_enlightenment,
         R.drawable.text_art,
@@ -246,6 +249,8 @@ class QualityHorizontalAdapter :
 
     init {
         setNewInstance(typeTextList)
+        val appDatas = AppGetUtil.getAppData()
+        appList4.addAll(appDatas)
         /*  val appTreblePackDataList =
               arrayListOf(
                   NewAppTypeBean(appList1),
