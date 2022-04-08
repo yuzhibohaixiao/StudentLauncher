@@ -153,6 +153,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             e.printStackTrace()
         }
 
+        tv_dialog_launcher.text = UserDBUtil.LAUNCHER_GRADE
+
         /* ApkController.slienceInstallWithSysSign(
              LauncherApplication.getContext(),
              Environment.getExternalStorageDirectory().path + "/"+ "launcher.apk"

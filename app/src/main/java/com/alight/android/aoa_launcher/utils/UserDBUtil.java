@@ -13,24 +13,22 @@ import com.alight.android.aoa_launcher.application.LauncherApplication;
  */
 public class UserDBUtil {
     /**
-     *
-     *
      * 保存信息的时候
      * 当年级或者其他信息更改是调用一下方法
-     *  UserDBUtil.keepLastRecord("小学","四年级",-1,-1,"",null);
-     *
+     * UserDBUtil.keepLastRecord("小学","四年级",-1,-1,"",null);
+     * <p>
      * 获取信息的时候
-     *
-     *         if (UserDBUtil.hasLastRecocrd()){
-     *             UserInfoBean userInfoRecocrd = UserDBUtil.getUserInfoRecocrd();
-     *             if (userInfoRecocrd!=null && !TextUtils.isEmpty(userInfoRecocrd.getGrade())){
-     *                //获取到年级信息
-     *                 String grader=userInfoRecocrd.getGrade();
-     *              //TODO 根据年级信息去刷新数据
-     *
-     *             }
-     *         }
-     *
+     * <p>
+     * if (UserDBUtil.hasLastRecocrd()){
+     * UserInfoBean userInfoRecocrd = UserDBUtil.getUserInfoRecocrd();
+     * if (userInfoRecocrd!=null && !TextUtils.isEmpty(userInfoRecocrd.getGrade())){
+     * //获取到年级信息
+     * String grader=userInfoRecocrd.getGrade();
+     * //TODO 根据年级信息去刷新数据
+     * <p>
+     * }
+     * }
+     * <p>
      * _id id
      * _section 学段
      * _grade 年级
@@ -46,6 +44,7 @@ public class UserDBUtil {
     public static final String SEX = "_sex";
     public static final String AGE = "_age";
     public static final String NICKNAME = "_nickname";
+    public static String LAUNCHER_GRADE = "一年级上      ▼";
 
 
     public static final Uri LAST_RECORDR_URI = Uri.parse("content://com.jxw.mskt.video.userInfoProvider/userinfo");
