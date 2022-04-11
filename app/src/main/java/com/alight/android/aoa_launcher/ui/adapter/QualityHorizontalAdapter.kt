@@ -1,7 +1,6 @@
 package com.alight.android.aoa_launcher.ui.adapter
 
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.bean.NewAppTypeBean
@@ -161,6 +160,16 @@ class QualityHorizontalAdapter :
         ),
     )
 
+    private val filterList: ArrayList<NewAppTypeBean> = arrayListOf(
+        NewAppTypeBean(
+            "",
+            R.drawable.quality_default_icon,
+            AppConstants.LAUNCHER_PACKAGE_NAME,
+            null,
+            null
+        ),
+    )
+
 
     /* private val appList1: ArrayList<AppTrebleDataBean> = arrayListOf(
          AppTrebleDataBean(
@@ -249,8 +258,11 @@ class QualityHorizontalAdapter :
 
     init {
         setNewInstance(typeTextList)
+        //获取全部应用
         val appDatas = AppGetUtil.getAppData()
-        appList4.addAll(appDatas)
+        //过滤掉不需要的应用（素质拓展和系统应用）
+        val appFilter = appFilter(appDatas)
+        appList4.addAll(appFilter)
         /*  val appTreblePackDataList =
               arrayListOf(
                   NewAppTypeBean(appList1),
@@ -262,6 +274,29 @@ class QualityHorizontalAdapter :
 //        setNewInstance(appList2)
 //        setNewInstance(appList3)
 //        setNewInstance(appList4)
+    }
+
+    private fun appFilter(appDatas: ArrayList<NewAppTypeBean>): List<NewAppTypeBean> {
+        var allQualityList = arrayListOf<NewAppTypeBean>()
+        allQualityList.addAll(appList1)
+        allQualityList.addAll(appList2)
+        allQualityList.addAll(appList3)
+        allQualityList.addAll(appList4)
+        allQualityList.addAll(filterList)
+
+        var removeList = arrayListOf<NewAppTypeBean>()
+        for (appData in appDatas) {
+            val appPackName = appData.appPackName
+            for (qualityApp in allQualityList) {
+                val qualityAppPackName = qualityApp.appPackName
+                if (appPackName.contains(qualityAppPackName)) {
+                    removeList.add(appData)
+                    continue
+                }
+            }
+        }
+        appDatas.removeAll(removeList)
+        return appDatas
     }
 
     /**

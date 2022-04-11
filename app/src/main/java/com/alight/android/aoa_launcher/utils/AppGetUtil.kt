@@ -1,6 +1,5 @@
 package com.alight.android.aoa_launcher.utils
 
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.alight.android.aoa_launcher.R
@@ -12,8 +11,8 @@ import com.alight.android.aoa_launcher.common.bean.NewAppTypeBean
  */
 object AppGetUtil {
     val TAG = "AppGetUtil"
-    fun getAppData(): List<NewAppTypeBean> {
-        val datas: MutableList<NewAppTypeBean> = ArrayList()
+    fun getAppData(): ArrayList<NewAppTypeBean> {
+        val datas: ArrayList<NewAppTypeBean> = ArrayList()
         var packageManager = LauncherApplication.getContext().packageManager
         var mainIntent = Intent(Intent.ACTION_MAIN, null)
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
