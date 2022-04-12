@@ -112,12 +112,6 @@ class QualityHorizontalAdapter :
             null,
             null
         ),
-        NewAppTypeBean(
-            "凯叔讲故事",
-            R.drawable.quality_default_icon, "com.ks.kaishustory",
-            null,
-            null
-        ),
     )
     private val appList4: ArrayList<NewAppTypeBean> = arrayListOf(
         NewAppTypeBean(
@@ -304,7 +298,7 @@ class QualityHorizontalAdapter :
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
-            "teaonly.droidipcam",
+            "teaonly.rk.droidipcam",
             null,
             null
         ),

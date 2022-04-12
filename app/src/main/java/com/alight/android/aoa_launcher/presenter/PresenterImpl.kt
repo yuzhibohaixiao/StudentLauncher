@@ -19,10 +19,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
 import com.alight.android.aoa_launcher.R
@@ -39,6 +42,7 @@ import com.alight.android.aoa_launcher.common.event.SplashEvent
 import com.alight.android.aoa_launcher.common.listener.DownloadListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.contract.IContract
+import com.alight.android.aoa_launcher.ui.adapter.GradeDialogAdapter
 import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
@@ -971,88 +975,49 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      * 处理弹出显示内容、点击事件等逻辑
      * @param contentView
      */
-    private fun handleLogic(contentView: View, tv_dialog_launcher: TextView) {
+    private fun handleLogic(activity: Activity, contentView: View, tv_dialog_launcher: TextView) {
+        var gradeDialogAdapter: GradeDialogAdapter? = null
+        var preschoolList = arrayListOf("学龄前")
+        var primarySchoolList = arrayListOf("一年级", "二年级", "三年级", "四年级", "五年级", "六年级")
+        var juniorList = arrayListOf("初中", "高中", "其他")
+        val rvGrade = contentView.findViewById<RecyclerView>(R.id.rv_grade_launcher)
         val listener = View.OnClickListener {
             if (mCustomPopWindow != null) {
-                mCustomPopWindow?.dissmiss();
+//                mCustomPopWindow?.dissmiss()
+                rvGrade.visibility = View.VISIBLE
             }
             when (it.id) {
-                R.id.tv_grade1_up_launcher -> {
-                    gradeContent = "一年级上"
-                    UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
+                R.id.tv_preschool_dialog -> {
+                    gradeDialogAdapter?.setNewInstance(preschoolList)
+//                    gradeContent = "一年级上"
+//                    UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
                 }
-                R.id.tv_grade1_down_launcher -> {
-                    gradeContent = "一年级下"
-                    UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
+                R.id.tv_primary_school_dialog -> {
+                    gradeDialogAdapter?.setNewInstance(primarySchoolList)
                 }
-                R.id.tv_grade2_up_launcher -> {
-                    gradeContent = "二年级上"
-                    UserDBUtil.keepLastRecord("小学", "二年级", -1, -1, "", null)
-                }
-                R.id.tv_grade2_down_launcher -> {
-                    gradeContent = "二年级下"
-                    UserDBUtil.keepLastRecord("小学", "二年级", -1, -1, "", null)
-                }
-                R.id.tv_grade3_up_launcher -> {
-                    gradeContent = "三年级上"
-                    UserDBUtil.keepLastRecord("小学", "三年级", -1, -1, "", null)
-                }
-                R.id.tv_grade3_down_launcher -> {
-                    gradeContent = "三年级下"
-                    UserDBUtil.keepLastRecord("小学", "三年级", -1, -1, "", null)
-                }
-                R.id.tv_grade4_up_launcher -> {
-                    gradeContent = "四年级上"
-                    UserDBUtil.keepLastRecord("小学", "四年级", -1, -1, "", null)
-                }
-                R.id.tv_grade4_down_launcher -> {
-                    gradeContent = "四年级下"
-                    UserDBUtil.keepLastRecord("小学", "四年级", -1, -1, "", null)
-                }
-                R.id.tv_grade5_up_launcher -> {
-                    gradeContent = "五年级上"
-                    UserDBUtil.keepLastRecord("小学", "五年级", -1, -1, "", null)
-                }
-                R.id.tv_grade5_down_launcher -> {
-                    gradeContent = "五年级下"
-                    UserDBUtil.keepLastRecord("小学", "五年级", -1, -1, "", null)
-                }
-                R.id.tv_grade6_up_launcher -> {
-                    gradeContent = "六年级上"
-                    UserDBUtil.keepLastRecord("小学", "六年级", -1, -1, "", null)
-                }
-                R.id.tv_grade6_down_launcher -> {
-                    gradeContent = "六年级下"
-                    UserDBUtil.keepLastRecord("小学", "六年级", -1, -1, "", null)
+                R.id.tv_junior_dialog -> {
+                    gradeDialogAdapter?.setNewInstance(juniorList)
                 }
             }
             tv_dialog_launcher.text = "$gradeContent      ▼"
             UserDBUtil.LAUNCHER_GRADE = tv_dialog_launcher.text.toString()
         }
-        contentView.findViewById<TextView>(R.id.tv_grade1_up_launcher).setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade1_down_launcher)
+        contentView.findViewById<TextView>(R.id.tv_preschool_dialog).setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_primary_school_dialog)
             .setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade2_up_launcher).setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade2_down_launcher)
-            .setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade3_up_launcher).setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade3_down_launcher)
-            .setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade4_up_launcher).setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade4_down_launcher)
-            .setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade5_up_launcher).setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade5_down_launcher)
-            .setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade6_up_launcher).setOnClickListener(listener)
-        contentView.findViewById<TextView>(R.id.tv_grade6_down_launcher)
-            .setOnClickListener(listener)
+        contentView.findViewById<TextView>(R.id.tv_junior_dialog).setOnClickListener(listener)
+
+        if (gradeDialogAdapter == null) {
+            gradeDialogAdapter = GradeDialogAdapter()
+            rvGrade.layoutManager = LinearLayoutManager(activity)
+            rvGrade.adapter = gradeDialogAdapter
+        }
     }
 
     fun showSelectGradeDialog(activity: Activity, tv_dialog_launcher: TextView) {
         val contentView: View = LayoutInflater.from(activity).inflate(R.layout.pop_menu, null)
         //处理popWindow 显示内容
-        handleLogic(contentView, tv_dialog_launcher)
+        handleLogic(activity, contentView, tv_dialog_launcher)
         //创建并显示popWindow
         mCustomPopWindow = CustomPopWindow.PopupWindowBuilder(activity)
             .setView(contentView)
