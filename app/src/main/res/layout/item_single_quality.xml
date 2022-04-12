@@ -2,17 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="77.5dp"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="18dp"
+    android:layout_marginStart="17.5dp"
+    android:layout_marginEnd="17.5dp"
     android:layout_marginBottom="25dp"
     android:background="@drawable/white_quality_oval"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <ImageView
-        android:layout_marginTop="6dp"
         android:id="@+id/iv_quality_icon"
         android:layout_width="47.5dp"
         android:layout_height="47.5dp"
+        android:layout_marginTop="6dp"
         android:scaleType="fitCenter"
         android:src="@drawable/quality_default_icon" />
 
