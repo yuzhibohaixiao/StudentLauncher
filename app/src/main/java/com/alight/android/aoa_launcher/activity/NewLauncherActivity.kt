@@ -12,7 +12,6 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.OvershootInterpolator
-import android.widget.HorizontalScrollView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -171,7 +170,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         tv_task_challenges.setOnClickListener(this)
         iv_av_launcher.setOnClickListener(this)
         tv_book_click.setOnClickListener(this)
-        iv_book_launcher.setOnClickListener(this)
+        fl_classroom_sync.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -903,7 +902,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
             }
             //打开预习课文
-            R.id.tv_book_click, R.id.iv_book_launcher -> {
+            R.id.tv_book_click, R.id.fl_classroom_sync -> {
                 StartAppUtils.startActivity(
                     this,
                     selectBook.appPackName,
@@ -957,8 +956,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         iv_classroom_sync.setImageResource(R.drawable.text_classroom_sync)
                         iv_study_tools.setImageResource(R.drawable.text_study_tools)
                         iv_extracurricular_counselling.setImageResource(R.drawable.text_extracurricular_counselling)
-                        iv_book_launcher.setImageResource(R.drawable.launcher_english_book)
-                        tv_book_text.text = resources.getString(R.string.text_english_book)
+                        fl_classroom_sync.setBackgroundResource(R.drawable.launcher_english_book)
+                        tv_book_click.setBackgroundResource(R.drawable.english_text_bg_oval)
                         selectBook = bookList[0]
                     }
                     AppConstants.LAUNCHER_TYPE_MATHEMATICS -> {
@@ -966,8 +965,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         iv_classroom_sync.setImageResource(R.drawable.text_math_classroom_sync)
                         iv_study_tools.setImageResource(R.drawable.text_math_study_tools)
                         iv_extracurricular_counselling.setImageResource(R.drawable.text_math_extracurricular_counselling)
-                        iv_book_launcher.setImageResource(R.drawable.launcher_math_book)
-                        tv_book_text.text = resources.getString(R.string.text_math_book)
+                        fl_classroom_sync.setBackgroundResource(R.drawable.launcher_math_book)
+                        tv_book_click.setBackgroundResource(R.drawable.math_text_bg_oval)
                         selectBook = bookList[1]
                     }
                     AppConstants.LAUNCHER_TYPE_CHINESE -> {
@@ -975,12 +974,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         iv_classroom_sync.setImageResource(R.drawable.text_language_classroom_sync)
                         iv_study_tools.setImageResource(R.drawable.text_language_study_tools)
                         iv_extracurricular_counselling.setImageResource(R.drawable.text_language_extracurricular_counselling)
-                        iv_book_launcher.setImageResource(R.drawable.launcher_language_book)
-                        tv_book_text.text = resources.getString(R.string.text_language_book)
+                        fl_classroom_sync.setBackgroundResource(R.drawable.launcher_language_book)
+                        tv_book_click.setBackgroundResource(R.drawable.language_text_bg_oval)
                         selectBook = bookList[2]
                     }
                 }
-                fl_classroom_sync.setBackgroundResource(launcherBg)
                 fl_study_tools.setBackgroundResource(launcherBg)
                 fl_extracurricular_counselling.setBackgroundResource(launcherBg)
             }
