@@ -19,7 +19,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -58,7 +57,6 @@ import com.qweather.sdk.view.HeConfig
 import com.qweather.sdk.view.QWeather
 import com.qweather.sdk.view.QWeather.OnResultGeoListener
 import com.qweather.sdk.view.QWeather.OnResultWeatherNowListener
-import com.tencent.mmkv.MMKV
 import com.viewpagerindicator.CirclePageIndicator
 import com.xuexiang.xupdate.entity.UpdateEntity
 import com.xuexiang.xupdate.listener.IUpdateParseCallback
@@ -693,14 +691,14 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         intent.putExtra("systemApp", systemAppList)
         intent.putExtra("otherApp", otherAppList)
 
-        var localOtaVersionName = ""
+        var newOtaVersionName = ""
         systemAppList.forEach {
             if (it.format == 3) {
-                localOtaVersionName = it.version_name
+                newOtaVersionName = it.version_name
             }
         }
-        val newSystemVersionName = Build.DISPLAY
-        if (!newSystemVersionName.equals(localOtaVersionName)) {
+        val localSystemVersionName = Build.DISPLAY
+        if (newOtaVersionName.isNotEmpty() && localSystemVersionName.equals(newOtaVersionName)) {
             activity.startActivity(intent)
         } else {
             EventBus.getDefault().post(SplashEvent.getInstance(true))

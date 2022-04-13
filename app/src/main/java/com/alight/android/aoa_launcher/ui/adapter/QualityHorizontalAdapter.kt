@@ -154,6 +154,9 @@ class QualityHorizontalAdapter :
         ),
     )
 
+    /**
+     * 过滤应用
+     */
     private val filterList: ArrayList<NewAppTypeBean> = arrayListOf(
         NewAppTypeBean(
             "",
@@ -277,7 +280,7 @@ class QualityHorizontalAdapter :
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
-            "com.android.providers.downloads.ui",
+            "com.android.documentsui",
             null,
             null
         ),
