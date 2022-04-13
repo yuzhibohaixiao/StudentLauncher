@@ -71,7 +71,7 @@
             android:layout_marginStart="31.5dp"
             android:background="@drawable/white_bg_oval"
             android:gravity="center"
-            android:text="一年级上      ▼"
+            android:text="一年级      ▼"
             android:textColor="@color/black"
             android:textSize="12sp"
             android:visibility="gone" />

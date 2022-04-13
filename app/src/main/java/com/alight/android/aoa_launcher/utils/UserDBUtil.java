@@ -44,7 +44,7 @@ public class UserDBUtil {
     public static final String SEX = "_sex";
     public static final String AGE = "_age";
     public static final String NICKNAME = "_nickname";
-    public static String LAUNCHER_GRADE = "一年级上      ▼";
+    public static String LAUNCHER_GRADE = "一年级      ▼";
 
 
     public static final Uri LAST_RECORDR_URI = Uri.parse("content://com.jxw.mskt.video.userInfoProvider/userinfo");

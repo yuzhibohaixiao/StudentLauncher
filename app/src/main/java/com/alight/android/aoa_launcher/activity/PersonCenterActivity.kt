@@ -32,11 +32,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
-import com.tencent.mmkv.MMKV
 import com.xw.repo.BubbleSeekBar
-import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.android.synthetic.main.activity_personal_center.*
-import kotlinx.android.synthetic.main.activity_personal_center.tv_dialog_launcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay

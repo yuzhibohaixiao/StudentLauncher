@@ -43,6 +43,7 @@ import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.contract.IContract
 import com.alight.android.aoa_launcher.ui.adapter.GradeDialogAdapter
 import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
+import com.alight.android.aoa_launcher.ui.adapter.QualityAdapter
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.*
@@ -80,7 +81,7 @@ import java.util.*
 class PresenterImpl : BasePresenter<IContract.IView>() {
 
     private var mCustomPopWindow: CustomPopWindow? = null
-    private var gradeContent = "一年级上"
+    private var gradeContent = "一年级"
 
     private var TAG = "PresenterImpl"
     override fun <T> getModel(url: String, map: HashMap<String, Any>, cls: Class<T>) {
@@ -698,7 +699,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             }
         }
         val localSystemVersionName = Build.DISPLAY
-        if (newOtaVersionName.isNotEmpty() && localSystemVersionName.equals(newOtaVersionName)) {
+        if (newOtaVersionName.isNotEmpty() && !localSystemVersionName.equals(newOtaVersionName)) {
             activity.startActivity(intent)
         } else {
             EventBus.getDefault().post(SplashEvent.getInstance(true))
@@ -981,14 +982,11 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         val rvGrade = contentView.findViewById<RecyclerView>(R.id.rv_grade_launcher)
         val listener = View.OnClickListener {
             if (mCustomPopWindow != null) {
-//                mCustomPopWindow?.dissmiss()
                 rvGrade.visibility = View.VISIBLE
             }
             when (it.id) {
                 R.id.tv_preschool_dialog -> {
                     gradeDialogAdapter?.setNewInstance(preschoolList)
-//                    gradeContent = "一年级上"
-//                    UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
                 }
                 R.id.tv_primary_school_dialog -> {
                     gradeDialogAdapter?.setNewInstance(primarySchoolList)
@@ -997,8 +995,6 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     gradeDialogAdapter?.setNewInstance(juniorList)
                 }
             }
-            tv_dialog_launcher.text = "$gradeContent      ▼"
-            UserDBUtil.LAUNCHER_GRADE = tv_dialog_launcher.text.toString()
         }
         contentView.findViewById<TextView>(R.id.tv_preschool_dialog).setOnClickListener(listener)
         contentView.findViewById<TextView>(R.id.tv_primary_school_dialog)
@@ -1009,6 +1005,17 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             gradeDialogAdapter = GradeDialogAdapter()
             rvGrade.layoutManager = LinearLayoutManager(activity)
             rvGrade.adapter = gradeDialogAdapter
+            gradeDialogAdapter.setOnItemClickListener { adapter, view, position ->
+                mCustomPopWindow?.dissmiss()
+                gradeContent = adapter.data[position].toString()
+                tv_dialog_launcher.text = "$gradeContent      ▼"
+                UserDBUtil.LAUNCHER_GRADE = tv_dialog_launcher.text.toString()
+                if (gradeDialogAdapter.data == primarySchoolList) {
+                    UserDBUtil.keepLastRecord("小学", gradeContent, -1, -1, "", null)
+                } else {
+                    UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
+                }
+            }
         }
     }
 
@@ -1026,7 +1033,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             }
             .create()
             .showAsDropDown(tv_dialog_launcher, 0, 0)
-        tv_dialog_launcher.text = UserDBUtil.LAUNCHER_GRADE
+        tv_dialog_launcher.text = "$gradeContent      ▲"
         tv_dialog_launcher.setBackgroundResource(R.drawable.launcher_dialog_top)
     }
 
