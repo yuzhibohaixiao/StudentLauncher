@@ -114,6 +114,7 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
         //定位后获取天气
         getPresenter().getLocationAndWeather()
         startHardwareControl()
+        startActivateService()
         Log.i(TAG, "DSN: ${AccountUtil.getDSN()}")
         SPUtils.syncPutData("splashClose", false)
         Log.i(TAG, "splashClose initData")
@@ -167,6 +168,16 @@ class LauncherActivity : BaseActivity(), View.OnClickListener, LauncherListener,
         val componentName =
             ComponentName(AppConstants.AHWCX_PACKAGE_NAME, AppConstants.AHWCX_SERVICE_NAME)
         intent.component = componentName
+        startService(intent)
+    }
+
+    /**
+     * 开启九学王的激活服务
+     */
+    private fun startActivateService() {
+        val intent = Intent()
+        intent.component =
+            ComponentName("com.jxw.launcher", "com.jht.engine.platsign.PlatformService")
         startService(intent)
     }
 

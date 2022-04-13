@@ -220,7 +220,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             )
         }
         splashCloseFlag = false
-        qualityHorizontalAdapter?.notifyDataSetChanged()
+        qualityHorizontalAdapter?.resetAppNotifyAdapter()
     }
 
     /**
@@ -371,6 +371,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             contentObserver
         )
         startHardwareControl()
+        startActivateService()
         Log.i(TAG, "DSN: ${AccountUtil.getDSN()}")
         SPUtils.syncPutData("splashClose", false)
         Log.i(TAG, "splashClose initData")
@@ -598,6 +599,15 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         startService(intent)
     }
 
+    /**
+     * 开启九学王的激活服务
+     */
+    private fun startActivateService() {
+        val intent = Intent()
+        intent.component =
+            ComponentName("com.jxw.launcher", "com.jht.engine.platsign.PlatformService")
+        startService(intent)
+    }
 
     /**
      * 内容提供者监听类

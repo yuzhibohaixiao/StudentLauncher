@@ -154,6 +154,8 @@ class QualityHorizontalAdapter :
         ),
     )
 
+    private val tempList: ArrayList<NewAppTypeBean> = arrayListOf()
+
     /**
      * 过滤应用
      */
@@ -413,6 +415,7 @@ class QualityHorizontalAdapter :
         val appDatas = AppGetUtil.getAppData()
         //过滤掉不需要的应用（素质拓展和系统应用）
         val appFilter = appFilter(appDatas)
+        tempList.addAll(appList4)
         appList4.addAll(appFilter)
         /*  val appTreblePackDataList =
               arrayListOf(
@@ -427,12 +430,25 @@ class QualityHorizontalAdapter :
 //        setNewInstance(appList4)
     }
 
+    fun resetAppNotifyAdapter() {
+        val appDatas = AppGetUtil.getAppData()
+        //过滤掉不需要的应用（素质拓展和系统应用）
+        val appFilter = appFilter(appDatas)
+        appList4.clear()
+        appList4.addAll(tempList)
+        appList4.addAll(appFilter)
+        notifyItemChanged(itemCount - 1)
+    }
+
+    /**
+     * 过滤不需要的应用（包括系统应用和部分第三方应用）
+     */
     private fun appFilter(appDatas: ArrayList<NewAppTypeBean>): List<NewAppTypeBean> {
         var allQualityList = arrayListOf<NewAppTypeBean>()
         allQualityList.addAll(appList1)
         allQualityList.addAll(appList2)
         allQualityList.addAll(appList3)
-        allQualityList.addAll(appList4)
+        allQualityList.addAll(tempList)
         allQualityList.addAll(filterList)
 
         var removeList = arrayListOf<NewAppTypeBean>()
