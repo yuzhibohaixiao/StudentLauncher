@@ -171,6 +171,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         iv_av_launcher.setOnClickListener(this)
         tv_book_click.setOnClickListener(this)
         fl_classroom_sync.setOnClickListener(this)
+        iv_ip_image.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -919,6 +920,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     selectBook.className,
                     selectBook.params
                 )
+            }
+            R.id.iv_ip_image -> {
+                audioAbility?.wakeup()
             }
         }
     }
