@@ -17,7 +17,7 @@
         android:text="一年级      ▼"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/ll_back_personal_center"
@@ -81,521 +81,682 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="111.5dp"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="218dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="230dp"
-                android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14.5dp"
-                    android:layout_marginTop="13.5dp"
-                    android:text="我的信息"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp" />
-
-                <ImageView
-                    android:id="@+id/iv_icon_personal_center"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="23dp"
-                    android:src="@drawable/splash_boy" />
-
-                <TextView
-                    android:id="@+id/tv_name_personal_center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:text="张小诚"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/tv_grade_personal_center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:text="一年级      ▼"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/tv_gender_center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:drawableStart="@drawable/boy"
-                    android:drawablePadding="8dp"
-                    android:text="男孩"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="17dp"
-                android:background="@drawable/launcher_personal_center_rounded_rectangle">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14.5dp"
-                    android:layout_marginTop="13.5dp"
-                    android:text="我的信息"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tv_control_today"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginStart="14.5dp"
-                    android:layout_marginTop="13.5dp"
-                    android:layout_marginEnd="17dp"
-                    android:text="今天：上学日"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="7sp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="35.5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="14.5dp"
-                        android:layout_marginTop="13.5dp"
-                        android:text="娱乐总时长"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="9sp" />
-
-                    <TextView
-                        android:id="@+id/tv_control_total_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="14.5dp"
-                        android:layout_marginTop="13.5dp"
-                        android:text="3h30min"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="11.5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="14.5dp"
-                        android:layout_marginTop="13.5dp"
-                        android:text="娱乐时间段"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="9sp" />
-
-                    <TextView
-                        android:id="@+id/tv_control_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="13.5dp"
-                        android:text="15:00-18:30"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-
-            </FrameLayout>
-        </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="95dp"
+        android:orientation="vertical">
 
         <FrameLayout
-            android:layout_width="400dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="16dp">
-
-            <FrameLayout
-                android:layout_width="400dp"
-                android:layout_height="180dp"
-                android:layout_gravity="end"
-                android:background="@drawable/launcher_personal_center_rounded_rectangle">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="家庭信息"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_family_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="51.5dp"
-                    android:clipToPadding="false"
-                    android:paddingStart="26dp" />
-
-                <LinearLayout
-                    android:id="@+id/ll_family_info_offline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="33.5dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/iv_family_info_offline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/no_network" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6.5dp"
-                        android:text="暂无信号，请连接网络后使用"
-                        android:textColor="#50ffffff"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="400dp"
-                android:layout_height="145dp"
-                android:layout_gravity="bottom"
-                android:background="@drawable/launcher_personal_center_rounded_rectangle">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
-                    android:text="系统设置"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="53dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_focus"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                        android:drawableTop="@drawable/camera_calibration"
-                        android:drawablePadding="8dp"
-                        android:gravity="center_horizontal"
-                        android:paddingTop="14.5dp"
-                        android:text="触控校准"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tv_wifi"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="32dp"
-                        android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                        android:drawableTop="@drawable/wifi"
-                        android:drawablePadding="8dp"
-                        android:gravity="center_horizontal"
-                        android:paddingTop="14.5dp"
-                        android:text="Wifi"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tv_set"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="32dp"
-                        android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                        android:drawableTop="@drawable/setting"
-                        android:drawablePadding="8dp"
-                        android:gravity="center_horizontal"
-                        android:paddingTop="14.5dp"
-                        android:text="系统设置"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tv_splash"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="32dp"
-                        android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                        android:drawableTop="@drawable/splash"
-                        android:drawablePadding="8dp"
-                        android:gravity="center_horizontal"
-                        android:paddingTop="14.5dp"
-                        android:text="用户引导"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </FrameLayout>
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="250dp"
-            android:layout_height="342dp"
-            android:layout_marginStart="16dp"
+            android:id="@+id/fl_child_info"
+            android:layout_width="321dp"
+            android:layout_height="216.5dp"
+            android:layout_marginStart="30.5dp"
             android:background="@drawable/launcher_personal_center_rounded_rectangle"
-            android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15.5dp"
+                android:layout_marginTop="11dp"
+                android:text="我的信息"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_icon_personal_center"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="43dp"
+                android:src="@drawable/splash_boy" />
+
+            <TextView
+                android:id="@+id/tv_name_personal_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="42.5dp"
+                android:layout_marginTop="130.5dp"
+                android:text="张小诚"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="21sp" />
+
+            <TextView
+                android:id="@+id/tv_grade_personal_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="一年级      ▼"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_gender_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/boy"
+                android:drawablePadding="8dp"
+                android:text="男孩"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:src="@drawable/dotted_line" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="307.5dp"
+            android:layout_height="216.5dp"
+            android:layout_marginStart="17.5dp"
+            android:layout_toEndOf="@id/fl_child_info"
+            android:background="@drawable/launcher_personal_center_rounded_rectangle">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15.5dp"
+                android:layout_marginTop="11dp"
                 android:text="控制中心"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16.5dp"
+                android:layout_marginTop="40.5dp"
+                android:layout_marginEnd="16dp">
+
+                <FrameLayout
+                    android:id="@+id/fl_wifi_set"
+                    android:layout_width="135dp"
+                    android:layout_height="41dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="7dp"
+                        android:src="@drawable/wifi_not_connected" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="38dp"
+                        android:layout_marginTop="6dp"
+                        android:text="AlightWireles…"
+                        android:textColor="#ff215558"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="38dp"
+                        android:layout_marginTop="22dp"
+                        android:text="未连接"
+                        android:textColor="#8AA1A2"
+                        android:textSize="8sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_eyeshield_mode"
+                    android:layout_width="135dp"
+                    android:layout_height="41dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="7dp"
+                        android:src="@drawable/eyeshield_mode_close" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="38dp"
+                        android:layout_marginTop="6dp"
+                        android:text="护眼模式"
+                        android:textColor="#ff215558"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="38dp"
+                        android:layout_marginTop="22dp"
+                        android:text="未开启"
+                        android:textColor="#8AA1A2"
+                        android:textSize="8sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_update_system"
+                    android:layout_width="135dp"
+                    android:layout_height="41dp"
+                    android:layout_below="@id/fl_wifi_set"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="7dp"
+                        android:src="@drawable/system_no_update" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="38dp"
+                        android:layout_marginTop="6dp"
+                        android:text="系统更新"
+                        android:textColor="#ff215558"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="38dp"
+                        android:layout_marginTop="22dp"
+                        android:text="已是最新版本"
+                        android:textColor="#8AA1A2"
+                        android:textSize="8sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="135dp"
+                    android:layout_height="41dp"
+                    android:layout_below="@id/fl_eyeshield_mode"
+                    android:layout_alignStart="@id/fl_eyeshield_mode"
+                    android:layout_alignTop="@id/fl_update_system"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="7dp"
+                        android:src="@drawable/clear_memory" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="38dp"
+                        android:text="清理内存"
+                        android:textColor="#ff215558"
+                        android:textSize="12sp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="57.5dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8.5dp"
+                            android:layout_marginTop="8.5dp"
+                            android:text="音量调节"
+                            android:textColor="#ff215558"
+                            android:textSize="12sp" />
+                    </FrameLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="8.5dp"
+                        android:layout_marginBottom="26dp"
+                        android:src="@drawable/voice_min" />
+
+                    <com.xw.repo.BubbleSeekBar
+                        android:id="@+id/bsb_voice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginBottom="8dp"
+                        android:scrollbarSize="5dp"
+                        app:bsb_auto_adjust_section_mark="true"
+                        app:bsb_hide_bubble="true"
+                        app:bsb_max="100"
+                        app:bsb_min="0"
+                        app:bsb_second_track_color="#ff75c0fc"
+                        app:bsb_second_track_size="10dp"
+                        app:bsb_section_count="4"
+                        app:bsb_show_section_mark="false"
+                        app:bsb_thumb_color="@color/white"
+                        app:bsb_thumb_radius="2dp"
+                        app:bsb_thumb_radius_on_dragging="2dp"
+                        app:bsb_thumb_text_color="@color/white"
+                        app:bsb_thumb_text_size="8sp"
+                        app:bsb_touch_to_seek="false"
+                        app:bsb_track_color="#3F5574"
+                        app:bsb_track_size="10dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginEnd="9dp"
+                        android:layout_marginBottom="25dp"
+                        android:src="@drawable/voice_max" />
+
+                </FrameLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="53dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_focus"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle"
+                    android:drawableTop="@drawable/camera_calibration"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="14.5dp"
+                    android:text="触控校准"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_wifi"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="32dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle"
+                    android:drawableTop="@drawable/wifi"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="14.5dp"
+                    android:text="Wifi"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_set"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="32dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle"
+                    android:drawableTop="@drawable/setting"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="14.5dp"
+                    android:text="系统设置"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_splash"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="32dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle"
+                    android:drawableTop="@drawable/splash"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="14.5dp"
+                    android:text="用户引导"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="17dp"
+            android:background="@drawable/launcher_personal_center_rounded_rectangle"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14.5dp"
+                android:layout_marginTop="13.5dp"
+                android:text="我的信息"
                 android:textColor="@color/person_center_text_black"
                 android:textSize="12sp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
+            <TextView
+                android:id="@+id/tv_control_today"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginStart="14.5dp"
+                android:layout_marginTop="13.5dp"
+                android:layout_marginEnd="17dp"
+                android:text="今天：上学日"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="7sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8.5dp"
-                    android:layout_marginTop="15dp"
-                    android:src="@drawable/light_min" />
-
-                <com.xw.repo.BubbleSeekBar
-                    android:id="@+id/bsb_light"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="18dp"
-                    android:scrollbarSize="5dp"
-                    app:bsb_auto_adjust_section_mark="true"
-                    app:bsb_hide_bubble="true"
-                    app:bsb_max="100"
-                    app:bsb_min="0"
-                    app:bsb_second_track_color="#ff75c0fc"
-                    app:bsb_second_track_size="10dp"
-                    app:bsb_section_count="4"
-                    app:bsb_thumb_color="@color/white"
-                    app:bsb_thumb_radius="2dp"
-                    app:bsb_thumb_radius_on_dragging="2dp"
-                    app:bsb_thumb_text_color="@color/white"
-                    app:bsb_thumb_text_size="8sp"
-                    app:bsb_touch_to_seek="false"
-                    app:bsb_track_color="#3F5574"
-                    app:bsb_track_size="10dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginEnd="9dp"
-                    android:src="@drawable/light_max" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="35dp"
-                    android:layout_marginEnd="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="0%"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="8sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="25%"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="8sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="50%"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="8sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="最佳护眼"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="8sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="100%"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="8sp" />
-                </LinearLayout>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8.5dp"
-                    android:src="@drawable/voice_min" />
-
-                <com.xw.repo.BubbleSeekBar
-                    android:id="@+id/bsb_voice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="18dp"
-                    android:scrollbarSize="5dp"
-                    app:bsb_auto_adjust_section_mark="true"
-                    app:bsb_hide_bubble="true"
-                    app:bsb_max="100"
-                    app:bsb_min="0"
-                    app:bsb_second_track_color="#ff75c0fc"
-                    app:bsb_second_track_size="10dp"
-                    app:bsb_section_count="4"
-                    app:bsb_show_section_mark="false"
-                    app:bsb_thumb_color="@color/white"
-                    app:bsb_thumb_radius="2dp"
-                    app:bsb_thumb_radius_on_dragging="2dp"
-                    app:bsb_thumb_text_color="@color/white"
-                    app:bsb_thumb_text_size="8sp"
-                    app:bsb_touch_to_seek="false"
-                    app:bsb_track_color="#3F5574"
-                    app:bsb_track_size="10dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="9dp"
-                    android:src="@drawable/voice_max" />
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="35.5dp"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14.5dp"
+                    android:layout_marginTop="13.5dp"
+                    android:text="娱乐总时长"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="9sp" />
+
+                <TextView
+                    android:id="@+id/tv_control_total_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14.5dp"
+                    android:layout_marginTop="13.5dp"
+                    android:text="3h30min"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="11.5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14.5dp"
+                    android:layout_marginTop="13.5dp"
+                    android:text="娱乐时间段"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="9sp" />
+
+                <TextView
+                    android:id="@+id/tv_control_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="13.5dp"
+                    android:text="15:00-18:30"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="400dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="400dp"
+            android:layout_height="180dp"
+            android:layout_gravity="end"
+            android:background="@drawable/launcher_personal_center_rounded_rectangle">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="家庭信息"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="12sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_family_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="51.5dp"
+                android:clipToPadding="false"
+                android:paddingStart="26dp" />
+
+            <LinearLayout
+                android:id="@+id/ll_family_info_offline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="33.5dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/iv_family_info_offline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/no_network" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6.5dp"
+                    android:text="暂无信号，请连接网络后使用"
+                    android:textColor="#50ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="342dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/launcher_personal_center_rounded_rectangle"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="控制中心"
+            android:textColor="@color/person_center_text_black"
+            android:textSize="12sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8.5dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/light_min" />
+
+            <com.xw.repo.BubbleSeekBar
+                android:id="@+id/bsb_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="18dp"
+                android:scrollbarSize="5dp"
+                app:bsb_auto_adjust_section_mark="true"
+                app:bsb_hide_bubble="true"
+                app:bsb_max="100"
+                app:bsb_min="0"
+                app:bsb_second_track_color="#ff75c0fc"
+                app:bsb_second_track_size="10dp"
+                app:bsb_section_count="4"
+                app:bsb_thumb_color="@color/white"
+                app:bsb_thumb_radius="2dp"
+                app:bsb_thumb_radius_on_dragging="2dp"
+                app:bsb_thumb_text_color="@color/white"
+                app:bsb_thumb_text_size="8sp"
+                app:bsb_touch_to_seek="false"
+                app:bsb_track_color="#3F5574"
+                app:bsb_track_size="10dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="9dp"
+                android:src="@drawable/light_max" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0%"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="8sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="25%"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="8sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="50%"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="8sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="最佳护眼"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="8sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="100%"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="8sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                android:drawableTop="@drawable/auto_focus"
+                android:drawablePadding="8dp"
+                android:gravity="center_horizontal"
+                android:paddingTop="14dp"
+                android:text="触控对焦"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_pen_touch"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                    android:drawableTop="@drawable/auto_focus"
+                    android:layout_weight="1"
+                    android:background="@drawable/touch_mode_selector"
+                    android:drawableTop="@drawable/pen_touch"
                     android:drawablePadding="8dp"
                     android:gravity="center_horizontal"
                     android:paddingTop="14dp"
-                    android:text="触控对焦"
+                    android:soundEffectsEnabled="true"
+                    android:text="笔触"
                     android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:textSize="12sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_hand_touch"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:background="@drawable/touch_mode_selector"
+                    android:drawableTop="@drawable/hand_touch"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="14dp"
+                    android:soundEffectsEnabled="true"
+                    android:text="手触"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </FrameLayout>
 
-                    <TextView
-                        android:id="@+id/tv_pen_touch"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/touch_mode_selector"
-                        android:drawableTop="@drawable/pen_touch"
-                        android:drawablePadding="8dp"
-                        android:gravity="center_horizontal"
-                        android:paddingTop="14dp"
-                        android:soundEffectsEnabled="true"
-                        android:text="笔触"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tv_hand_touch"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/touch_mode_selector"
-                        android:drawableTop="@drawable/hand_touch"
-                        android:drawablePadding="8dp"
-                        android:gravity="center_horizontal"
-                        android:paddingTop="14dp"
-                        android:soundEffectsEnabled="true"
-                        android:text="手触"
-                        android:textColor="@color/person_center_text_black"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/tv_shutdown_personal_center"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                android:drawableTop="@drawable/shutdown"
-                android:drawablePadding="5dp"
-                android:gravity="center_horizontal"
-                android:paddingTop="14dp"
-                android:text="关机"
-                android:textColor="@color/person_center_text_black"
-                android:textSize="12sp" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_shutdown_personal_center"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+            android:drawableTop="@drawable/shutdown"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:paddingTop="14dp"
+            android:text="关机"
+            android:textColor="@color/person_center_text_black"
+            android:textSize="12sp" />
     </LinearLayout>
 </FrameLayout>
