@@ -1012,6 +1012,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 UserDBUtil.LAUNCHER_GRADE = tv_dialog_launcher.text.toString()
                 if (gradeDialogAdapter.data == primarySchoolList) {
                     UserDBUtil.keepLastRecord("小学", gradeContent, -1, -1, "", null)
+                    //六年级以上按六年级逻辑
+                } else if (gradeDialogAdapter.data == juniorList) {
+                    UserDBUtil.keepLastRecord("小学", "六年级", -1, -1, "", null)
+                    //学龄前以上按一年级逻辑
                 } else {
                     UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
                 }

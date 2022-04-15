@@ -410,24 +410,9 @@ class QualityHorizontalAdapter :
      )*/
 
     init {
-        setNewInstance(typeTextList)
-        //获取全部应用
-        val appDatas = AppGetUtil.getAppData()
-        //过滤掉不需要的应用（素质拓展和系统应用）
-        val appFilter = appFilter(appDatas)
         tempList.addAll(appList4)
-        appList4.addAll(appFilter)
-        /*  val appTreblePackDataList =
-              arrayListOf(
-                  NewAppTypeBean(appList1),
-                  NewAppTypeBean(R.drawable.quality_thinking, appList2),
-                  NewAppTypeBean(R.drawable.quality_happy_kids, appList3),
-                  NewAppTypeBean(R.drawable.quality_happy_study, appList4)
-              )*/
-//
-//        setNewInstance(appList2)
-//        setNewInstance(appList3)
-//        setNewInstance(appList4)
+        setNewInstance(typeTextList)
+        resetAppNotifyAdapter()
     }
 
     fun resetAppNotifyAdapter() {
