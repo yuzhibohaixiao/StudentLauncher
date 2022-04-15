@@ -154,6 +154,7 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/fl_control_center"
             android:layout_width="307.5dp"
             android:layout_height="216.5dp"
             android:layout_marginStart="17.5dp"
@@ -195,7 +196,7 @@
                         android:layout_marginStart="38dp"
                         android:layout_marginTop="6dp"
                         android:text="AlightWireles…"
-                        android:textColor="#ff215558"
+                        android:textColor="#215558"
                         android:textSize="12sp" />
 
                     <TextView
@@ -228,7 +229,7 @@
                         android:layout_marginStart="38dp"
                         android:layout_marginTop="6dp"
                         android:text="护眼模式"
-                        android:textColor="#ff215558"
+                        android:textColor="#215558"
                         android:textSize="12sp" />
 
                     <TextView
@@ -262,7 +263,7 @@
                         android:layout_marginStart="38dp"
                         android:layout_marginTop="6dp"
                         android:text="系统更新"
-                        android:textColor="#ff215558"
+                        android:textColor="#215558"
                         android:textSize="12sp" />
 
                     <TextView
@@ -296,7 +297,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="38dp"
                         android:text="清理内存"
-                        android:textColor="#ff215558"
+                        android:textColor="#215558"
                         android:textSize="12sp" />
 
                 </FrameLayout>
@@ -318,7 +319,7 @@
                             android:layout_marginStart="8.5dp"
                             android:layout_marginTop="8.5dp"
                             android:text="音量调节"
-                            android:textColor="#ff215558"
+                            android:textColor="#215558"
                             android:textSize="12sp" />
                     </FrameLayout>
 
@@ -343,7 +344,7 @@
                         app:bsb_hide_bubble="true"
                         app:bsb_max="100"
                         app:bsb_min="0"
-                        app:bsb_second_track_color="#ff75c0fc"
+                        app:bsb_second_track_color="#75c0fc"
                         app:bsb_second_track_size="10dp"
                         app:bsb_section_count="4"
                         app:bsb_show_section_mark="false"
@@ -365,71 +366,193 @@
                         android:src="@drawable/voice_max" />
 
                 </FrameLayout>
+
             </RelativeLayout>
 
-            <LinearLayout
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@id/fl_child_info"
+            android:layout_alignStart="@id/fl_child_info"
+            android:layout_alignEnd="@id/fl_control_center"
+            android:layout_marginTop="17.5dp"
+            android:layout_marginBottom="31dp"
+            android:background="@drawable/launcher_personal_center_rounded_rectangle"
+            android:orientation="horizontal"
+            android:paddingStart="15.5dp"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_basic_set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="53dp"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:layout_marginTop="11dp"
+                android:text="基础设置"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="14sp" />
+
+            <FrameLayout
+                android:layout_width="197.5dp"
+                android:layout_height="27.5dp"
+                android:layout_marginTop="41.5dp"
+                android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
 
                 <TextView
-                    android:id="@+id/tv_focus"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                    android:drawableTop="@drawable/camera_calibration"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="14.5dp"
-                    android:text="触控校准"
-                    android:textColor="@color/person_center_text_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8.5dp"
+                    android:text="今日娱乐时间段"
+                    android:textColor="#215558"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/tv_wifi"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="32dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                    android:drawableTop="@drawable/wifi"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="14.5dp"
-                    android:text="Wifi"
-                    android:textColor="@color/person_center_text_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:text="15:00-18:00"
+                    android:textColor="#215558"
+                    android:textSize="10sp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="197.5dp"
+                android:layout_height="27.5dp"
+                android:layout_marginTop="79dp"
+                android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8.5dp"
+                    android:text="应用"
+                    android:textColor="#215558"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/tv_set"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="32dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                    android:drawableTop="@drawable/setting"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="14.5dp"
-                    android:text="系统设置"
-                    android:textColor="@color/person_center_text_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:text="已安装 74 个应用"
+                    android:textColor="#215558"
+                    android:textSize="10sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="197.5dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="116.5dp"
+                android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8.5dp"
+                    android:layout_marginTop="5.5dp"
+                    android:text="存储"
+                    android:textColor="#215558"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/tv_splash"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="32dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                    android:drawableTop="@drawable/splash"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="14.5dp"
-                    android:text="用户引导"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8.5dp"
+                    android:shadowColor="#215558"
+                    android:text="已使用12.16G/14.56G"
+                    android:textColor="#215558"
+                    android:textSize="10sp" />
+
+                <com.xw.repo.BubbleSeekBar
+                    android:layout_width="180.5dp"
+                    android:layout_height="8.5dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="18dp"
+                    android:layout_marginBottom="8dp"
+                    android:scrollbarSize="5dp"
+                    app:bsb_auto_adjust_section_mark="true"
+                    app:bsb_hide_bubble="true"
+                    app:bsb_max="100"
+                    app:bsb_min="0"
+                    app:bsb_second_track_color="#75c0fc"
+                    app:bsb_second_track_size="10dp"
+                    app:bsb_section_count="4"
+                    app:bsb_show_section_mark="false"
+                    app:bsb_thumb_color="@color/white"
+                    app:bsb_thumb_radius="2dp"
+                    app:bsb_thumb_radius_on_dragging="2dp"
+                    app:bsb_thumb_text_color="@color/white"
+                    app:bsb_thumb_text_size="8sp"
+                    app:bsb_touch_to_seek="false"
+                    app:bsb_track_color="#3F5574"
+                    app:bsb_track_size="10dp" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_focus"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/launcher_personal_center_rounded_rectangle"
+                android:drawableTop="@drawable/camera_calibration"
+                android:drawablePadding="8dp"
+                android:gravity="center_horizontal"
+                android:paddingTop="14.5dp"
+                android:text="触控校准"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_wifi"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="32dp"
+                android:background="@drawable/launcher_personal_center_rounded_rectangle"
+                android:drawableTop="@drawable/wifi"
+                android:drawablePadding="8dp"
+                android:gravity="center_horizontal"
+                android:paddingTop="14.5dp"
+                android:text="Wifi"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_set"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="32dp"
+                android:background="@drawable/launcher_personal_center_rounded_rectangle"
+                android:drawableTop="@drawable/setting"
+                android:drawablePadding="8dp"
+                android:gravity="center_horizontal"
+                android:paddingTop="14.5dp"
+                android:text="系统设置"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_splash"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="32dp"
+                android:background="@drawable/launcher_personal_center_rounded_rectangle"
+                android:drawableTop="@drawable/splash"
+                android:drawablePadding="8dp"
+                android:gravity="center_horizontal"
+                android:paddingTop="14.5dp"
+                android:text="用户引导"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="12sp"
+                android:visibility="gone" />
         </FrameLayout>
 
         <FrameLayout
@@ -619,7 +742,7 @@
                 app:bsb_hide_bubble="true"
                 app:bsb_max="100"
                 app:bsb_min="0"
-                app:bsb_second_track_color="#ff75c0fc"
+                app:bsb_second_track_color="#75c0fc"
                 app:bsb_second_track_size="10dp"
                 app:bsb_section_count="4"
                 app:bsb_thumb_color="@color/white"
