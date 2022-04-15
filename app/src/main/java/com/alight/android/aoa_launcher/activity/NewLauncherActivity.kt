@@ -82,9 +82,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var playTimeBean: PlayTimeBean? = null
     private var shutdownReceiver: ShutdownReceiver? = null
     private var selectBook: AppTypeBean = AppTypeBean(
-        R.drawable.yxkw, "com.jxw.online_study",
-        "com.jxw.online_study.activity.BookCaseWrapperActivity",
-        mapOf("StartArgs" to "d:/同步学习/英语|e:JWFD")
+        R.drawable.yxkw, "com.jxw.pedu.clickread",
+        "com.jxw.pedu.clickread.MainActivity",
+        mapOf("StartArgs" to "英语")
     )
 
     /**
