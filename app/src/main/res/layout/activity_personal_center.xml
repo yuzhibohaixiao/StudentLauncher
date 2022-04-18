@@ -498,15 +498,50 @@
                 android:layout_marginStart="277.5dp"
                 android:layout_marginTop="19.5dp">
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="60dp"
-                    android:layout_height="60dp">
+                    android:layout_height="60dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
                     <ImageView
+                        android:layout_width="23.5dp"
+                        android:layout_height="23.5dp"
+                        android:layout_marginTop="10.5dp"
+                        android:src="@drawable/camera_calibration" />
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="" />
-                </FrameLayout>
+                        android:layout_marginTop="5.5dp"
+                        android:text="摄像头校准"
+                        android:textColor="#215558"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="85dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="23.5dp"
+                        android:layout_height="23.5dp"
+                        android:layout_marginTop="10.5dp"
+                        android:src="@drawable/mode_set" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5.5dp"
+                        android:text="模式设置"
+                        android:textColor="#215558"
+                        android:textSize="10sp" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tv_focus"
@@ -520,7 +555,7 @@
                     android:text="摄像头校准"
                     android:textColor="@color/person_center_text_black"
                     android:textSize="12sp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_mode_set"
@@ -535,7 +570,7 @@
                     android:text="模式设置"
                     android:textColor="@color/person_center_text_black"
                     android:textSize="12sp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_unbind_user"
@@ -550,7 +585,7 @@
                     android:text="解绑设备"
                     android:textColor="@color/person_center_text_black"
                     android:textSize="12sp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_splash"
@@ -565,7 +600,7 @@
                     android:text="用户指引"
                     android:textColor="@color/person_center_text_black"
                     android:textSize="12sp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="60dp"
@@ -580,7 +615,7 @@
                     android:text="关于设备"
                     android:textColor="@color/person_center_text_black"
                     android:textSize="12sp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="60dp"
@@ -595,7 +630,7 @@
                     android:text="电源"
                     android:textColor="@color/person_center_text_black"
                     android:textSize="12sp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
             </FrameLayout>
 
         </FrameLayout>
