@@ -179,14 +179,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             rv_family_info.visibility = View.VISIBLE
             ll_family_info_offline.visibility = View.GONE
-            tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting, 0, 0)
             resources.getColor(R.color.person_center_text_black)
             ll_exit_personal_center.visibility = View.VISIBLE
         } else if (netState == 0) {
             rv_family_info.visibility = View.GONE
             ll_family_info_offline.visibility = View.VISIBLE
-            tv_set.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.setting_no_network, 0, 0)
-            tv_set.setTextColor(Color.parseColor("#50ffffff"))
             ll_exit_personal_center.visibility = View.GONE
             Log.e(TAG, "onNetChanged:没有网络 ")
         }
@@ -198,8 +195,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         ll_exit_personal_center.setOnClickListener(this)
         tv_shutdown_personal_center.setOnClickListener(this)
         tv_focus.setOnClickListener(this)
-        tv_wifi.setOnClickListener(this)
-        tv_set.setOnClickListener(this)
         tv_splash.setOnClickListener(this)
         tv_pen_touch.setOnClickListener(this)
         tv_hand_touch.setOnClickListener(this)
@@ -404,11 +399,12 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_focus -> {
                 calibrationAbility?.startCalibration()
             }
-            R.id.tv_wifi ->
-                startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
+           /* R.id.tv_wifi ->
+                startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面*/
             R.id.ll_family_info_offline -> {
                 showOfflineDialog()
             }
+/*
             R.id.tv_set -> {
                 if (netState == 1) {
                     getPresenter().getModel(
@@ -419,7 +415,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 } else {
                     showOfflineDialog()
                 }
-                /*
+                */
+/*
                 //todo 待解绑验证码接口完善后完成
                 val unbindDialog = CustomDialog(this, R.layout.dialog_unbind)
                  unbindDialog.show()
@@ -447,9 +444,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                  tvClose.setOnClickListener {
                      unbindDialog.dismiss()
                      updateDialog.dismiss()
-                 }*/
+                 }*//*
+
 
             }
+*/
             R.id.tv_splash -> {
                 //直接打开用户引导
                 val intent = Intent(this, SplashActivity::class.java)
