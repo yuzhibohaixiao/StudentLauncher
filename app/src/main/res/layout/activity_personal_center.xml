@@ -470,6 +470,16 @@
                     android:textColor="#215558"
                     android:textSize="10sp" />
 
+                <ProgressBar
+                    android:id="@+id/update_progress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="8.5dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="26.5dp"
+                    android:layout_marginEnd="8dp"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/person_center_progress_bar" />
 
             </FrameLayout>
 
