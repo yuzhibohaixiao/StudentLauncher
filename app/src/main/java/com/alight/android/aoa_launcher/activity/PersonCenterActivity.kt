@@ -61,7 +61,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         initWifiState()
         getPresenter().getModel(
             Urls.UPDATE,
-            hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+            hashMapOf("device_type" to "LAMP"),
             UpdateBean::class.java
         )
     }
@@ -418,6 +418,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
      * 根据数据展示是否更新的状态
      */
     private fun setUpdateBtn(any: UpdateBean) {
+        var needUpdate = false
         any.data.forEach {
             if (it.format == 1 && SPUtils.getData(
                     "configVersion",
@@ -428,17 +429,21 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                     it.app_info.package_name
                 ) >= it.version_code
             ) {
-                //无需更新
-                tv_update_state.text = "已是最新版本"
-                iv_update_icon.setImageResource(R.drawable.system_no_update)
-                tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_gray))
             } else {
-                //需要更新
-                tv_update_state.text = "有新版本"
-                iv_update_icon.setImageResource(R.drawable.system_need_update)
-                tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_blue))
+                needUpdate = true
+                return@forEach
             }
-
+        }
+        if (needUpdate) {
+            //需要更新
+            tv_update_state.text = "有新版本"
+            iv_update_icon.setImageResource(R.drawable.system_need_update)
+            tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_blue))
+        } else {
+            //无需更新
+            tv_update_state.text = "已是最新版本"
+            iv_update_icon.setImageResource(R.drawable.system_no_update)
+            tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_gray))
         }
     }
 
