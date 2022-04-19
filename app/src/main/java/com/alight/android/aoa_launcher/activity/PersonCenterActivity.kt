@@ -198,6 +198,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         tv_hand_touch.setOnClickListener(this)
         tv_dialog_launcher.setOnClickListener(this)
 
+        ll_camera_calibration.setOnClickListener(this)
+        ll_mode_set.setOnClickListener(this)
+        ll_unbind_device.setOnClickListener(this)
+        ll_splash.setOnClickListener(this)
+        ll_about_deivce.setOnClickListener(this)
+        ll_power.setOnClickListener(this)
+
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
             if (status.jpush_online == 0) {
@@ -394,15 +401,16 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
-         /*   R.id.tv_focus -> {
+            R.id.ll_camera_calibration -> {
                 calibrationAbility?.startCalibration()
-            }*/
-           /* R.id.tv_wifi ->
-                startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面*/
+            }
+            /* R.id.tv_wifi ->
+                 startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面*/
             R.id.ll_family_info_offline -> {
                 showOfflineDialog()
             }
-/*
+
+            /*
             R.id.tv_set -> {
                 if (netState == 1) {
                     getPresenter().getModel(
@@ -447,14 +455,12 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
             }
 */
-/*
-            R.id.tv_splash -> {
+            R.id.ll_splash -> {
                 //直接打开用户引导
                 val intent = Intent(this, SplashActivity::class.java)
                 intent.putExtra("openUserSplash", true)
                 startActivity(intent)
             }
-*/
             R.id.tv_pen_touch -> {
                 tv_pen_touch.isSelected = true
                 tv_hand_touch.isSelected = false

@@ -366,12 +366,11 @@
                         android:src="@drawable/voice_max" />
 
                 </FrameLayout>
-
             </RelativeLayout>
-
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/fl_basic_set"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_below="@id/fl_child_info"
@@ -499,6 +498,7 @@
                 android:layout_marginTop="19.5dp">
 
                 <LinearLayout
+                    android:id="@+id/ll_camera_calibration"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
@@ -521,6 +521,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_mode_set"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginStart="85dp"
@@ -544,6 +545,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_unbind_device"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginStart="170dp"
@@ -555,7 +557,7 @@
                         android:layout_width="23.5dp"
                         android:layout_height="23.5dp"
                         android:layout_marginTop="10.5dp"
-                        android:src="@drawable/unbind_user" />
+                        android:src="@drawable/unbind_device" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -567,6 +569,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_splash"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginStart="255dp"
@@ -589,37 +592,55 @@
                         android:textSize="10sp" />
                 </LinearLayout>
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/ll_about_deivce"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="97dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                    android:drawableTop="@drawable/splash"
-                    android:drawablePadding="8dp"
+                    android:layout_marginTop="77.5dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
                     android:gravity="center_horizontal"
-                    android:paddingTop="14.5dp"
-                    android:text="关于设备"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:orientation="vertical">
 
-                <TextView
+                    <ImageView
+                        android:layout_width="23.5dp"
+                        android:layout_height="23.5dp"
+                        android:layout_marginTop="10.5dp"
+                        android:src="@drawable/about_device" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5.5dp"
+                        android:text="关于设备"
+                        android:textColor="#215558"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_power"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginStart="117dp"
-                    android:layout_marginTop="97dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle"
-                    android:drawableTop="@drawable/power"
-                    android:drawablePadding="8dp"
+                    android:layout_marginStart="85dp"
+                    android:layout_marginTop="77.5dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
                     android:gravity="center_horizontal"
-                    android:paddingTop="14.5dp"
-                    android:text="电源"
-                    android:textColor="@color/person_center_text_black"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="23.5dp"
+                        android:layout_height="23.5dp"
+                        android:layout_marginTop="10.5dp"
+                        android:src="@drawable/power" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5.5dp"
+                        android:text="电源"
+                        android:textColor="#215558"
+                        android:textSize="10sp" />
+                </LinearLayout>
             </FrameLayout>
-
         </FrameLayout>
 
         <FrameLayout
@@ -707,6 +728,28 @@
 
         </FrameLayout>
 
+        <FrameLayout
+            android:id="@+id/fl_notify_center"
+            android:layout_width="234dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/fl_child_info"
+            android:layout_alignBottom="@id/fl_basic_set"
+            android:layout_marginStart="17.5dp"
+            android:layout_toEndOf="@id/fl_control_center"
+            android:background="@drawable/launcher_personal_center_rounded_rectangle"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="11dp"
+                android:text="通知中心"
+                android:textColor="@color/person_center_text_black"
+                android:textSize="14sp" />
+
+
+        </FrameLayout>
 
     </RelativeLayout>
 

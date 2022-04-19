@@ -26,6 +26,21 @@ android {
             v1SigningEnabled true
             v2SigningEnabled true
         }
+        release_3399 {
+            storeFile file('../sign/devplatform.jks') // devplatform: 鑫中宏
+            storePassword '123456' // system   鑫中宏: 123456   ubi: android
+            keyAlias 'android' //'nanopc-system' 鑫中宏 android ubi: key
+            keyPassword '123456' // system  鑫中宏123456   ubi: android
+            v1SigningEnabled true
+        }
+
+        release_3566 {
+            storeFile file("../sign/rk3566.keystore")
+            storePassword 'caration'
+            keyAlias 'caration'
+            keyPassword 'caration'
+            v1SigningEnabled true
+        }
     }
 
     defaultConfig {
@@ -54,6 +69,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            signingConfig signingConfigs.debug
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -64,6 +82,40 @@ android {
     }
     lintOptions {
         abortOnError false
+    }
+
+    //flavor配置
+    flavorDimensions "chip", "oem"
+    productFlavors {
+        _chip_3399 {
+            dimension "chip"
+            signingConfig signingConfigs.release_3399
+            buildConfigField("String", "MMKV_PATH", "\"/data/media/0/alight_mmkv/\"")
+        }
+
+        _chip_3566 {
+            dimension "chip"
+            signingConfig signingConfigs.release_3566
+            buildConfigField("String", "MMKV_PATH", "\"/sdcard/alight_mmkv/\"")
+
+        }
+
+        _oem_self_test {
+            dimension "oem"
+        }
+
+        _oem_self_prod {
+            dimension "oem"
+        }
+
+        _oem_guangfeng_test {
+            dimension "oem"
+        }
+
+        _oem_guangfeng_prod {
+            dimension "oem"
+        }
+
     }
 }
 
