@@ -184,6 +184,7 @@
                     android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
 
                     <ImageView
+                        android:id="@+id/iv_wifi_icon"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center_vertical"
@@ -191,15 +192,17 @@
                         android:src="@drawable/wifi_not_connected" />
 
                     <TextView
+                        android:id="@+id/tv_wifi_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="38dp"
                         android:layout_marginTop="6dp"
-                        android:text="AlightWireles…"
+                        android:text="点此连接Wifi"
                         android:textColor="#215558"
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tv_wifi_state"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="38dp"

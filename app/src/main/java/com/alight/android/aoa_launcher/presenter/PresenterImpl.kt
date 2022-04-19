@@ -12,9 +12,13 @@ import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -81,6 +85,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     private var mCustomPopWindow: CustomPopWindow? = null
     private var gradeContent = "一年级"
+    private var context = LauncherApplication.getContext()
 
     private var TAG = "PresenterImpl"
     override fun <T> getModel(url: String, map: HashMap<String, Any>, cls: Class<T>) {
@@ -1050,6 +1055,37 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         // 跳转 存储设置 【记忆卡存储】
         val intent = Intent(Settings.ACTION_MEMORY_CARD_SETTINGS)
         context.startActivity(intent)
+    }
+
+    fun showWifiSetting(context: Context) {
+        context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
+    }
+
+    fun getWifiSsid(): String {
+
+        var ssid = ""
+
+        var connManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        var networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (networkInfo?.isConnected!!) {
+            var wifiManager =
+                context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+            var connectionInfo = wifiManager.connectionInfo;
+
+            if (connectionInfo != null && !TextUtils.isEmpty(connectionInfo.ssid)) {
+
+                ssid = connectionInfo.ssid;
+
+            }
+
+        }
+
+        return ssid;
+
     }
 
     /**

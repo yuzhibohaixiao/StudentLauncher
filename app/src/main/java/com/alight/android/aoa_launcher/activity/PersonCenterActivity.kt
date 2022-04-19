@@ -55,6 +55,26 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private var music: MediaPlayer? = null
     private var netState = 1
 
+    override fun onResume() {
+        super.onResume()
+        initWifiState()
+    }
+
+    private fun initWifiState() {
+        val wifiSsid = getPresenter().getWifiSsid()
+        if (wifiSsid.isEmpty()) {
+            iv_wifi_icon.setImageResource(R.drawable.wifi_not_connected)
+            tv_wifi_state.text = "未连接"
+            tv_wifi_name.text = "点此连接Wifi"
+            tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_gray))
+        } else {
+            iv_wifi_icon.setImageResource(R.drawable.wifi_connect)
+            tv_wifi_state.text = "已连接"
+            tv_wifi_name.text = wifiSsid.substring(1, wifiSsid.length - 1)
+            tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_blue))
+        }
+    }
+
     override fun initView() {
         familyAdapter = PersonalCenterFamilyAdapter()
         rv_family_info.layoutManager =
@@ -206,6 +226,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         ll_power.setOnClickListener(this)
         fl_all_app.setOnClickListener(this)
         fl_storage.setOnClickListener(this)
+        fl_wifi_set.setOnClickListener(this)
 
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
@@ -406,8 +427,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.ll_camera_calibration -> {
                 calibrationAbility?.startCalibration()
             }
-            /* R.id.tv_wifi ->
-                 startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面*/
+            R.id.fl_wifi_set ->
+                getPresenter().showWifiSetting(this)
             R.id.ll_family_info_offline -> {
                 showOfflineDialog()
             }
