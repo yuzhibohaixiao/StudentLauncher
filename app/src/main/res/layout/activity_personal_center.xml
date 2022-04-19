@@ -440,6 +440,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tv_all_app_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"

@@ -8,6 +8,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
@@ -709,6 +710,18 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             EventBus.getDefault().post(SplashEvent.getInstance(true))
         }
 
+    }
+
+    fun getAllAppSize(): Int {
+        var queryIntentActivities = mutableListOf<ResolveInfo>()
+        val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            queryIntentActivities =
+                context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)
+        } else {
+            queryIntentActivities = context.packageManager.queryIntentActivities(intent, 0)
+        }
+        return queryIntentActivities.size
     }
 
     fun showUpdateActivity(

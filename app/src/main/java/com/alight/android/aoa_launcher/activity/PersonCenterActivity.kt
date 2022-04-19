@@ -181,6 +181,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
              LauncherApplication.getContext(),
              Environment.getExternalStorageDirectory().path + "/"+ "launcher.apk"
          )*/
+        val allAppSize = getPresenter().getAllAppSize()
+        tv_all_app_size.text = "已安装 $allAppSize 个应用"
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
