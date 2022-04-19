@@ -194,8 +194,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         ll_back_personal_center.setOnClickListener(this)
         ll_exit_personal_center.setOnClickListener(this)
         tv_shutdown_personal_center.setOnClickListener(this)
-        tv_focus.setOnClickListener(this)
-        tv_splash.setOnClickListener(this)
         tv_pen_touch.setOnClickListener(this)
         tv_hand_touch.setOnClickListener(this)
         tv_dialog_launcher.setOnClickListener(this)
@@ -396,9 +394,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
-            R.id.tv_focus -> {
+         /*   R.id.tv_focus -> {
                 calibrationAbility?.startCalibration()
-            }
+            }*/
            /* R.id.tv_wifi ->
                 startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面*/
             R.id.ll_family_info_offline -> {
@@ -449,12 +447,14 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
             }
 */
+/*
             R.id.tv_splash -> {
                 //直接打开用户引导
                 val intent = Intent(this, SplashActivity::class.java)
                 intent.putExtra("openUserSplash", true)
                 startActivity(intent)
             }
+*/
             R.id.tv_pen_touch -> {
                 tv_pen_touch.isSelected = true
                 tv_hand_touch.isSelected = false
