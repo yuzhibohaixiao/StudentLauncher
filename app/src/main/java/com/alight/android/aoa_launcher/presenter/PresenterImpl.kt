@@ -43,7 +43,6 @@ import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.contract.IContract
 import com.alight.android.aoa_launcher.ui.adapter.GradeDialogAdapter
 import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
-import com.alight.android.aoa_launcher.ui.adapter.QualityAdapter
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.*
@@ -1039,6 +1038,18 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             .showAsDropDown(tv_dialog_launcher, 0, 0)
         tv_dialog_launcher.text = "$gradeContent      ▲"
         tv_dialog_launcher.setBackgroundResource(R.drawable.launcher_dialog_top)
+    }
+
+    fun showAppSetting(context: Context) {
+        // 跳转应用程序列表界面
+        val intent = Intent(Settings.ACTION_APPLICATION_SETTINGS)
+        context.startActivity(intent)
+    }
+
+    fun showStorage(context: Context) {
+        // 跳转 存储设置 【记忆卡存储】
+        val intent = Intent(Settings.ACTION_MEMORY_CARD_SETTINGS)
+        context.startActivity(intent)
     }
 
     /**

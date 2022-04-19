@@ -204,6 +204,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         ll_splash.setOnClickListener(this)
         ll_about_deivce.setOnClickListener(this)
         ll_power.setOnClickListener(this)
+        fl_all_app.setOnClickListener(this)
+        fl_storage.setOnClickListener(this)
 
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
@@ -390,7 +392,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 finish()
             }
             //关机
-            R.id.tv_shutdown_personal_center -> {
+            R.id.ll_power -> {
 //                val intent = Intent()
 //                intent.action = Intent.ACTION_SHUTDOWN
 //                sendBroadcast(intent)
@@ -475,6 +477,12 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_dialog_launcher -> {
                 getPresenter().showSelectGradeDialog(this, tv_dialog_launcher)
+            }
+            R.id.fl_all_app -> {
+                getPresenter().showAppSetting(this)
+            }
+            R.id.fl_storage -> {
+                getPresenter().showStorage(this)
             }
         }
     }

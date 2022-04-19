@@ -408,6 +408,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tv_control_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
@@ -418,6 +419,7 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/fl_all_app"
                 android:layout_width="197.5dp"
                 android:layout_height="27.5dp"
                 android:layout_marginTop="79dp"
@@ -444,6 +446,7 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/fl_storage"
                 android:layout_width="197.5dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="116.5dp"
@@ -715,7 +718,6 @@
                     android:textSize="9sp" />
 
                 <TextView
-                    android:id="@+id/tv_control_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
