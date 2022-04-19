@@ -33,6 +33,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.xw.repo.BubbleSeekBar
 import kotlinx.android.synthetic.main.activity_personal_center.*
+import kotlinx.android.synthetic.main.item_download.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -183,6 +184,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
          )*/
         val allAppSize = getPresenter().getAllAppSize()
         tv_all_app_size.text = "已安装 $allAppSize 个应用"
+        val useSize = StorageUtil.getUseSize()
+        val totalSize = StorageUtil.getTotalSize()
+        tv_storage.text = "已使用${useSize}GB/${totalSize}GB"
+        val progress = useSize.toInt() * 100 / totalSize.toInt()
+        update_progress.progress = progress
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
