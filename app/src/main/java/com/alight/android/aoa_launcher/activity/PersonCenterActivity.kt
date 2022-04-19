@@ -1,7 +1,6 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.Paint
 import android.media.MediaPlayer
 import android.os.Build
@@ -54,10 +53,16 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private var panelAbility: PanelAbility? = null
     private var music: MediaPlayer? = null
     private var netState = 1
+    private var updateBean: UpdateBean? = null
 
     override fun onResume() {
         super.onResume()
         initWifiState()
+        getPresenter().getModel(
+            Urls.UPDATE,
+            hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+            UpdateBean::class.java
+        )
     }
 
     private fun initWifiState() {
@@ -227,6 +232,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         fl_all_app.setOnClickListener(this)
         fl_storage.setOnClickListener(this)
         fl_wifi_set.setOnClickListener(this)
+        fl_update_system.setOnClickListener(this)
 
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
@@ -391,9 +397,40 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 //                }
             }
             is UpdateBean -> {
-                if (familyId != null)
-                    getPresenter().showUpdateDialog(any, familyId!!, this)
+                updateBean = any
+                //初始化更新按钮的效果
+                setUpdateBtn(any)
+//                if (familyId != null)
+//                    getPresenter().showUpdateDialog(any, familyId!!, this)
             }
+        }
+    }
+
+    /**
+     * 根据数据展示是否更新的状态
+     */
+    private fun setUpdateBtn(any: UpdateBean) {
+        any.data.forEach {
+            if (it.format == 1 && SPUtils.getData(
+                    "configVersion",
+                    0
+                ) as Int >= it.version_code
+                || AppUtils.getVersionCode(
+                    this,
+                    it.app_info.package_name
+                ) >= it.version_code
+            ) {
+                //无需更新
+                tv_update_state.text = "已是最新版本"
+                iv_update_icon.setImageResource(R.drawable.system_no_update)
+                tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_gray))
+            } else {
+                //需要更新
+                tv_update_state.text = "有新版本"
+                iv_update_icon.setImageResource(R.drawable.system_need_update)
+                tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_blue))
+            }
+
         }
     }
 
@@ -431,6 +468,14 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 getPresenter().showWifiSetting(this)
             R.id.ll_family_info_offline -> {
                 showOfflineDialog()
+            }
+            R.id.fl_update_system -> {
+                if (updateBean != null)
+                    getPresenter().showUpdateActivity(updateBean!!, this)
+            }
+            R.id.ll_unbind_device -> {
+                if (familyId != null)
+                    getPresenter().showUnbindDeviceDialog(familyId!!, this)
             }
 
             /*

@@ -711,6 +711,71 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     }
 
+    fun showUpdateActivity(
+        any: UpdateBean,
+        activity: Activity
+    ) {
+        if (activity == null || activity.isDestroyed) {
+            return
+        }
+        //系统应用
+        var systemAppList: ArrayList<UpdateBeanData> = arrayListOf()
+        //预置应用
+        var otherAppList: ArrayList<UpdateBeanData> = arrayListOf()
+        var systemApp: UpdateBeanData? = null
+        if (any.data == null) return
+        for (position in any.data.indices) {
+            val updateBeanData = any.data[position]
+            //把ota单独抽出放到最后
+            if (updateBeanData.format == 3) {
+                systemApp = updateBeanData
+                continue
+            }
+            if (updateBeanData.app_info.type == 1) {
+                systemAppList.add(updateBeanData)
+            } else if (updateBeanData.app_info.type == 2) {
+                otherAppList.add(updateBeanData)
+            }
+        }
+
+        if (systemApp?.app_info?.type == 1) {
+            systemAppList.add(systemApp)
+        } else if (systemApp?.app_info?.type == 2) {
+            otherAppList.add(systemApp)
+        }
+        var intent = Intent(activity, UpdateActivity::class.java)
+        intent.putExtra("systemApp", systemAppList)
+        intent.putExtra("otherApp", otherAppList)
+        activity.startActivity(intent)
+    }
+
+    fun showUnbindDeviceDialog(
+        familyId: Int,
+        activity: Activity
+    ) {
+        //解绑二次确认弹窗
+        val confirmDialog = ConfirmDialog(activity)
+        confirmDialog.setOnItemClickListener(object :
+            ConfirmDialog.OnItemClickListener {
+            //点击确认
+            override fun onConfirmClick() {
+                deleteModel(
+                    RequestBody.create(
+                        MediaType.get("application/json; charset=utf-8"),
+                        mapOf(
+                            "family_id" to familyId,
+                            "dsn" to AccountUtil.getDSN()
+                        ).toJson()
+                    ),
+                    DeviceRelationBean::class.java
+                )
+                confirmDialog.dismiss()
+            }
+        })
+        confirmDialog.show()
+    }
+
+
     fun showUpdateDialog(
         any: UpdateBean,
         familyId: Int,
