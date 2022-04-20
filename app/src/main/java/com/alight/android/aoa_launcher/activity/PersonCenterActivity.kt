@@ -561,6 +561,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         ivClose.setOnClickListener { powerDialog.dismiss() }
         powerDialog.findViewById<View>(R.id.ll_standby).setOnClickListener { v: View? ->
             getPresenter().screenOff()
+            powerDialog.dismiss()
         }
         powerDialog.findViewById<View>(R.id.ll_restart).setOnClickListener { v: View? ->
             val confirmDialog = CustomDialog(this, R.layout.dialog_confirm_new)
@@ -569,7 +570,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             confirmDialog.findViewById<TextView>(R.id.confirm).setOnClickListener {
                 //确定重启
                 getPresenter().reboot()
-
+                powerDialog.dismiss()
             }
             confirmDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {
                 confirmDialog.dismiss()
@@ -586,6 +587,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             confirmDialog.findViewById<TextView>(R.id.confirm).setOnClickListener {
                 //确定关机
                 getPresenter().shutdown()
+                powerDialog.dismiss()
             }
             confirmDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {
                 confirmDialog.dismiss()
