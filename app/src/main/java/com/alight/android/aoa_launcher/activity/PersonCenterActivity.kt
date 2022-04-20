@@ -584,6 +584,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                     this,
                     it.app_info.package_name
                 ) >= it.version_code
+                || (it.format == 3 && it.version_name == Build.DISPLAY)
             ) {
             } else {
                 needUpdate = true
