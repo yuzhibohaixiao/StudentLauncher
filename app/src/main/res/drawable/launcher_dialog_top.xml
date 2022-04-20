@@ -4,5 +4,5 @@
         android:topLeftRadius="6dp"
         android:topRightRadius="6dp" />
 
-    <solid android:color="@color/launcher_trans_white" />
+    <solid android:color="@color/white" />
 </shape>

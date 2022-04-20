@@ -115,10 +115,12 @@
 
                 <TextView
                     android:id="@+id/tv_grade_person_center"
-                    android:layout_width="90dp"
+                    android:layout_width="130dp"
                     android:layout_height="25dp"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="18dp"
                     android:layout_marginTop="12.5dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                    android:background="@drawable/grade_white_bg"
                     android:gravity="center"
                     android:text="一年级      ▼"
                     android:textColor="@color/person_center_text_black"
@@ -136,6 +138,7 @@
                     android:layout_height="wrap_content">
 
                     <LinearLayout
+                        android:id="@+id/ll_family1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="23.5dp"
@@ -185,6 +188,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_family2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="23.5dp"
@@ -240,6 +244,7 @@
                     android:layout_height="wrap_content">
 
                     <LinearLayout
+                        android:id="@+id/ll_family3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="111dp"
@@ -290,6 +295,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_family4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="111dp"

@@ -448,72 +448,119 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun setFamilyData(parentList: List<Parent>) {
-        val parent1 = parentList[0]
-        val parent2 = parentList[1]
-        val parent3 = parentList[2]
-        val parent4 = parentList[3]
-        //家长头像
-        Glide.with(this).load(parent1.avatar)
-            .error(if (parent1.role_type == 1) R.drawable.father else R.drawable.mather)
-            .apply(RequestOptions.bitmapTransform(CircleCrop()))
-            .into(iv_icon_family_item)
-        Glide.with(this).load(parent2.avatar)
-            .error(if (parent2.role_type == 1) R.drawable.father else R.drawable.mather)
-            .apply(RequestOptions.bitmapTransform(CircleCrop()))
-            .into(iv_icon_family_item2)
-        Glide.with(this).load(parent3.avatar)
-            .error(if (parent3.role_type == 1) R.drawable.father else R.drawable.mather)
-            .apply(RequestOptions.bitmapTransform(CircleCrop()))
-            .into(iv_icon_family_item3)
-        Glide.with(this).load(parent4.avatar)
-            .error(if (parent4.role_type == 1) R.drawable.father else R.drawable.mather)
-            .apply(RequestOptions.bitmapTransform(CircleCrop()))
-            .into(iv_icon_family_item4)
-        //家长名称
-        tv_name_family_item.text = parent1.name
-        tv_name_family_item2.text = parent2.name
-        tv_name_family_item3.text = parent3.name
-        tv_name_family_item4.text = parent4.name
-        //在线状态
-        if (parent1.status.jpush_online == 0) {
-            iv_online_dot_family_item.setImageResource(R.drawable.online_state_gray)
-            iv_online_state_family_item.text = "离线"
-        } else if (parent1.status.jpush_online == 1 && parent1.status.av == 0) {
-            iv_online_dot_family_item.setImageResource(R.drawable.online_state_green)
-            iv_online_state_family_item.text = "在线"
-        } else {
-            iv_online_dot_family_item.setImageResource(R.drawable.online_state_yellow)
-            iv_online_state_family_item.text = "忙绿"
+
+        var parent1: Parent? = null
+        var parent2: Parent? = null
+        var parent3: Parent? = null
+        var parent4: Parent? = null
+
+        when (parentList.size) {
+            1 -> {
+                parent1 = parentList[0]
+                ll_family1.visibility = View.VISIBLE
+                ll_family2.visibility = View.INVISIBLE
+                ll_family3.visibility = View.INVISIBLE
+                ll_family4.visibility = View.INVISIBLE
+            }
+            2 -> {
+                parent1 = parentList[0]
+                parent2 = parentList[1]
+                ll_family1.visibility = View.VISIBLE
+                ll_family2.visibility = View.VISIBLE
+                ll_family3.visibility = View.INVISIBLE
+                ll_family4.visibility = View.INVISIBLE
+            }
+            3 -> {
+                parent1 = parentList[0]
+                parent2 = parentList[1]
+                parent3 = parentList[2]
+                ll_family1.visibility = View.VISIBLE
+                ll_family2.visibility = View.VISIBLE
+                ll_family3.visibility = View.VISIBLE
+                ll_family4.visibility = View.INVISIBLE
+            }
+            4 -> {
+                parent1 = parentList[0]
+                parent2 = parentList[1]
+                parent3 = parentList[2]
+                parent4 = parentList[3]
+                ll_family1.visibility = View.VISIBLE
+                ll_family2.visibility = View.VISIBLE
+                ll_family3.visibility = View.VISIBLE
+                ll_family4.visibility = View.VISIBLE
+            }
         }
-        if (parent2.status.jpush_online == 0) {
-            iv_online_dot_family_item2.setImageResource(R.drawable.online_state_gray)
-            iv_online_state_family_item2.text = "离线"
-        } else if (parent2.status.jpush_online == 1 && parent1.status.av == 0) {
-            iv_online_dot_family_item2.setImageResource(R.drawable.online_state_green)
-            iv_online_state_family_item2.text = "在线"
-        } else {
-            iv_online_dot_family_item2.setImageResource(R.drawable.online_state_yellow)
-            iv_online_state_family_item2.text = "忙绿"
+        if (parent1 != null) {
+            //家长头像
+            Glide.with(this).load(parent1.avatar)
+                .error(if (parent1.role_type == 1) R.drawable.father else R.drawable.mather)
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .into(iv_icon_family_item)
+            //家长名称
+            tv_name_family_item.text = parent1.name
+            //在线状态
+            if (parent1.status.jpush_online == 0) {
+                iv_online_dot_family_item.setImageResource(R.drawable.online_state_gray)
+                iv_online_state_family_item.text = "离线"
+            } else if (parent1.status.jpush_online == 1 && parent1.status.av == 0) {
+                iv_online_dot_family_item.setImageResource(R.drawable.online_state_green)
+                iv_online_state_family_item.text = "在线"
+            } else {
+                iv_online_dot_family_item.setImageResource(R.drawable.online_state_yellow)
+                iv_online_state_family_item.text = "忙绿"
+            }
         }
-        if (parent3.status.jpush_online == 0) {
-            iv_online_dot_family_item3.setImageResource(R.drawable.online_state_gray)
-            iv_online_state_family_item3.text = "离线"
-        } else if (parent3.status.jpush_online == 1 && parent1.status.av == 0) {
-            iv_online_dot_family_item3.setImageResource(R.drawable.online_state_green)
-            iv_online_state_family_item3.text = "在线"
-        } else {
-            iv_online_dot_family_item3.setImageResource(R.drawable.online_state_yellow)
-            iv_online_state_family_item3.text = "忙绿"
+        if (parent2 != null) {
+            Glide.with(this).load(parent2.avatar)
+                .error(if (parent2.role_type == 1) R.drawable.father else R.drawable.mather)
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .into(iv_icon_family_item2)
+            tv_name_family_item2.text = parent2.name
+            if (parent2.status.jpush_online == 0) {
+                iv_online_dot_family_item2.setImageResource(R.drawable.online_state_gray)
+                iv_online_state_family_item2.text = "离线"
+            } else if (parent2.status.jpush_online == 1 && parent2.status.av == 0) {
+                iv_online_dot_family_item2.setImageResource(R.drawable.online_state_green)
+                iv_online_state_family_item2.text = "在线"
+            } else {
+                iv_online_dot_family_item2.setImageResource(R.drawable.online_state_yellow)
+                iv_online_state_family_item2.text = "忙绿"
+            }
         }
-        if (parent4.status.jpush_online == 0) {
-            iv_online_dot_family_item4.setImageResource(R.drawable.online_state_gray)
-            iv_online_state_family_item4.text = "离线"
-        } else if (parent4.status.jpush_online == 1 && parent1.status.av == 0) {
-            iv_online_dot_family_item4.setImageResource(R.drawable.online_state_green)
-            iv_online_state_family_item4.text = "在线"
-        } else {
-            iv_online_dot_family_item4.setImageResource(R.drawable.online_state_yellow)
-            iv_online_state_family_item4.text = "忙绿"
+        if (parent3 != null) {
+            Glide.with(this).load(parent3.avatar)
+                .error(if (parent3.role_type == 1) R.drawable.father else R.drawable.mather)
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .into(iv_icon_family_item3)
+            tv_name_family_item3.text = parent3.name
+            if (parent3.status.jpush_online == 0) {
+                iv_online_dot_family_item3.setImageResource(R.drawable.online_state_gray)
+                iv_online_state_family_item3.text = "离线"
+            } else if (parent3.status.jpush_online == 1 && parent3.status.av == 0) {
+                iv_online_dot_family_item3.setImageResource(R.drawable.online_state_green)
+                iv_online_state_family_item3.text = "在线"
+            } else {
+                iv_online_dot_family_item3.setImageResource(R.drawable.online_state_yellow)
+                iv_online_state_family_item3.text = "忙绿"
+            }
+        }
+        if (parent4 != null) {
+            Glide.with(this).load(parent4.avatar)
+                .error(if (parent4.role_type == 1) R.drawable.father else R.drawable.mather)
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .into(iv_icon_family_item4)
+            tv_name_family_item4.text = parent4.name
+
+            if (parent4.status.jpush_online == 0) {
+                iv_online_dot_family_item4.setImageResource(R.drawable.online_state_gray)
+                iv_online_state_family_item4.text = "离线"
+            } else if (parent4.status.jpush_online == 1 && parent4.status.av == 0) {
+                iv_online_dot_family_item4.setImageResource(R.drawable.online_state_green)
+                iv_online_state_family_item4.text = "在线"
+            } else {
+                iv_online_dot_family_item4.setImageResource(R.drawable.online_state_yellow)
+                iv_online_state_family_item4.text = "忙绿"
+            }
         }
     }
 
