@@ -17,19 +17,12 @@
         <FrameLayout
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/launcher_personal_center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/launcher_back" />
-        </FrameLayout>
+            android:background="@drawable/person_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9.5dp"
+            android:layout_marginTop="6dp"
             android:text="返回"
             android:textColor="@color/white"
             android:textSize="12sp" />
@@ -49,19 +42,12 @@
         <FrameLayout
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/launcher_personal_center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/launcher_user_exit" />
-        </FrameLayout>
+            android:background="@drawable/person_exit" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9.5dp"
+            android:layout_marginTop="6dp"
             android:text="切换用户"
             android:textColor="@color/white"
             android:textSize="12sp" />

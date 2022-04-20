@@ -41,6 +41,8 @@ import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.math.BigDecimal
+import java.text.DecimalFormat
 
 
 class PersonCenterActivity : BaseActivity(), View.OnClickListener {
@@ -187,11 +189,15 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
          )*/
         val allAppSize = getPresenter().getAllAppSize()
         tv_all_app_size.text = "已安装 $allAppSize 个应用"
-        val useSize = StorageUtil.getUseSize()
-        val totalSize = StorageUtil.getTotalSize()
+        val storageBean = StorageUtil.queryWithStorageManager(this)
+        var totalSize = storageBean.totalSize
+        var useSize = storageBean.useSize
+        val format = DecimalFormat("0.00")
+        totalSize = format.format(BigDecimal(totalSize))
+        useSize = format.format(BigDecimal(useSize))
         tv_storage.text = "已使用${useSize}GB/${totalSize}GB"
-        val progress = useSize.toInt() * 100 / totalSize.toInt()
-        update_progress.progress = progress
+        val progress = useSize.toFloat() * 100 / totalSize.toFloat()
+        update_progress.progress = progress.toInt()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
