@@ -912,7 +912,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
     private void showUpdateOtaDialog() {
         CustomDialog customDialog = new CustomDialog(this, R.layout.dialog_confirm_new);
-        TextView tvOtaVersion = customDialog.findViewById(R.id.tv_ota_version);
+        TextView tvOtaVersion = customDialog.findViewById(R.id.tv_content_dialog);
         tvOtaVersion.setText("确定要更新版本吗？");
         customDialog.findViewById(R.id.cancel).setOnClickListener(v -> {
             customDialog.dismiss();

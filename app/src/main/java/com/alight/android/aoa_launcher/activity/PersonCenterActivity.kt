@@ -10,6 +10,7 @@ import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.ahwcx.ahwsdk.AbilityManager
@@ -33,7 +34,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.xw.repo.BubbleSeekBar
 import kotlinx.android.synthetic.main.activity_personal_center.*
-import kotlinx.android.synthetic.main.item_download.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -61,7 +61,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         initWifiState()
         getPresenter().getModel(
             Urls.UPDATE,
-            hashMapOf("device_type" to "LAMP"),
+            hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
             UpdateBean::class.java
         )
     }
@@ -452,6 +452,54 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         ToastUtils.showShort(this, "网络请求错误")
     }
 
+    private fun showPowerDialog() {
+        val powerDialog = CustomDialog(this, R.layout.dialog_power)
+        val ivClose = powerDialog.findViewById<ImageView>(R.id.iv_close_dialog)
+        ivClose.setOnClickListener { powerDialog.dismiss() }
+        powerDialog.findViewById<View>(R.id.ll_standby).setOnClickListener { v: View? ->
+            //todo 待机
+            powerDialog.dismiss()
+        }
+        powerDialog.findViewById<View>(R.id.ll_restart).setOnClickListener { v: View? ->
+            val confirmDialog = CustomDialog(this, R.layout.dialog_confirm_new)
+            val tvTitle = confirmDialog.findViewById<TextView>(R.id.tv_title_dialog)
+            val tvContent = confirmDialog.findViewById<TextView>(R.id.tv_content_dialog)
+            confirmDialog.findViewById<TextView>(R.id.confirm).setOnClickListener {
+                //确定重启
+                val intent = Intent()
+                intent.action = Intent.ACTION_REBOOT
+                sendBroadcast(intent)
+            }
+            confirmDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {
+                confirmDialog.dismiss()
+            }
+            tvTitle.text = "重启"
+            tvContent.text = "是否确定要重启"
+            powerDialog.dismiss()
+            confirmDialog.show()
+        }
+        powerDialog.findViewById<View>(R.id.ll_shutdown).setOnClickListener { v: View? ->
+            val confirmDialog = CustomDialog(this, R.layout.dialog_confirm_new)
+            val tvTitle = confirmDialog.findViewById<TextView>(R.id.tv_title_dialog)
+            val tvContent = confirmDialog.findViewById<TextView>(R.id.tv_content_dialog)
+            confirmDialog.findViewById<TextView>(R.id.confirm).setOnClickListener {
+                //确定关机
+                val intent = Intent()
+                intent.action = Intent.ACTION_SHUTDOWN
+                sendBroadcast(intent)
+            }
+            confirmDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {
+                confirmDialog.dismiss()
+            }
+            tvTitle.text = "关机"
+            tvContent.text = "是否确定要关机"
+            powerDialog.dismiss()
+            confirmDialog.show()
+        }
+        powerDialog.show()
+    }
+
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.ll_back_personal_center ->
@@ -464,15 +512,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             //关机
             R.id.ll_power -> {
-//                val intent = Intent()
-//                intent.action = Intent.ACTION_SHUTDOWN
-//                sendBroadcast(intent)
-
-                val intent = Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN")
-                intent.putExtra("android.intent.extra.KEY_CONFIRM", true)
-                //其中false换成true,会弹出是否关机的确认窗口
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
+                showPowerDialog()
             }
             R.id.ll_camera_calibration -> {
                 calibrationAbility?.startCalibration()
