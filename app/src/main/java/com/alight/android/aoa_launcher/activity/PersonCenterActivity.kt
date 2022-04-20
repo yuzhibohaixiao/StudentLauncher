@@ -560,8 +560,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         val ivClose = powerDialog.findViewById<ImageView>(R.id.iv_close_dialog)
         ivClose.setOnClickListener { powerDialog.dismiss() }
         powerDialog.findViewById<View>(R.id.ll_standby).setOnClickListener { v: View? ->
-            //todo 待机
-            powerDialog.dismiss()
+            getPresenter().screenOff()
         }
         powerDialog.findViewById<View>(R.id.ll_restart).setOnClickListener { v: View? ->
             val confirmDialog = CustomDialog(this, R.layout.dialog_confirm_new)

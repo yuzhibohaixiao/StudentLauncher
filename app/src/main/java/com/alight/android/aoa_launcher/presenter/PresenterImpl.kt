@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.Notification.FLAG_NO_CLEAR
 import android.app.NotificationManager
+import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -17,6 +18,8 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
+import android.os.PowerManager.WakeLock
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
@@ -27,6 +30,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -37,6 +41,7 @@ import com.alight.android.aoa_launcher.activity.UpdateActivity
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BasePresenter
 import com.alight.android.aoa_launcher.common.bean.*
+import com.alight.android.aoa_launcher.common.broadcast.ScreenOffAdminReceiver
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.EXTRA_IMAGE_PATH
 import com.alight.android.aoa_launcher.common.constants.AppConstants.Companion.OLD_AOA_PACKAGE_NAME
@@ -1164,6 +1169,47 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         return ssid;
 
     }
+
+    fun screenOff() {
+        //在需要调用息屏的逻辑调用代码
+        val root = AndroidRootUtils.checkDeviceRoot()
+        if (root) {
+            AndroidRootUtils.execRootCmd("input keyevent 223");
+        }
+    }
+
+    //息屏
+/*
+    fun closeScreen(context: Context) {
+        var policyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        ComponentName adminReceiver = new ComponentName(
+            AppIdleActivity.this,
+            ScreenOffAdminReceiver.class);
+        boolean admin = policyManager . isAdminActive (adminReceiver);
+        if (admin) {
+            isScreenOn = false;
+            policyManager.lockNow();
+        } else {
+            Toast.makeText(
+                this, "没有设备管理权限",
+                Toast.LENGTH_LONG
+            ).show();
+        }
+
+        try {
+            val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager?
+//            pm.goToSleep(SystemClock.uptimeMillis());
+            val wakeLock: WakeLock = pm?.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "TAG")!!
+//            wakeLock.acquire()
+//            wakeLock.release()
+//            wakeLock.release();
+//            wakeLock.reenableKeyguard();
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+
+    }
+*/
 
     //关机
     fun shutdown() {

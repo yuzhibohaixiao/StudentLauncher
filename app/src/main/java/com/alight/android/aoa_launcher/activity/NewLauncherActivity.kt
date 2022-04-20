@@ -425,6 +425,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         initAbility()
         initShutdownReceiver()
         UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
+
+        Log.i(TAG, "DSN: " + AccountUtil.getDSN())
     }
 
     private fun initShutdownReceiver() {
