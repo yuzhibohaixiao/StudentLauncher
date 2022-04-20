@@ -55,6 +55,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private var music: MediaPlayer? = null
     private var netState = 1
     private var updateBean: UpdateBean? = null
+    private var splitFamilyList: List<List<Parent>>? = null
+    private var selectFamilyPosition = 0    //  当前展示的家长页数
+    private var maxFamilySize = 4 //一页展示的最大家长个数
 
     override fun onResume() {
         super.onResume()
@@ -241,6 +244,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         fl_storage.setOnClickListener(this)
         fl_wifi_set.setOnClickListener(this)
         fl_update_system.setOnClickListener(this)
+        tv_family_back.setOnClickListener(this)
+        tv_family_next.setOnClickListener(this)
 
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
@@ -374,6 +379,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 //                    }
                     familyAdapter.data.clear()
                     familyAdapter.addData(any.data.parents)
+
+                    splitFamilyList =
+                        ListSplitUtil.splitList(
+                            any.data.parents,
+                            maxFamilySize
+                        ) as List<List<Parent>>
+                    setFamilyUI(selectFamilyPosition)
 /*
                     any.data.parents.forEach {
                         getPresenter().getModel(
@@ -411,6 +423,97 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 //                if (familyId != null)
 //                    getPresenter().showUpdateDialog(any, familyId!!, this)
             }
+        }
+    }
+
+    /**
+     * 所显示的家长页数
+     */
+    private fun setFamilyUI(selectFamilyPosition: Int) {
+        if (!splitFamilyList.isNullOrEmpty()) {
+            setFamilyData(splitFamilyList!![selectFamilyPosition])
+            //表示有下一页
+            if (selectFamilyPosition < splitFamilyList!!.size - 1) {
+                tv_family_next.visibility = View.VISIBLE
+            } else {
+                tv_family_next.visibility = View.GONE
+            }
+            //表示有上一页
+            if (selectFamilyPosition != 0) {
+                tv_family_back.visibility = View.VISIBLE
+            } else {
+                tv_family_back.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun setFamilyData(parentList: List<Parent>) {
+        val parent1 = parentList[0]
+        val parent2 = parentList[1]
+        val parent3 = parentList[2]
+        val parent4 = parentList[3]
+        //家长头像
+        Glide.with(this).load(parent1.avatar)
+            .error(if (parent1.role_type == 1) R.drawable.father else R.drawable.mather)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
+            .into(iv_icon_family_item)
+        Glide.with(this).load(parent2.avatar)
+            .error(if (parent2.role_type == 1) R.drawable.father else R.drawable.mather)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
+            .into(iv_icon_family_item2)
+        Glide.with(this).load(parent3.avatar)
+            .error(if (parent3.role_type == 1) R.drawable.father else R.drawable.mather)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
+            .into(iv_icon_family_item3)
+        Glide.with(this).load(parent4.avatar)
+            .error(if (parent4.role_type == 1) R.drawable.father else R.drawable.mather)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
+            .into(iv_icon_family_item4)
+        //家长名称
+        tv_name_family_item.text = parent1.name
+        tv_name_family_item2.text = parent2.name
+        tv_name_family_item3.text = parent3.name
+        tv_name_family_item4.text = parent4.name
+        //在线状态
+        if (parent1.status.jpush_online == 0) {
+            iv_online_dot_family_item.setImageResource(R.drawable.online_state_gray)
+            iv_online_state_family_item.text = "离线"
+        } else if (parent1.status.jpush_online == 1 && parent1.status.av == 0) {
+            iv_online_dot_family_item.setImageResource(R.drawable.online_state_green)
+            iv_online_state_family_item.text = "在线"
+        } else {
+            iv_online_dot_family_item.setImageResource(R.drawable.online_state_yellow)
+            iv_online_state_family_item.text = "忙绿"
+        }
+        if (parent2.status.jpush_online == 0) {
+            iv_online_dot_family_item2.setImageResource(R.drawable.online_state_gray)
+            iv_online_state_family_item2.text = "离线"
+        } else if (parent2.status.jpush_online == 1 && parent1.status.av == 0) {
+            iv_online_dot_family_item2.setImageResource(R.drawable.online_state_green)
+            iv_online_state_family_item2.text = "在线"
+        } else {
+            iv_online_dot_family_item2.setImageResource(R.drawable.online_state_yellow)
+            iv_online_state_family_item2.text = "忙绿"
+        }
+        if (parent3.status.jpush_online == 0) {
+            iv_online_dot_family_item3.setImageResource(R.drawable.online_state_gray)
+            iv_online_state_family_item3.text = "离线"
+        } else if (parent3.status.jpush_online == 1 && parent1.status.av == 0) {
+            iv_online_dot_family_item3.setImageResource(R.drawable.online_state_green)
+            iv_online_state_family_item3.text = "在线"
+        } else {
+            iv_online_dot_family_item3.setImageResource(R.drawable.online_state_yellow)
+            iv_online_state_family_item3.text = "忙绿"
+        }
+        if (parent4.status.jpush_online == 0) {
+            iv_online_dot_family_item4.setImageResource(R.drawable.online_state_gray)
+            iv_online_state_family_item4.text = "离线"
+        } else if (parent4.status.jpush_online == 1 && parent1.status.av == 0) {
+            iv_online_dot_family_item4.setImageResource(R.drawable.online_state_green)
+            iv_online_state_family_item4.text = "在线"
+        } else {
+            iv_online_dot_family_item4.setImageResource(R.drawable.online_state_yellow)
+            iv_online_state_family_item4.text = "忙绿"
         }
     }
 
@@ -466,9 +569,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             val tvContent = confirmDialog.findViewById<TextView>(R.id.tv_content_dialog)
             confirmDialog.findViewById<TextView>(R.id.confirm).setOnClickListener {
                 //确定重启
-                val intent = Intent()
-                intent.action = Intent.ACTION_REBOOT
-                sendBroadcast(intent)
+                getPresenter().reboot()
+
             }
             confirmDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {
                 confirmDialog.dismiss()
@@ -484,9 +586,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             val tvContent = confirmDialog.findViewById<TextView>(R.id.tv_content_dialog)
             confirmDialog.findViewById<TextView>(R.id.confirm).setOnClickListener {
                 //确定关机
-                val intent = Intent()
-                intent.action = Intent.ACTION_SHUTDOWN
-                sendBroadcast(intent)
+                getPresenter().shutdown()
             }
             confirmDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {
                 confirmDialog.dismiss()
@@ -602,6 +702,14 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.fl_storage -> {
                 getPresenter().showStorage(this)
+            }
+            R.id.tv_family_back -> {
+                selectFamilyPosition--
+                setFamilyUI(selectFamilyPosition)
+            }
+            R.id.tv_family_next -> {
+                selectFamilyPosition++
+                setFamilyUI(selectFamilyPosition)
             }
         }
     }

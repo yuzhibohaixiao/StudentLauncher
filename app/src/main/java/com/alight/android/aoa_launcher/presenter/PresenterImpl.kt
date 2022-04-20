@@ -14,7 +14,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
@@ -1164,6 +1163,24 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
         return ssid;
 
+    }
+
+    //关机
+    fun shutdown() {
+        val intent = Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN")
+        intent.putExtra("android.intent.extra.KEY_CONFIRM", false)
+        //其中false换成true,会弹出是否关机的确认窗口
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(intent)
+    }
+
+    //关机
+    fun reboot() {
+        var intent = Intent(Intent.ACTION_REBOOT);
+        intent.putExtra("nowait", 1);
+        intent.putExtra("interval", 1);
+        intent.putExtra("window", 0);
+        context.sendBroadcast(intent);
     }
 
     /**
