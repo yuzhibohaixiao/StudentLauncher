@@ -103,7 +103,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 .into(iv_icon_personal_center)
 
             tv_name_personal_center.text = name
-            tv_grade_personal_center.text = "一年级"
+//            tv_grade_personal_center.text = "一年级"
             tv_gender_center.text = when (gender) {
                 0 -> "未知性别"
                 1 -> "男孩"
@@ -176,7 +176,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             e.printStackTrace()
         }
 
-        tv_dialog_launcher.text = UserDBUtil.LAUNCHER_GRADE
+        tv_grade_person_center.text = UserDBUtil.LAUNCHER_GRADE
 
         /* ApkController.slienceInstallWithSysSign(
              LauncherApplication.getContext(),
@@ -229,7 +229,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         tv_shutdown_personal_center.setOnClickListener(this)
         tv_pen_touch.setOnClickListener(this)
         tv_hand_touch.setOnClickListener(this)
-        tv_dialog_launcher.setOnClickListener(this)
+        tv_grade_person_center.setOnClickListener(this)
 
         ll_camera_calibration.setOnClickListener(this)
         ll_mode_set.setOnClickListener(this)
@@ -594,8 +594,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 panelAbility?.setTouchMode(PanelAbility.TouchMode.FINGER_MODE)
                 playClickMusic()
             }
-            R.id.tv_dialog_launcher -> {
-                getPresenter().showSelectGradeDialog(this, tv_dialog_launcher)
+            R.id.tv_grade_person_center -> {
+                getPresenter().showSelectGradeDialog(this, tv_grade_person_center)
             }
             R.id.fl_all_app -> {
                 getPresenter().showAppSetting(this)

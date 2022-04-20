@@ -65,7 +65,7 @@
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/tv_dialog_launcher"
+            android:id="@+id/tv_grade_person_center"
             android:layout_width="135dp"
             android:layout_height="28dp"
             android:layout_marginStart="31.5dp"

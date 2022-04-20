@@ -5,20 +5,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/launcher_bg_new">
 
-    <TextView
-        android:id="@+id/tv_dialog_launcher"
-        android:layout_width="160dp"
-        android:layout_height="28dp"
-        android:layout_gravity="end"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="95dp"
-        android:background="@drawable/white_bg_oval"
-        android:gravity="center"
-        android:text="一年级      ▼"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:visibility="gone" />
-
     <LinearLayout
         android:id="@+id/ll_back_personal_center"
         android:layout_width="wrap_content"
@@ -95,42 +81,50 @@
             android:background="@drawable/launcher_personal_center_rounded_rectangle"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15.5dp"
-                android:layout_marginTop="11dp"
-                android:text="我的信息"
-                android:textColor="@color/person_center_text_black"
-                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/iv_icon_personal_center"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="43dp"
-                android:src="@drawable/splash_boy" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="15.5dp"
+                    android:layout_marginTop="11dp"
+                    android:text="我的信息"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tv_name_personal_center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="42.5dp"
-                android:layout_marginTop="130.5dp"
-                android:text="张小诚"
-                android:textColor="@color/person_center_text_black"
-                android:textSize="21sp" />
+                <ImageView
+                    android:id="@+id/iv_icon_personal_center"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="12dp"
+                    android:src="@drawable/splash_boy" />
 
-            <TextView
-                android:id="@+id/tv_grade_personal_center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="一年级      ▼"
-                android:textColor="@color/person_center_text_black"
-                android:textSize="12sp"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/tv_name_personal_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7.5dp"
+                    android:text="张小诚"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="21sp" />
+
+                <TextView
+                    android:id="@+id/tv_grade_person_center"
+                    android:layout_width="90dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="12.5dp"
+                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                    android:gravity="center"
+                    android:text="一年级      ▼"
+                    android:textColor="@color/person_center_text_black"
+                    android:textSize="12sp"
+                    android:visibility="visible" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_gender_center"
@@ -349,7 +343,7 @@
                         app:bsb_hide_bubble="true"
                         app:bsb_max="100"
                         app:bsb_min="0"
-                        app:bsb_second_track_color="#75c0fc"
+                        app:bsb_second_track_color="#5183E9"
                         app:bsb_second_track_size="10dp"
                         app:bsb_section_count="4"
                         app:bsb_show_section_mark="false"
@@ -359,7 +353,7 @@
                         app:bsb_thumb_text_color="@color/white"
                         app:bsb_thumb_text_size="8sp"
                         app:bsb_touch_to_seek="true"
-                        app:bsb_track_color="#cccccc"
+                        app:bsb_track_color="#B4BBBC"
                         app:bsb_track_size="10dp" />
 
                     <ImageView

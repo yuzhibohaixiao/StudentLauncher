@@ -169,7 +169,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         iv_user_icon_new_launcher.setOnClickListener(this)
         tv_user_name_new_launcher.setOnClickListener(this)
         iv_all_app_launcher.setOnClickListener(this)
-        tv_dialog_launcher.setOnClickListener(this)
+        tv_grade_person_center.setOnClickListener(this)
         iv_book_reading.setOnClickListener(this)
         iv_az_store.setOnClickListener(this)
         tv_task_challenges.setOnClickListener(this)
@@ -907,8 +907,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 getPresenter().showDialog(AppConstants.ALL_APP)
             }
             //选年级
-            R.id.tv_dialog_launcher -> {
-                getPresenter().showSelectGradeDialog(this, tv_dialog_launcher)
+            R.id.tv_grade_person_center -> {
+                getPresenter().showSelectGradeDialog(this, tv_grade_person_center)
             }
             //应用商店
             R.id.iv_az_store -> {
