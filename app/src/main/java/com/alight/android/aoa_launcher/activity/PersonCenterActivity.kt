@@ -106,9 +106,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .error(if (tokenPair?.gender == 1) R.drawable.splash_boy else R.drawable.splash_girl)
                 .into(iv_icon_personal_center)
-
             tv_name_personal_center.text = name
-//            tv_grade_personal_center.text = "一年级"
             tv_gender_center.text = when (gender) {
                 0 -> "未知性别"
                 1 -> "男孩"
@@ -124,6 +122,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 null,
                 null
             )
+            if (gradeType != null && !UserDBUtil.isLocalChanged) {
+                getPresenter().setInitGrade(gradeType!!, tv_grade_person_center)
+            } else {
+                tv_grade_person_center.text = UserDBUtil.LAUNCHER_GRADE
+            }
         }
         calibrationAbility =
             abilityManager.getAbility(CalibrationAbility::class.java, true, applicationContext)
@@ -181,7 +184,6 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             e.printStackTrace()
         }
 
-        tv_grade_person_center.text = UserDBUtil.LAUNCHER_GRADE
 
         /* ApkController.slienceInstallWithSysSign(
              LauncherApplication.getContext(),
@@ -661,6 +663,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 finish()
             //用户注销
             R.id.ll_exit_personal_center -> {
+                UserDBUtil.isLocalChanged = false
                 SPUtils.syncPutData("onlyShowSelectChild", true)
                 setResult(AppConstants.RESULT_CODE_LAUNCHER_START_SELECT_USER)
                 finish()

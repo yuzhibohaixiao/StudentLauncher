@@ -1117,6 +1117,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             rvGrade.layoutManager = LinearLayoutManager(activity)
             rvGrade.adapter = gradeDialogAdapter
             gradeDialogAdapter.setOnItemClickListener { adapter, view, position ->
+                UserDBUtil.isLocalChanged = true
                 mCustomPopWindow?.dissmiss()
                 gradeContent = adapter.data[position].toString()
                 tv_dialog_launcher.text = "$gradeContent      ▼"
@@ -1247,11 +1248,34 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     //关机
     fun reboot() {
-        var intent = Intent(Intent.ACTION_REBOOT);
-        intent.putExtra("nowait", 1);
-        intent.putExtra("interval", 1);
-        intent.putExtra("window", 0);
-        context.sendBroadcast(intent);
+        var intent = Intent(Intent.ACTION_REBOOT)
+        intent.putExtra("nowait", 1)
+        intent.putExtra("interval", 1)
+        intent.putExtra("window", 0)
+        context.sendBroadcast(intent)
+    }
+
+    fun setInitGrade(gradeType: Int, tv_grade_person_center: TextView) {
+        val currentGrade = GradeUtil.getCurrentGrade(gradeType)
+        if (currentGrade != null) {
+            gradeContent = currentGrade
+        }
+        val gradeString = "$currentGrade      ▼"
+        tv_grade_person_center.text = gradeString
+        UserDBUtil.LAUNCHER_GRADE = gradeString
+        when {
+            gradeType in 6..11 -> {
+                UserDBUtil.keepLastRecord("小学", gradeContent, -1, -1, "", null)
+                //六年级以上按六年级逻辑
+            }
+            gradeType < 6 -> {
+                UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
+                //学龄前以上按一年级逻辑
+            }
+            else -> {
+                UserDBUtil.keepLastRecord("小学", "六年级", -1, -1, "", null)
+            }
+        }
     }
 
     /**

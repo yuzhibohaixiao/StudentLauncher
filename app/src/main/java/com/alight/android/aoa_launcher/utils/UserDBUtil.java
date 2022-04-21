@@ -45,6 +45,7 @@ public class UserDBUtil {
     public static final String AGE = "_age";
     public static final String NICKNAME = "_nickname";
     public static String LAUNCHER_GRADE = "一年级      ▼";
+    public static Boolean isLocalChanged = false;// 表示本地修改过年级
 
 
     public static final Uri LAST_RECORDR_URI = Uri.parse("content://com.jxw.mskt.video.userInfoProvider/userinfo");
