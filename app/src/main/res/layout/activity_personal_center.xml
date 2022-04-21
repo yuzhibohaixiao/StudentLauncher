@@ -130,7 +130,8 @@
                         android:layout_marginTop="23.5dp"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="invisible">
 
                         <ImageView
                             android:id="@+id/iv_icon_family_item"
@@ -180,7 +181,8 @@
                         android:layout_marginTop="23.5dp"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="invisible">
 
 
                         <ImageView
@@ -236,7 +238,8 @@
                         android:layout_marginTop="111dp"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="invisible">
 
 
                         <ImageView
@@ -287,7 +290,8 @@
                         android:layout_marginTop="111dp"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="invisible">
 
 
                         <ImageView
