@@ -1087,7 +1087,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      */
     private fun handleLogic(activity: Activity, contentView: View, tv_dialog_launcher: TextView) {
         var gradeDialogAdapter: GradeDialogAdapter? = null
-        var preschoolList = arrayListOf("学龄前")
+        var preschoolList = arrayListOf("早教", "小班", "中班", "大班", "学龄前")
         var primarySchoolList = arrayListOf("一年级", "二年级", "三年级", "四年级", "五年级", "六年级")
         var juniorList = arrayListOf("初中", "高中", "其他")
         val rvGrade = contentView.findViewById<RecyclerView>(R.id.rv_grade_launcher)
