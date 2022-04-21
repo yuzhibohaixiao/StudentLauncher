@@ -97,7 +97,7 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/standby" />
+                        android:src="@drawable/power" />
 
                     <TextView
                         android:layout_width="wrap_content"
