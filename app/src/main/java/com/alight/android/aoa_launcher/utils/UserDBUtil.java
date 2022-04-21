@@ -44,7 +44,8 @@ public class UserDBUtil {
     public static final String SEX = "_sex";
     public static final String AGE = "_age";
     public static final String NICKNAME = "_nickname";
-    public static String LAUNCHER_GRADE = "一年级      ▼";
+    public static String CURRENT_GRADE = "一年级";
+    public static String CURRENT_GRADE_ADD_TRIANGLE = CURRENT_GRADE + "      ▼";
     public static Boolean isLocalChanged = false;// 表示本地修改过年级
 
 

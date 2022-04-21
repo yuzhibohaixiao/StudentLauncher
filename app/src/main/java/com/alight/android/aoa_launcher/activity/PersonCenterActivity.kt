@@ -125,7 +125,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             if (gradeType != null && !UserDBUtil.isLocalChanged) {
                 getPresenter().setInitGrade(gradeType!!, tv_grade_person_center)
             } else {
-                tv_grade_person_center.text = UserDBUtil.LAUNCHER_GRADE
+                tv_grade_person_center.text = UserDBUtil.CURRENT_GRADE_ADD_TRIANGLE
             }
         }
         calibrationAbility =

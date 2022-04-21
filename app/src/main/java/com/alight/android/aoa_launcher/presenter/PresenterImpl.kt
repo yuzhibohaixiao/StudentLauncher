@@ -86,7 +86,6 @@ import java.util.*
 class PresenterImpl : BasePresenter<IContract.IView>() {
 
     private var mCustomPopWindow: CustomPopWindow? = null
-    private var gradeContent = "一年级"
     private var context = LauncherApplication.getContext()
 
     private var TAG = "PresenterImpl"
@@ -1119,11 +1118,11 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             gradeDialogAdapter.setOnItemClickListener { adapter, view, position ->
                 UserDBUtil.isLocalChanged = true
                 mCustomPopWindow?.dissmiss()
-                gradeContent = adapter.data[position].toString()
-                tv_dialog_launcher.text = "$gradeContent      ▼"
-                UserDBUtil.LAUNCHER_GRADE = tv_dialog_launcher.text.toString()
+                UserDBUtil.CURRENT_GRADE = adapter.data[position].toString()
+                tv_dialog_launcher.text = "${UserDBUtil.CURRENT_GRADE}      ▼"
+                UserDBUtil.CURRENT_GRADE_ADD_TRIANGLE = tv_dialog_launcher.text.toString()
                 if (gradeDialogAdapter.data == primarySchoolList) {
-                    UserDBUtil.keepLastRecord("小学", gradeContent, -1, -1, "", null)
+                    UserDBUtil.keepLastRecord("小学", UserDBUtil.CURRENT_GRADE, -1, -1, "", null)
                     //六年级以上按六年级逻辑
                 } else if (gradeDialogAdapter.data == juniorList) {
                     UserDBUtil.keepLastRecord("小学", "六年级", -1, -1, "", null)
@@ -1143,13 +1142,13 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         mCustomPopWindow = CustomPopWindow.PopupWindowBuilder(activity)
             .setView(contentView)
             .setOnDissmissListener {
-                tv_dialog_launcher.text = UserDBUtil.LAUNCHER_GRADE
+                tv_dialog_launcher.text = UserDBUtil.CURRENT_GRADE_ADD_TRIANGLE
                 tv_dialog_launcher.setBackgroundResource(R.drawable.white_bg_oval)
-                UserDBUtil.LAUNCHER_GRADE = tv_dialog_launcher.text.toString()
+                UserDBUtil.CURRENT_GRADE_ADD_TRIANGLE = tv_dialog_launcher.text.toString()
             }
             .create()
             .showAsDropDown(tv_dialog_launcher, 0, 0)
-        tv_dialog_launcher.text = "$gradeContent      ▲"
+        tv_dialog_launcher.text = "${UserDBUtil.CURRENT_GRADE}      ▲"
         tv_dialog_launcher.setBackgroundResource(R.drawable.launcher_dialog_top)
     }
 
@@ -1258,14 +1257,14 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     fun setInitGrade(gradeType: Int, tv_grade_person_center: TextView) {
         val currentGrade = GradeUtil.getCurrentGrade(gradeType)
         if (currentGrade != null) {
-            gradeContent = currentGrade
+            UserDBUtil.CURRENT_GRADE = currentGrade
         }
         val gradeString = "$currentGrade      ▼"
         tv_grade_person_center.text = gradeString
-        UserDBUtil.LAUNCHER_GRADE = gradeString
+        UserDBUtil.CURRENT_GRADE_ADD_TRIANGLE = gradeString
         when {
             gradeType in 6..11 -> {
-                UserDBUtil.keepLastRecord("小学", gradeContent, -1, -1, "", null)
+                UserDBUtil.keepLastRecord("小学",  UserDBUtil.CURRENT_GRADE, -1, -1, "", null)
                 //六年级以上按六年级逻辑
             }
             gradeType < 6 -> {
