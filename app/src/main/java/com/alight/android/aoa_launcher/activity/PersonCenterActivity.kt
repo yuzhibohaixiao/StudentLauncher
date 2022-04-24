@@ -663,6 +663,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 finish()
             //用户注销
             R.id.ll_exit_personal_center -> {
+//                getPresenter().deleteModel(Urls.BIND_PUSH, BaseBean::class.java)
                 UserDBUtil.isLocalChanged = false
                 SPUtils.syncPutData("onlyShowSelectChild", true)
                 setResult(AppConstants.RESULT_CODE_LAUNCHER_START_SELECT_USER)

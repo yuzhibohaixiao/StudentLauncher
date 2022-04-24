@@ -1264,7 +1264,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         UserDBUtil.CURRENT_GRADE_ADD_TRIANGLE = gradeString
         when {
             gradeType in 6..11 -> {
-                UserDBUtil.keepLastRecord("小学",  UserDBUtil.CURRENT_GRADE, -1, -1, "", null)
+                UserDBUtil.keepLastRecord("小学", UserDBUtil.CURRENT_GRADE, -1, -1, "", null)
                 //六年级以上按六年级逻辑
             }
             gradeType < 6 -> {
@@ -1276,6 +1276,24 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             }
         }
     }
+
+    fun setInitGrade(gradeType: Int) {
+        val currentGrade = GradeUtil.getCurrentGrade(gradeType)
+        when {
+            gradeType in 6..11 -> {
+                UserDBUtil.keepLastRecord("小学", currentGrade, -1, -1, "", null)
+                //六年级以上按六年级逻辑
+            }
+            gradeType < 6 -> {
+                UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
+                //学龄前以上按一年级逻辑
+            }
+            else -> {
+                UserDBUtil.keepLastRecord("小学", "六年级", -1, -1, "", null)
+            }
+        }
+    }
+
 
     /**
      * 更新解析器

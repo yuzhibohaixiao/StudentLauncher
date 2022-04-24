@@ -424,8 +424,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         initAbility()
         initShutdownReceiver()
-        UserDBUtil.keepLastRecord("小学", "一年级", -1, -1, "", null)
-
         Log.i(TAG, "DSN: " + AccountUtil.getDSN())
     }
 
@@ -688,6 +686,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             if (any is TokenPair) {
                 tokenPair = any
                 if (tokenPair != null) {
+                    if (!UserDBUtil.isLocalChanged) {
+                        getPresenter().setInitGrade(tokenPair!!.gradeType!!)
+                    }
                     writeUserInfo(tokenPair!!)
                     SPUtils.syncPutData("tokenPair", Gson().toJson(tokenPair))
                 }

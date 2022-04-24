@@ -156,7 +156,8 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="4dp"
                             android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/iv_online_state_family_item"
@@ -208,7 +209,8 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="4dp"
                             android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/iv_online_state_family_item2"
@@ -265,7 +267,8 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="4dp"
                             android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/iv_online_state_family_item3"
@@ -317,7 +320,8 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="4dp"
                             android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/iv_online_state_family_item4"
