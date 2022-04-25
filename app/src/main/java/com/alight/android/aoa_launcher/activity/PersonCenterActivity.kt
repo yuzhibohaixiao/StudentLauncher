@@ -25,6 +25,7 @@ import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.ui.adapter.NotifyCenterAdapter
 import com.alight.android.aoa_launcher.ui.adapter.PersonalCenterFamilyAdapter
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.*
@@ -60,6 +61,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private var splitFamilyList: List<List<Parent>>? = null
     private var selectFamilyPosition = 0    //  当前展示的家长页数
     private var maxFamilySize = 4 //一页展示的最大家长个数
+    private var notifyCenterAdapter: NotifyCenterAdapter? = null
 
     override fun onResume() {
         super.onResume()
@@ -200,6 +202,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         tv_storage.text = "已使用${useSize}GB/${totalSize}GB"
         val progress = useSize.toFloat() * 100 / totalSize.toFloat()
         update_progress.progress = progress.toInt()
+        if (notifyCenterAdapter == null) {
+            rv_notify_center.layoutManager = LinearLayoutManager(this)
+            notifyCenterAdapter = NotifyCenterAdapter()
+            rv_notify_center.adapter = notifyCenterAdapter
+            notifyCenterAdapter?.setNewInstance(arrayListOf("", "", "", "", "", ""))
+        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

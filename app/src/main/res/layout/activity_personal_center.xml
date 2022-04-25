@@ -995,6 +995,22 @@
                 android:textColor="@color/person_center_text_black"
                 android:textSize="14sp" />
 
+            <ImageView
+                android:layout_width="11.5dp"
+                android:layout_height="12.5dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="11dp"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/notify_clear" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_notify_center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="45.5dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="14.5dp" />
 
         </FrameLayout>
 

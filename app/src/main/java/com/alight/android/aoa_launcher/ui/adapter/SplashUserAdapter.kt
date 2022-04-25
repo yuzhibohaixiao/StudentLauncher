@@ -9,8 +9,6 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.System.load
 
 class SplashUserAdapter : BaseQuickAdapter<TokenPair, BaseViewHolder>(R.layout.item_child_splash) {
 
