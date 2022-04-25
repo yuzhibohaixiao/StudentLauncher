@@ -62,6 +62,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private var selectFamilyPosition = 0    //  当前展示的家长页数
     private var maxFamilySize = 4 //一页展示的最大家长个数
     private var notifyCenterAdapter: NotifyCenterAdapter? = null
+    private var notifyCenterList = arrayListOf("", "", "", "", "", "")
 
     override fun onResume() {
         super.onResume()
@@ -206,7 +207,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             rv_notify_center.layoutManager = LinearLayoutManager(this)
             notifyCenterAdapter = NotifyCenterAdapter()
             rv_notify_center.adapter = notifyCenterAdapter
-            notifyCenterAdapter?.setNewInstance(arrayListOf("", "", "", "", "", ""))
+            notifyCenterAdapter?.setNewInstance(notifyCenterList)
         }
 
     }
@@ -263,6 +264,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         fl_update_system.setOnClickListener(this)
         tv_family_back.setOnClickListener(this)
         tv_family_next.setOnClickListener(this)
+        iv_notify_clear.setOnClickListener(this)
 
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
@@ -778,6 +780,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_family_next -> {
                 selectFamilyPosition++
                 setFamilyUI(selectFamilyPosition)
+            }
+            //清理消息中心
+            R.id.iv_notify_clear -> {
+                notifyCenterList.clear()
+                notifyCenterAdapter?.notifyDataSetChanged()
             }
         }
     }

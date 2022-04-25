@@ -996,6 +996,7 @@
                 android:textSize="14sp" />
 
             <ImageView
+                android:id="@+id/iv_notify_clear"
                 android:layout_width="11.5dp"
                 android:layout_height="12.5dp"
                 android:layout_gravity="end"
