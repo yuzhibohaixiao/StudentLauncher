@@ -33,6 +33,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.xw.repo.BubbleSeekBar
 import kotlinx.android.synthetic.main.activity_personal_center.*
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +63,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private var selectFamilyPosition = 0    //  当前展示的家长页数
     private var maxFamilySize = 4 //一页展示的最大家长个数
     private var notifyCenterAdapter: NotifyCenterAdapter? = null
-    private var notifyCenterList = arrayListOf("", "", "", "", "", "")
+    private var notifyCenterList = arrayListOf<CallArBean>()
 
     override fun onResume() {
         super.onResume()
@@ -207,6 +208,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             rv_notify_center.layoutManager = LinearLayoutManager(this)
             notifyCenterAdapter = NotifyCenterAdapter()
             rv_notify_center.adapter = notifyCenterAdapter
+            val mmkv = LauncherApplication.getMMKV()
+            val callArBeanListString: String =
+                mmkv.getString("notifyInfo", "")!!
+            notifyCenterList = Gson().fromJson<ArrayList<CallArBean>>(
+                callArBeanListString,
+                object : TypeToken<ArrayList<CallArBean?>?>() {}.type
+            )
             notifyCenterAdapter?.setNewInstance(notifyCenterList)
         }
 
@@ -783,8 +791,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             //清理消息中心
             R.id.iv_notify_clear -> {
+                //清除通知数据
                 notifyCenterList.clear()
                 notifyCenterAdapter?.notifyDataSetChanged()
+                LauncherApplication.getMMKV().remove("notifyInfo")
             }
         }
     }

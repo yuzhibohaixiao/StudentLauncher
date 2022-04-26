@@ -7,7 +7,8 @@ data class CallArBean(
     val message: CallArBeanMessage,
     val title: String,
     val trace: CallArBeanTrace,
-    val type: Int
+    val type: Int,
+    val body: String
 )
 
 data class CallArBeanMessage(
@@ -15,7 +16,8 @@ data class CallArBeanMessage(
     val fromUserInfo: CallArBeanFromUserInfo,
     val roomId: Int,
     val type: String,
-    val userId: Int
+    val userId: Int,
+    val time: Long
 )
 
 data class CallArBeanTrace(

@@ -12,17 +12,23 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.alight.android.aoa_launcher.activity.PersonCenterActivity;
 import com.alight.android.aoa_launcher.application.LauncherApplication;
 import com.alight.android.aoa_launcher.common.bean.CallArBean;
 import com.alight.android.aoa_launcher.common.bean.ParentControlBean;
+import com.alight.android.aoa_launcher.common.bean.TokenPair;
 import com.alight.android.aoa_launcher.common.constants.AppConstants;
 import com.alight.android.aoa_launcher.common.event.ParentControlEvent;
-import com.alight.android.aoa_launcher.utils.AccountUtil;
 import com.alight.android.aoa_launcher.utils.SPUtils;
+import com.alight.android.aoa_launcher.utils.StringUtils;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tencent.mmkv.MMKV;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -68,6 +74,42 @@ public class JPushDefaultReceiver extends BroadcastReceiver {
             String json = bundle.getString(JPushInterface.EXTRA_EXTRA);
             try {
                 CallArBean callArBean = new Gson().fromJson(json, CallArBean.class);
+                //电话拨打过来
+                if (callArBean.getIntent_url().equals("87://av")) {
+                    JPushInterface.clearNotificationById(context, intent.getIntExtra(JPushInterface.EXTRA_NOTIFICATION_ID, 0));
+//                    NotifyUtil.INSTANCE.setAvNotifyId(intent.getIntExtra(JPushInterface.EXTRA_NOTIFICATION_ID, 0));
+                    //电话拨打超时
+                } else if (callArBean.getIntent_url().equals("88://av")) {
+                    MMKV mmkv = LauncherApplication.Companion.getMMKV();
+                    String notifyInfo = mmkv.getString("notifyInfo", "");
+                    if (StringUtils.isEmpty(notifyInfo)) {
+                        List<CallArBean> callArBeanList = new ArrayList<>();
+                        callArBeanList.add(callArBean);
+                        String callArBeanListString = new Gson().toJson(callArBeanList);
+                        mmkv.encode("notifyInfo", callArBeanListString);
+                    } else {
+                        String callArBeanListString = mmkv.getString("notifyInfo", "");
+                        ArrayList<CallArBean> callArBeanList = new Gson().fromJson(callArBeanListString, new TypeToken<ArrayList<CallArBean>>() {
+                        }.getType());
+                        callArBeanList.add(callArBean);
+                        mmkv.encode("notifyInfo", new Gson().toJson(callArBeanList));
+                    }
+//                    CallArBean callArBean2 = new Gson().fromJson(json, CallArBean.class);
+//                    JPushInterface.clearNotificationById(context, NotifyUtil.INSTANCE.getAvNotifyId());
+//                    CallArBean callArBean = new Gson().fromJson(json, CallArBean.class);
+//                    TokenPair tokenPair = new Gson().fromJson(tokenPairCache, TokenPair.class);
+//                    Intent intent1 = new Intent(context, PersonCenterActivity.class);
+//                    intent1.putExtra("userInfo", tokenPair);
+//                    intent1.putExtra("netState", 1);
+//                    intent1.putExtra("notify", callArBean.getBody());
+//                    intent1.putExtra("parentId", callArBean.getMessage().getFromUserId() + "");
+//                    intent1.putExtra("parentName", callArBean.getMessage().getFromUserInfo().getName());
+//                    intent1.putExtra("parentAvatar", callArBean.getMessage().getFromUserInfo().getAvatar());
+//                    intent1.putExtra("roomId", callArBean.getMessage().getRoomId());
+//                    intent1.putExtra("childId", callArBean.getMessage().getUserId() + "");
+//                    intent1.putExtra("called", 1);
+//                    intent1.putExtra("callType", callArBean.getMessage().getType());
+                }
                 Intent intent2 = new Intent();
                 intent2.setComponent(new ComponentName(
                         "com.tencent.trtcav",
@@ -95,6 +137,30 @@ public class JPushDefaultReceiver extends BroadcastReceiver {
 
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
+            Log.d(TAG, "用户点击打开了通知");
+            String tokenPairCache = (String) SPUtils.getData("tokenPair", "");
+            if (!StringUtils.isEmpty(tokenPairCache)) {
+                String json = bundle.getString(JPushInterface.EXTRA_EXTRA);
+                try {
+//                    CallArBean callArBean = new Gson().fromJson(json, CallArBean.class);
+                    TokenPair tokenPair = new Gson().fromJson(tokenPairCache, TokenPair.class);
+                    Intent intent1 = new Intent(context, PersonCenterActivity.class);
+                    intent1.putExtra("userInfo", tokenPair);
+                    intent1.putExtra("netState", 1);
+//                    intent1.putExtra("notify", callArBean.getBody());
+//                    intent1.putExtra("parentId", callArBean.getMessage().getFromUserId() + "");
+//                    intent1.putExtra("parentName", callArBean.getMessage().getFromUserInfo().getName());
+//                    intent1.putExtra("parentAvatar", callArBean.getMessage().getFromUserInfo().getAvatar());
+//                    intent1.putExtra("roomId", callArBean.getMessage().getRoomId());
+//                    intent1.putExtra("childId", callArBean.getMessage().getUserId() + "");
+//                    intent1.putExtra("called", 1);
+//                    intent1.putExtra("callType", callArBean.getMessage().getType());
+                    context.startActivity(intent1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

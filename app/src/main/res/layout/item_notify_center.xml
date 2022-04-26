@@ -6,6 +6,7 @@
     android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
 
     <TextView
+        android:id="@+id/tv_date_notify_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
@@ -15,6 +16,7 @@
         android:textSize="9sp" />
 
     <TextView
+        android:id="@+id/tv_date_notify_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
