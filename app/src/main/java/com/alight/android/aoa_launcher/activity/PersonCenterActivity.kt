@@ -217,6 +217,18 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                     callArBeanListString,
                     object : TypeToken<ArrayList<CallArBean>>() {}.type
                 )
+                var endTime = System.currentTimeMillis()     //获取毫秒数
+                notifyCenterList.forEachIndexed { index, callArBean ->
+                    var startTime = callArBean.message.time//获取毫秒数
+                    var timeDifference = endTime - startTime;
+                    var second = timeDifference / 1000;    //计算秒
+                    var minute = second / 60
+                    var hour = minute / 60
+                    var day = hour / 24
+                    if (day >= 7) {
+                        notifyCenterList.removeAt(index)
+                    }
+                }
                 notifyCenterAdapter?.setNewInstance(notifyCenterList)
             }
             //通知中心的回拨按钮
