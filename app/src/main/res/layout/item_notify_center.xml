@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="42dp"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
     android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
 
@@ -21,8 +21,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
         android:layout_marginTop="20dp"
+        android:lineSpacingExtra="5dp"
+        android:lines="2"
         android:text="欢迎使用深光AR投影学习机，请下载…"
         android:textColor="#215558"
         android:textSize="10sp" />
 
+    <TextView
+        android:id="@+id/tv_av_callback"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end|bottom"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/person_av_callback"
+        android:gravity="center"
+        android:text="点击回拨"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
 </FrameLayout>

@@ -211,13 +211,17 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             val mmkv = LauncherApplication.getMMKV()
             val callArBeanListString: String =
                 mmkv.getString("notifyInfo", "")!!
-            notifyCenterList = Gson().fromJson<ArrayList<CallArBean>>(
-                callArBeanListString,
-                object : TypeToken<ArrayList<CallArBean?>?>() {}.type
-            )
-            notifyCenterAdapter?.setNewInstance(notifyCenterList)
-        }
+            if (callArBeanListString.isNotEmpty()) {
+                notifyCenterList = Gson().fromJson(
+                    callArBeanListString,
+                    object : TypeToken<ArrayList<CallArBean>>() {}.type
+                )
+                notifyCenterAdapter?.setNewInstance(notifyCenterList)
+            }
+//            notifyCenterAdapter?.set {
 
+//            }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

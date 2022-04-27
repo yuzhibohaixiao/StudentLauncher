@@ -10,7 +10,7 @@ object TimestampUtils {
      * @return String
      */
     fun transToString(time: Long): String {
-        return SimpleDateFormat("YY-MM-DD hh-mm-ss").format(time)
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time)
     }
 
     /**
@@ -21,4 +21,6 @@ object TimestampUtils {
     fun transToTimeStamp(date: String): Long {
         return SimpleDateFormat("YY-MM-DD hh-mm-ss").parse(date, ParsePosition(0)).time
     }
+
+
 }
