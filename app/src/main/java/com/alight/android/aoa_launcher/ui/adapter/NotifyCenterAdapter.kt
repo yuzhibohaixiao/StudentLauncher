@@ -12,6 +12,11 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 class NotifyCenterAdapter :
     BaseQuickAdapter<CallArBean, BaseViewHolder>(R.layout.item_notify_center) {
 
+    init {
+        //新版添加子控件点击事件
+        addChildClickViewIds(R.id.tv_av_callback)
+    }
+
     override fun convert(holder: BaseViewHolder, item: CallArBean) {
         holder.setText(R.id.tv_date_notify_item, TimestampUtils.transToString(item.message.time))
         holder.setText(R.id.tv_date_notify_content, item.body)

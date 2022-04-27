@@ -32,6 +32,7 @@ import com.alight.android.aoa_launcher.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.xw.repo.BubbleSeekBar
@@ -218,9 +219,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 )
                 notifyCenterAdapter?.setNewInstance(notifyCenterList)
             }
-//            notifyCenterAdapter?.set {
-
-//            }
+            //通知中心的回拨按钮
+            notifyCenterAdapter?.setOnItemChildClickListener { adapter: BaseQuickAdapter<*, *>?, view: View, position: Int ->
+                if (view.id == R.id.tv_av_callback) {
+                    val callArBean = notifyCenterAdapter?.data?.get(position)
+                    startPhoneWindow(callArBean!!)
+                }
+            }
         }
     }
 
@@ -365,11 +370,31 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 progressFloat: Float,
                 fromUser: Boolean
             ) {
-
             }
         }
 
     }
+
+    /**
+     * 回拨时调用的方法，按打来的通话方式进行回拨
+     */
+    private fun startPhoneWindow(callArBean: CallArBean) {
+        val intent = Intent("com.alight.trtcav.WindowActivity")
+        intent.putExtra("called", 1)    //主叫
+        intent.putExtra("parentId", callArBean.message.fromUserId.toString())
+        intent.putExtra("parentName", callArBean.message.fromUserInfo.name)
+        intent.putExtra("parentAvatar", callArBean.message.fromUserInfo.avatar)
+        intent.putExtra("childId", callArBean.message.userId.toString())
+        intent.putExtra("callType", callArBean.message.type)
+        intent.putExtra("token", tokenPair?.token)
+        intent.putExtra("isCallback", true)
+        try {
+            this.startActivity(intent)
+        } catch (e: Exception) {
+            e.stackTraceToString()
+        }
+    }
+
 
     private fun startPhoneWindow(position: Int) {
         val parentInfo = familyAdapter.data[position]
