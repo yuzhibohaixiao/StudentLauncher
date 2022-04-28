@@ -229,6 +229,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                         notifyCenterList.removeAt(index)
                     }
                 }
+                notifyCenterList.reverse()
                 notifyCenterAdapter?.setNewInstance(notifyCenterList)
             }
             //通知中心的回拨按钮

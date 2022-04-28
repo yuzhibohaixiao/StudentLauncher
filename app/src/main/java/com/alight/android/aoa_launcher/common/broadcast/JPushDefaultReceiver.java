@@ -76,7 +76,6 @@ public class JPushDefaultReceiver extends BroadcastReceiver {
                 CallArBean callArBean = new Gson().fromJson(json, CallArBean.class);
                 //电话拨打过来
                 if (callArBean.getIntent_url().equals("87://av")) {
-                    JPushInterface.clearNotificationById(context, intent.getIntExtra(JPushInterface.EXTRA_NOTIFICATION_ID, 0));
                     Intent intent2 = new Intent();
                     intent2.setComponent(new ComponentName(
                             "com.tencent.trtcav",
@@ -101,6 +100,9 @@ public class JPushDefaultReceiver extends BroadcastReceiver {
                         Log.d(TAG, "唤起音视频");
                         context.startActivity(intent2);
                     }, 100);
+                    handler.postDelayed(() -> {
+                        JPushInterface.clearNotificationById(context, intent.getIntExtra(JPushInterface.EXTRA_NOTIFICATION_ID, 0));
+                    }, 1000);
                 } else if (callArBean.getIntent_url().equals("88://av")) {
                     MMKV mmkv = LauncherApplication.Companion.getMMKV();
                     String notifyInfo = mmkv.getString("notifyInfo", "");
