@@ -20,6 +20,11 @@ class NotifyCenterAdapter :
     override fun convert(holder: BaseViewHolder, item: CallArBean) {
         holder.setText(R.id.tv_date_notify_item, TimestampUtils.transToString(item.message.time))
         holder.setText(R.id.tv_date_notify_content, item.body)
+        if (item.message.type == "video") {
+            holder.setImageResource(R.id.iv_callback_type, R.drawable.callback_video)
+        } else {
+            holder.setImageResource(R.id.iv_callback_type, R.drawable.callback_audio)
+        }
     }
 
 }

@@ -7,7 +7,7 @@ import java.util.*
  */
 object GradeUtil {
     fun getCurrentGrade(gradeType: Int): String? {
-        val gradeMap = hashMapOf<Int, String>(
+        val gradeMap = hashMapOf(
             1 to "早教",
             2 to "小班",
             3 to "中班",
@@ -28,4 +28,24 @@ object GradeUtil {
         )
         return gradeMap[gradeType]
     }
+
+    fun getCurrentGradeInt(gradeString: String): Int? {
+        val gradeMap = hashMapOf(
+            "早教" to 1,
+            "小班" to 2,
+            "中班" to 3,
+            "大班" to 4,
+            "学龄前" to 5,
+            "一年级" to 6,
+            "二年级" to 7,
+            "三年纪" to 8,
+            "四年级" to 9,
+            "五年级" to 10,
+            "六年级" to 11,
+            "初中" to 12,
+            "高中" to 15
+        )
+        return gradeMap[gradeString]
+    }
+
 }

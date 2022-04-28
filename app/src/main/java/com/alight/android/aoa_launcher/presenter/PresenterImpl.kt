@@ -1121,6 +1121,12 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 UserDBUtil.CURRENT_GRADE = adapter.data[position].toString()
                 tv_dialog_launcher.text = "${UserDBUtil.CURRENT_GRADE}      ▼"
                 UserDBUtil.CURRENT_GRADE_ADD_TRIANGLE = tv_dialog_launcher.text.toString()
+                val mmkv = LauncherApplication.getMMKV()
+                mmkv.encode(
+                    AppConstants.AOA_LAUNCHER_USER_INFO_LOCAL_GRADE_TYPE,
+                    GradeUtil.getCurrentGradeInt(UserDBUtil.CURRENT_GRADE)!!
+                )
+                //记录选择的年级
                 if (gradeDialogAdapter.data == primarySchoolList) {
                     UserDBUtil.keepLastRecord("小学", UserDBUtil.CURRENT_GRADE, -1, -1, "", null)
                     //六年级以上按六年级逻辑
