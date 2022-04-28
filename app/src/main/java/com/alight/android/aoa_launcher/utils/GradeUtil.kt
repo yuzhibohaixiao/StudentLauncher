@@ -43,7 +43,8 @@ object GradeUtil {
             "五年级" to 10,
             "六年级" to 11,
             "初中" to 12,
-            "高中" to 15
+            "高中" to 15,
+            "其他" to 15
         )
         return gradeMap[gradeString]
     }
