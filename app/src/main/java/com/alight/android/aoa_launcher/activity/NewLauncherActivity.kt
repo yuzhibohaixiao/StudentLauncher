@@ -935,6 +935,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (audioInitSuccessful)
+            audioAbility?.stopRecording()
+    }
+
     private fun showSelectUI(id: Int) {
         when (id) {
             R.id.tv_ar_launcher -> {
