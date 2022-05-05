@@ -218,6 +218,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                     object : TypeToken<ArrayList<CallArBean>>() {}.type
                 )
                 var endTime = System.currentTimeMillis()     //获取毫秒数
+                var removeBeanList = arrayListOf<CallArBean>()
                 notifyCenterList.forEachIndexed { index, callArBean ->
                     var startTime = callArBean.message.time//获取毫秒数
                     var timeDifference = endTime - startTime;
@@ -226,8 +227,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                     var hour = minute / 60
                     var day = hour / 24
                     if (day >= 7) {
-                        notifyCenterList.removeAt(index)
+                        removeBeanList.add(callArBean)
                     }
+                }
+                removeBeanList.forEach {
+                    notifyCenterList.remove(it)
                 }
                 notifyCenterList.reverse()
                 notifyCenterAdapter?.setNewInstance(notifyCenterList)
