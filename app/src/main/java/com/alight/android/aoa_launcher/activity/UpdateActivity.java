@@ -113,6 +113,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private View llOtaUpdateProgress;
     private ProgressBar pbUpdateOta;
     private TextView tvOtaUpdateText;
+    private TextView tvCheckTitle;
+    private TextView tvCheckContent;
+    private TextView tvCheckStep;
+    private TextView tvUpdating;
     private boolean otaInstall = false;
     private View ivOtaLogo;
     //true表示是否第一次进行引导更新
@@ -121,6 +125,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private boolean isShowDialog = false;
     private UpgradeApkReceiver upgradeApkReceiver;
     private int updatePostion;
+    //true是开机检测流程
+    private boolean isCheckUpdate = false;
 
     @Override
     public void initData() {
@@ -168,7 +174,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         });
         source = getIntent().getStringExtra("source");
         newSplash = getIntent().getBooleanExtra("new_splash", true);
+        //开机固件升级检测
         if (!StringUtils.isEmpty(source) && source.equals("splash")) {
+            isCheckUpdate = true;
             tvSystemApp.setVisibility(View.GONE);
             tvOtherApp.setVisibility(View.GONE);
             if (newSplash) {
@@ -837,6 +845,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         pbUpdateOta = findViewById(R.id.pb_update_ota);
         tvOtaUpdateText = findViewById(R.id.tv_ota_update_text);
         ivOtaLogo = findViewById(R.id.iv_ota_logo);
+
+        tvCheckTitle = findViewById(R.id.tv_check_update_title);
+        tvCheckContent = findViewById(R.id.tv_check_update_content);
+        tvCheckStep = findViewById(R.id.tv_check_update_step);
+        tvUpdating = findViewById(R.id.tv_updating);
     }
 
     @Nullable
@@ -932,6 +945,13 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         ToastUtils.showShort(this, "开始OTA固件更新");
         llOtaUpdateBtn.setVisibility(View.GONE);
         llOtaUpdateProgress.setVisibility(View.VISIBLE);
+        if (isCheckUpdate) {
+            tvCheckTitle.setVisibility(View.VISIBLE);
+            tvCheckContent.setVisibility(View.VISIBLE);
+            tvCheckStep.setVisibility(View.VISIBLE);
+            ivOtaLogo.setVisibility(View.GONE);
+            tvUpdating.setVisibility(View.GONE);
+        }
         setBanOnBack(true);
         //开启ota升级
         startOtaDownload();

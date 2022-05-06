@@ -189,6 +189,28 @@
                     android:visibility="gone">
 
                     <TextView
+                        android:id="@+id/tv_check_update_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="86dp"
+                        android:text="正在升级 Alight OS"
+                        android:textColor="#ff26595c"
+                        android:textSize="24sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_check_update_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="42dp"
+                        android:text="深光AR投影学习机即将重启数次，请坐下来放松片刻"
+                        android:textColor="#ff26595c"
+                        android:textSize="15sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_updating"
                         android:layout_width="196dp"
                         android:layout_height="21dp"
                         android:text="正在更新，请不要操作设备…"
@@ -212,6 +234,16 @@
                         android:layout_marginTop="12.5dp"
                         android:max="100"
                         android:progressDrawable="@drawable/pb_ota_update_bg" />
+
+                    <TextView
+                        android:id="@+id/tv_check_update_step"
+                        android:layout_width="169dp"
+                        android:layout_height="17dp"
+                        android:layout_marginTop="12.5dp"
+                        android:text="共计2个更新项，当前为第1项目"
+                        android:textColor="#ff26595c"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
                 </LinearLayout>
 
 
