@@ -80,7 +80,7 @@
                     android:layout_marginStart="15.5dp"
                     android:layout_marginTop="11dp"
                     android:text="我的信息"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7.5dp"
                     android:text="张小诚"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="21sp" />
 
                 <TextView
@@ -109,7 +109,7 @@
                     android:background="@drawable/grade_white_bg"
                     android:gravity="center"
                     android:text="一年级      ▼"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="12sp"
                     android:visibility="visible" />
             </LinearLayout>
@@ -147,7 +147,7 @@
                             android:maxEms="4"
                             android:singleLine="true"
                             android:text="张小诚"
-                            android:textColor="@color/person_center_text_black"
+                            android:textColor="@color/person_center_text_green"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -200,7 +200,7 @@
                             android:maxEms="4"
                             android:singleLine="true"
                             android:text="张小诚"
-                            android:textColor="@color/person_center_text_black"
+                            android:textColor="@color/person_center_text_green"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -258,7 +258,7 @@
                             android:maxEms="4"
                             android:singleLine="true"
                             android:text="张小诚"
-                            android:textColor="@color/person_center_text_black"
+                            android:textColor="@color/person_center_text_green"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -311,7 +311,7 @@
                             android:maxEms="4"
                             android:singleLine="true"
                             android:text="张小诚"
-                            android:textColor="@color/person_center_text_black"
+                            android:textColor="@color/person_center_text_green"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -377,7 +377,7 @@
                 android:drawableStart="@drawable/boy"
                 android:drawablePadding="8dp"
                 android:text="男孩"
-                android:textColor="@color/person_center_text_black"
+                android:textColor="@color/person_center_text_green"
                 android:textSize="12sp"
                 android:visibility="gone" />
 
@@ -404,7 +404,7 @@
                 android:layout_marginStart="15.5dp"
                 android:layout_marginTop="11dp"
                 android:text="控制中心"
-                android:textColor="@color/person_center_text_black"
+                android:textColor="@color/person_center_text_green"
                 android:textSize="14sp" />
 
             <RelativeLayout
@@ -632,7 +632,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="11dp"
                 android:text="基础设置"
-                android:textColor="@color/person_center_text_black"
+                android:textColor="@color/person_center_text_green"
                 android:textSize="14sp" />
 
             <FrameLayout
@@ -904,7 +904,7 @@
                 android:layout_marginStart="14.5dp"
                 android:layout_marginTop="13.5dp"
                 android:text="我的信息"
-                android:textColor="@color/person_center_text_black"
+                android:textColor="@color/person_center_text_green"
                 android:textSize="12sp" />
 
             <TextView
@@ -916,7 +916,7 @@
                 android:layout_marginTop="13.5dp"
                 android:layout_marginEnd="17dp"
                 android:text="今天：上学日"
-                android:textColor="@color/person_center_text_black"
+                android:textColor="@color/person_center_text_green"
                 android:textSize="7sp" />
 
             <LinearLayout
@@ -932,7 +932,7 @@
                     android:layout_marginStart="14.5dp"
                     android:layout_marginTop="13.5dp"
                     android:text="娱乐总时长"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="9sp" />
 
                 <TextView
@@ -942,7 +942,7 @@
                     android:layout_marginStart="14.5dp"
                     android:layout_marginTop="13.5dp"
                     android:text="3h30min"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -959,7 +959,7 @@
                     android:layout_marginStart="14.5dp"
                     android:layout_marginTop="13.5dp"
                     android:text="娱乐时间段"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="9sp" />
 
                 <TextView
@@ -968,7 +968,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="13.5dp"
                     android:text="15:00-18:30"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -992,7 +992,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="11dp"
                 android:text="通知中心"
-                android:textColor="@color/person_center_text_black"
+                android:textColor="@color/person_center_text_green"
                 android:textSize="14sp" />
 
             <ImageView
@@ -1035,7 +1035,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="家庭信息"
-                android:textColor="@color/person_center_text_black"
+                android:textColor="@color/person_center_text_green"
                 android:textSize="12sp" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -1089,7 +1089,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="控制中心"
-            android:textColor="@color/person_center_text_black"
+            android:textColor="@color/person_center_text_green"
             android:textSize="12sp" />
 
         <FrameLayout
@@ -1148,7 +1148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="0%"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="8sp" />
 
                 <TextView
@@ -1156,7 +1156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="25%"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="8sp" />
 
                 <TextView
@@ -1164,7 +1164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="50%"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="8sp" />
 
                 <TextView
@@ -1172,7 +1172,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="最佳护眼"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="8sp" />
 
                 <TextView
@@ -1180,7 +1180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="100%"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="8sp" />
             </LinearLayout>
         </FrameLayout>
@@ -1199,7 +1199,7 @@
                 android:gravity="center_horizontal"
                 android:paddingTop="14dp"
                 android:text="触控对焦"
-                android:textColor="@color/person_center_text_black"
+                android:textColor="@color/person_center_text_green"
                 android:textSize="12sp"
                 android:visibility="gone" />
 
@@ -1222,7 +1222,7 @@
                     android:paddingTop="14dp"
                     android:soundEffectsEnabled="true"
                     android:text="笔触"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="12sp" />
 
                 <TextView
@@ -1237,7 +1237,7 @@
                     android:paddingTop="14dp"
                     android:soundEffectsEnabled="true"
                     android:text="手触"
-                    android:textColor="@color/person_center_text_black"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="12sp" />
             </LinearLayout>
         </FrameLayout>
@@ -1253,7 +1253,7 @@
             android:gravity="center_horizontal"
             android:paddingTop="14dp"
             android:text="关机"
-            android:textColor="@color/person_center_text_black"
+            android:textColor="@color/person_center_text_green"
             android:textSize="12sp" />
     </LinearLayout>
 </FrameLayout>

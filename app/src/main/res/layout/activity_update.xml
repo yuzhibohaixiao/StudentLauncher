@@ -8,16 +8,16 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="#10ffffff"
+        android:background="#80ffffff"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="105dp"
             android:layout_height="match_parent"
-            android:background="#12ffffff"
+            android:background="#80ffffff"
             android:gravity="center"
             android:text="系统更新"
-            android:textColor="@color/white"
+            android:textColor="@color/person_center_text_green"
             android:textSize="15sp" />
 
         <TextView
@@ -43,7 +43,7 @@
         <FrameLayout
             android:layout_width="105dp"
             android:layout_height="match_parent"
-            android:background="#10ffffff"
+            android:background="#80ffffff"
             android:paddingTop="19.5dp">
 
             <LinearLayout
@@ -58,7 +58,7 @@
                     android:background="@drawable/update_app_type_bg_selector"
                     android:gravity="center"
                     android:text="固件更新"
-                    android:textColor="@color/white"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="15sp" />
 
                 <TextView
@@ -68,7 +68,7 @@
                     android:background="@drawable/update_app_type_bg_selector"
                     android:gravity="center"
                     android:text="系统应用"
-                    android:textColor="@color/white"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="15sp" />
 
                 <TextView
@@ -78,7 +78,7 @@
                     android:background="@drawable/update_app_type_bg_selector"
                     android:gravity="center"
                     android:text="预装应用"
-                    android:textColor="@color/white"
+                    android:textColor="@color/person_center_text_green"
                     android:textSize="15sp" />
             </LinearLayout>
 
@@ -133,7 +133,7 @@
                     android:id="@+id/iv_ota_logo"
                     android:layout_width="227.5dp"
                     android:layout_height="135dp"
-                    android:layout_marginTop="68dp"
+                    android:layout_marginTop="58dp"
                     android:src="@drawable/logo_ota_update" />
 
                 <LinearLayout
@@ -144,12 +144,20 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Alight OS"
+                        android:textColor="@color/person_center_text_green"
+                        android:textSize="24sp" />
+
+                    <TextView
                         android:id="@+id/tv_local_ota_app"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
                         android:text="版本：1.2.432.2.2"
-                        android:textColor="@color/white"
+                        android:textColor="#9E9E9E"
                         android:textSize="15sp" />
 
                     <TextView
@@ -158,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:text="发现新版本："
-                        android:textColor="@color/white" />
+                        android:textColor="@color/person_center_text_green" />
 
                     <TextView
                         android:id="@+id/tv_ota_app_update"
@@ -184,7 +192,7 @@
                         android:layout_width="196dp"
                         android:layout_height="21dp"
                         android:text="正在更新，请不要操作设备…"
-                        android:textColor="#ffffffff"
+                        android:textColor="@color/person_center_text_green"
                         android:textSize="15sp" />
 
                     <TextView
@@ -193,7 +201,7 @@
                         android:layout_height="17dp"
                         android:layout_marginTop="20dp"
                         android:text="更新进度：0%"
-                        android:textColor="#ffffffff"
+                        android:textColor="@color/person_center_text_green"
                         android:textSize="12sp" />
 
                     <ProgressBar

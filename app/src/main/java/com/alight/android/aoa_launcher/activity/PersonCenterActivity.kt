@@ -71,7 +71,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         initWifiState()
         getPresenter().getModel(
             Urls.UPDATE,
-            hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+//            hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+            hashMapOf("device_type" to "LAMP"),
             UpdateBean::class.java
         )
     }
@@ -267,7 +268,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             rv_family_info.visibility = View.VISIBLE
             ll_family_info_offline.visibility = View.GONE
-            resources.getColor(R.color.person_center_text_black)
+            resources.getColor(R.color.person_center_text_green)
             ll_exit_personal_center.visibility = View.VISIBLE
         } else if (netState == 0) {
             rv_family_info.visibility = View.GONE

@@ -6,7 +6,6 @@ import android.content.*
 import android.content.Intent.ACTION_SHUTDOWN
 import android.database.ContentObserver
 import android.net.Uri
-import android.os.Build
 import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
@@ -338,7 +337,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                             {
                                 getPresenter().getModel(
                                     Urls.UPDATE,
-                                    hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+//                                    hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+                                    hashMapOf("device_type" to "LAMP"),
                                     UpdateBean::class.java
                                 )
                                 //表示引导过用户升级

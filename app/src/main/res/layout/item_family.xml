@@ -20,7 +20,7 @@
         android:layout_marginTop="23.5dp"
         android:singleLine="true"
         android:text="张小诚"
-        android:textColor="@color/person_center_text_black"
+        android:textColor="@color/person_center_text_green"
         android:textSize="12sp" />
 
     <ImageView

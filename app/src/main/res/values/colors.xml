@@ -21,9 +21,10 @@
     <color name="celadon">#E2F7F4</color>
     <color name="blue_green">#28BCB6</color>
 
+
     <color name="person_center_text_blue">#5183E9</color>
     <color name="person_center_text_gray">#8AA1A2</color>
 
-    <color name="person_center_text_black">#215558</color>
+    <color name="person_center_text_green">#215558</color>
 
 </resources>
