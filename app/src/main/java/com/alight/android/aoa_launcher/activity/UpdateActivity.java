@@ -1148,8 +1148,13 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         } else if (source.equals("splash") && !newSplash) {
                             getPresenter().sendMenuEnableBroadcast(UpdateActivity.this, true);
                         }
+                        if (isCheckUpdate) {
+                            ivOtaLogo.setVisibility(View.VISIBLE);
+                        }
                         llOtaUpdateProgress.setVisibility(View.GONE);
                         llOtaUpdateBtn.setVisibility(View.VISIBLE);
+                        //固件安装之前可以返回
+                        llBackUpdate.setVisibility(View.VISIBLE);
                         tvOtaAppUpdate.setText("安装");
                         otaInstall = true;
                     }
