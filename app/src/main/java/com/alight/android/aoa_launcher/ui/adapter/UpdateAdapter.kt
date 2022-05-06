@@ -48,19 +48,25 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                         .load(getIcon(file.packName))
                         .error(R.mipmap.ic_launcher)
                         .into(holder.getView(R.id.iv_app_icon_update_item))
+                    val versionName = AppUtils.getVersionName(context, file.packName)
                     //版本号
                     holder.setText(
                         R.id.tv_app_code_update_item,
-                        "版本：" + AppUtils.getVersionName(context, file.packName)
+                        if (versionName.isNullOrEmpty()) {
+                            "未安装"
+                        } else {
+                            "版本：" + AppUtils.getVersionName(context, file.packName)
+                        }
                     )
                 } else {
+                    //资源文件
                     Glide.with(context)
                         .load(R.mipmap.ic_launcher)
                         .error(R.mipmap.ic_launcher)
                         .into(holder.getView(R.id.iv_app_icon_update_item))
                     holder.setText(
                         R.id.tv_app_code_update_item,
-                        "版本：" + "暂无"
+                        "版本：" + file.versionCode + ".0.0"
                     )
                 }
                 //ota
@@ -133,19 +139,30 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                         .load(getIcon(file.packName))
                         .error(R.mipmap.ic_launcher)
                         .into(holder.getView(R.id.iv_app_icon_update_item))
+                    val versionName = AppUtils.getVersionName(context, file.packName)
                     //版本号
                     holder.setText(
                         R.id.tv_app_code_update_item,
-                        "版本：" + AppUtils.getVersionName(context, file.packName)
+                        if (versionName.isNullOrEmpty()) {
+                            "未安装"
+                        } else {
+                            "版本：" + AppUtils.getVersionName(context, file.packName)
+                        }
                     )
                 } else {
                     Glide.with(context)
                         .load(R.mipmap.ic_launcher)
                         .error(R.mipmap.ic_launcher)
                         .into(holder.getView(R.id.iv_app_icon_update_item))
+                    val versionName = AppUtils.getVersionName(context, file.packName)
+                    //版本号
                     holder.setText(
                         R.id.tv_app_code_update_item,
-                        "版本：" + "暂无"
+                        if (versionName.isNullOrEmpty()) {
+                            "未安装"
+                        } else {
+                            "版本：" + AppUtils.getVersionName(context, file.packName)
+                        }
                     )
                 }
                 if (file.fileName == "system.zip") {

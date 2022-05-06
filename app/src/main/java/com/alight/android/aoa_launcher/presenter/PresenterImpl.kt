@@ -660,6 +660,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         context.sendBroadcast(intent)
     }
 
+    /**
+     * 开机固件升级检测
+     */
     fun splashStartUpdateActivity(
         isNewUser: Boolean, any: UpdateBean,
         activity: Activity
