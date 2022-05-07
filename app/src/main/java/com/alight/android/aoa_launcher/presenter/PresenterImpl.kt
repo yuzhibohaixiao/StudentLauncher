@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.graphics.drawable.Drawable
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
@@ -791,6 +792,21 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         intent.putExtra("systemApp", systemAppList)
         intent.putExtra("otherApp", otherAppList)
         activity.startActivity(intent)
+    }
+
+    fun getIcon(packName: String): Drawable? {
+        val pm: PackageManager = context.packageManager
+        try {
+            var appInfo = pm.getApplicationInfo(packName, PackageManager.GET_META_DATA)
+            // 应用名称
+            // pm.getApplicationLabel(appInfo)
+
+            //应用图标
+            return pm.getApplicationIcon(appInfo)
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return null
     }
 
     fun showUnbindDeviceDialog(

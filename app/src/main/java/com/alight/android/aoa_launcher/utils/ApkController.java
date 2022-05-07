@@ -149,7 +149,7 @@ public class ApkController {
             }
             return true;
         } catch (Exception e) {
-            ToastUtils.showLong(context, "安装失败，请查看存储空间是否充足");
+            ToastUtils.showLong(context, "安装失败，请稍后重试");
             e.printStackTrace();
 
         }

@@ -40,6 +40,7 @@ import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
 import com.alight.android.aoa_launcher.ui.view.CustomDialog;
 import com.alight.android.aoa_launcher.utils.ApkController;
 import com.alight.android.aoa_launcher.utils.AppUtils;
+import com.alight.android.aoa_launcher.utils.RxTimerUtil;
 import com.alight.android.aoa_launcher.utils.SPUtils;
 import com.alight.android.aoa_launcher.utils.StringUtils;
 import com.alight.android.aoa_launcher.utils.ToastUtils;
@@ -89,8 +90,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private UpdateAdapter otherAdapter;
     private int zipPosition = 0;
     private HashMap<String, DownloadReceiver> downloadReceiverMap = new HashMap<>();
-    private List<File> appList = new ArrayList<>();
+    private List<File> systemList = new ArrayList<>();
     private List<File> otherList = new ArrayList<>();
+    private List<File> needUpdateSystemList = new ArrayList<>();
     private File otaFile = new File();
     private TextView tvOtaApp;
     private TextView tvSystemApp;
@@ -128,6 +130,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private int updatePostion;
     //true是开机检测流程
     private boolean isCheckUpdate = false;
+    private boolean isStartOtaUpdate = false;
+    private int installApp = 0;//强更过程已安装的应用个数
 
     @Override
     public void initData() {
@@ -148,7 +152,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         if (systemAdapter == null) {
             systemAdapter = new UpdateAdapter();
             systemAdapter.setAppType(appType);
-            systemAdapter.addData(appList);
+            systemAdapter.addData(systemList);
             systemRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
             ((SimpleItemAnimator) systemRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             systemRecyclerView.setAdapter(systemAdapter);
@@ -206,21 +210,25 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             }
         }
         MMKV mmkv = LauncherApplication.Companion.getMMKV();
-        boolean isStartOtaUpdate = mmkv.getBoolean("isStartOtaUpdate", false);
+        isStartOtaUpdate = mmkv.getBoolean("isStartOtaUpdate", false);
         //开始强梗流程
         if (!isStartOtaUpdate) {
-            llOtaUpdateBtn.setVisibility(View.GONE);
-            llOtaUpdateProgress.setVisibility(View.VISIBLE);
-            tvCheckTitle.setVisibility(View.VISIBLE);
-            tvCheckContent.setVisibility(View.VISIBLE);
-            tvCheckStep.setVisibility(View.VISIBLE);
-            ivOtaLogo.setVisibility(View.GONE);
-            tvUpdating.setVisibility(View.GONE);
-            tvCheckStep.setText("共计2个更新项，当前为第2项目");
-
-            //将数据重置
-//            mmkv.encode("isStartOtaUpdate", true);
+            StartOtaUpdate();
         }
+    }
+
+    private void StartOtaUpdate() {
+        llOtaUpdateBtn.setVisibility(View.GONE);
+        llOtaUpdateProgress.setVisibility(View.VISIBLE);
+        tvCheckTitle.setVisibility(View.VISIBLE);
+        tvCheckContent.setVisibility(View.VISIBLE);
+        tvCheckStep.setVisibility(View.VISIBLE);
+        ivOtaLogo.setVisibility(View.GONE);
+        tvUpdating.setVisibility(View.GONE);
+        tvCheckStep.setText("共计2个更新项，当前为第2项目");
+        startSystemAppDownload();
+        //将数据重置
+//      mmkv.encode("isStartOtaUpdate", true);
     }
 
     private void initOtaUpdate() {
@@ -479,7 +487,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             for (int i = 0; i < systemAdapter.getData().size(); i++) {
                                 if (LAUNCHER_PACKAGE_NAME.equals(systemAdapter.getData().get(i).getPackName())) {
                                     updatePostion = i;
-                                    appList.get(updatePostion).setInstalled(true);
+                                    systemList.get(updatePostion).setInstalled(true);
                                     runOnUiThread(() -> systemAdapter.notifyItemChanged(updatePostion));
                                 }
                             }
@@ -618,12 +626,17 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-    private void startDownload() {
-        for (int i = 0; i < appList.size(); i++) {
-            File file = appList.get(i);
+    /**
+     * 系统应用一键更新
+     */
+    private void startSystemAppDownload() {
+        needUpdateSystemList.clear();
+        for (int i = 0; i < systemList.size(); i++) {
+            File file = systemList.get(i);
             if (file.getFormat() == 4) {
                 continue;
             }
+            needUpdateSystemList.add(systemList.get(i));
             file.setSizeStr("请稍等");
             file.setSpeed("");
             serviceIntent = new Intent(UpdateActivity.this, UpdateService.class);
@@ -700,7 +713,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
                 if (systemUpdateBean.getFormat() == 3) {
                     file.setFormat(systemUpdateBean.getFormat());
-                    appList.add(file);
+                    systemList.add(file);
                     //跳过ota应用
                     continue;
                 } else if ((systemUpdateBean.getFormat() == 1 && (int) SPUtils.getData("configVersion", 0) >= systemUpdateBean.getVersion_code())
@@ -710,15 +723,15 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         containsConfigFile = false;
                     }
                     file.setFormat(4);
-                    appList.add(file);
+                    systemList.add(file);
                     continue;
                 } else {
-                    appList.add(file);
+                    systemList.add(file);
                 }
             }
-            Collections.sort(appList);
-            for (int i = 0; i < appList.size(); i++) {
-                File file = appList.get(i);
+            Collections.sort(systemList);
+            for (int i = 0; i < systemList.size(); i++) {
+                File file = systemList.get(i);
                 if (file.getFormat() == 3 || file.getFormat() == 4) {
                     continue;
                 }
@@ -822,15 +835,16 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             }
             downloadReceiverMap.clear();
         }
-        if (appList != null) {
-            appList.clear();
+        if (systemList != null) {
+            systemList.clear();
         }
-        if (appList != null) {
-            appList.clear();
+        if (systemList != null) {
+            systemList.clear();
         }
         if (serviceIntent != null) {
             stopService(serviceIntent);
         }
+        RxTimerUtil.cancel();
     }
 
     @Override
@@ -919,7 +933,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 tvUpdateAll.setTextColor(Color.parseColor("#50ffffff"));
                 tvUpdateAll.setEnabled(false);
                 tvUpdateAll.setClickable(false);
-                startDownload();
+                startSystemAppDownload();
                 break;
             case R.id.ll_back_update:
                 finish();
@@ -1058,9 +1072,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             int type = intent.getIntExtra("type", 1);
             if (type == 1) {
                 //系统应用
-                for (int i = 0; i < appList.size(); i++) {
+                for (int i = 0; i < systemList.size(); i++) {
                     try {
-                        File file = appList.get(i);
+                        File file = systemList.get(i);
                         if (intent.getAction().equals(AppConstants.LAUNCHER_PACKAGE_NAME + file.getId() + type)) {
                             String speedS = intent.getStringExtra("speed");
                             String sizeS = intent.getStringExtra("size");
@@ -1085,9 +1099,13 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 if (file.getPackName() != null && file.getPackName().equals(AppConstants.LAUNCHER_PACKAGE_NAME) && containsConfigFile) {
                                 } else if (file.getFormat() == 2) {
                                     if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)) {
-                                        file.setInstalled(true);
-                                        systemAdapter.notifyItemChanged(i);
+                                        if (isStartOtaUpdate) {
+                                            syncDownloadProgress();
+                                        } else {
+                                            file.setInstalled(true);
+                                            systemAdapter.notifyItemChanged(i);
 //                                        sendUpdateBroadcast(file.getPackName());
+                                        }
                                     }
 
                                 } else if (file.getFormat() == 1) {
@@ -1213,7 +1231,20 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         }
+    }
 
+    private void syncDownloadProgress() {
+        RxTimerUtil.interval(1000, number -> {
+            Log.i(TAG, "syncDownloadProgress: ");
+            for (int i = 0; i < needUpdateSystemList.size(); i++) {
+                File file = needUpdateSystemList.get(i);
+                if (getPresenter().getIcon(file.getPackName()) != null) {
+                    installApp++;
+                }
+            }
+            if (installApp != 0 && needUpdateSystemList.size() != 0)
+                pbUpdateOta.setProgress(installApp * 100 / needUpdateSystemList.size());
+        });
     }
 
     /**
