@@ -43,6 +43,7 @@ import com.alight.android.aoa_launcher.utils.AppUtils;
 import com.alight.android.aoa_launcher.utils.SPUtils;
 import com.alight.android.aoa_launcher.utils.StringUtils;
 import com.alight.android.aoa_launcher.utils.ToastUtils;
+import com.tencent.mmkv.MMKV;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -203,6 +204,22 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     tvUpdateAll.setText("无需更新");
                 }
             }
+        }
+        MMKV mmkv = LauncherApplication.Companion.getMMKV();
+        boolean isStartOtaUpdate = mmkv.getBoolean("isStartOtaUpdate", false);
+        //开始强梗流程
+        if (!isStartOtaUpdate) {
+            llOtaUpdateBtn.setVisibility(View.GONE);
+            llOtaUpdateProgress.setVisibility(View.VISIBLE);
+            tvCheckTitle.setVisibility(View.VISIBLE);
+            tvCheckContent.setVisibility(View.VISIBLE);
+            tvCheckStep.setVisibility(View.VISIBLE);
+            ivOtaLogo.setVisibility(View.GONE);
+            tvUpdating.setVisibility(View.GONE);
+            tvCheckStep.setText("共计2个更新项，当前为第2项目");
+
+            //将数据重置
+//            mmkv.encode("isStartOtaUpdate", true);
         }
     }
 
@@ -909,6 +926,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.tv_ota_app_update:
                 if (otaInstall) {
+                    //包含系统应用更新，进入强更流程
+                    if (isExistSystemUpdate()) {
+                        MMKV mmkv = LauncherApplication.Companion.getMMKV();
+                        mmkv.encode("isStartOtaUpdate", true);
+                    }
                     installSystem(this);
                 } else {
                     if (!isShowDialog) {
@@ -951,10 +973,36 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             tvCheckStep.setVisibility(View.VISIBLE);
             ivOtaLogo.setVisibility(View.GONE);
             tvUpdating.setVisibility(View.GONE);
+            if (!isExistSystemUpdate()) {
+                tvCheckStep.setText("共计1个更新项，当前为第1项目");
+            }
         }
         setBanOnBack(true);
         //开启ota升级
         startOtaDownload();
+    }
+
+    /**
+     * true 表示存在系统更新
+     */
+    private boolean isExistSystemUpdate() {
+        Integer configVersion = (Integer) SPUtils.getData(
+                "configVersion",
+                0
+        );
+        for (int i = 0; i < systemAppList.size(); i++) {
+            UpdateBeanData updateBeanData = systemAppList.get(i);
+            //资源包
+            if (updateBeanData.getFormat() == 1 && configVersion < updateBeanData.getVersion_code()) {
+                return true;
+            } else if (AppUtils.getVersionCode(
+                    this,
+                    updateBeanData.getPackName()
+            ) < updateBeanData.getVersion_code()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
