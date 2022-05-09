@@ -219,7 +219,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         MMKV mmkv = LauncherApplication.Companion.getMMKV();
         isStartOtaUpdate = mmkv.getBoolean("isStartOtaUpdate", false);
         //开始强更流程
-        if (isStartOtaUpdate && !isHaveOtaUpdate) {
+        if (isStartOtaUpdate && !isHaveOtaUpdate && !StringUtils.isEmpty(source)) {
             startForceUpdate();
         }
     }
