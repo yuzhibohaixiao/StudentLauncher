@@ -881,7 +881,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             //清理内存
             R.id.fl_clear_memory -> {
                 if (isFeatureAbilityInit) {
-                    featureAbility?.closeEyeProtectionMode()
+                    featureAbility?.startMemoryClearn()
+                    ToastUtils.showShort(this, "清理成功！")
                 }
             }
             //护眼模式
