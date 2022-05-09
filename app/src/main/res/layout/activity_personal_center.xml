@@ -520,6 +520,7 @@
                 </FrameLayout>
 
                 <FrameLayout
+                    android:id="@+id/fl_clear_memory"
                     android:layout_width="135dp"
                     android:layout_height="41dp"
                     android:layout_below="@id/fl_eyeshield_mode"

@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -120,6 +121,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private TextView tvCheckContent;
     private TextView tvCheckStep;
     private TextView tvUpdating;
+    private FrameLayout flEyeshieldMode;
+    private FrameLayout flClearMemory;
     private boolean otaInstall = false;
     private View ivOtaLogo;
     //true表示是否第一次进行引导更新
@@ -192,7 +195,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         } else {
             isShowDialog = true;
         }
-        initOtaUpdate();
+        boolean isHaveOtaUpdate = initOtaUpdate();
 
         //系统应用没有应用时不提示一键更新
         if (systemAdapter.getData().size() > 0) {
@@ -210,15 +213,14 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             }
         }
         MMKV mmkv = LauncherApplication.Companion.getMMKV();
-        isStartOtaUpdate = mmkv.encode("isStartOtaUpdate", false);
         isStartOtaUpdate = mmkv.getBoolean("isStartOtaUpdate", false);
-        //开始强梗流程
-        if (isStartOtaUpdate) {
-            StartOtaUpdate();
+        //开始强更流程
+        if (isStartOtaUpdate && !isHaveOtaUpdate) {
+            startForceUpdate();
         }
     }
 
-    private void StartOtaUpdate() {
+    private void startForceUpdate() {
         llOtaUpdateBtn.setVisibility(View.GONE);
         llOtaUpdateProgress.setVisibility(View.VISIBLE);
         tvCheckTitle.setVisibility(View.VISIBLE);
@@ -228,11 +230,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvUpdating.setVisibility(View.GONE);
         tvCheckStep.setText("共计2个更新项，当前为第2项目");
         startSystemAppDownload();
-        //将数据重置
-//      mmkv.encode("isStartOtaUpdate", true);
     }
 
-    private void initOtaUpdate() {
+    private boolean initOtaUpdate() {
         tvLocalOtaApp.setText("版本：" + Build.DISPLAY);
         if (otaUpdateBean != null && !otaUpdateBean.getVersion_name().equals(Build.DISPLAY)) {
             //有新版
@@ -242,11 +242,13 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             filter.addAction(AppConstants.LAUNCHER_PACKAGE_NAME + otaUpdateBean.getId() + 3);
             registerReceiver(receiver, filter);
             downloadReceiverMap.put(String.valueOf(otaUpdateBean.getId()), receiver);
+            return true;
         } else {
             //无新版
             tvNewOtaApp.setText("已是最新版本");
             tvOtaAppUpdate.setVisibility(View.GONE);
             ivOtaLogo.setPadding(0, 80, 0, 0);
+            return false;
         }
     }
 

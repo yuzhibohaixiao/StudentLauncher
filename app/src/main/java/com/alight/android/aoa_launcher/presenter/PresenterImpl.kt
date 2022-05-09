@@ -707,8 +707,38 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 newOtaVersionName = it.version_name
             }
         }
+        var isHaveSystemUpdate = false;
+        val configVersion = SPUtils.getData(
+            "configVersion",
+            0
+        ) as Int
+        for (i in systemAppList.indices) {
+            val systemApp = systemAppList[i]
+            //资源包
+            if (systemApp.format == 1 && configVersion < systemApp.version_code) {
+                isHaveSystemUpdate = true
+                break
+            } else if (AppUtils.getVersionCode(
+                    context,
+                    systemApp.packName
+                ) < systemApp.version_code
+            ) {
+                isHaveSystemUpdate = true
+                break
+            }
+        }
+
         val localSystemVersionName = Build.DISPLAY
+        val mmkv = LauncherApplication.getMMKV()
+
+        //强更标记
+        var isStartOtaUpdate = mmkv.getBoolean("isStartOtaUpdate", false)
         if (newOtaVersionName.isNotEmpty() && !localSystemVersionName.equals(newOtaVersionName)) {
+            activity.startActivity(intent)
+
+        } else if (isStartOtaUpdate && isHaveSystemUpdate) {    //有强更新标记并且包含系统更新
+
+        } else if (isHaveSystemUpdate) {
             activity.startActivity(intent)
         } else {
             EventBus.getDefault().post(SplashEvent.getInstance(true))
@@ -1228,7 +1258,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
-    //息屏
+//息屏
 /*
     fun closeScreen(context: Context) {
         var policyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager

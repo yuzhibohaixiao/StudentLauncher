@@ -10,6 +10,7 @@ import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -300,6 +301,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         tv_family_back.setOnClickListener(this)
         tv_family_next.setOnClickListener(this)
         iv_notify_clear.setOnClickListener(this)
+
+        fl_eyeshield_mode.setOnClickListener(this)
+        fl_clear_memory.setOnClickListener(this)
 
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
@@ -842,6 +846,14 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 notifyCenterList.clear()
                 notifyCenterAdapter?.notifyDataSetChanged()
                 LauncherApplication.getMMKV().remove("notifyInfo")
+            }
+            //清理内存
+            R.id.fl_clear_memory -> {
+
+            }
+            //护眼模式
+            R.id.fl_eyeshield_mode -> {
+
             }
         }
     }

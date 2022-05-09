@@ -1179,6 +1179,17 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     ),
                     JPushBindBean::class.java
                 )
+                if (!guideUserUpdate)  //检测系统更新
+                {
+                    getPresenter().getModel(
+                        Urls.UPDATE,
+                        hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+//                                    hashMapOf("device_type" to "LAMP"),
+                        UpdateBean::class.java
+                    )
+                    //表示引导过用户升级
+                    guideUserUpdate = true
+                }
                 /*  if (!guideUserUpdate && splashCloseFlag)  //检测系统更新
                   {
                       getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
