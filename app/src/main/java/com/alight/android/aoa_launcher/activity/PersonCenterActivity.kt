@@ -71,8 +71,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         initWifiState()
         getPresenter().getModel(
             Urls.UPDATE,
-//            hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
-            hashMapOf("device_type" to "LAMP"),
+            hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+//            hashMapOf("device_type" to "LAMP"),
             UpdateBean::class.java
         )
     }
