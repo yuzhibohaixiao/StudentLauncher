@@ -737,7 +737,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         } else if (isStartOtaUpdate && isHaveSystemUpdate) {    //有强更新标记并且包含系统更新
             intent.putExtra("source", "splash")
             activity.startActivity(intent)
-        } else if (isHaveSystemUpdate) {
+        } else if (isHaveSystemUpdate) {    //仅有系统更新
             intent.putExtra("source", "onlySystemUpdate")
             activity.startActivity(intent)
         } else {

@@ -232,6 +232,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvCheckStep.setVisibility(View.VISIBLE);
         ivOtaLogo.setVisibility(View.GONE);
         tvUpdating.setVisibility(View.GONE);
+        llBackUpdate.setVisibility(View.GONE);
         tvCheckStep.setText("共计2个更新项，当前为第2项目");
         startSystemAppDownload();
     }
@@ -499,6 +500,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 }
                             }
 //                            sendUpdateBroadcast(LAUNCHER_PACKAGE_NAME);
+                        } else {
+
                         }
                     }
                 }
@@ -718,6 +721,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 if (!StringUtils.isEmpty(systemUpdateBean.getApp_info().getPackage_name())) {
                     file.setPackName(systemUpdateBean.getApp_info().getPackage_name());
                 }
+                file.setVersionCode(systemUpdateBean.getVersion_code());
                 if (systemUpdateBean.getFormat() == 3) {
                     file.setFormat(systemUpdateBean.getFormat());
                     systemList.add(file);
@@ -1240,16 +1244,38 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void syncDownloadProgress() {
+        int configVersion = (int) SPUtils.getData(
+                "configVersion",
+                0
+        );
         RxTimerUtil.interval(1000, number -> {
-            Log.i(TAG, "syncDownloadProgress: ");
+            int a = 0;
             for (int i = 0; i < needUpdateSystemList.size(); i++) {
                 File file = needUpdateSystemList.get(i);
-                if (getPresenter().getIcon(file.getPackName()) != null) {
-                    installApp++;
+                int localVersionCode = AppUtils.getVersionCode(UpdateActivity.this, file.getPackName());
+                if (localVersionCode != 0 && localVersionCode >= file.getVersionCode()
+                ) {
+                    //apk更新
+                    a++;
+                } else if (file.getFormat() == 1 && configVersion >= file.getVersionCode()) {
+                    //资源包更新
+                    a++;
                 }
             }
-            if (installApp != 0 && needUpdateSystemList.size() != 0)
-                pbUpdateOta.setProgress(installApp * 100 / needUpdateSystemList.size());
+            if (a != 0 && needUpdateSystemList.size() > 0 && a > installApp) {
+                installApp = a;
+                int progress = installApp * 100 / needUpdateSystemList.size();
+                pbUpdateOta.setProgress(progress);
+                tvOtaUpdateText.setText("更新进度：" + progress + "%");
+                Log.i(TAG, "syncDownloadProgress: 更新进度：" + progress + "%");
+                if (needUpdateSystemList.size() == installApp) {
+                    ToastUtils.showShort(this, "恭喜，更新完成！");
+                    llBackUpdate.setVisibility(View.VISIBLE);
+                    //解除强更状态
+                    MMKV mmkv = LauncherApplication.Companion.getMMKV();
+                    mmkv.encode("isStartOtaUpdate", false);
+                }
+            }
         });
     }
 

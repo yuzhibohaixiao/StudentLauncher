@@ -244,7 +244,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
     }
 
     private fun refreshInstallState(file: File, tvUpdate: TextView) {
-        if (file.isInstalled && getIcon(file.packName) != null) {
+        if (file.isInstalled && AppUtils.getVersionCode(context,file.packName) >= file.versionCode) {
             GlobalScope.launch(Dispatchers.Main) {
                 tvUpdate.text = "已完成"
             }

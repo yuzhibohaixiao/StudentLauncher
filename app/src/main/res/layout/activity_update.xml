@@ -211,16 +211,16 @@
 
                     <TextView
                         android:id="@+id/tv_updating"
-                        android:layout_width="196dp"
-                        android:layout_height="21dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="正在更新，请不要操作设备…"
                         android:textColor="@color/person_center_text_green"
                         android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tv_ota_update_text"
-                        android:layout_width="87dp"
-                        android:layout_height="17dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:text="更新进度：0%"
                         android:textColor="@color/person_center_text_green"
@@ -237,8 +237,8 @@
 
                     <TextView
                         android:id="@+id/tv_check_update_step"
-                        android:layout_width="169dp"
-                        android:layout_height="17dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="12.5dp"
                         android:text="共计2个更新项，当前为第1项目"
                         android:textColor="#ff26595c"
