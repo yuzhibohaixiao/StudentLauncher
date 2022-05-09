@@ -192,6 +192,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             } else {
                 isShowDialog = true;
             }
+        } else if (!StringUtils.isEmpty(source) && source.equals("onlySystemUpdate")) {
+            tvOtaApp.setVisibility(View.GONE);
+            tvOtherApp.setVisibility(View.GONE);
+            setSelectRefreshUI(tvSystemApp);
         } else {
             isShowDialog = true;
         }
@@ -954,7 +958,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         startOtaUpdate();
                     } else {
                         showUpdateOtaDialog();
-
                     }
                 }
                 break;

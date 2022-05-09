@@ -696,11 +696,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         //newSplash true表示使用新用户第一次开启ota升级
 //        val newSplash = SPUtils.getData("new_splash", true) as Boolean
         var intent = Intent(activity, UpdateActivity::class.java)
-        intent.putExtra("source", "splash")
-        intent.putExtra("new_splash", isNewUser)
         intent.putExtra("systemApp", systemAppList)
         intent.putExtra("otherApp", otherAppList)
-
+        intent.putExtra("new_splash", isNewUser)
         var newOtaVersionName = ""
         systemAppList.forEach {
             if (it.format == 3) {
@@ -734,11 +732,13 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         //强更标记
         var isStartOtaUpdate = mmkv.getBoolean("isStartOtaUpdate", false)
         if (newOtaVersionName.isNotEmpty() && !localSystemVersionName.equals(newOtaVersionName)) {
+            intent.putExtra("source", "splash")
             activity.startActivity(intent)
-
         } else if (isStartOtaUpdate && isHaveSystemUpdate) {    //有强更新标记并且包含系统更新
-
+            intent.putExtra("source", "splash")
+            activity.startActivity(intent)
         } else if (isHaveSystemUpdate) {
+            intent.putExtra("source", "onlySystemUpdate")
             activity.startActivity(intent)
         } else {
             EventBus.getDefault().post(SplashEvent.getInstance(true))
