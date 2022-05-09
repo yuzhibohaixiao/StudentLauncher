@@ -458,6 +458,7 @@
                     android:background="@drawable/launcher_personal_center_rounded_rectangle_right">
 
                     <ImageView
+                        android:id="@+id/iv_eyeshield_mode"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center_vertical"
@@ -474,6 +475,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tv_eyeshield_mode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="38dp"

@@ -10,14 +10,16 @@ import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.ahwcx.ahwsdk.AbilityManager
+import com.alight.ahwcx.ahwsdk.abilities.AudioAbility
 import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
+import com.alight.ahwcx.ahwsdk.abilities.FeatureAbility
 import com.alight.ahwcx.ahwsdk.abilities.PanelAbility
 import com.alight.ahwcx.ahwsdk.abilities.PanelAbility.HardwareStatusHandler
+import com.alight.ahwcx.ahwsdk.common.AbilityConnectionHandler
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
@@ -66,6 +68,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     private var maxFamilySize = 4 //一页展示的最大家长个数
     private var notifyCenterAdapter: NotifyCenterAdapter? = null
     private var notifyCenterList = arrayListOf<CallArBean>()
+    private var featureAbility: FeatureAbility? = null //内存 护眼相关
+    private var isFeatureAbilityInit = false
 
     override fun onResume() {
         super.onResume()
@@ -141,7 +145,33 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         panelAbility =
             abilityManager.getAbility(PanelAbility::class.java, true, applicationContext)
         panelAbility?.bindLooper(Looper.myLooper()!!)
+        if (featureAbility == null) {
+            featureAbility =
+                abilityManager.getAbility(
+                    FeatureAbility::class.java,
+                    true,
+                    applicationContext
+                )
+            featureAbility?.bindLooper(Looper.myLooper()!!)
+            GlobalScope.launch(Dispatchers.Main) {
+                featureAbility?.waitConnection(object : AbilityConnectionHandler {
+                    override fun onServerConnected() {
+                        isFeatureAbilityInit = true
+                        featureAbility?.getEyeProtectionMode(object :
+                            FeatureAbility.EyeProtectionModeHandler {
+                            override fun onError(result: Map<String, Any>) {
 
+                            }
+
+                            override fun onSuccess(eyeProtectionMode: Boolean) {
+                                iv_eyeshield_mode.setImageResource(if (eyeProtectionMode) R.drawable.eyeshield_mode_open else R.drawable.eyeshield_mode_close)
+                                tv_eyeshield_mode.text = if (eyeProtectionMode) "已开启" else "未开启"
+                            }
+                        })
+                    }
+                })
+            }
+        }
         GlobalScope.launch {
             delay(500)
             try {
@@ -246,6 +276,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 }
             }
         }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -849,11 +880,30 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             //清理内存
             R.id.fl_clear_memory -> {
-
+                if (isFeatureAbilityInit) {
+                    featureAbility?.closeEyeProtectionMode()
+                }
             }
             //护眼模式
             R.id.fl_eyeshield_mode -> {
+                if (isFeatureAbilityInit) {
+                    featureAbility?.getEyeProtectionMode(object :
+                        FeatureAbility.EyeProtectionModeHandler {
+                        override fun onError(result: Map<String, Any>) {
 
+                        }
+
+                        override fun onSuccess(eyeProtectionMode: Boolean) {
+                            if (eyeProtectionMode) {
+                                featureAbility?.closeEyeProtectionMode()
+                            } else {
+                                featureAbility?.openEyeProtectionMode()
+                            }
+                            iv_eyeshield_mode.setImageResource(if (!eyeProtectionMode) R.drawable.eyeshield_mode_open else R.drawable.eyeshield_mode_close)
+                            tv_eyeshield_mode.text = if (!eyeProtectionMode) "已开启" else "未开启"
+                        }
+                    })
+                }
             }
         }
     }
