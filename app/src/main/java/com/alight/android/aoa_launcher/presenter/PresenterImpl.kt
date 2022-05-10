@@ -713,12 +713,13 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         for (i in systemAppList.indices) {
             val systemApp = systemAppList[i]
             //资源包
-            if (systemApp.format == 1 && configVersion < systemApp.version_code) {
-                isHaveSystemUpdate = true
+            if (systemApp.format == 1) {
+                if (configVersion < systemApp.version_code)
+                    isHaveSystemUpdate = true
                 break
             } else if (AppUtils.getVersionCode(
                     context,
-                    systemApp.packName
+                    systemApp.app_info.package_name
                 ) < systemApp.version_code
             ) {
                 isHaveSystemUpdate = true

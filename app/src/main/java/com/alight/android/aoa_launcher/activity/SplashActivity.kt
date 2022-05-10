@@ -85,6 +85,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     override fun initData() {
         EventBus.getDefault().register(this)
+        Log.i("SplashActivity", "DSN: ${AccountUtil.getDSN()}")
         //仅重选用户
         val onlyShowSelectChild = SPUtils.getData("onlyShowSelectChild", false) as Boolean
         //开启用户引导

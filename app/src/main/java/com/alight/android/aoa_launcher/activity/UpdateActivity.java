@@ -820,6 +820,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void installSystem(Context context) {
+        //包含系统应用更新，且为开机检测更新则进入强更流程
+        if (isExistSystemUpdate() && !StringUtils.isEmpty(source) && source.equals("splash")) {
+            MMKV mmkv = LauncherApplication.Companion.getMMKV();
+            mmkv.encode("isStartOtaUpdate", true);
+        }
         try {
             Intent intent = new Intent();
             intent.setComponent(new ComponentName(
@@ -951,11 +956,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.tv_ota_app_update:
                 if (otaInstall) {
-                    //包含系统应用更新，且为开机检测更新则进入强更流程
-                    if (isExistSystemUpdate() && !StringUtils.isEmpty(source) && source.equals("splash")) {
-                        MMKV mmkv = LauncherApplication.Companion.getMMKV();
-                        mmkv.encode("isStartOtaUpdate", true);
-                    }
                     installSystem(this);
                 } else {
                     if (!isShowDialog) {
