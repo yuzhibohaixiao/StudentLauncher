@@ -9,7 +9,7 @@
         android:id="@+id/iv_app_icon_update_item"
         android:layout_width="51dp"
         android:layout_height="51dp"
-        android:layout_margin="12dp"
+        android:layout_margin="13dp"
         android:scaleType="centerCrop" />
 
     <LinearLayout
@@ -58,14 +58,14 @@
 
     <TextView
         android:id="@+id/tv_app_name_update_item"
-        android:layout_width="51dp"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginStart="13dp"
         android:layout_marginBottom="8dp"
-        android:gravity="center_horizontal"
+        android:ems="8"
         android:singleLine="true"
-        android:text="星仔办学"
+        android:text="深光智能交互系统"
         android:textColor="@color/person_center_text_green"
         android:textSize="12sp" />
 

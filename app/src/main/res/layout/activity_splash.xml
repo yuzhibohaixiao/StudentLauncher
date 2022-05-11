@@ -71,7 +71,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="请用微信扫一扫打开并授权小程序"
+            android:text="请用微信扫一扫下载App，之后使用App扫码绑定设备"
             android:textColor="@color/white"
             android:textSize="24sp" />
 

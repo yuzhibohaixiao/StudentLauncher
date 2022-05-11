@@ -698,7 +698,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     file.setFileName(systemUpdateBean.getApp_name() + ".zip");
                     if (systemUpdateBean.getFormat() == 1) {
                         file.setVersionCode(systemUpdateBean.getVersion_code());
-                        file.setFileName("ansystem.zip");
+//                        file.setFileName("ansystem.zip");
                         containsConfigFile = true;
                     }
                 } else {
