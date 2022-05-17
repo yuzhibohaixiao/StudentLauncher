@@ -1169,16 +1169,17 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                             String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
                             if (file.getFormat() == 2) {
+
                                 //剩余容量大于100M时执行安装
-                                if (getAvailableSize() > 100) {
-                                    if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)) {
-                                        file.setInstalled(true);
-                                        systemAdapter.notifyItemChanged(i);
+//                                if (getAvailableSize() > 100) {
+                                if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)) {
+                                    file.setInstalled(true);
+                                    systemAdapter.notifyItemChanged(i);
 //                                        sendUpdateBroadcast(file.getPackName());
-                                    }
-                                } else {
-                                    ToastUtils.showLong(context, "安装失败，请查看存储空间是否充足");
                                 }
+//                                } else {
+//                                    ToastUtils.showLong(context, "安装失败，请查看存储空间是否充足");
+//                                }
                             } else if (file.getFormat() == 1) {
                                 if (!StringUtils.isEmpty(apkPath)) {
                                     loadZip(apkPath, file.getVersionCode());
