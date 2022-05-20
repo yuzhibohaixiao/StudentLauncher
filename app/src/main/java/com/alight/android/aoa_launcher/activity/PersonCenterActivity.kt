@@ -712,6 +712,38 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         ToastUtils.showShort(this, "网络请求错误")
     }
 
+    private fun showAboutDeviceDialog() {
+        val powerDialog = CustomDialog(this, R.layout.dialog_about_device)
+        val ivClose = powerDialog.findViewById<ImageView>(R.id.iv_close_dialog)
+        ivClose.setOnClickListener { powerDialog.dismiss() }
+        val deviceTupe = Build.DEVICE
+        var deviceName: String? = null
+        when (deviceTupe) {
+            "LAMP", "LAMP_AL" -> {
+                deviceName = "深光AR投影学习机G9"
+            }
+            else -> {
+                deviceName = "暂无"
+            }
+        }
+        powerDialog.findViewById<TextView>(R.id.tv_device_name).text = deviceName
+        powerDialog.findViewById<TextView>(R.id.tv_device_type).text =
+            deviceTupe //设备类型 (LAMP LAMP_AL)
+        powerDialog.findViewById<TextView>(R.id.tv_device_model).text = Build.MODEL
+        powerDialog.findViewById<TextView>(R.id.tv_android_version).text = Build.VERSION.RELEASE
+        powerDialog.findViewById<TextView>(R.id.tv_alight_os_version).text = Build.DISPLAY
+        powerDialog.findViewById<TextView>(R.id.tv_launcher_version).text = "Launcher " +
+                AppUtils.getVersionName(this, AppConstants.LAUNCHER_PACKAGE_NAME)
+        powerDialog.findViewById<TextView>(R.id.tv_aoa_version).text = "AOA " +
+                AppUtils.getVersionName(this, AppConstants.AOA_PACKAGE_NAME)
+        powerDialog.findViewById<TextView>(R.id.tv_av_version).text = "AV " +
+                AppUtils.getVersionName(this, AppConstants.AV_PACKAGE_NAME)
+        powerDialog.findViewById<TextView>(R.id.tv_ahwc_version).text = "AHWC " +
+                AppUtils.getVersionName(this, AppConstants.AHWCX_PACKAGE_NAME)
+        powerDialog.findViewById<TextView>(R.id.tv_device_nunber).text = AccountUtil.getDSN()
+        powerDialog.show()
+    }
+
     private fun showPowerDialog() {
         val powerDialog = CustomDialog(this, R.layout.dialog_power)
         val ivClose = powerDialog.findViewById<ImageView>(R.id.iv_close_dialog)
@@ -789,6 +821,10 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.ll_unbind_device -> {
                 if (familyId != null)
                     getPresenter().showUnbindDeviceDialog(familyId!!, this)
+            }
+            //关于设备
+            R.id.ll_about_deivce -> {
+                showAboutDeviceDialog()
             }
 
             /*
