@@ -59,12 +59,12 @@ object StartAppUtils {
             var startTime = playTimeBean.data.playtime.start_playtime
             var endTime = playTimeBean.data.playtime.stop_playtime
 
-            playTimeBean.data.app_manage.forEach {
-                if (appPackName == it.app_info.package_name
+            for (it in playTimeBean.data.app_manage) {
+                if (it.app_info.package_name.isNotEmpty() && appPackName == it.app_info.package_name
                 ) {
                     if ((it.app_permission == 3)) {
                         ToastUtils.showLong(context, "该应用已被禁用")
-                        return@startApp
+                        return
                     } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
                             startTime,
                             endTime,
@@ -73,10 +73,10 @@ object StartAppUtils {
                     ) {
                         //限时禁用
                         ToastUtils.showLong(context, "该应用已被限时禁用")
-                        return@startApp
+                        return
                     }
-                    return@forEach
-                }
+                    break
+                } else continue
             }
 
             val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
