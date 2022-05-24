@@ -189,7 +189,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || rebinding && !splashClose) {
             Log.i(TAG, "展示引导页")
 //        如果未展示过引导则展示引导页
-            activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
+//            activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         } else {
             if (audioInitSuccessful) {
                 audioAbility?.startRecording()

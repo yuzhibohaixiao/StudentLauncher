@@ -488,7 +488,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     runOnUiThread(() -> {
                         ToastUtils.showShort(this, "解压完成！");
                         TextView tvUpdate = (TextView) systemAdapter.getViewByPosition(zipPosition, R.id.tv_update_item);
-                        tvUpdate.setText("已完成");
+                        if (tvUpdate != null)
+                            tvUpdate.setText("已完成");
                     });
                     if (!StringUtils.isEmpty(launcherApkPath)) {
                         if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), launcherApkPath)) {

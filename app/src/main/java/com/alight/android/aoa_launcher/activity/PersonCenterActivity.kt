@@ -83,7 +83,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun initWifiState() {
-        val wifiSsid = getPresenter().getWifiSsid()
+        val wifiSsid = getPresenter().getWifiSsid(this)
         if (wifiSsid.isEmpty()) {
             iv_wifi_icon.setImageResource(R.drawable.wifi_not_connected)
             tv_wifi_state.text = "未连接"
@@ -226,7 +226,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
              LauncherApplication.getContext(),
              Environment.getExternalStorageDirectory().path + "/"+ "launcher.apk"
          )*/
-        val allAppSize = getPresenter().getAllAppSize()
+        val allAppSize = getPresenter().getAllAppSize(this)
         tv_all_app_size.text = "已安装 $allAppSize 个应用"
         val storageBean = StorageUtil.queryWithStorageManager(this)
         var totalSize = storageBean.totalSize
@@ -726,7 +726,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             val tvContent = confirmDialog.findViewById<TextView>(R.id.tv_content_dialog)
             confirmDialog.findViewById<TextView>(R.id.confirm).setOnClickListener {
                 //确定重启
-                getPresenter().reboot()
+                getPresenter().reboot(this)
                 powerDialog.dismiss()
             }
             confirmDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {
@@ -743,7 +743,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             val tvContent = confirmDialog.findViewById<TextView>(R.id.tv_content_dialog)
             confirmDialog.findViewById<TextView>(R.id.confirm).setOnClickListener {
                 //确定关机
-                getPresenter().shutdown()
+                getPresenter().shutdown(this)
                 powerDialog.dismiss()
             }
             confirmDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {

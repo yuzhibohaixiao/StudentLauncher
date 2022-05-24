@@ -440,7 +440,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 isForceUpdate = true
                 if (!isRebinding)
                 //展示系统固件更新
-                    getPresenter().splashStartUpdateActivity(true, any, this)
+                    getPresenter().splashStartUpdateActivity(
+                        true,
+                        any,
+                        this
+                    )
             }
         }
     }

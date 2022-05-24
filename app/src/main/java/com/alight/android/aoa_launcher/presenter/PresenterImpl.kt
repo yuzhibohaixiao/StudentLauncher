@@ -87,7 +87,6 @@ import java.util.*
 class PresenterImpl : BasePresenter<IContract.IView>() {
 
     private var mCustomPopWindow: CustomPopWindow? = null
-    private var context = LauncherApplication.getContext()
 
     private var TAG = "PresenterImpl"
     override fun <T> getModel(url: String, map: HashMap<String, Any>, cls: Class<T>) {
@@ -718,7 +717,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     isHaveSystemUpdate = true
                 break
             } else if (AppUtils.getVersionCode(
-                    context,
+                    activity,
                     systemApp.app_info.package_name
                 ) < systemApp.version_code
             ) {
@@ -775,7 +774,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         return packages
     }
 
-    fun getAllAppSize(): Int {
+    fun getAllAppSize(context: Context): Int {
         var queryIntentActivities = mutableListOf<ResolveInfo>()
         val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -825,7 +824,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         activity.startActivity(intent)
     }
 
-    fun getIcon(packName: String): Drawable? {
+    fun getIcon(context: Context, packName: String): Drawable? {
         val pm: PackageManager = context.packageManager
         try {
             var appInfo = pm.getApplicationInfo(packName, PackageManager.GET_META_DATA)
@@ -1224,7 +1223,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
     }
 
-    fun getWifiSsid(): String {
+    fun getWifiSsid(context: Context): String {
 
         var ssid = ""
 
@@ -1293,7 +1292,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 */
 
     //关机
-    fun shutdown() {
+    fun shutdown(context: Context) {
         val intent = Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN")
         intent.putExtra("android.intent.extra.KEY_CONFIRM", false)
         //其中false换成true,会弹出是否关机的确认窗口
@@ -1302,7 +1301,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     //关机
-    fun reboot() {
+    fun reboot(context: Context) {
         var intent = Intent(Intent.ACTION_REBOOT)
         intent.putExtra("nowait", 1)
         intent.putExtra("interval", 1)

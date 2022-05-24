@@ -332,13 +332,21 @@ class QualityHorizontalAdapter :
             "com.jxw.huiben",
             null,
             null
-        ), NewAppTypeBean(
+        ),
+        NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com.google.android.inputmethod.latin",
             null,
             null
-        )
+        ),
+        NewAppTypeBean(
+            "",
+            R.drawable.quality_default_icon,
+            "com.oirsdfg89.flg",
+            null,
+            null
+        ),
     )
 
 
