@@ -130,6 +130,16 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * Activity是否已被销毁
+     * @return
+     */
+    fun isActivityEnable(): Boolean {
+        return if (this == null || isDestroyed || isFinishing) {
+            false
+        } else true
+    }
+
     private fun showQRCode(isRebinding: Boolean) {
         if (!isRebinding && !wifiFlag) {
             return
@@ -141,38 +151,40 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val qrCode = AccountUtil.getQrCode()
-                    GlobalScope.launch(Dispatchers.Main) {
-                        Glide.with(this@SplashActivity).load(qrCode)
-                            .listener(object : RequestListener<Drawable> {
-                                override fun onLoadFailed(
-                                    e: GlideException?,
-                                    model: Any,
-                                    target: Target<Drawable>,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    //加载失败
-                                    return false
-                                }
+                    if (isActivityEnable()) {
+                        GlobalScope.launch(Dispatchers.Main) {
+                            Glide.with(this@SplashActivity).load(qrCode)
+                                .listener(object : RequestListener<Drawable> {
+                                    override fun onLoadFailed(
+                                        e: GlideException?,
+                                        model: Any,
+                                        target: Target<Drawable>,
+                                        isFirstResource: Boolean
+                                    ): Boolean {
+                                        //加载失败
+                                        return false
+                                    }
 
-                                override fun onResourceReady(
-                                    resource: Drawable,
-                                    model: Any,
-                                    target: Target<Drawable>,
-                                    dataSource: DataSource,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    //加载成功
-                                    getPresenter().getModel(
-                                        Urls.DEVICE_BIND,
-                                        hashMapOf("dsn" to AccountUtil.getDSN()),
-                                        DeviceBindBean::class.java
-                                    )
-                                    return false
-                                }
-                            }).into(iv_qr_splash)
+                                    override fun onResourceReady(
+                                        resource: Drawable,
+                                        model: Any,
+                                        target: Target<Drawable>,
+                                        dataSource: DataSource,
+                                        isFirstResource: Boolean
+                                    ): Boolean {
+                                        //加载成功
+                                        getPresenter().getModel(
+                                            Urls.DEVICE_BIND,
+                                            hashMapOf("dsn" to AccountUtil.getDSN()),
+                                            DeviceBindBean::class.java
+                                        )
+                                        return false
+                                    }
+                                }).into(iv_qr_splash)
 //                        val bitmap = BitmapFactory.decodeByteArray(qrCode, 0, qrCode.size)
 //                        iv_qr_splash.setImageBitmap(bitmap)
 //                        loadBitmapImage(iv_qr_splash, bitmap)
+                        }
                     }
                 } catch (e: SocketTimeoutException) {
                     delay(2000L)
