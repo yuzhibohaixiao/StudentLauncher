@@ -154,7 +154,7 @@ class QualityHorizontalAdapter :
         ),
         NewAppTypeBean(
             "科学",
-            R.drawable.science, "org.pbskids.playandlearnscience",
+            R.drawable.science, "com.jxw.online_study",
             "com.jxw.online_study.activity.BookCaseWrapperActivity",
             mapOf<String, Any>("StartArgs" to "d:/同步学习/科学|e:JWFD")
         ),
@@ -344,6 +344,13 @@ class QualityHorizontalAdapter :
             "",
             R.drawable.quality_default_icon,
             "com.oirsdfg89.flg",
+            null,
+            null
+        ),
+        NewAppTypeBean(
+            "",
+            R.drawable.quality_default_icon,
+            "com.jxw.pedu.clickread",
             null,
             null
         ),
