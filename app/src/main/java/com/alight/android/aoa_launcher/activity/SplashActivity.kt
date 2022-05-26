@@ -92,6 +92,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         val openUserSplash = intent.getBooleanExtra("openUserSplash", false)
         //重新绑定
         isRebinding = SPUtils.getData("rebinding", false) as Boolean
+        getSystemDate()
         when {
             isRebinding -> {
                 showQRCode(isRebinding)
@@ -102,11 +103,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             onlyShowSelectChild -> {
                 showChildUser()
-                getSystemDate()
+//                getSystemDate()
             }
             else -> {
 //                getPresenter().sendMenuEnableBroadcast(this,false)
-                getSystemDate()
+//                getSystemDate()
             }
         }
     }
