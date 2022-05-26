@@ -2,8 +2,8 @@ package com.alight.android.aoa_launcher.activity
 
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
@@ -60,16 +60,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     //初始化控件
     override fun initView() {
-
+        tv_download_app.paint.flags = Paint.UNDERLINE_TEXT_FLAG
     }
 
     override fun setListener() {
         fl_splash1.setOnClickListener(this)
         ll_splash2.setOnClickListener(this)
-        fl_splash3.setOnClickListener(this)
+        fl_splash4.setOnClickListener(this)
         tv_next_launcher_splash.setOnClickListener(this)
         tv_skip_splash.setOnClickListener(this)
         ll_no_child_splash.setOnClickListener(this)
+        tv_download_app.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -136,7 +137,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         //判断网络是否连接
         if (InternetUtil.isNetworkAvalible(this)) {
             fl_splash1.visibility = View.GONE
-            ll_splash2.visibility = View.VISIBLE
+            ll_splash3.visibility = View.VISIBLE
+            iv_splash_progress.setImageResource(R.drawable.splash3_progress)
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val qrCode = AccountUtil.getQrCode()
@@ -146,6 +148,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                 override fun onLoadFailed(
                                     e: GlideException?,
                                     model: Any,
+
                                     target: Target<Drawable>,
                                     isFirstResource: Boolean
                                 ): Boolean {
@@ -192,7 +195,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private fun showChildUser() {
         fl_splash1.visibility = View.GONE
         ll_splash2.visibility = View.GONE
-        fl_splash3.visibility = View.VISIBLE
+        fl_splash4.visibility = View.VISIBLE
         try {
             GlobalScope.launch(Dispatchers.IO) {
                 try {
@@ -405,18 +408,19 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         when (any) {
             is DeviceBindBean -> {
                 if (any.data.exists) {
+                    showChildUser()
                     //检测系统更新
-                    if (isRebinding) {
-                        showChildUser()
-                    } else {
-                        //绕过升级直接进入选择用户
-//                        showChildUser()
-                        getPresenter().getModel(
-                            Urls.UPDATE,
-                            hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
-                            UpdateBean::class.java
-                        )
-                    }
+                    /*  if (isRebinding) {
+                          showChildUser()
+                      } else {
+                          //绕过升级直接进入选择用户
+  //                        showChildUser()
+                          getPresenter().getModel(
+                              Urls.UPDATE,
+                              hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+                              UpdateBean::class.java
+                          )
+                      }*/
 
                 } else {
                     GlobalScope.launch {
@@ -470,6 +474,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                     ToastUtils.showLong(this, getString(R.string.splash_network_connections))
                     startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
                 }
+            }
+            R.id.tv_download_app -> {
+                iv_splash_progress.setImageResource(R.drawable.splash3_progress)
             }
             R.id.ll_splash2 -> {
                 //跳过二维码后门

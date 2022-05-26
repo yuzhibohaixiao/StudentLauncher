@@ -18,13 +18,91 @@
         android:layout_marginEnd="70dp"
         android:text="2020/9/23 星期二 17:05"
         android:textColor="@color/white"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="395dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_splash_progress"
+            android:layout_width="438dp"
+            android:layout_height="34.5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="7dp"
+            android:layout_marginEnd="7dp"
+            android:src="@drawable/splash1_progress" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="连接wifi"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65dp"
+                android:text="下载深光家长APP"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="55dp"
+                android:text="扫码绑定设备"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:text="选择孩子"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fl_splash1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="85.5dp"
+                android:text="欢迎使用深光AR投影学习机"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <ImageView
+                android:layout_width="126.5dp"
+                android:layout_height="251dp"
+                android:layout_marginTop="3dp"
+                android:src="@drawable/splash1_person" />
+        </LinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,7 +113,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="53.5dp"
-            android:background="@drawable/splash1_center">
+            android:background="@drawable/splash1_center"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,9 +140,9 @@
     <LinearLayout
         android:id="@+id/ll_splash2"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="122dp"
+        android:layout_marginTop="85dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="gone">
@@ -71,19 +150,68 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="请用微信扫一扫下载App，之后使用App扫码绑定设备"
+            android:text="下载深光家长APP"
             android:textColor="@color/white"
             android:textSize="24sp" />
 
         <ImageView
-            android:id="@+id/iv_qr_splash"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            android:layout_marginTop="32dp" />
+            android:id="@+id/iv_qr_download_splash"
+            android:layout_width="185dp"
+            android:layout_height="185dp"
+            android:layout_marginTop="27.5dp" />
+
+        <TextView
+            android:id="@+id/tv_download_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="我已下载，下一步"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_splash3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="85dp"
+            android:text="扫描绑定设备"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <ImageView
+                android:layout_width="193dp"
+                android:layout_height="220.5dp"
+                android:src="@drawable/splash_scan" />
+
+            <ImageView
+                android:id="@+id/iv_qr_splash"
+                android:layout_width="185dp"
+                android:layout_height="185dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="22.5dp"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
     <FrameLayout
-        android:id="@+id/fl_splash3"
+        android:id="@+id/fl_splash4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
