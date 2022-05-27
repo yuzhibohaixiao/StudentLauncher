@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
@@ -167,19 +166,6 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                         //加载失败
                                         return false
                                     }
-                    GlobalScope.launch(Dispatchers.Main) {
-                        Glide.with(this@SplashActivity).load(qrCode)
-                            .listener(object : RequestListener<Drawable> {
-                                override fun onLoadFailed(
-                                    e: GlideException?,
-                                    model: Any,
-
-                                    target: Target<Drawable>,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    //加载失败
-                                    return false
-                                }
 
                                     override fun onResourceReady(
                                         resource: Drawable,

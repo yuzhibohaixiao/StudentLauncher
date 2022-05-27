@@ -824,7 +824,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             //关于设备
             R.id.ll_about_deivce -> {
-//                showAboutDeviceDialog()
+                showAboutDeviceDialog()
             }
 
             /*
