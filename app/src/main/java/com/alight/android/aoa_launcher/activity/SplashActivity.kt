@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
@@ -93,6 +94,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         val openUserSplash = intent.getBooleanExtra("openUserSplash", false)
         //重新绑定
         isRebinding = SPUtils.getData("rebinding", false) as Boolean
+        getSystemDate()
         when {
             isRebinding -> {
                 showQRCode(isRebinding)
@@ -103,11 +105,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             onlyShowSelectChild -> {
                 showChildUser()
-                getSystemDate()
+//                getSystemDate()
             }
             else -> {
 //                getPresenter().sendMenuEnableBroadcast(this,false)
-                getSystemDate()
+//                getSystemDate()
             }
         }
     }
@@ -130,6 +132,16 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * Activity是否已被销毁
+     * @return
+     */
+    fun isActivityEnable(): Boolean {
+        return if (this == null || isDestroyed || isFinishing) {
+            false
+        } else true
+    }
+
     private fun showQRCode(isRebinding: Boolean) {
         if (!isRebinding && !wifiFlag) {
             return
@@ -142,6 +154,19 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val qrCode = AccountUtil.getQrCode()
+                    if (isActivityEnable()) {
+                        GlobalScope.launch(Dispatchers.Main) {
+                            Glide.with(this@SplashActivity).load(qrCode)
+                                .listener(object : RequestListener<Drawable> {
+                                    override fun onLoadFailed(
+                                        e: GlideException?,
+                                        model: Any,
+                                        target: Target<Drawable>,
+                                        isFirstResource: Boolean
+                                    ): Boolean {
+                                        //加载失败
+                                        return false
+                                    }
                     GlobalScope.launch(Dispatchers.Main) {
                         Glide.with(this@SplashActivity).load(qrCode)
                             .listener(object : RequestListener<Drawable> {
@@ -156,25 +181,26 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                     return false
                                 }
 
-                                override fun onResourceReady(
-                                    resource: Drawable,
-                                    model: Any,
-                                    target: Target<Drawable>,
-                                    dataSource: DataSource,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    //加载成功
-                                    getPresenter().getModel(
-                                        Urls.DEVICE_BIND,
-                                        hashMapOf("dsn" to AccountUtil.getDSN()),
-                                        DeviceBindBean::class.java
-                                    )
-                                    return false
-                                }
-                            }).into(iv_qr_splash)
+                                    override fun onResourceReady(
+                                        resource: Drawable,
+                                        model: Any,
+                                        target: Target<Drawable>,
+                                        dataSource: DataSource,
+                                        isFirstResource: Boolean
+                                    ): Boolean {
+                                        //加载成功
+                                        getPresenter().getModel(
+                                            Urls.DEVICE_BIND,
+                                            hashMapOf("dsn" to AccountUtil.getDSN()),
+                                            DeviceBindBean::class.java
+                                        )
+                                        return false
+                                    }
+                                }).into(iv_qr_splash)
 //                        val bitmap = BitmapFactory.decodeByteArray(qrCode, 0, qrCode.size)
 //                        iv_qr_splash.setImageBitmap(bitmap)
 //                        loadBitmapImage(iv_qr_splash, bitmap)
+                        }
                     }
                 } catch (e: SocketTimeoutException) {
                     delay(2000L)
