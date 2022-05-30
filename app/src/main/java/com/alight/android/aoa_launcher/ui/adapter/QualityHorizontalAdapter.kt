@@ -8,6 +8,10 @@ import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.utils.AppGetUtil
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.ArrayList
 
 class QualityHorizontalAdapter :
@@ -448,14 +452,19 @@ class QualityHorizontalAdapter :
         resetAppNotifyAdapter()
     }
 
+    @DelicateCoroutinesApi
     fun resetAppNotifyAdapter() {
-        val appDatas = AppGetUtil.getAppData()
-        //过滤掉不需要的应用（素质拓展和系统应用）
-        val appFilter = appFilter(appDatas)
-        appList4.clear()
-        appList4.addAll(tempList)
-        appList4.addAll(appFilter)
-        notifyItemChanged(itemCount - 1)
+        GlobalScope.launch(Dispatchers.IO) {
+            val appDatas = AppGetUtil.getAppData()
+            //过滤掉不需要的应用（素质拓展和系统应用）
+            val appFilter = appFilter(appDatas)
+            appList4.clear()
+            appList4.addAll(tempList)
+            appList4.addAll(appFilter)
+            GlobalScope.launch(Dispatchers.Main) {
+                notifyItemChanged(itemCount - 1)
+            }
+        }
     }
 
     /**
