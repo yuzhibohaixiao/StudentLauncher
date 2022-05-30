@@ -11,11 +11,13 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.application.LauncherApplication.Companion.getMMKV
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.SplashEvent
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
+import com.alight.android.aoa_launcher.net.model.File
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.SplashUserAdapter
@@ -96,7 +98,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         getSystemDate()
         when {
             isRebinding -> {
-                showQRCode(isRebinding)
+                showSplash3(isRebinding)
             }
             openUserSplash -> {   //直接跳转到用户引导
                 fl_splash1.visibility = View.GONE
@@ -141,13 +143,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         } else true
     }
 
-    private fun showQRCode(isRebinding: Boolean) {
+    /**
+     * 扫描二维码绑定
+     */
+    private fun showSplash3(isRebinding: Boolean) {
         if (!isRebinding && !wifiFlag) {
             return
         }
         //判断网络是否连接
         if (InternetUtil.isNetworkAvalible(this)) {
             fl_splash1.visibility = View.GONE
+            ll_splash2.visibility = View.GONE
             ll_splash3.visibility = View.VISIBLE
             iv_splash_progress.setImageResource(R.drawable.splash3_progress)
             GlobalScope.launch(Dispatchers.IO) {
@@ -183,18 +189,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                         return false
                                     }
                                 }).into(iv_qr_splash)
-//                        val bitmap = BitmapFactory.decodeByteArray(qrCode, 0, qrCode.size)
-//                        iv_qr_splash.setImageBitmap(bitmap)
-//                        loadBitmapImage(iv_qr_splash, bitmap)
                         }
                     }
-                } catch (e: SocketTimeoutException) {
-                    delay(2000L)
-                    showQRCode(isRebinding)
-                    e.printStackTrace()
                 } catch (e: Exception) {
                     delay(2000L)
-                    showQRCode(isRebinding)
+                    showSplash3(isRebinding)
                     e.printStackTrace()
                 }
             }
@@ -204,10 +203,51 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private fun showSplash2QRCode() {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val qrCode = AccountUtil.getQrCode()
+                if (isActivityEnable()) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        Glide.with(this@SplashActivity).load(qrCode)
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any,
+                                    target: Target<Drawable>,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    //加载失败
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    model: Any,
+                                    target: Target<Drawable>,
+                                    dataSource: DataSource,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    //加载成功
+                                    return false
+                                }
+                            }).into(iv_qr_download_splash)
+                    }
+                }
+            } catch (e: Exception) {
+                delay(2000L)
+                showSplash2QRCode()
+                e.printStackTrace()
+            }
+        }
+    }
+
     private fun showChildUser() {
         fl_splash1.visibility = View.GONE
         ll_splash2.visibility = View.GONE
+        ll_splash3.visibility = View.GONE
         fl_splash4.visibility = View.VISIBLE
+        iv_splash_progress.setImageResource(R.drawable.splash4_progress)
         try {
             GlobalScope.launch(Dispatchers.IO) {
                 try {
@@ -216,9 +256,11 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                         if (allUser.isNullOrEmpty()) {
                             ll_no_child_splash.visibility = View.VISIBLE
                             rv_select_child_splash.visibility = View.GONE
+                            tv_splash4_title.visibility = View.GONE
                         } else {
                             ll_no_child_splash.visibility = View.GONE
                             rv_select_child_splash.visibility = View.VISIBLE
+                            tv_splash4_title.visibility = View.VISIBLE
                             rv_select_child_splash.layoutManager = LinearLayoutManager(
                                 this@SplashActivity,
                                 RecyclerView.HORIZONTAL, false
@@ -426,7 +468,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                           showChildUser()
                       } else {
                           //绕过升级直接进入选择用户
-  //                        showChildUser()
+    //                        showChildUser()
                           getPresenter().getModel(
                               Urls.UPDATE,
                               hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
@@ -475,13 +517,44 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         Log.e("error", error)
     }
 
+    /**
+     * 根据页码展示不同的引导页
+     */
+/*
+    private fun showPositionSplash(position: Int) {
+        when (position) {
+            1 -> {
+                fl_splash1.visibility = View.VISIBLE
+                ll_splash2.visibility = View.GONE
+                ll_splash3.visibility = View.GONE
+                fl_splash4.visibility = View.GONE
+            }
+            2 -> {
+                fl_splash1.visibility = View.GONE
+                ll_splash2.visibility = View.VISIBLE
+                ll_splash3.visibility = View.GONE
+                fl_splash4.visibility = View.GONE
+            }
+            3 -> {
+                showSplash3()
+            }
+            4 -> {
+            }
+        }
+
+    }
+*/
+
     override fun onClick(view: View) {
         when (view.id) {
             R.id.fl_splash1 -> {
                 wifiFlag = true
                 //开始判断网络状态
                 if (InternetUtil.isNetworkAvalible(this)) {
-                    showQRCode(true)
+                    fl_splash1.visibility = View.GONE
+                    ll_splash2.visibility = View.VISIBLE
+                    iv_splash_progress.setImageResource(R.drawable.splash2_progress)
+                    showSplash2QRCode()
                 } else {
                     ToastUtils.showLong(this, getString(R.string.splash_network_connections))
                     startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
@@ -489,11 +562,12 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_download_app -> {
                 iv_splash_progress.setImageResource(R.drawable.splash3_progress)
+                showSplash3(true)
             }
-            R.id.ll_splash2 -> {
-                //跳过二维码后门
+//            R.id.ll_splash2 -> {
+            //跳过二维码后门
 //                showChildUser()
-            }
+//            }
 //            R.id.fl_splash3 -> {
             //系统引导设置完毕，关闭引导页
 //                closeSplash()
