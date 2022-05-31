@@ -325,7 +325,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                                     //仅展示用户选择
                                                     finishSplash()
                                                 } else {
-                                                    nextNewUserSplash()
+                                                    showNewUserSplash()
                                                 }
 
                                             }
