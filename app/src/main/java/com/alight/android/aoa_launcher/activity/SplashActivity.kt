@@ -28,9 +28,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.transition.Transition
 import com.networkbench.agent.impl.NBSAppAgent
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
@@ -63,6 +61,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private var userSplashNumber = 0
     private val USER_LOGIN_ACTION = "com.alight.android.user_login" // 自定义ACTION
     private var onlySplash = false
+    private var closeSplash = false
 
     //初始化控件
     override fun initView() {
@@ -86,6 +85,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     override fun onPause() {
         super.onPause()
+        lastSplashClose()
         if (!isForceUpdate)
             getPresenter().sendMenuEnableBroadcast(this, true)
     }
@@ -111,14 +111,39 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             onlyShowSelectChild -> {
                 showChildUser()
-//                getSystemDate()
-            }
-            else -> {
-//                getPresenter().sendMenuEnableBroadcast(this,false)
-//                getSystemDate()
             }
         }
     }
+
+    /**
+     * 屏蔽系统返回按钮
+     */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        return when (event.keyCode) {
+            KeyEvent.KEYCODE_BACK -> {
+                lastSplashClose()
+                true;//系统层不做处理 就可以了
+            }
+            KeyEvent.KEYCODE_MENU -> {//MENU键
+                //监控/拦截菜单键
+                return true;
+            }
+            else -> {
+                super.dispatchKeyEvent(event);
+            }
+        }
+    }
+
+    /**
+     * 电源键处理
+     */
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_POWER) {
+            lastSplashClose()
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
 
     /**
      * 发送用户登出的广播
@@ -343,17 +368,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun openUserSplash() {
-        if (userSplashNumber == userSplashBgList.size) {
-            //关闭引导
-            closeSplash()
-            finishSplash()
-            //开机引导进入launcher时检测更新
-            if (!onlySplash) {
-                EventBus.getDefault().post(CheckUpdateEvent.getInstance())
-            }
-//            getPresenter().showAOA()
-            return
-        }
+        if (lastSplashClose()) return
         //显示launcher引导
         if (userSplashNumber == 0) {
             sc_next_launcher_splash.visibility = View.VISIBLE
@@ -361,23 +376,41 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             tv_skip_splash.visibility = View.VISIBLE
             rv_select_child_splash.visibility = View.GONE
             sc_next_launcher_splash.visibility = View.VISIBLE
+            ll_progress_splash.visibility = View.GONE
+            fl_splash4.visibility = View.GONE
         } else {
             tv_next_launcher_splash.text = "下一步"
         }
-        Glide.with(this)
-            .load(userSplashBgList[userSplashNumber])
-            .into(object : SimpleTarget<Drawable?>() {
-                override fun onResourceReady(
-                    resource: Drawable,
-                    transition: Transition<in Drawable?>?
-                ) {
-                    fl_splash.background = resource
-                }
-            })
+        fl_splash.setBackgroundResource(userSplashBgList[userSplashNumber])
+        /*  Glide.with(this)
+              .load(userSplashBgList[userSplashNumber])
+              .into(object : SimpleTarget<Drawable?>() {
+                  override fun onResourceReady(
+                      resource: Drawable,
+                      transition: Transition<in Drawable?>?
+                  ) {
+                      fl_splash.background = resource
+                  }
+              })*/
         userSplashNumber++
         if (userSplashNumber == userSplashBgList.size) {
             tv_next_launcher_splash.text = "完成引导"
         }
+    }
+
+    private fun lastSplashClose(): Boolean {
+        if (userSplashNumber == userSplashBgList.size && !closeSplash) {
+            //关闭引导
+            closeSplash()
+            finishSplash()
+            //开机引导进入launcher时检测更新
+            if (!onlySplash) {
+                closeSplash = true
+                EventBus.getDefault().post(CheckUpdateEvent.getInstance())
+            }
+            return true
+        }
+        return false
     }
 
     /**
@@ -603,25 +636,6 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         SPUtils.asyncPutData(AppConstants.NEW_USER, false)
         SPUtils.asyncPutData("onlyShowSelectChild", true)
         finishSplash()
-    }
-
-    /**
-     * 屏蔽系统返回按钮
-     */
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        return when (event.keyCode) {
-            KeyEvent.KEYCODE_BACK -> {
-                //do something.
-                true;//系统层不做处理 就可以了
-            }
-            KeyEvent.KEYCODE_MENU -> {//MENU键
-                //监控/拦截菜单键
-                return true;
-            }
-            else -> {
-                super.dispatchKeyEvent(event);
-            }
-        }
     }
 
 }
