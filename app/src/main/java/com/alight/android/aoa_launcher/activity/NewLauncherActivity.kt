@@ -192,6 +192,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
         } else {
+            initAccountUtil()
             if (audioInitSuccessful) {
                 audioAbility?.startRecording()
             }
@@ -298,7 +299,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     private fun initAccountUtil() {
-        if (AccountUtil.currentUserId != null && !splashCloseFlag && tokenPair == null)
+        if (AccountUtil.currentUserId != null && !splashCloseFlag && tokenPair == null &&tv_user_name_new_launcher.text.toString().isNotEmpty())
             return
         AccountUtil.register(this)
         val userId = SPUtils.getData(AppConstants.USER_ID, -1) as Int

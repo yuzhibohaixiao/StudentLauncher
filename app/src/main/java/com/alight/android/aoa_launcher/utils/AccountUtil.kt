@@ -170,8 +170,13 @@ object AccountUtil : LauncherProvider {
 
     override fun selectUser(userId: Int) {
         //关机时不再调用用户信息接口
-        if (!isShutdown)
-            declareUser(userId)
+        try {
+            if (!isShutdown)
+                declareUser(userId)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
     }
 
     override fun getCurrentUser(): TokenPair {

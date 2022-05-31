@@ -181,10 +181,12 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         }
         //判断网络是否连接
         if (InternetUtil.isNetworkAvalible(this)) {
-            fl_splash1.visibility = View.GONE
-            ll_splash2.visibility = View.GONE
-            ll_splash3.visibility = View.VISIBLE
-            iv_splash_progress.setImageResource(R.drawable.splash3_progress)
+            GlobalScope.launch(Dispatchers.Main) {
+                fl_splash1.visibility = View.GONE
+                ll_splash2.visibility = View.GONE
+                ll_splash3.visibility = View.VISIBLE
+                iv_splash_progress.setImageResource(R.drawable.splash3_progress)
+            }
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val qrCode = AccountUtil.getQrCode()
@@ -272,12 +274,14 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun showChildUser() {
-        fl_splash1.visibility = View.GONE
-        ll_splash2.visibility = View.GONE
-        ll_splash3.visibility = View.GONE
-        fl_splash4.visibility = View.VISIBLE
-        iv_splash_progress.setImageResource(R.drawable.splash4_progress)
         try {
+            GlobalScope.launch(Dispatchers.Main) {
+                fl_splash1.visibility = View.GONE
+                ll_splash2.visibility = View.GONE
+                ll_splash3.visibility = View.GONE
+                fl_splash4.visibility = View.VISIBLE
+                iv_splash_progress.setImageResource(R.drawable.splash4_progress)
+            }
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val allUser = AccountUtil.getAllToken() as MutableList<TokenPair>
@@ -400,8 +404,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
 
     private fun nextNewUserSplash() {
-        userSplashNumber++
         if (lastSplashClose()) return
+        userSplashNumber++
         //显示launcher引导
         if (userSplashNumber == 0) {
             sc_next_launcher_splash.visibility = View.VISIBLE
@@ -432,7 +436,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun lastSplashClose(): Boolean {
-        if (userSplashNumber == userSplashBgList.size && !closeSplash) {
+        if (userSplashNumber == userSplashBgList.size - 1 && !closeSplash) {
             //关闭引导
             closeSplash()
             finishSplash()
