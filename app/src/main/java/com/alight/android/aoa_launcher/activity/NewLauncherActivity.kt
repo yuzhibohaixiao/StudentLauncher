@@ -28,6 +28,7 @@ import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
+import com.alight.android.aoa_launcher.common.event.CheckUpdateEvent
 import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.common.event.ParentControlEvent
 import com.alight.android.aoa_launcher.common.i.LauncherListener
@@ -1212,6 +1213,19 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 hashMapOf("user_id" to tokenPair?.userId.toString()),
                 PlayTimeBean::class.java
             )
+    }
+
+    /**
+     * 进行检测更新
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onCheckUpdateEvent(event: CheckUpdateEvent) {
+        getPresenter().getModel(
+            Urls.UPDATE,
+            hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+//                                    hashMapOf("device_type" to "LAMP"),
+            UpdateBean::class.java
+        )
     }
 
     override fun onConnect() {

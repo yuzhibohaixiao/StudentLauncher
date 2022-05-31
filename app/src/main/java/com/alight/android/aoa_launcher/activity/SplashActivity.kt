@@ -11,13 +11,15 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
-import com.alight.android.aoa_launcher.application.LauncherApplication.Companion.getMMKV
 import com.alight.android.aoa_launcher.common.base.BaseActivity
-import com.alight.android.aoa_launcher.common.bean.*
+import com.alight.android.aoa_launcher.common.bean.DeviceBindBean
+import com.alight.android.aoa_launcher.common.bean.TokenManagerException
+import com.alight.android.aoa_launcher.common.bean.TokenPair
+import com.alight.android.aoa_launcher.common.bean.UpdateBean
 import com.alight.android.aoa_launcher.common.constants.AppConstants
+import com.alight.android.aoa_launcher.common.event.CheckUpdateEvent
 import com.alight.android.aoa_launcher.common.event.SplashEvent
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
-import com.alight.android.aoa_launcher.net.model.File
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.SplashUserAdapter
@@ -53,12 +55,14 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         R.drawable.launcher_splash2,
         R.drawable.launcher_splash3,
         R.drawable.launcher_splash4,
-        R.drawable.launcher_splash5
+        R.drawable.launcher_splash5,
+        R.drawable.launcher_splash6,
     )
     private var isForceUpdate = false
     private var isRebinding = false
     private var userSplashNumber = 0
     private val USER_LOGIN_ACTION = "com.alight.android.user_login" // 自定义ACTION
+    private var onlySplash = false
 
     //初始化控件
     override fun initView() {
@@ -102,6 +106,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             openUserSplash -> {   //直接跳转到用户引导
                 fl_splash1.visibility = View.GONE
+                onlySplash = true
                 openUserSplash()
             }
             onlyShowSelectChild -> {
@@ -342,6 +347,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             //关闭引导
             closeSplash()
             finishSplash()
+            //开机引导进入launcher时检测更新
+            if (!onlySplash) {
+                EventBus.getDefault().post(CheckUpdateEvent.getInstance())
+            }
 //            getPresenter().showAOA()
             return
         }
@@ -577,6 +586,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_skip_splash -> {
                 closeSplash()
+                if (!onlySplash) {
+                    EventBus.getDefault().post(CheckUpdateEvent.getInstance())
+                }
             }
             R.id.ll_no_child_splash -> {
                 ll_no_child_splash.visibility = View.GONE
