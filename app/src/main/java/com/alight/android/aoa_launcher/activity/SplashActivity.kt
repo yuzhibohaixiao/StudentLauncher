@@ -73,6 +73,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         ll_splash2.setOnClickListener(this)
         fl_splash4.setOnClickListener(this)
         tv_next_launcher_splash.setOnClickListener(this)
+        tv_next_launcher_splash2.setOnClickListener(this)
         tv_skip_splash.setOnClickListener(this)
         ll_no_child_splash.setOnClickListener(this)
         tv_download_app.setOnClickListener(this)
@@ -105,9 +106,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 showSplash3(isRebinding)
             }
             openUserSplash -> {   //直接跳转到用户引导
-                fl_splash1.visibility = View.GONE
-                onlySplash = true
-                openUserSplash()
+                showNewUserSplash()
             }
             onlyShowSelectChild -> {
                 showChildUser()
@@ -326,7 +325,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                                     //仅展示用户选择
                                                     finishSplash()
                                                 } else {
-                                                    openUserSplash()
+                                                    nextNewUserSplash()
                                                 }
 
                                             }
@@ -367,7 +366,41 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun openUserSplash() {
+    private fun showNewUserSplash() {
+        fl_splash.setBackgroundResource(userSplashBgList[0])
+        onlySplash = true
+        fl_splash1.visibility = View.GONE
+        sc_next_launcher_splash.visibility = View.VISIBLE
+        tv_date_splash.visibility = View.GONE
+        tv_skip_splash.visibility = View.VISIBLE
+        rv_select_child_splash.visibility = View.GONE
+        ll_progress_splash.visibility = View.GONE
+        fl_splash4.visibility = View.GONE
+    }
+
+    private fun backNewUserSplash() {
+        userSplashNumber--
+        if (userSplashNumber == 0) {
+            sc_next_launcher_splash.visibility = View.VISIBLE
+            tv_date_splash.visibility = View.GONE
+            tv_skip_splash.visibility = View.VISIBLE
+            rv_select_child_splash.visibility = View.GONE
+            ll_progress_splash.visibility = View.GONE
+            fl_splash4.visibility = View.GONE
+            sc_next_launcher_splash2.visibility = View.GONE
+            tv_next_launcher_splash.text = "下一步"
+        } else {
+            sc_next_launcher_splash2.visibility = View.VISIBLE
+            sc_next_launcher_splash.visibility = View.VISIBLE
+            tv_next_launcher_splash.text = "上一步"
+            tv_next_launcher_splash2.text = "下一步"
+        }
+        fl_splash.setBackgroundResource(userSplashBgList[userSplashNumber])
+    }
+
+
+    private fun nextNewUserSplash() {
+        userSplashNumber++
         if (lastSplashClose()) return
         //显示launcher引导
         if (userSplashNumber == 0) {
@@ -375,11 +408,12 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             tv_date_splash.visibility = View.GONE
             tv_skip_splash.visibility = View.VISIBLE
             rv_select_child_splash.visibility = View.GONE
-            sc_next_launcher_splash.visibility = View.VISIBLE
             ll_progress_splash.visibility = View.GONE
             fl_splash4.visibility = View.GONE
         } else {
-            tv_next_launcher_splash.text = "下一步"
+            sc_next_launcher_splash2.visibility = View.VISIBLE
+            sc_next_launcher_splash.visibility = View.VISIBLE
+            tv_next_launcher_splash.text = "上一步"
         }
         fl_splash.setBackgroundResource(userSplashBgList[userSplashNumber])
         /*  Glide.with(this)
@@ -392,9 +426,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                       fl_splash.background = resource
                   }
               })*/
-        userSplashNumber++
-        if (userSplashNumber == userSplashBgList.size) {
-            tv_next_launcher_splash.text = "完成引导"
+        if (userSplashNumber == userSplashBgList.size - 1) {
+            tv_next_launcher_splash2.text = "完成引导"
         }
     }
 
@@ -615,7 +648,15 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 //                closeSplash()
 //            }
             R.id.tv_next_launcher_splash -> {
-                openUserSplash()
+                //第一页
+                if (userSplashNumber == 0) {
+                    nextNewUserSplash()
+                } else {
+                    backNewUserSplash()
+                }
+            }
+            R.id.tv_next_launcher_splash2 -> {
+                nextNewUserSplash()
             }
             R.id.tv_skip_splash -> {
                 closeSplash()
