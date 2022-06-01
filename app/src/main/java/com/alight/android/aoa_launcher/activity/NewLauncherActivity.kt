@@ -365,24 +365,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     override fun initData() {
         mINetEvent = this
         EventBus.getDefault().register(this)
-        val splashClose = SPUtils.getData("splashClose", false) as Boolean
-        Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
-
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
-        val rebinding = SPUtils.getData("rebinding", false) as Boolean
         //满足条件时展示引导页
-        if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || rebinding && !splashClose) {
-        } else if (!splashCloseFlag && !guideUserUpdate) {
-            //检测系统更新
-            getPresenter().getModel(
-                Urls.UPDATE,
-                hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
-//                hashMapOf("device_type" to "LAMP_AL"),
-                UpdateBean::class.java
-            )
-            //表示引导过用户升级
-            guideUserUpdate = true
-        }
         if (tokenPairCache.isNotEmpty()) {
             tokenPair = Gson().fromJson(tokenPairCache, TokenPair::class.java)
             writeUserInfo(tokenPair!!)
@@ -1200,6 +1184,24 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     ),
                     JPushBindBean::class.java
                 )
+                val splashClose = SPUtils.getData("splashClose", false) as Boolean
+                Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
+
+                val tokenPairCache = SPUtils.getData("tokenPair", "") as String
+                val rebinding = SPUtils.getData("rebinding", false) as Boolean
+                //满足条件时展示引导页
+                if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || rebinding && !splashClose) {
+                } else if (!splashCloseFlag && !guideUserUpdate) {
+                    //检测系统更新
+                    getPresenter().getModel(
+                        Urls.UPDATE,
+                        hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+//                hashMapOf("device_type" to "LAMP_AL"),
+                        UpdateBean::class.java
+                    )
+                    //表示引导过用户升级
+                    guideUserUpdate = true
+                }
                 /* if (!guideUserUpdate)  //检测系统更新
                  {
                      getPresenter().getModel(
