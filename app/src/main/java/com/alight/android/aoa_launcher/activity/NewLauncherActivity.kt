@@ -299,7 +299,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     private fun initAccountUtil() {
-        if (AccountUtil.currentUserId != null && !splashCloseFlag && tokenPair == null &&tv_user_name_new_launcher.text.toString().isNotEmpty())
+        if (AccountUtil.currentUserId != null && !splashCloseFlag && tokenPair == null && tv_user_name_new_launcher.text.toString()
+                .isNotEmpty()
+        )
             return
         AccountUtil.register(this)
         val userId = SPUtils.getData(AppConstants.USER_ID, -1) as Int
@@ -372,7 +374,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || rebinding && !splashClose) {
         } else if (!splashCloseFlag && !guideUserUpdate) {
             //检测系统更新
-            getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
+            getPresenter().getModel(
+                Urls.UPDATE,
+                hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
+//                hashMapOf("device_type" to "LAMP_AL"),
+                UpdateBean::class.java
+            )
             //表示引导过用户升级
             guideUserUpdate = true
         }
