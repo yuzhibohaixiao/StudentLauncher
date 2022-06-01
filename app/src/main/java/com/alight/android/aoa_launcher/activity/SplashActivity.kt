@@ -106,6 +106,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 showSplash3(isRebinding)
             }
             openUserSplash -> {   //直接跳转到用户引导
+                onlySplash = true
                 showNewUserSplash()
             }
             onlyShowSelectChild -> {
@@ -372,7 +373,6 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     private fun showNewUserSplash() {
         fl_splash.setBackgroundResource(userSplashBgList[0])
-        onlySplash = true
         fl_splash1.visibility = View.GONE
         sc_next_launcher_splash.visibility = View.VISIBLE
         tv_date_splash.visibility = View.GONE
@@ -437,14 +437,13 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     private fun lastSplashClose(): Boolean {
         if (userSplashNumber == userSplashBgList.size - 1 && !closeSplash) {
-            //关闭引导
-            closeSplash()
-            finishSplash()
             //开机引导进入launcher时检测更新
             if (!onlySplash) {
                 closeSplash = true
                 EventBus.getDefault().post(CheckUpdateEvent.getInstance())
             }
+            //关闭引导
+            closeSplash()
             return true
         }
         return false
