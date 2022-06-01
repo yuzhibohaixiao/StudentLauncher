@@ -1,5 +1,9 @@
 package com.alight.android.aoa_launcher.activity;
 
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.LAUNCHER_PACKAGE_NAME;
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
+
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -73,10 +77,6 @@ import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
-import static com.alight.android.aoa_launcher.common.constants.AppConstants.LAUNCHER_PACKAGE_NAME;
-import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
-
 /**
  * 多文件列表下载
  *
@@ -135,6 +135,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private boolean isCheckUpdate = false;
     private boolean isStartOtaUpdate = false;
     private int installApp = 0;//强更过程已安装的应用个数
+    private boolean forceUpdateUnzipFlag = false;
 
     @Override
     public void initData() {
@@ -484,6 +485,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         if (systemAdapter.getData().get(i).getFormat() == 1) {
                             zipPosition = i;
                         }
+                    }
+                    if (isStartOtaUpdate) {
+                        forceUpdateUnzipFlag = true;
                     }
                     runOnUiThread(() -> {
                         ToastUtils.showShort(this, "解压完成！");
@@ -1107,12 +1111,13 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 systemAdapter.notifyItemChanged(i);
                                 LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                                 String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
+                                if (isStartOtaUpdate) {
+                                    syncDownloadProgress();
+                                }
                                 if (file.getPackName() != null && file.getPackName().equals(AppConstants.LAUNCHER_PACKAGE_NAME) && containsConfigFile) {
                                 } else if (file.getFormat() == 2) {
                                     if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)) {
-                                        if (isStartOtaUpdate) {
-                                            syncDownloadProgress();
-                                        } else {
+                                        if (!isStartOtaUpdate) {
                                             file.setInstalled(true);
                                             systemAdapter.notifyItemChanged(i);
 //                                        sendUpdateBroadcast(file.getPackName());
@@ -1254,14 +1259,19 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             int a = 0;
             for (int i = 0; i < needUpdateSystemList.size(); i++) {
                 File file = needUpdateSystemList.get(i);
-                int localVersionCode = AppUtils.getVersionCode(UpdateActivity.this, file.getPackName());
-                if (localVersionCode != 0 && localVersionCode >= file.getVersionCode()
+                int localVersionCode = 0;
+                if (file.getFormat() == 2) {
+                    localVersionCode = AppUtils.getVersionCode(UpdateActivity.this, file.getPackName());
+                }
+                if (file.getFormat() == 2 && localVersionCode != 0 && localVersionCode >= file.getVersionCode()
                 ) {
                     //apk更新
                     a++;
-                } else if (file.getFormat() == 1 && configVersion >= file.getVersionCode()) {
+                    Log.e("UpdateActivity", "共" + needUpdateSystemList.size() + "个安装包,已更新" + a + "个安装包");
+                } else if (file.getFormat() == 1 && forceUpdateUnzipFlag) {
                     //资源包更新
                     a++;
+                    Log.e("UpdateActivity", "共" + needUpdateSystemList.size() + "个安装包,已更新" + a + "个安装包");
                 }
             }
             if (a != 0 && needUpdateSystemList.size() > 0 && a > installApp) {

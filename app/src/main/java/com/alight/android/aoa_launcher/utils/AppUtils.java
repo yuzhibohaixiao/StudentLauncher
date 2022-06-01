@@ -55,6 +55,7 @@ public class AppUtils {
      * @return 当前应用的版本名称
      */
     public static synchronized int getVersionCode(Context context, String packageName) {
+        if (packageName == null || packageName.length() == 0) return 0;
         try {
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(
