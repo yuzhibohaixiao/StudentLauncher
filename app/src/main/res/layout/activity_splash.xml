@@ -98,11 +98,27 @@
                 android:textColor="@color/white"
                 android:textSize="24sp" />
 
-            <ImageView
-                android:layout_width="126.5dp"
-                android:layout_height="251dp"
-                android:layout_marginTop="3dp"
-                android:src="@drawable/splash1_person" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="126.5dp"
+                    android:layout_height="251dp"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/splash1_person" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="142dp"
+                    android:gravity="center_horizontal"
+                    android:text="点击开启\nAR之旅"
+                    android:textColor="@color/person_center_text_green"
+                    android:textSize="18sp" />
+            </FrameLayout>
+
         </LinearLayout>
 
         <ImageView
