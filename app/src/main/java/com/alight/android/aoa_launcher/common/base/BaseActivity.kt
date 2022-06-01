@@ -1,5 +1,6 @@
 package com.alight.android.aoa_launcher.common.base
 
+import android.content.Context
 import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +37,10 @@ abstract class BaseActivity : AppCompatActivity(), IContract.IView {
         } else {
             throw IllegalStateException("this activity no layout")
         }
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase)
     }
 
     //设置监听器

@@ -732,13 +732,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         powerDialog.findViewById<TextView>(R.id.tv_device_model).text = Build.MODEL
         powerDialog.findViewById<TextView>(R.id.tv_android_version).text = Build.VERSION.RELEASE
         powerDialog.findViewById<TextView>(R.id.tv_alight_os_version).text = Build.DISPLAY
-        powerDialog.findViewById<TextView>(R.id.tv_launcher_version).text = "Launcher " +
+        powerDialog.findViewById<TextView>(R.id.tv_launcher_version).text = "" +
                 AppUtils.getVersionName(this, AppConstants.LAUNCHER_PACKAGE_NAME)
-        powerDialog.findViewById<TextView>(R.id.tv_aoa_version).text = "AOA " +
+        powerDialog.findViewById<TextView>(R.id.tv_aoa_version).text = "" +
                 AppUtils.getVersionName(this, AppConstants.AOA_PACKAGE_NAME)
-        powerDialog.findViewById<TextView>(R.id.tv_av_version).text = "AV " +
+        powerDialog.findViewById<TextView>(R.id.tv_av_version).text = "" +
                 AppUtils.getVersionName(this, AppConstants.AV_PACKAGE_NAME)
-        powerDialog.findViewById<TextView>(R.id.tv_ahwc_version).text = "AHWC " +
+        powerDialog.findViewById<TextView>(R.id.tv_ahwc_version).text = "" +
                 AppUtils.getVersionName(this, AppConstants.AHWCX_PACKAGE_NAME)
         powerDialog.findViewById<TextView>(R.id.tv_device_nunber).text = AccountUtil.getDSN()
         powerDialog.show()
