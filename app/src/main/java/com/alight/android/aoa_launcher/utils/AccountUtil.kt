@@ -97,7 +97,7 @@ object AccountUtil : LauncherProvider {
         val newMap = HashMap<Int, TokenPair>() as MutableMap<Int, TokenPair>
         val rep = service.getRelatedUsers(DSN).execute()
         if (rep.isSuccessful()) {
-            val jsonObj = JsonParser.parseString(rep.body()!!.string()).asJsonObject
+            val jsonObj = JsonParser.parseString(rep.body()?.string()).asJsonObject
             val cod = jsonObj.get("code").asInt
             if (cod >= 400) {
                 throw TokenManagerException(
@@ -131,7 +131,7 @@ object AccountUtil : LauncherProvider {
             )
         ).execute()
         if (rep.isSuccessful()) {
-            val jsonObj = JsonParser.parseString(rep.body()!!.string()).asJsonObject
+            val jsonObj = JsonParser.parseString(rep.body()?.string()).asJsonObject
             val cod = jsonObj.get("code").asInt
             if (cod >= 400) {
                 throw TokenManagerException(
@@ -143,7 +143,7 @@ object AccountUtil : LauncherProvider {
         } else {
             throw TokenManagerException(
                 TokenManagerException.CODE_ERR,
-                "update all token fail.Fail(${rep.code()},${rep.body()!!.string()})"
+                "update all token fail.Fail(${rep.code()},${rep.body()?.string()})"
             )
         }
     }
@@ -170,13 +170,8 @@ object AccountUtil : LauncherProvider {
 
     override fun selectUser(userId: Int) {
         //关机时不再调用用户信息接口
-        try {
-            if (!isShutdown)
-                declareUser(userId)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
+        if (!isShutdown)
+            declareUser(userId)
     }
 
     override fun getCurrentUser(): TokenPair {
