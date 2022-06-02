@@ -220,7 +220,7 @@ public class UpdateService extends Service {
             DbManager db = DbHelper.getDbManager();
             db.saveOrUpdate(file);
         } catch (Exception e) {
-            ToastUtils.showLong(getBaseContext(), "安装失败，请查看存储空间是否充足");
+            ToastUtils.showLong(getBaseContext(), "安装失败，请确保设备储存空间充足");
             e.printStackTrace();
         }
     }
@@ -279,7 +279,6 @@ public class UpdateService extends Service {
                 0, new Intent(this, UpdateActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
         notifyUtils.notifyCustomView(remoteViews, contentIntent,
                 R.drawable.file, 0, "文件下载", seq + 10001, false, false, false);
-        ToastUtils.showLong(this, "下载失败，请查看存储空间是否充足");
     }
 
 
