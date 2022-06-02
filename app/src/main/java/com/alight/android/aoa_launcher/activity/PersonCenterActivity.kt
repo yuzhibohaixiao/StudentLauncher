@@ -14,7 +14,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.ahwcx.ahwsdk.AbilityManager
-import com.alight.ahwcx.ahwsdk.abilities.AudioAbility
 import com.alight.ahwcx.ahwsdk.abilities.CalibrationAbility
 import com.alight.ahwcx.ahwsdk.abilities.FeatureAbility
 import com.alight.ahwcx.ahwsdk.abilities.PanelAbility

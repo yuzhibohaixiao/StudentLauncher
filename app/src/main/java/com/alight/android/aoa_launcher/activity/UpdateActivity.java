@@ -479,11 +479,14 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 if (upZipFile(zipPath, string)) {
                     containsConfigFile = false;
                     SPUtils.syncPutData("configVersion", versionCode);
-                    String launcherApkPath = Environment.getExternalStorageDirectory().getPath() + "/launcher.apk";
-
+                    String launcherApkPath = "";
                     for (int i = 0; i < systemAdapter.getData().size(); i++) {
-                        if (systemAdapter.getData().get(i).getFormat() == 1) {
+                        File file = systemAdapter.getData().get(i);
+                        if (file.getFormat() == 1) {
                             zipPosition = i;
+                        }
+                        if (file.getPackName() != null && file.getPackName().equals(LAUNCHER_PACKAGE_NAME)) {
+                            launcherApkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
                         }
                     }
                     if (isStartOtaUpdate) {
@@ -504,9 +507,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                     runOnUiThread(() -> systemAdapter.notifyItemChanged(updatePostion));
                                 }
                             }
-//                            sendUpdateBroadcast(LAUNCHER_PACKAGE_NAME);
-                        } else {
-
                         }
                     }
                 }
