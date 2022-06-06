@@ -6,13 +6,14 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.WifiManager
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import kotlinx.android.synthetic.main.activity_wifi.*
 
 class WifiActivity : BaseActivity() {
 
-    val wifiManager = application.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val wifiManager = LauncherApplication.getContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
     val wifiScanReceiver = object : BroadcastReceiver() {
 
