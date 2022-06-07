@@ -483,6 +483,14 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     /**
+     * 打开AdbWifi
+     */
+    fun showAdbWifi() {
+        val activity = getView() as Activity
+        StartAppUtils.startApp(activity, AppConstants.ADB_WIFI_PACKAGE_NAME)
+    }
+
+    /**
      * 打开酷安市场
      */
     fun showKAMarket() {
@@ -964,7 +972,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
-    private fun startApp(context: Context, appPackName: String) {
+    fun startApp(context: Context, appPackName: String) {
         try {
             val mmkv = LauncherApplication.getMMKV()
             val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
@@ -978,12 +986,12 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             var startTime = playTimeBean.data.playtime.start_playtime
             var endTime = playTimeBean.data.playtime.stop_playtime
 
-            playTimeBean.data.app_manage.forEach {
-                if (appPackName == it.app_info.package_name
+            for (it in playTimeBean.data.app_manage) {
+                if (it.app_info.package_name.isNotEmpty() && appPackName == it.app_info.package_name
                 ) {
                     if ((it.app_permission == 3)) {
                         ToastUtils.showLong(context, "该应用已被禁用")
-                        return@startApp
+                        return
                     } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
                             startTime,
                             endTime,
@@ -992,10 +1000,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     ) {
                         //限时禁用
                         ToastUtils.showLong(context, "该应用已被限时禁用")
-                        return@startApp
+                        return
                     }
-                    return@forEach
-                }
+                    break
+                } else continue
             }
 
             val intent = context.packageManager.getLaunchIntentForPackage(appPackName)

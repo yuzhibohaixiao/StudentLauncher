@@ -5,15 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.WifiManager
+import android.view.View
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import kotlinx.android.synthetic.main.activity_wifi.*
 
-class WifiActivity : BaseActivity() {
+class WifiActivity : BaseActivity(), View.OnClickListener {
 
-    val wifiManager = LauncherApplication.getContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val wifiManager =
+        LauncherApplication.getContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
     val wifiScanReceiver = object : BroadcastReceiver() {
 
@@ -57,6 +59,8 @@ class WifiActivity : BaseActivity() {
     }
 
     override fun setListener() {
+        iv_setting_wifi.setOnClickListener(this)
+        iv_adb_wifi.setOnClickListener(this)
         switch_wifi.setOnCheckedChangeListener { buttonView, isChecked ->
 //            if (isChecked) {
 //            } else {
@@ -79,13 +83,14 @@ class WifiActivity : BaseActivity() {
     override fun onError(error: String) {
     }
 
-/*
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.switch_wifi -> {
-
+            R.id.iv_adb_wifi -> {
+                getPresenter().showAdbWifi()
+            }
+            R.id.iv_setting_wifi -> {
+                getPresenter().showSystemSetting()
             }
         }
     }
-*/
 }

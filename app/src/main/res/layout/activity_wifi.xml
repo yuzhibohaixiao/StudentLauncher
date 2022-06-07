@@ -49,4 +49,24 @@
         </FrameLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="30dp">
+
+        <ImageView
+            android:id="@+id/iv_adb_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@mipmap/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/iv_setting_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/launcher_setting" />
+    </LinearLayout>
 </FrameLayout>
