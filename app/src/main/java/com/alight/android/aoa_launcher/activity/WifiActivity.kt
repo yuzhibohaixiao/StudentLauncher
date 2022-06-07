@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.util.Log
 import android.view.View
@@ -17,6 +18,8 @@ import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.WifiListAdapter
 import kotlinx.android.synthetic.main.activity_wifi.*
+import java.util.*
+import kotlin.collections.LinkedHashMap
 
 class WifiActivity : BaseActivity(), View.OnClickListener {
 
@@ -40,10 +43,43 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * 过滤重复项
+     */
+    private fun filterScanResult(list: MutableList<ScanResult>): MutableList<ScanResult>? {
+        val linkedMap: LinkedHashMap<String, ScanResult> = LinkedHashMap(list.size)
+        for (rst in list) {
+            if (linkedMap.containsKey(rst.SSID)) {
+                if (rst.level > linkedMap[rst.SSID]!!.level) {
+                    linkedMap[rst.SSID] = rst
+                }
+                continue
+            }
+            linkedMap[rst.SSID] = rst
+        }
+        list.clear()
+        list.addAll(linkedMap.values)
+        return list
+    }
+
     private fun scanSuccess() {
         val results = wifiManager.scanResults
-//        wifiListAdapter?.data?.clear()
-        wifiListAdapter?.setNewInstance(results)
+        val filterScanResult = filterScanResult(results)
+//        filterScanResult?.sort { scanResult, scanResult2 ->
+//        }
+//        filterScanResult.sort()
+//        Arrays.sort(rssi,new Comparator() {
+//            @Override
+//
+//            public int compare(String[] str1, String[] str2) {
+//                final String lv1= str1[0];
+//
+//                final String lv2= str2[0];
+//
+//                return lv1.compareTo(lv2);
+//
+//            }
+        wifiListAdapter?.setNewInstance(filterScanResult)
 //        ... use new scan results ...
     }
 
@@ -70,30 +106,37 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         if (!success) {
             // scan failure handling
             scanFailure()
-        } else {
-
         }
-
-//        val scanResults = wifiManager.scanResults
-//        wifiListAdapter?.setNewInstance(scanResults)
     }
 
     override fun initView() {
         if (wifiListAdapter == null) {
             rv_wifi_list.layoutManager = LinearLayoutManager(this)
             wifiListAdapter = WifiListAdapter()
+            wifiListAdapter?.setEmptyView(R.layout.item_wifi_empty)
             rv_wifi_list.adapter = wifiListAdapter
         }
+        switch_wifi.isChecked = wifiManager.isWifiEnabled
     }
 
     override fun setListener() {
         iv_setting_wifi.setOnClickListener(this)
         iv_adb_wifi.setOnClickListener(this)
         switch_wifi.setOnCheckedChangeListener { buttonView, isChecked ->
-//            if (isChecked) {
-//            } else {
-//            }
-//            }
+            if (isChecked) {
+                //wifi开启
+                //  Toast.makeText(WifiActivity.this, "打开", Toast.LENGTH_SHORT).show();
+                //第二次点击的时候，清除之前的list
+//                isRefresh = true;
+//                presenter.subscribe(isRefresh);
+            } else {
+                //wifi关闭
+                wifiListAdapter?.data?.clear()
+//                Toast.makeText(WifiActivity.this, "关闭", Toast.LENGTH_SHORT).show();
+//                listView.setVisibility(View.GONE);
+
+            }
+
         }
     }
 
@@ -122,4 +165,11 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(wifiScanReceiver)
+    }
+
 }
