@@ -18,8 +18,6 @@ import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.WifiListAdapter
 import kotlinx.android.synthetic.main.activity_wifi.*
-import java.util.*
-import kotlin.collections.LinkedHashMap
 
 class WifiActivity : BaseActivity(), View.OnClickListener {
 
@@ -46,7 +44,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     /**
      * 过滤重复项
      */
-    private fun filterScanResult(list: MutableList<ScanResult>): MutableList<ScanResult>? {
+    private fun filterScanResult(list: MutableList<ScanResult>): MutableList<ScanResult> {
         val linkedMap: LinkedHashMap<String, ScanResult> = LinkedHashMap(list.size)
         for (rst in list) {
             if (linkedMap.containsKey(rst.SSID)) {
