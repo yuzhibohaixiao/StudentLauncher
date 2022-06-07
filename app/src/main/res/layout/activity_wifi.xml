@@ -47,6 +47,22 @@
                 android:track="@drawable/thumb_selctor" />
 
         </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17.5dp"
+            android:text="可用WiFi列表"
+            android:textColor="@color/person_center_text_green"
+            android:textSize="12sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_wifi_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8.5dp"
+            android:layout_marginBottom="50.5dp"
+            android:background="@drawable/wifi_list_bg" />
     </LinearLayout>
 
     <LinearLayout

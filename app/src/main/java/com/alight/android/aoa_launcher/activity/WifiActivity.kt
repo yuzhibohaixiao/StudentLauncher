@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.WifiManager
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
@@ -56,6 +57,8 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initView() {
+        rv_wifi_list.layoutManager = LinearLayoutManager(this)
+//        rv_wifi_list.adapter =
     }
 
     override fun setListener() {
@@ -64,6 +67,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         switch_wifi.setOnCheckedChangeListener { buttonView, isChecked ->
 //            if (isChecked) {
 //            } else {
+//            }
 //            }
         }
     }
@@ -89,7 +93,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 getPresenter().showAdbWifi()
             }
             R.id.iv_setting_wifi -> {
-                getPresenter().showSystemSetting()
+                getPresenter().showWifiSetting(this)
             }
         }
     }
