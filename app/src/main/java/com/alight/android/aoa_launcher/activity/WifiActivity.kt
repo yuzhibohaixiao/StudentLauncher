@@ -111,7 +111,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         if (wifiListAdapter == null) {
             rv_wifi_list.layoutManager = LinearLayoutManager(this)
             wifiListAdapter = WifiListAdapter()
-            wifiListAdapter?.setEmptyView(R.layout.item_wifi_empty)
+            wifiListAdapter?.setEmptyView(View.inflate(this, R.layout.item_wifi_empty, null))
             rv_wifi_list.adapter = wifiListAdapter
         }
         switch_wifi.isChecked = wifiManager.isWifiEnabled
@@ -123,13 +123,16 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         switch_wifi.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 //wifi开启
+                wifiManager.isWifiEnabled = true
                 //  Toast.makeText(WifiActivity.this, "打开", Toast.LENGTH_SHORT).show();
                 //第二次点击的时候，清除之前的list
 //                isRefresh = true;
 //                presenter.subscribe(isRefresh);
             } else {
                 //wifi关闭
+                wifiManager.isWifiEnabled = false
                 wifiListAdapter?.data?.clear()
+                wifiListAdapter?.notifyDataSetChanged()
 //                Toast.makeText(WifiActivity.this, "关闭", Toast.LENGTH_SHORT).show();
 //                listView.setVisibility(View.GONE);
 
