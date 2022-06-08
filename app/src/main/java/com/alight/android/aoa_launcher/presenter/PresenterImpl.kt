@@ -715,7 +715,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         var isHaveSystemUpdate = false;
         val configVersion = SPUtils.getData(
             "configVersion",
-            0
+            1
         ) as Int
         for (i in systemAppList.indices) {
             val systemApp = systemAppList[i]

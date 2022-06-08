@@ -680,7 +680,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         any.data.forEach {
             if (it.format == 1 && SPUtils.getData(
                     "configVersion",
-                    0
+                    1
                 ) as Int >= it.version_code
                 || AppUtils.getVersionCode(
                     this,
