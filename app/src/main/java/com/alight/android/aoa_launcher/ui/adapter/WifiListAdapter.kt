@@ -36,6 +36,7 @@ class WifiListAdapter : BaseQuickAdapter<ScanResult, BaseViewHolder>(R.layout.it
             val wifiSsid = getWifiSsid()
             if (wifiSsid.isNotEmpty()) {
                 val currentWifiSsid = wifiSsid.subSequence(1, wifiSsid.length - 1)
+                //当前连接的wifi
                 if (currentWifiSsid == item.SSID) {
                     ivTick.visibility = View.VISIBLE
                     line.visibility = View.VISIBLE

@@ -1,6 +1,7 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -8,6 +9,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.wifi.ScanResult
+import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
 import android.util.Log
 import android.view.View
@@ -17,6 +19,7 @@ import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.WifiListAdapter
+import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import kotlinx.android.synthetic.main.activity_wifi.*
 
 
@@ -24,6 +27,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
     private val TAG = "WifiActivity"
     private var wifiListAdapter: WifiListAdapter? = null
+    private var wifiConfigList: List<WifiConfiguration>? = null
 
     val wifiManager =
         LauncherApplication.getContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -39,6 +43,16 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             } else {
                 scanFailure()
             }
+        }
+    }
+
+    //得到Wifi配置好的信息
+    @SuppressLint("MissingPermission")
+    fun getConfiguration() {
+        wifiConfigList = wifiManager.configuredNetworks //得到配置好的网络信息
+        for (i in 0 until wifiConfigList?.size!!) {
+            Log.i(TAG, wifiConfigList?.get(i)?.SSID!!)
+            Log.i(TAG, java.lang.String.valueOf(wifiConfigList?.get(i)?.networkId))
         }
     }
 
@@ -87,7 +101,9 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 //                return lv1.compareTo(lv2);
 //
 //            }
-        wifiListAdapter?.setNewInstance(filterScanResult)
+        //wifi列表排序
+        val sortScanResult = sortByLevel(filterScanResult)
+        wifiListAdapter?.setNewInstance(sortScanResult)
 //        ... use new scan results ...
     }
 
@@ -115,6 +131,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             // scan failure handling
             scanFailure()
         }
+        getConfiguration()
     }
 
     override fun initView() {
@@ -147,10 +164,98 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 //                listView.setVisibility(View.GONE);
 
             }
-
+        }
+        wifiListAdapter?.setOnItemClickListener { adapter, view, position ->
+            val scanResult = adapter.data[position] as ScanResult
+            val powerDialog = CustomDialog(this, R.layout.dialog_wifi_connect)
+            powerDialog.show()
+            //连接方式
+//            var wifiConfiguration = CreateWifiInfo(scanResult.SSID, "Password", Type)
+//            var flag = addNetwork(wifiConfiguration) //连接网络
         }
     }
 
+    //将搜索到的wifi根据信号从强到弱进行排序
+    private fun sortByLevel(list: MutableList<ScanResult>): MutableList<ScanResult> {
+        var temp: ScanResult? = null
+        for (i in list.indices) for (j in list.indices) {
+            if (list[i].level > list[j].level) //level属性即为强度
+            {
+                temp = list[i]
+                list[i] = list[j]
+                list[j] = temp
+            }
+        }
+        return list
+    }
+
+    /**
+     *flag 返回true 并不能代表热点连接成功，但是返回false一定代表连接不成功
+     *当密码位数不对时也会直接返回false，因此不能用该参数来判别是否连接成功
+     *这也是我在项目中碰到的一个难题
+     */
+
+    /**
+
+    连接到WPA2网络
+
+    @param ssid 热点名
+
+    @param password 密码
+
+    @return 配置是否成功
+
+     */
+
+
+    //添加指定WIFI的配置信息,原列表不存在此SSID
+    fun addWifiConfig(wifiList: List<ScanResult>, ssid: String, pwd: String): Int {
+        var wifiId = -1
+        for (i in wifiList.indices) {
+            val wifi = wifiList[i]
+            if (wifi.SSID == ssid) {
+                Log.i("AddWifiConfig", "equals")
+                val wifiCong = WifiConfiguration()
+                wifiCong.SSID = "\"" + wifi.SSID + "\"" //\"转义字符，代表"
+                wifiCong.preSharedKey = "\"" + pwd + "\"" //WPA-PSK密码
+                wifiCong.hiddenSSID = false
+                wifiCong.status = WifiConfiguration.Status.ENABLED
+                wifiId =
+                    wifiManager.addNetwork(wifiCong) //将配置好的特定WIFI密码信息添加,添加完成后默认是不激活状态，成功返回ID，否则为-1
+                if (wifiId != -1) {
+                    return wifiId
+                }
+            }
+        }
+        return wifiId
+    }
+
+    //连接指定Id的WIFI
+    fun connectWifi(wifiId: Int): Boolean {
+        for (i in wifiConfigList!!.indices) {
+            val wifi = wifiConfigList!![i]
+            if (wifi.networkId == wifiId) {
+                while (!wifiManager.enableNetwork(wifiId, true)) { //激活该Id，建立连接
+                    //status:0--已经连接，1--不可连接，2--可以连接
+                    Log.i("ConnectWifi", wifiConfigList!![wifiId].status.toString())
+                }
+                return true
+            }
+        }
+        return false
+    }
+
+    //判定指定WIFI是否已经配置好,依据WIFI的地址BSSID,返回NetId
+    fun isConfiguration(SSID: String): Int {
+        Log.i("IsConfiguration", wifiConfigList!!.size.toString())
+        for (i in wifiConfigList!!.indices) {
+            Log.i(wifiConfigList!![i].SSID, wifiConfigList!![i].networkId.toString())
+            if (wifiConfigList!![i].SSID == SSID) { //地址相同
+                return wifiConfigList!![i].networkId
+            }
+        }
+        return -1
+    }
 
     /**
      * 移除wifi，因为权限，无法移除的时候，需要手动去翻wifi列表删除
