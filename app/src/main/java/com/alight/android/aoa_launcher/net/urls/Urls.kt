@@ -4,7 +4,6 @@ object Urls {
 
     //          android 9 以上需要使用https
     const val BASEURL = "https://api.alight-sys.com"   //正式服务（生产）
-
 //    const val BASEURL = "https://test.api.alight-sys.com" //测试服务
 //    const val BASEURL = "https://appotronics.api.alight-sys.com" //光峰
 

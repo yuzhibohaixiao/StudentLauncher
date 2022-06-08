@@ -19,6 +19,7 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.WifiListAdapter
 import kotlinx.android.synthetic.main.activity_wifi.*
 
+
 class WifiActivity : BaseActivity(), View.OnClickListener {
 
     private val TAG = "WifiActivity"
@@ -58,6 +59,15 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         list.clear()
         list.addAll(linkedMap.values)
         return list
+    }
+
+    /**
+     * WiFi未打开，开启wifi
+     */
+    private fun enableWifi() {
+        if (wifiManager != null && !wifiManager.isWifiEnabled) {
+            wifiManager.isWifiEnabled = true
+        }
     }
 
     private fun scanSuccess() {
@@ -141,6 +151,17 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+
+    /**
+     * 移除wifi，因为权限，无法移除的时候，需要手动去翻wifi列表删除
+     * 注意：！！！只能移除自己应用创建的wifi。
+     * 删除掉app，再安装的，都不算自己应用，具体看removeNetwork源码
+     *
+     * @param netId wifi的id
+     */
+    fun removeWifi(netId: Int): Boolean {
+        return wifiManager.removeNetwork(netId)
+    }
 
     override fun initPresenter(): PresenterImpl {
         return PresenterImpl()
