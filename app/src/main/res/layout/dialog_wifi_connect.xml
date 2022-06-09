@@ -46,10 +46,12 @@
                 android:textSize="12sp" />
 
             <EditText
+                android:id="@+id/et_wifi_pwd"
                 android:layout_width="228dp"
                 android:layout_height="26.5dp"
-                android:background="@drawable/gray_bg_12oval"
+                android:background="@drawable/gray_bg_6oval"
                 android:hint="请输入wifi密码"
+                android:inputType="textPassword"
                 android:paddingStart="10dp"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -61,6 +63,7 @@
             android:layout_marginTop="10dp">
 
             <CheckBox
+                android:id="@+id/cb_show_pwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:theme="@style/MyGreenCheckBox" />
@@ -79,6 +82,7 @@
             android:layout_marginStart="74.5dp">
 
             <CheckBox
+                android:id="@+id/cb_record_pwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:theme="@style/MyGreenCheckBox" />
@@ -91,6 +95,31 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="42dp">
+
+            <TextView
+                android:layout_width="57.5dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="17.5dp"
+                android:background="@drawable/dark_gray_bg_6oval"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/person_center_text_green"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="57.5dp"
+                android:layout_height="25dp"
+                android:background="@drawable/dark_gray_bg_6oval"
+                android:gravity="center"
+                android:text="加入"
+                android:textColor="@color/person_center_text_green"
+                android:textSize="12sp" />
+        </LinearLayout>
 
     </LinearLayout>
 </FrameLayout>

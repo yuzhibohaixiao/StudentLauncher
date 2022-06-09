@@ -11,8 +11,12 @@ import android.net.ConnectivityManager
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
+import android.text.InputType
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.CheckBox
+import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
@@ -21,6 +25,8 @@ import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.WifiListAdapter
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import kotlinx.android.synthetic.main.activity_wifi.*
+import kotlinx.android.synthetic.main.dialog_wifi_connect.*
+import java.util.*
 
 
 class WifiActivity : BaseActivity(), View.OnClickListener {
@@ -167,8 +173,29 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         }
         wifiListAdapter?.setOnItemClickListener { adapter, view, position ->
             val scanResult = adapter.data[position] as ScanResult
-            val powerDialog = CustomDialog(this, R.layout.dialog_wifi_connect)
-            powerDialog.show()
+            if (scanResult.SSID.isNotEmpty() && scanResult.SSID == getWifiSsid()) {
+                //已连接的wifi
+            } else {
+                //未连接的wifi
+                val powerDialog = CustomDialog(this, R.layout.dialog_wifi_connect)
+                val etWifiPwd = powerDialog.findViewById<EditText>(R.id.et_wifi_pwd)
+                powerDialog.findViewById<CheckBox>(R.id.cb_show_pwd)
+                    .setOnCheckedChangeListener { buttonView, isChecked ->
+                        //显示密码
+                        if (isChecked) {
+                            etWifiPwd.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                        } else {
+                            etWifiPwd.inputType =
+                                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                        }
+                        etWifiPwd.setSelection(etWifiPwd.text.toString().length)
+                    }
+                powerDialog.findViewById<CheckBox>(R.id.cb_record_pwd)
+                    .setOnCheckedChangeListener { buttonView, isChecked ->
+                        //记录密码
+                    }
+                powerDialog.show()
+            }
             //连接方式
 //            var wifiConfiguration = CreateWifiInfo(scanResult.SSID, "Password", Type)
 //            var flag = addNetwork(wifiConfiguration) //连接网络
@@ -186,7 +213,40 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 list[j] = temp
             }
         }
+
+        for (i in list.indices) {
+            if (list[i].SSID.isNotEmpty() && list[i].SSID == getWifiSsid()) {
+                //把已连接的元素放在首位
+                Collections.swap(list, i, 0)
+                break
+            }
+        }
         return list
+    }
+
+    /**
+     * 获取当前连接的wifi名称
+     */
+    private fun getWifiSsid(): String {
+
+        var ssid = ""
+
+        var networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (networkInfo?.isConnected!!) {
+
+            var connectionInfo = wifiManager.connectionInfo;
+
+            if (connectionInfo != null && !TextUtils.isEmpty(connectionInfo.ssid)) {
+
+                ssid = connectionInfo.ssid;
+
+            }
+
+        }
+
+        return ssid.replace("\"", "")
+
     }
 
     /**

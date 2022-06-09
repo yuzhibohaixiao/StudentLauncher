@@ -33,9 +33,8 @@ class WifiListAdapter : BaseQuickAdapter<ScanResult, BaseViewHolder>(R.layout.it
         if (item.SSID.isNotEmpty()) {
             holder.itemView.visibility = View.VISIBLE
             holder.setText(R.id.tv_wifi_name, item.SSID)
-            val wifiSsid = getWifiSsid()
-            if (wifiSsid.isNotEmpty()) {
-                val currentWifiSsid = wifiSsid.subSequence(1, wifiSsid.length - 1)
+            val currentWifiSsid = getWifiSsid()
+            if (currentWifiSsid.isNotEmpty()) {
                 //当前连接的wifi
                 if (currentWifiSsid == item.SSID) {
                     ivTick.visibility = View.VISIBLE
@@ -126,7 +125,7 @@ class WifiListAdapter : BaseQuickAdapter<ScanResult, BaseViewHolder>(R.layout.it
 
         }
 
-        return ssid;
+        return ssid.replace("\"", "")
 
     }
 
