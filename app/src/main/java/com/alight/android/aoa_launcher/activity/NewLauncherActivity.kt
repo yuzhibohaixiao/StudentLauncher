@@ -82,6 +82,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var stopHeart = false
     private var playTimeBean: PlayTimeBean? = null
     private var shutdownReceiver: ShutdownReceiver? = null
+    private var startHeart = false
     private var selectBook: AppTypeBean = AppTypeBean(
         R.drawable.yxkw, "com.jxw.pedu.clickread",
         "com.jxw.pedu.clickread.MainActivity",
@@ -709,7 +710,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 }
             } else if (any is JPushBindBean) {
                 if (any.code == 201) {
-                    heartbeat()
+                    if (!startHeart) {
+                        startHeart = true
+                        heartbeat()
+                    }
                 }
             } else if (any is StudyPlanBean) {
                 try {
