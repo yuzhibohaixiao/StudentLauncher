@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
-import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -77,6 +76,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         tv_skip_splash.setOnClickListener(this)
         ll_no_child_splash.setOnClickListener(this)
         tv_download_app.setOnClickListener(this)
+        fl_wifi_module.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -112,6 +112,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             onlyShowSelectChild -> {
                 showChildUser()
             }
+        }
+        RxTimerUtil.interval(5000) {
+            iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
         }
     }
 
@@ -372,6 +375,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun showNewUserSplash() {
+        fl_wifi_module.visibility = View.GONE
         fl_splash.setBackgroundResource(userSplashBgList[0])
         fl_splash1.visibility = View.GONE
         sc_next_launcher_splash.visibility = View.VISIBLE
@@ -671,6 +675,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             R.id.ll_no_child_splash -> {
                 ll_no_child_splash.visibility = View.GONE
                 showChildUser()
+            }
+            R.id.fl_wifi_module -> {
+                getPresenter().startWifiModule(false)
             }
         }
     }

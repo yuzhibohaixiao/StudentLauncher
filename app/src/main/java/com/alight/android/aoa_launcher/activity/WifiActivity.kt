@@ -159,6 +159,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     override fun setListener() {
         iv_setting_wifi.setOnClickListener(this)
         iv_adb_wifi.setOnClickListener(this)
+        ll_back.setOnClickListener(this)
         switch_wifi.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 //wifi开启
@@ -355,6 +356,9 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.iv_setting_wifi -> {
                 getPresenter().showWifiSetting(this)
+            }
+            R.id.ll_back -> {
+                finish()
             }
         }
     }

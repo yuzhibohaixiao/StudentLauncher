@@ -1,8 +1,10 @@
 package com.alight.android.aoa_launcher.utils
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiConfiguration
+import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.text.TextUtils
 import java.lang.reflect.Method
@@ -179,6 +181,14 @@ object WifiUtil {
             }
         }
         return null
+    }
+
+    // 获取当前热点最新的信号强度
+    fun getCurrentNetworkRssi(mContext: Context): Int {
+        var wifiManager =
+            mContext.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        var wifiInfo = wifiManager.connectionInfo
+        return wifiInfo.rssi
     }
 
 }

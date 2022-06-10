@@ -356,4 +356,22 @@
         android:textColor="@color/launcher_purple"
         android:textSize="18sp"
         android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/fl_wifi_module"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/wifi_oval_gray">
+
+        <ImageView
+            android:id="@+id/iv_wifi_module"
+            android:layout_width="16dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center"
+            android:src="@drawable/wifi_connect_big" />
+    </FrameLayout>
+
 </FrameLayout>

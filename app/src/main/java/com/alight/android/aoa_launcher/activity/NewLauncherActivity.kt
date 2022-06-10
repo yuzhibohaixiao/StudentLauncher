@@ -433,6 +433,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         initAbility()
         initShutdownReceiver()
         Log.i(TAG, "DSN: " + AccountUtil.getDSN())
+        RxTimerUtil.interval(5000) {
+            iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
+        }
     }
 
     private fun initShutdownReceiver() {
