@@ -73,13 +73,13 @@
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@style/theme_Launcher">
-            <!--  <intent-filter>
-                  <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                  <category android:name="android.intent.category.HOME" />
-                  <category android:name="android.intent.category.DEFAULT" />
-                  <category android:name="android.intent.category.LAUNCHER" />
-              </intent-filter>-->
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <intent-filter>
                 <data android:scheme="tingyun.42759" />
                 <!--                &lt;!&ndash;请将 scheme 中的“tingyun.xxxx”替换为听云报表设置页面中的 URL Scheme&ndash;&gt;-->
@@ -94,13 +94,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <!-- <activity
               android:name=".activity.LauncherActivity"
