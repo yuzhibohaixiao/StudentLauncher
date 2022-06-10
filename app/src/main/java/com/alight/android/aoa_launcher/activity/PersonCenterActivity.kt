@@ -80,17 +80,18 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 //            hashMapOf("device_type" to "LAMP"),
             UpdateBean::class.java
         )
+        iv_wifi_icon.setImageResource(getPresenter().getCurrentWifiPersonDrawable(this))
     }
 
     private fun initWifiState() {
         val wifiSsid = getPresenter().getWifiSsid(this)
         if (wifiSsid.isEmpty()) {
-            iv_wifi_icon.setImageResource(R.drawable.wifi_not_connected)
+//            iv_wifi_icon.setImageResource(R.drawable.wifi_not_connected)
             tv_wifi_state.text = "未连接"
             tv_wifi_name.text = "点此连接Wifi"
             tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_gray))
         } else {
-            iv_wifi_icon.setImageResource(R.drawable.wifi_connect_person_big)
+//            iv_wifi_icon.setImageResource(R.drawable.wifi_connect_person_big)
             tv_wifi_state.text = "已连接"
             tv_wifi_name.text = wifiSsid.substring(1, wifiSsid.length - 1)
             tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_blue))

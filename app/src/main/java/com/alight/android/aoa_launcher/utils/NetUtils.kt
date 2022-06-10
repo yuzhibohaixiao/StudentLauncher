@@ -18,13 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
- * 协程 类似于rxjava 是一个异步处理库
- *
- * kotlin_version 大于1.3
- * 使用方式：
- * 导入
- * implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1"
-implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
+ *  网络请求的封装类
  */
 class NetUtils private constructor() {
     lateinit var apiService: Apiservice

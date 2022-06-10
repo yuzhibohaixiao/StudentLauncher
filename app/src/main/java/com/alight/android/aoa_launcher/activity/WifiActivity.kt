@@ -57,6 +57,9 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     @SuppressLint("MissingPermission")
     fun getConfiguration() {
         wifiConfigList = wifiManager.configuredNetworks //得到配置好的网络信息
+        if (wifiConfigList == null || wifiConfigList?.size == 0) {
+            return
+        }
         for (i in 0 until wifiConfigList?.size!!) {
             Log.i(TAG, wifiConfigList?.get(i)?.SSID!!)
             Log.i(TAG, java.lang.String.valueOf(wifiConfigList?.get(i)?.networkId))

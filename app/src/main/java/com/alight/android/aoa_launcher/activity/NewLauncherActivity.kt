@@ -231,6 +231,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         splashCloseFlag = false
         qualityHorizontalAdapter?.resetAppNotifyAdapter()
+        iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
     }
 
     /**

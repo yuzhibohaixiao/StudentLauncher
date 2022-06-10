@@ -82,6 +82,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         getPresenter().sendMenuEnableBroadcast(this, false)
+        iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
     }
 
     override fun onPause() {
