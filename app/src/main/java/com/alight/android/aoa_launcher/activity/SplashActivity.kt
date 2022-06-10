@@ -635,7 +635,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                     showSplash2QRCode()
                 } else {
                     ToastUtils.showLong(this, getString(R.string.splash_network_connections))
-                    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
+                    getPresenter().startWifiModule(true)
+//                    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
                 }
             }
             R.id.tv_download_app -> {
