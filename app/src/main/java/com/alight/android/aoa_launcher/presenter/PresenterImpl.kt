@@ -35,6 +35,7 @@ import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.activity.UpdateActivity
+import com.alight.android.aoa_launcher.activity.WifiActivity
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BasePresenter
 import com.alight.android.aoa_launcher.common.bean.*
@@ -1355,6 +1356,16 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 UserDBUtil.keepLastRecord("小学", "六年级", -1, -1, "", null)
             }
         }
+    }
+
+    /**
+     * @param startWifi true wifi默认被开启
+     */
+    fun startWifiModule(startWifi: Boolean) {
+        val activity = getView() as Activity
+        val intent = Intent(activity, WifiActivity::class.java)
+        intent.putExtra("startWifi", startWifi)
+        activity.startActivity(intent)
     }
 
 

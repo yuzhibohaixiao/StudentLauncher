@@ -179,6 +179,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         tv_book_click.setOnClickListener(this)
         fl_classroom_sync.setOnClickListener(this)
         iv_ip_image.setOnClickListener(this)
+        fl_wifi_module.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -941,6 +942,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             R.id.iv_ip_image -> {
                 audioAbility?.wakeup()
+            }
+            R.id.fl_wifi_module -> {
+                getPresenter().startWifiModule(false)
             }
         }
     }

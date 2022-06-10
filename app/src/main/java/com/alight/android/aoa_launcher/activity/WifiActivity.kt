@@ -24,6 +24,7 @@ import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.WifiListAdapter
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
+import com.alight.android.aoa_launcher.utils.WifiUtil
 import kotlinx.android.synthetic.main.activity_wifi.*
 import kotlinx.android.synthetic.main.dialog_wifi_connect.*
 import java.util.*
@@ -123,6 +124,11 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     override fun initData() {
         val PERMS_INITIAL = arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION)
         requestPermissions(PERMS_INITIAL, 127)
+
+        val startWifi = intent.getBooleanExtra("startWifi", false)
+        if (startWifi) {
+            WifiUtil.openWifi(wifiManager)
+        }
 
         val hasSystemFeature = packageManager.hasSystemFeature(PackageManager.FEATURE_WIFI_AWARE)
         Log.i(TAG, "当前设备可以感知wifi: $hasSystemFeature")

@@ -8,7 +8,7 @@ import android.text.TextUtils
 import java.lang.reflect.Method
 
 
-class WifiUtil {
+object WifiUtil {
     /**
      * 开始扫描wifi
      */
