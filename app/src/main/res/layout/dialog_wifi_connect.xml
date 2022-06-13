@@ -102,6 +102,7 @@
             android:layout_marginEnd="42dp">
 
             <TextView
+                android:id="@+id/tv_connect_cancel"
                 android:layout_width="57.5dp"
                 android:layout_height="25dp"
                 android:layout_marginEnd="17.5dp"
@@ -112,6 +113,7 @@
                 android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/tv_connect_wifi"
                 android:layout_width="57.5dp"
                 android:layout_height="25dp"
                 android:background="@drawable/dark_gray_bg_6oval"

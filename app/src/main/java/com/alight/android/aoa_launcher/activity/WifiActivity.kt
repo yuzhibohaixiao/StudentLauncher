@@ -17,6 +17,8 @@ import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
@@ -24,9 +26,11 @@ import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.WifiListAdapter
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
-import com.alight.android.aoa_launcher.utils.WifiUtil
+import com.alight.android.aoa_launcher.utils.WifiAdmin
 import kotlinx.android.synthetic.main.activity_wifi.*
-import kotlinx.android.synthetic.main.dialog_wifi_connect.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -35,6 +39,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     private val TAG = "WifiActivity"
     private var wifiListAdapter: WifiListAdapter? = null
     private var wifiConfigList: List<WifiConfiguration>? = null
+    private var mWifiAdmin: WifiAdmin? = null
 
     val wifiManager =
         LauncherApplication.getContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -56,14 +61,16 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     //得到Wifi配置好的信息
     @SuppressLint("MissingPermission")
     fun getConfiguration() {
-        wifiConfigList = wifiManager.configuredNetworks //得到配置好的网络信息
-        if (wifiConfigList == null || wifiConfigList?.size == 0) {
-            return
+        GlobalScope.launch(Dispatchers.IO) {
+            wifiConfigList = wifiManager.configuredNetworks //得到配置好的网络信息
         }
-        for (i in 0 until wifiConfigList?.size!!) {
-            Log.i(TAG, wifiConfigList?.get(i)?.SSID!!)
-            Log.i(TAG, java.lang.String.valueOf(wifiConfigList?.get(i)?.networkId))
-        }
+//        if (wifiConfigList == null || wifiConfigList?.size == 0) {
+//            return
+//        }
+//        for (i in 0 until wifiConfigList?.size!!) {
+//            Log.i(TAG, wifiConfigList?.get(i)?.SSID!!)
+//            Log.i(TAG, java.lang.String.valueOf(wifiConfigList?.get(i)?.networkId))
+//        }
     }
 
     /**
@@ -127,10 +134,11 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     override fun initData() {
         val PERMS_INITIAL = arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION)
         requestPermissions(PERMS_INITIAL, 127)
-
+        mWifiAdmin = WifiAdmin(this);
         val startWifi = intent.getBooleanExtra("startWifi", false)
-        if (startWifi) {
-            WifiUtil.openWifi(wifiManager)
+        if (startWifi && !wifiManager.isWifiEnabled) {
+            mWifiAdmin?.openWifi(this)
+//            WifiUtil.openWifi(wifiManager)
         }
 
         val hasSystemFeature = packageManager.hasSystemFeature(PackageManager.FEATURE_WIFI_AWARE)
@@ -139,14 +147,14 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         val intentFilter = IntentFilter()
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         registerReceiver(wifiScanReceiver, intentFilter)
-
-        val success = wifiManager.startScan()
-        Log.i(TAG, "开始扫描: $success")
-        if (!success) {
-            // scan failure handling
-            scanFailure()
-        }
-        getConfiguration()
+        mWifiAdmin?.startScan(this)
+//        val success = wifiManager.startScan()
+//        Log.i(TAG, "开始扫描: $success")
+//        if (!success) {
+        // scan failure handling
+//            scanFailure()
+//        }
+//        getConfiguration()
     }
 
     override fun initView() {
@@ -204,12 +212,116 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                     .setOnCheckedChangeListener { buttonView, isChecked ->
                         //记录密码
                     }
+                powerDialog.findViewById<TextView>(R.id.tv_connect_cancel).setOnClickListener {
+                    //取消
+                    powerDialog.dismiss()
+                }
+                powerDialog.findViewById<TextView>(R.id.tv_connect_wifi).setOnClickListener {
+                    if (etWifiPwd.text.toString().length < 8) {
+                        Toast.makeText(this, "密码至少8位", Toast.LENGTH_SHORT).show();
+                        return@setOnClickListener
+                    }
+                    //加入（连接wifi）
+                    mWifiAdmin?.addNetwork(
+                        mWifiAdmin?.CreateWifiInfo(
+                            scanResult.SSID,
+                            etWifiPwd.text.toString(),
+                            getWifiType(scanResult)
+                        )
+                    )
+                    powerDialog.dismiss()
+                }
                 powerDialog.show()
             }
             //连接方式
 //            var wifiConfiguration = CreateWifiInfo(scanResult.SSID, "Password", Type)
 //            var flag = addNetwork(wifiConfiguration) //连接网络
         }
+    }
+
+    private fun getWifiType(scanResult: ScanResult): Int {
+        var TYPE: Int
+        val capabilities = scanResult.capabilities
+        if (capabilities.isEmpty()) {
+            TYPE = 1
+        } else if (capabilities.contains("WEP")) {
+            TYPE = 2
+        } else if (capabilities.contains("WPA") || capabilities.contains("WPA2") || capabilities.contains(
+                "WPS"
+            )
+        ) {
+            TYPE = 3
+        } else {
+            TYPE = 1
+        }
+        return TYPE
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun IsExsits(SSID: String): WifiConfiguration? {
+        var existingConfigs = wifiManager.configuredNetworks
+        existingConfigs.forEach {
+            if (it.SSID.equals("\"" + SSID + "\"")) {
+                return it;
+            }
+        }
+        return null;
+    }
+
+    fun CreateWifiInfo(SSID: String, Password: String, Type: Int): WifiConfiguration {
+        var config = WifiConfiguration()
+        config.allowedAuthAlgorithms.clear();
+        config.allowedGroupCiphers.clear();
+        config.allowedKeyManagement.clear();
+        config.allowedPairwiseCiphers.clear();
+        config.allowedProtocols.clear();
+        config.SSID = "\"" + SSID + "\"";
+
+        var tempConfig = this.IsExsits(SSID);
+        if (tempConfig != null) {
+            wifiManager.removeNetwork(tempConfig.networkId);
+        }
+
+        if (Type == 1) //WIFICIPHER_NOPASS
+        {
+            config.wepKeys[0] = "";
+            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+            config.wepTxKeyIndex = 0;
+        }
+        if (Type == 2) //WIFICIPHER_WEP
+        {
+            config.hiddenSSID = true;
+            config.wepKeys[0] = "\"" + Password + "\"";
+            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+            config.wepTxKeyIndex = 0;
+        }
+        if (Type == 3) //WIFICIPHER_WPA
+        {
+            config.preSharedKey = "\"" + Password + "\"";
+            config.hiddenSSID = true;
+            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+            //config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+            config.status = WifiConfiguration.Status.ENABLED;
+        }
+        return config;
+    }
+
+    // 添加一个网络并连接
+    fun addNetwork(wcg: WifiConfiguration) {
+        var wcgID = wifiManager.addNetwork(wcg)
+        var b = wifiManager.enableNetwork(wcgID, true)
+        Log.i(TAG, "a--$wcgID");
+        Log.i(TAG, "b--$b");
     }
 
     //将搜索到的wifi根据信号从强到弱进行排序
