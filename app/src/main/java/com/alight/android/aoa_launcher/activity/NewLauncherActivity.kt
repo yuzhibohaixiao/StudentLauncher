@@ -83,6 +83,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var playTimeBean: PlayTimeBean? = null
     private var shutdownReceiver: ShutdownReceiver? = null
     private var startHeart = false
+    private var onresumeFlag = false
     private var selectBook: AppTypeBean = AppTypeBean(
         R.drawable.yxkw, "com.jxw.pedu.clickread",
         "com.jxw.pedu.clickread.MainActivity",
@@ -184,6 +185,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     override fun onResume() {
         super.onResume()
+        if (onresumeFlag) {
+            return
+        } else {
+            onresumeFlag = true
+        }
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
         Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
 
@@ -232,6 +238,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         splashCloseFlag = false
         qualityHorizontalAdapter?.resetAppNotifyAdapter()
         iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
+        GlobalScope.launch(Dispatchers.IO) {
+            delay(3000)
+            //放开onResume限制
+            onresumeFlag = false
+        }
     }
 
     /**

@@ -29,18 +29,23 @@ import okhttp3.logging.HttpLoggingInterceptor;
 /**
  * Created by wangzhe
  */
-public final class HTTPSUtils {
-    private OkHttpClient client;
-
-    public Context mContext;
-
+public class HTTPSUtils {
+    private static volatile OkHttpClient client;
 
     /**
      * 获取OkHttpClient实例
      *
      * @return
      */
-    public OkHttpClient getInstance() {
+    public static OkHttpClient getInstance(Context context) {
+        if (client == null) {
+            synchronized (OkHttpClient.class) {
+                if (client == null) {
+                    new HTTPSUtils(context);
+                    return client;
+                }
+            }
+        }
         return client;
     }
 
@@ -49,13 +54,12 @@ public final class HTTPSUtils {
      *
      * @param context
      */
-    public HTTPSUtils(Context context) {
-        mContext = context;
+    private HTTPSUtils(Context context) {
         X509TrustManager trustManager;
         SSLSocketFactory sslSocketFactory;
         final InputStream inputStream;
         try {
-            inputStream = mContext.getAssets().open("alightca.cer"); // 得到证书的输入流
+            inputStream = context.getAssets().open("alightca.cer"); // 得到证书的输入流
             try {
                 TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
                     /**

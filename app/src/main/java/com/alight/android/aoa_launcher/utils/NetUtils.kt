@@ -34,11 +34,11 @@ class NetUtils private constructor() {
             .addInterceptor(HeaderInterceptor())
             .build()*/
 
-        val httpsUtils = HTTPSUtils(LauncherApplication.getContext())
+        val okHttpClient = HTTPSUtils.getInstance(LauncherApplication.getContext())
 
         var retro = Retrofit.Builder()
             .baseUrl(Urls.BASEURL)
-            .client(httpsUtils.instance)
+            .client(okHttpClient)
             //1 替换Factory CoroutineCallAdapterFactory()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
