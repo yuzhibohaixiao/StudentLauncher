@@ -241,7 +241,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 e.printStackTrace()
 //                cdk = "获取失败，点击按钮重试"
                 failed = true
-//                ToastUtils.showLong(this@SplashActivity, "获取失败，稍后点击按钮重试")
+                ToastUtils.showLong(this@SplashActivity, "获取失败，稍后点击按钮重试")
             }
             if (!failed) {
                 GlobalScope.launch(Dispatchers.Main) {
