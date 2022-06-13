@@ -31,4 +31,7 @@ interface AccountService {
     @GET("/device/v1/qr-code")
     fun getQrCode(@Query("dsn")dsn:String):Call<ResponseBody>
 
+    @Headers("Connection:close")
+    @GET("/device/v1/cdk")
+    fun getCDK(@Query("dsn")dsn:String):Call<ResponseBody>
 }

@@ -5,6 +5,10 @@ plugins {
     id 'newlens'
 }
 
+def releaseTime() {
+    return new Date().format("yyMMdd", TimeZone.getTimeZone("GMT+08:00"))
+}
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -47,8 +51,8 @@ android {
         applicationId "com.alight.android.aoa_launcher"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 44
-        versionName "1.0.44"
+        versionCode project.APP_VERSION_CODE as int
+        versionName project.APP_VERSION_NAME as String
         multiDexEnabled true
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -68,6 +72,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            setProperty("archivesBaseName", "launcher_" + project.APP_VERSION_CODE + "_v" + project.APP_VERSION_NAME + "_" + "${project.AOS_VERSION}" + "_" + releaseTime())
         }
         debug {
             signingConfig signingConfigs.debug
@@ -102,18 +107,22 @@ android {
 
         _oem_self_test {
             dimension "oem"
+            buildConfigField("String", "API_HOST", "\"test.api.alight-sys.com\"")
         }
 
         _oem_self_prod {
             dimension "oem"
+            buildConfigField("String", "API_HOST", "\"api.alight-sys.com\"")
         }
 
         _oem_guangfeng_test {
             dimension "oem"
+            buildConfigField("String", "API_HOST", "\"appotronics.api.alight-sys.com\"")
         }
 
         _oem_guangfeng_prod {
             dimension "oem"
+            buildConfigField("String", "API_HOST", "\"appotronics.api.alight-sys.com\"")
         }
 
     }

@@ -1,5 +1,7 @@
 package com.alight.android.aoa_launcher.common.constants
 
+import com.alight.android.aoa_launcher.BuildConfig
+
 class AppConstants {
     companion object {
         const val MEDIA_APP = "media_app"
@@ -56,7 +58,7 @@ class AppConstants {
         const val SYSTEM_ZIP_FULL_PATH = "/data/media/0/update.zip"
         const val SYSTEM_ZIP_PATH = "/data/media/0/"
 
-        const val SYSTEM_MMKV_PATH = "/data/media/0/alight_mmkv/"
+        const val SYSTEM_MMKV_PATH = BuildConfig.MMKV_PATH
 
         const val APP_DOWNLOAD_PATH = "/storage/emulated/0/"
 

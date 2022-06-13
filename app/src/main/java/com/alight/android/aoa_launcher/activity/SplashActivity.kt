@@ -64,6 +64,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private val USER_LOGIN_ACTION = "com.alight.android.user_login" // 自定义ACTION
     private var onlySplash = false
     private var closeSplash = false
+    private var cdk: String? = null;
+    private var lastCDKFetchTime: Long = 0;
+    private var fetchCDKTimer: TimerTask? = null;
+
 
     //初始化控件
     override fun initView() {
@@ -98,6 +102,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         tv_skip_splash.setOnClickListener(this)
         ll_no_child_splash.setOnClickListener(this)
         tv_download_app.setOnClickListener(this)
+        btn_code_renew.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -202,9 +207,49 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 iv_splash_progress.setImageResource(R.drawable.splash3_progress)
             }
             loadQRCode(iv_qr_splash)
+            fetchCDK()
         } else {
             ToastUtils.showLong(this, getString(R.string.splash_reconnection))
         }
+    }
+
+    private var fetchSDKThrottleTimeLock:Long = 0;
+
+    private fun fetchCDK() {
+        if(cdk == null) {
+            bind_code_text.text = "获取中";
+        }
+        // 加锁
+        val now =  System.currentTimeMillis()
+        if(now - fetchSDKThrottleTimeLock < 1000) {
+            ToastUtils.showShort(this, "获取过于频繁，请稍候再试")
+            return;
+        }
+        fetchSDKThrottleTimeLock = now;
+        var failed = true;
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                cdk = AccountUtil.getCDK()
+                failed = false
+                lastCDKFetchTime = System.currentTimeMillis()
+//                fetchCDKTimer = object : TimerTask() {
+//                    override fun run() {
+//                        fetchCDK()
+//                    }
+//                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+//                cdk = "获取失败，点击按钮重试"
+                failed = true
+//                ToastUtils.showLong(this@SplashActivity, "获取失败，稍后点击按钮重试")
+            }
+            if (!failed) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    bind_code_text.text = cdk
+                }
+            }
+        }
+
     }
 
     private fun loadQRCode(view: ImageView) {
@@ -646,6 +691,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             R.id.ll_no_child_splash -> {
                 ll_no_child_splash.visibility = View.GONE
                 showChildUser()
+            }
+            R.id.btn_code_renew -> {
+                fetchCDK()
             }
         }
     }
