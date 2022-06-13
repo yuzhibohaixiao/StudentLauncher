@@ -256,7 +256,7 @@ public class WifiAdmin {
     }
 
     @SuppressLint("MissingPermission")
-    private WifiConfiguration IsExsits(String SSID) {
+    public WifiConfiguration IsExsits(String SSID) {
         List<WifiConfiguration> existingConfigs = mWifiManager.getConfiguredNetworks();
         for (WifiConfiguration existingConfig : existingConfigs) {
             if (existingConfig.SSID.equals("\"" + SSID + "\"")) {

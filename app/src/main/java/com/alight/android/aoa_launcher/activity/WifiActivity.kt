@@ -186,13 +186,16 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 wifiListAdapter?.notifyDataSetChanged()
 //                Toast.makeText(WifiActivity.this, "关闭", Toast.LENGTH_SHORT).show();
 //                listView.setVisibility(View.GONE);
-
             }
         }
         wifiListAdapter?.setOnItemClickListener { adapter, view, position ->
             val scanResult = adapter.data[position] as ScanResult
+            val wifiConfiguration = mWifiAdmin?.IsExsits(scanResult.SSID)
             if (scanResult.SSID.isNotEmpty() && scanResult.SSID == getWifiSsid()) {
                 //已连接的wifi
+            } else if (wifiConfiguration != null) {
+                //有记录的wifi 无需输入密码 直接连接
+                mWifiAdmin?.addNetwork(wifiConfiguration)
             } else {
                 //未连接的wifi
                 val powerDialog = CustomDialog(this, R.layout.dialog_wifi_connect)
@@ -266,62 +269,6 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             }
         }
         return null;
-    }
-
-    fun CreateWifiInfo(SSID: String, Password: String, Type: Int): WifiConfiguration {
-        var config = WifiConfiguration()
-        config.allowedAuthAlgorithms.clear();
-        config.allowedGroupCiphers.clear();
-        config.allowedKeyManagement.clear();
-        config.allowedPairwiseCiphers.clear();
-        config.allowedProtocols.clear();
-        config.SSID = "\"" + SSID + "\"";
-
-        var tempConfig = this.IsExsits(SSID);
-        if (tempConfig != null) {
-            wifiManager.removeNetwork(tempConfig.networkId);
-        }
-
-        if (Type == 1) //WIFICIPHER_NOPASS
-        {
-            config.wepKeys[0] = "";
-            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-            config.wepTxKeyIndex = 0;
-        }
-        if (Type == 2) //WIFICIPHER_WEP
-        {
-            config.hiddenSSID = true;
-            config.wepKeys[0] = "\"" + Password + "\"";
-            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
-            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-            config.wepTxKeyIndex = 0;
-        }
-        if (Type == 3) //WIFICIPHER_WPA
-        {
-            config.preSharedKey = "\"" + Password + "\"";
-            config.hiddenSSID = true;
-            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-            //config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-            config.status = WifiConfiguration.Status.ENABLED;
-        }
-        return config;
-    }
-
-    // 添加一个网络并连接
-    fun addNetwork(wcg: WifiConfiguration) {
-        var wcgID = wifiManager.addNetwork(wcg)
-        var b = wifiManager.enableNetwork(wcgID, true)
-        Log.i(TAG, "a--$wcgID");
-        Log.i(TAG, "b--$b");
     }
 
     //将搜索到的wifi根据信号从强到弱进行排序
