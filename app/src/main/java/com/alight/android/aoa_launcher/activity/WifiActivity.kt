@@ -83,7 +83,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                  }*/
             } else if (intent.action == WifiManager.NETWORK_STATE_CHANGED_ACTION) { //wifi连接网络状态变化
                 Log.i(TAG, "onReceive: NETWORK_STATE_CHANGED_ACTION")
-                sortScaResult()
+//                sortScaResult()
                 val info: NetworkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO)!!
                 Log.d(TAG, "--NetworkInfo--$info")
                 if (NetworkInfo.State.DISCONNECTED == info.state) { //wifi没连接上
@@ -147,6 +147,14 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 Log.i(TAG, "onReceive: SUPPLICANT_STATE_CHANGED_ACTION")
                 val state = intent.getParcelableExtra<SupplicantState>(WifiManager.EXTRA_NEW_STATE)
                 val error = intent.getIntExtra(EXTRA_SUPPLICANT_ERROR, 0)
+                if (intent.hasExtra(EXTRA_SUPPLICANT_ERROR)) {
+                    //failed to connect
+                    ToastUtils.showShort(this@WifiActivity, "连接失败！")
+                } else if (error == WifiManager.ERROR_AUTHENTICATING) {
+                    ToastUtils.showShort(this@WifiActivity, "连接失败，请重试！")
+                }
+
+
                 /*if (null != listener) {
                     if (error == WifiManager.ERROR_AUTHENTICATING) {
 
@@ -362,9 +370,12 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             }
         }
         wifiListAdapter?.setOnItemClickListener { adapter, view, position ->
-            val scanResult = adapter.data[position] as WifiBean
-            val wifiConfiguration = mWifiAdmin?.IsExsits(scanResult.wifiName)
-            if (scanResult.wifiName.isNotEmpty() && scanResult.wifiName == getWifiSsid()) {
+            val wifiBean = adapter.data[position] as WifiBean
+            //正在连接的点击不做处理
+            if (wifiBean.state == 2)
+                return@setOnItemClickListener
+            val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
+            if (wifiBean.state == 1) {
                 //已连接的wifi
             } else if (wifiConfiguration != null) {
                 //有记录的wifi 无需输入密码 直接连接
@@ -399,18 +410,13 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                     }
 //                    SPUtils.syncPutData("wifi" + scanResult.SSID, true)
                     //加入（连接wifi）
-                    val connected = mWifiAdmin?.addNetwork(
+                    mWifiAdmin?.addNetwork(
                         mWifiAdmin?.CreateWifiInfo(
-                            scanResult.wifiName,
+                            wifiBean.wifiName,
                             etWifiPwd.text.toString(),
-                            getWifiType(scanResult)
+                            getWifiType(wifiBean)
                         )
                     )
-                    if (connected!!) {
-                        ToastUtils.showShort(this, "连接成功!")
-                    } else {
-                        ToastUtils.showShort(this, "连接失败，请重试!")
-                    }
                     powerDialog.dismiss()
                 }
                 powerDialog.show()
