@@ -83,7 +83,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                  }*/
             } else if (intent.action == WifiManager.NETWORK_STATE_CHANGED_ACTION) { //wifi连接网络状态变化
                 Log.i(TAG, "onReceive: NETWORK_STATE_CHANGED_ACTION")
-                sortScaResult()
+//                sortScaResult()
                 val info: NetworkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO)!!
                 Log.d(TAG, "--NetworkInfo--$info")
                 if (NetworkInfo.State.DISCONNECTED == info.state) { //wifi没连接上
@@ -272,7 +272,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
     private fun scanSuccess() {
 //        val results = wifiManager.scanResults
-        sortScaResult()
+//        sortScaResult()
 //        val filterScanResult = filterScanResult(results)
 //        filterScanResult?.sort { scanResult, scanResult2 ->
 //        }
