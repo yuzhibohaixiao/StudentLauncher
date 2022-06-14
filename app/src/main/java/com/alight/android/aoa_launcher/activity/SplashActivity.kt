@@ -213,15 +213,15 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private var fetchSDKThrottleTimeLock:Long = 0;
+    private var fetchSDKThrottleTimeLock: Long = 0;
 
     private fun fetchCDK() {
-        if(cdk == null) {
+        if (cdk == null) {
             bind_code_text.text = "获取中";
         }
         // 加锁
-        val now =  System.currentTimeMillis()
-        if(now - fetchSDKThrottleTimeLock < 1000) {
+        val now = System.currentTimeMillis()
+        if (now - fetchSDKThrottleTimeLock < 5000) {
             ToastUtils.showShort(this, "获取过于频繁，请稍候再试")
             return;
         }
@@ -232,11 +232,15 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 cdk = AccountUtil.getCDK()
                 failed = false
                 lastCDKFetchTime = System.currentTimeMillis()
-//                fetchCDKTimer = object : TimerTask() {
-//                    override fun run() {
-//                        fetchCDK()
-//                    }
-//                }
+                if (fetchCDKTimer == null) {
+                    fetchCDKTimer = object : TimerTask() {
+                        override fun run() {
+                            fetchCDK()
+                        }
+                    }
+                    // 5分钟自动刷新
+                    Timer().schedule(fetchCDKTimer, 5 * 60 * 1000)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
 //                cdk = "获取失败，点击按钮重试"
