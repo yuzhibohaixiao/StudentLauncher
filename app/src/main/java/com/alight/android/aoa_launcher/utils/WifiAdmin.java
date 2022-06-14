@@ -10,6 +10,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
+import android.util.Log;
 import android.widget.Toast;
 
 public class WifiAdmin {
@@ -23,6 +24,7 @@ public class WifiAdmin {
     private List<WifiConfiguration> mWifiConfiguration;
     // 定义一个WifiLock
     WifiLock mWifiLock;
+    private String TAG = "WifiAdmin";
 
     // 构造器
     public WifiAdmin(Context context) {
@@ -187,11 +189,12 @@ public class WifiAdmin {
     }
 
     // 添加一个网络并连接
-    public void addNetwork(WifiConfiguration wcg) {
+    public boolean addNetwork(WifiConfiguration wcg) {
         int wcgID = mWifiManager.addNetwork(wcg);
         boolean b = mWifiManager.enableNetwork(wcgID, true);
-        System.out.println("a--" + wcgID);
-        System.out.println("b--" + b);
+        Log.i(TAG, "a--" + wcgID);
+        Log.i(TAG, "b--" + b);
+        return b;
     }
 
     // 断开指定ID的网络

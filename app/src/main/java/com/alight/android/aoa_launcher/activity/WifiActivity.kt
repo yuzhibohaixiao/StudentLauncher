@@ -8,9 +8,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
-import android.net.wifi.ScanResult
-import android.net.wifi.WifiConfiguration
-import android.net.wifi.WifiManager
+import android.net.NetworkInfo
+import android.net.wifi.*
+import android.net.wifi.WifiManager.EXTRA_SUPPLICANT_ERROR
 import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
@@ -23,10 +23,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
+import com.alight.android.aoa_launcher.common.bean.WifiBean
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.WifiListAdapter
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
+import com.alight.android.aoa_launcher.utils.ToastUtils
 import com.alight.android.aoa_launcher.utils.WifiAdmin
+import com.alight.android.aoa_launcher.utils.WifiBeanUtil
 import kotlinx.android.synthetic.main.activity_wifi.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,12 +43,15 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     private var wifiListAdapter: WifiListAdapter? = null
     private var wifiConfigList: List<WifiConfiguration>? = null
     private var mWifiAdmin: WifiAdmin? = null
+    private var realWifiList: ArrayList<WifiBean> = ArrayList()
 
     val wifiManager =
         LauncherApplication.getContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
     val connectivityManager =
         LauncherApplication.getContext().applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//    val wifiScanReceiver: WifiReceiver? = null
 
+/*
     val wifiScanReceiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
@@ -55,6 +61,135 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             } else {
                 scanFailure()
             }
+        }
+    }
+*/
+
+    val wifiScanReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.i(TAG, "onReceive: intent action" + intent.action)
+            if (intent.action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
+                Log.i(TAG, "onReceive: SCAN_RESULTS_AVAILABLE_ACTION")
+                val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+                if (success) {
+                    scanSuccess()
+                } else {
+                    scanFailure()
+                }
+                //当扫描结果后，进行刷新列表
+                /* refreshLocalWifiListData()
+                 if (null != listener) {
+                     listener.onScanResultAvailable()
+                 }*/
+            } else if (intent.action == WifiManager.NETWORK_STATE_CHANGED_ACTION) { //wifi连接网络状态变化
+                Log.i(TAG, "onReceive: NETWORK_STATE_CHANGED_ACTION")
+                sortScaResult()
+                val info: NetworkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO)!!
+                Log.d(TAG, "--NetworkInfo--$info")
+                if (NetworkInfo.State.DISCONNECTED == info.state) { //wifi没连接上
+                    Log.d(TAG, "wifi没连接上")
+//                    hidingProgressBar()
+                    for (i in realWifiList.indices) { //没连接上将 所有的连接状态都置为“未连接”
+                        realWifiList[i].state = 3
+                    }
+                    wifiListAdapter?.notifyDataSetChanged()
+                } else if (NetworkInfo.State.CONNECTED == info.state) { //wifi连接上了
+                    Log.d(TAG, "wifi连接上了")
+//                    hidingProgressBar()
+                    val connectedWifiInfo: WifiInfo = wifiManager.connectionInfo
+                    //连接成功 跳转界面 传递ip地址
+                    Toast.makeText(this@WifiActivity, "wifi连接上了", Toast.LENGTH_SHORT).show()
+                    val connectType = 1
+                    wifiListSet(connectedWifiInfo.ssid, connectType)
+                } else if (NetworkInfo.State.CONNECTING == info.state) { //正在连接
+                    Log.d(TAG, "wifi正在连接")
+//                    showProgressBar()
+                    val connectedWifiInfo: WifiInfo = wifiManager.connectionInfo
+                    val connectType = 2
+                    wifiListSet(connectedWifiInfo.ssid, connectType)
+                }
+                /*    refreshLocalWifiListData()
+                    val state =
+                        (intent.getParcelableExtra<Parcelable>(WifiManager.EXTRA_NETWORK_INFO) as NetworkInfo?)!!.detailedState
+                    if (null != listener) {
+                        listener.onNetWorkStateChanged(state, mSSID)
+                    }*/
+            } else if (intent.action == WifiManager.WIFI_STATE_CHANGED_ACTION) { //wifi状态变化
+                Log.i(TAG, "onReceive: WIFI_STATE_CHANGED_ACTION")
+                val state = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, 0)
+                when (state) {
+                    WifiManager.WIFI_STATE_DISABLED -> {
+                        Log.d(TAG, "已经关闭")
+                    }
+                    WifiManager.WIFI_STATE_DISABLING -> {
+                        Log.d(TAG, "正在关闭")
+                    }
+                    WifiManager.WIFI_STATE_ENABLED -> {
+                        Log.d(TAG, "已经打开")
+                        sortScaResult()
+                    }
+                    WifiManager.WIFI_STATE_ENABLING -> {
+                        Log.d(TAG, "正在打开")
+                    }
+                    WifiManager.WIFI_STATE_UNKNOWN -> {
+                        Log.d(TAG, "未知状态")
+                    }
+                }
+
+//                val wifiState = intent.getIntExtra(
+//                    WifiManager.EXTRA_WIFI_STATE,
+//                    WifiManager.WIFI_STATE_DISABLED
+//                )
+                /*  if (null != listener) {
+                      listener.onWiFiStateChanged(wifiState)
+                  }*/
+            } else if (intent.action == WifiManager.SUPPLICANT_STATE_CHANGED_ACTION) {
+                Log.i(TAG, "onReceive: SUPPLICANT_STATE_CHANGED_ACTION")
+                val state = intent.getParcelableExtra<SupplicantState>(WifiManager.EXTRA_NEW_STATE)
+                val error = intent.getIntExtra(EXTRA_SUPPLICANT_ERROR, 0)
+                /*if (null != listener) {
+                    if (error == WifiManager.ERROR_AUTHENTICATING) {
+
+                    //这里可以获取到监听连接wifi密码错误的时候进行回调
+                        listener.onWifiPasswordFault()
+                    }*/
+            }
+        }
+    }
+
+    /**
+     * 将"已连接"或者"正在连接"的wifi热点放置在第一个位置
+     * @param wifiName
+     * @param type
+     */
+    fun wifiListSet(wifiName: String, type: Int) {
+        var index = -1;
+        var wifiInfo = WifiBean()
+        if (realWifiList == null || realWifiList.size == 0) {
+            return
+        }
+        for (i in realWifiList.indices) {
+            realWifiList[i].state = 3
+        }
+        realWifiList.sort()//根据信号强度排序
+        for (i in realWifiList.indices) {
+            var wifiBean = realWifiList.get(i);
+            if (index == -1 && ("\"" + wifiBean.getWifiName() + "\"").equals(wifiName)) {
+                index = i;
+                wifiInfo.setLevel(wifiBean.getLevel());
+                wifiInfo.setWifiName(wifiBean.getWifiName());
+                wifiInfo.setCapabilities(wifiBean.getCapabilities());
+                if (type == 1) {
+                    wifiInfo.state = 1
+                } else {
+                    wifiInfo.state = 2
+                }
+            }
+        }
+        if (index != -1) {
+            realWifiList.removeAt(index);
+            realWifiList.add(0, wifiInfo);
+            wifiListAdapter?.notifyDataSetChanged();
         }
     }
 
@@ -101,9 +236,35 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * 获取wifi列表然后将bean转成自己定义的WifiBean
+     */
+    private fun sortScaResult() {
+        val scanResults = WifiBeanUtil.noSameName(wifiManager.scanResults)
+        realWifiList.clear()
+        if (scanResults != null && scanResults.size > 0) {
+            for (i in scanResults.indices) {
+                val wifiBean = WifiBean()
+                wifiBean.wifiName = scanResults[i].SSID
+                wifiBean.state = 3 //只要获取都假设设置成未连接，真正的状态都通过广播来确定
+                wifiBean.capabilities = scanResults[i].capabilities
+                wifiBean.level = scanResults[i].level
+                realWifiList.add(wifiBean)
+                //排序
+                realWifiList.sort()
+                if (wifiListAdapter?.data == null || wifiListAdapter?.data!!.size == 0) {
+                    wifiListAdapter?.setNewInstance(realWifiList)
+                } else {
+                    wifiListAdapter?.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
     private fun scanSuccess() {
-        val results = wifiManager.scanResults
-        val filterScanResult = filterScanResult(results)
+//        val results = wifiManager.scanResults
+        sortScaResult()
+//        val filterScanResult = filterScanResult(results)
 //        filterScanResult?.sort { scanResult, scanResult2 ->
 //        }
 //        filterScanResult.sort()
@@ -119,8 +280,8 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 //
 //            }
         //wifi列表排序
-        val sortScanResult = sortByLevel(filterScanResult)
-        wifiListAdapter?.setNewInstance(sortScanResult)
+//        val sortScanResult = sortByLevel(filterScanResult)
+//        wifiListAdapter?.setNewInstance(sortScanResult)
 //        ... use new scan results ...
     }
 
@@ -144,9 +305,6 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         val hasSystemFeature = packageManager.hasSystemFeature(PackageManager.FEATURE_WIFI_AWARE)
         Log.i(TAG, "当前设备可以感知wifi: $hasSystemFeature")
 
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        registerReceiver(wifiScanReceiver, intentFilter)
         mWifiAdmin?.startScan(this)
 //        val success = wifiManager.startScan()
 //        Log.i(TAG, "开始扫描: $success")
@@ -155,6 +313,21 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 //            scanFailure()
 //        }
 //        getConfiguration()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)//监听wifi是开关变化的状态
+        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)//监听wifiwifi连接状态广播
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)//监听wifi列表变化（开启一个热点或者关闭一个热点）
+        intentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)
+        registerReceiver(wifiScanReceiver, intentFilter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(wifiScanReceiver)
     }
 
     override fun initView() {
@@ -189,9 +362,9 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             }
         }
         wifiListAdapter?.setOnItemClickListener { adapter, view, position ->
-            val scanResult = adapter.data[position] as ScanResult
-            val wifiConfiguration = mWifiAdmin?.IsExsits(scanResult.SSID)
-            if (scanResult.SSID.isNotEmpty() && scanResult.SSID == getWifiSsid()) {
+            val scanResult = adapter.data[position] as WifiBean
+            val wifiConfiguration = mWifiAdmin?.IsExsits(scanResult.wifiName)
+            if (scanResult.wifiName.isNotEmpty() && scanResult.wifiName == getWifiSsid()) {
                 //已连接的wifi
             } else if (wifiConfiguration != null) {
                 //有记录的wifi 无需输入密码 直接连接
@@ -211,10 +384,10 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                         }
                         etWifiPwd.setSelection(etWifiPwd.text.toString().length)
                     }
-                powerDialog.findViewById<CheckBox>(R.id.cb_record_pwd)
-                    .setOnCheckedChangeListener { buttonView, isChecked ->
-                        //记录密码
-                    }
+                /* powerDialog.findViewById<CheckBox>(R.id.cb_record_pwd)
+                     .setOnCheckedChangeListener { buttonView, isChecked ->
+                         //记录密码
+                     }*/
                 powerDialog.findViewById<TextView>(R.id.tv_connect_cancel).setOnClickListener {
                     //取消
                     powerDialog.dismiss()
@@ -224,14 +397,20 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                         Toast.makeText(this, "密码至少8位", Toast.LENGTH_SHORT).show();
                         return@setOnClickListener
                     }
+//                    SPUtils.syncPutData("wifi" + scanResult.SSID, true)
                     //加入（连接wifi）
-                    mWifiAdmin?.addNetwork(
+                    val connected = mWifiAdmin?.addNetwork(
                         mWifiAdmin?.CreateWifiInfo(
-                            scanResult.SSID,
+                            scanResult.wifiName,
                             etWifiPwd.text.toString(),
                             getWifiType(scanResult)
                         )
                     )
+                    if (connected!!) {
+                        ToastUtils.showShort(this, "连接成功!")
+                    } else {
+                        ToastUtils.showShort(this, "连接失败，请重试!")
+                    }
                     powerDialog.dismiss()
                 }
                 powerDialog.show()
@@ -242,9 +421,9 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun getWifiType(scanResult: ScanResult): Int {
+    private fun getWifiType(wifiBean: WifiBean): Int {
         var TYPE: Int
-        val capabilities = scanResult.capabilities
+        val capabilities = wifiBean.capabilities
         if (capabilities.isEmpty()) {
             TYPE = 1
         } else if (capabilities.contains("WEP")) {
@@ -428,7 +607,6 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(wifiScanReceiver)
     }
 
 }

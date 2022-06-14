@@ -1372,9 +1372,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         val networkAvalible = InternetUtil.isNetworkAvalible(context)
         if (!networkAvalible) return R.drawable.wifi_no_connect
         val wifi = WifiUtil.getCurrentNetworkRssi(context)
-        return if (wifi > -50 && wifi < 0) {//最强
+        return if (wifi > -70 && wifi < 0) {//最强
             R.drawable.wifi_connect_big
-        } else if (wifi > -70 && wifi <= -50) {//较强
+        } else if (wifi > -80 && wifi <= -70) {//较强
             R.drawable.wifi_connect_middle
         } else {//较弱
             R.drawable.wifi_connect_small
@@ -1385,9 +1385,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         val networkAvalible = InternetUtil.isNetworkAvalible(context)
         if (!networkAvalible) return R.drawable.wifi_not_connected
         val wifi = WifiUtil.getCurrentNetworkRssi(context)
-        return if (wifi > -50 && wifi < 0) {//最强
+        return if (wifi > -70 && wifi < 0) {//最强
             R.drawable.wifi_connect_person_big
-        } else if (wifi > -70 && wifi <= -50) {//较强
+        } else if (wifi > -80 && wifi <= -70) {//较强
             R.drawable.wifi_connect_person_middle
         } else {//较弱
             R.drawable.wifi_connect_person_small
