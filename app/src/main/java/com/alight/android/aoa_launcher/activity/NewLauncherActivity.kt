@@ -798,7 +798,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 showLeftSelectUI(v.id)
                 showSelectUI(v.id)
             }
-            //书本指读（AR指读）
+            //书本指读（AR指读 学王指读）
             R.id.iv_book_reading -> {
                 val startActivity = getPresenter().startActivity(
                     this,
@@ -1216,12 +1216,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || rebinding && !splashClose) {
                 } else if (!splashCloseFlag && !guideUserUpdate) {
                     //检测系统更新
-                    getPresenter().getModel(
+                  /*  getPresenter().getModel(
                         Urls.UPDATE,
                         hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
 //                hashMapOf("device_type" to "LAMP_AL"),
                         UpdateBean::class.java
-                    )
+                    )*/
                     //表示引导过用户升级
                     guideUserUpdate = true
                 }

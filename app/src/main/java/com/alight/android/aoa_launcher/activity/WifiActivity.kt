@@ -83,11 +83,12 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                  }*/
             } else if (intent.action == WifiManager.NETWORK_STATE_CHANGED_ACTION) { //wifi连接网络状态变化
                 Log.i(TAG, "onReceive: NETWORK_STATE_CHANGED_ACTION")
-//                sortScaResult()
+                sortScaResult()
                 val info: NetworkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO)!!
                 Log.d(TAG, "--NetworkInfo--$info")
                 if (NetworkInfo.State.DISCONNECTED == info.state) { //wifi没连接上
                     Log.d(TAG, "wifi没连接上")
+//                    Toast.makeText(this@WifiActivity, "wifi没连接上", Toast.LENGTH_SHORT).show()
 //                    hidingProgressBar()
                     for (i in realWifiList.indices) { //没连接上将 所有的连接状态都置为“未连接”
                         realWifiList[i].state = 3
@@ -301,6 +302,13 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)//监听wifi是开关变化的状态
+        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)//监听wifiwifi连接状态广播
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)//监听wifi列表变化（开启一个热点或者关闭一个热点）
+        intentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)
+        registerReceiver(wifiScanReceiver, intentFilter)
+
         val PERMS_INITIAL = arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION)
         requestPermissions(PERMS_INITIAL, 127)
         mWifiAdmin = WifiAdmin(this);
@@ -354,16 +362,21 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         ll_back.setOnClickListener(this)
         switch_wifi.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
+                mWifiAdmin?.openWifi(this)
+//                mWifiAdmin?.startScan(this)
+//                sortScaResult()
                 //wifi开启
-                wifiManager.isWifiEnabled = true
+//                wifiManager.isWifiEnabled = true
+//                mWifiAdmin?.startScan(this)
                 //  Toast.makeText(WifiActivity.this, "打开", Toast.LENGTH_SHORT).show();
                 //第二次点击的时候，清除之前的list
 //                isRefresh = true;
 //                presenter.subscribe(isRefresh);
             } else {
+                mWifiAdmin?.closeWifi(this)
                 //wifi关闭
-                wifiManager.isWifiEnabled = false
-                wifiListAdapter?.data?.clear()
+//                wifiManager.isWifiEnabled = false
+                realWifiList.clear()
                 wifiListAdapter?.notifyDataSetChanged()
 //                Toast.makeText(WifiActivity.this, "关闭", Toast.LENGTH_SHORT).show();
 //                listView.setVisibility(View.GONE);
@@ -375,10 +388,16 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             if (wifiBean.state == 2)
                 return@setOnItemClickListener
             val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
+//            val index = mWifiAdmin?.getConfigIndex(wifiBean.wifiName)!!
             if (wifiBean.state == 1) {
                 //已连接的wifi
             } else if (wifiConfiguration != null) {
                 //有记录的wifi 无需输入密码 直接连接
+                // 连接配置好的指定ID的网络
+//                wifiManager.enableNetwork(
+//                    wifiConfiguration.networkId,
+//                    true
+//                )
                 mWifiAdmin?.addNetwork(wifiConfiguration)
             } else {
                 //未连接的wifi

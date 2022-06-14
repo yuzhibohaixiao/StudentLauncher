@@ -267,4 +267,16 @@ public class WifiAdmin {
         }
         return null;
     }
+
+    @SuppressLint("MissingPermission")
+    public int getConfigIndex(String SSID) {
+        List<WifiConfiguration> existingConfigs = mWifiManager.getConfiguredNetworks();
+        for (int i = 0; i < existingConfigs.size(); i++) {
+            WifiConfiguration existingConfig = existingConfigs.get(i);
+            if (existingConfig.SSID.equals("\"" + SSID + "\"")) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
