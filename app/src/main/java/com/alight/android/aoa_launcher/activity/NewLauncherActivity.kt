@@ -1216,12 +1216,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || rebinding && !splashClose) {
                 } else if (!splashCloseFlag && !guideUserUpdate) {
                     //检测系统更新
-                  /*  getPresenter().getModel(
+                    getPresenter().getModel(
                         Urls.UPDATE,
                         hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
 //                hashMapOf("device_type" to "LAMP_AL"),
                         UpdateBean::class.java
-                    )*/
+                    )
                     //表示引导过用户升级
                     guideUserUpdate = true
                 }
