@@ -188,12 +188,13 @@ public class WifiAdmin {
         return (mWifiInfo == null) ? "NULL" : mWifiInfo.toString();
     }
 
-    // 添加一个网络并连接
-    public void addNetwork(WifiConfiguration wcg) {
+    // 添加一个网络并连接 返回连接成功或者失败的状态
+    public boolean addNetwork(WifiConfiguration wcg) {
         int wcgID = mWifiManager.addNetwork(wcg);
         boolean b = mWifiManager.enableNetwork(wcgID, true);
         Log.i(TAG, "a--" + wcgID);
         Log.i(TAG, "b--" + b);
+        return mWifiManager.enableNetwork(wcg.networkId, true);
     }
 
     // 断开指定ID的网络
