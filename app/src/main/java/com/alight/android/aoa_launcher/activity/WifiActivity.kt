@@ -42,6 +42,13 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     private var mWifiAdmin: WifiAdmin? = null
     private var realWifiList: ArrayList<WifiBean> = ArrayList()
 
+    //true表示经历了连接过程
+    private var connecting = false
+    private var mWifiBean: WifiBean? = null
+
+    //true表示主动触发了一次连接
+    private var activeConnect = false
+
     val wifiManager =
         LauncherApplication.getContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
     val connectivityManager =
@@ -84,6 +91,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 val info: NetworkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO)!!
                 Log.d(TAG, "--NetworkInfo--$info")
                 if (NetworkInfo.State.DISCONNECTED == info.state) { //wifi没连接上
+
                     Log.d(TAG, "wifi没连接上")
 //                    Toast.makeText(this@WifiActivity, "wifi没连接上", Toast.LENGTH_SHORT).show()
 //                    hidingProgressBar()
@@ -91,16 +99,33 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                         realWifiList[i].state = 3
                     }
                     wifiListAdapter?.notifyDataSetChanged()
+                    //经历过连接
+                    if (connecting) {
+                        ToastUtils.showShort(this@WifiActivity, "连接失败，请重试！")
+                        //主动连接且未连接成功，提示弹窗
+                        if (mWifiBean != null && activeConnect) {
+                            showWifiDialog(mWifiBean!!)
+                            activeConnect = false
+                        }
+                        connecting = false
+                    }
                 } else if (NetworkInfo.State.CONNECTED == info.state) { //wifi连接上了
                     Log.d(TAG, "wifi连接上了")
+                    //连接成功 跳转界面 传递ip地址
 //                    hidingProgressBar()
                     val connectedWifiInfo: WifiInfo = wifiManager.connectionInfo
-                    //连接成功 跳转界面 传递ip地址
-                    Toast.makeText(this@WifiActivity, "wifi连接上了", Toast.LENGTH_SHORT).show()
+                    //经历过连接
+                    if (connecting) {
+                        Toast.makeText(this@WifiActivity, "连接成功！", Toast.LENGTH_SHORT).show()
+                        connecting = false
+                        activeConnect = false
+                    }
                     val connectType = 1
                     wifiListSet(connectedWifiInfo.ssid, connectType)
                 } else if (NetworkInfo.State.CONNECTING == info.state) { //正在连接
                     Log.d(TAG, "wifi正在连接")
+                    //经历了连接
+                    connecting = true
 //                    showProgressBar()
                     val connectedWifiInfo: WifiInfo = wifiManager.connectionInfo
                     val connectType = 2
@@ -354,7 +379,6 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                         // 使用WI-FI
                         val connectedWifiInfo: WifiInfo = wifiManager.connectionInfo
                         //连接成功 跳转界面 传递ip地址
-                        Toast.makeText(this@WifiActivity, "wifi连接上了", Toast.LENGTH_SHORT).show()
                         val connectType = 1
                         wifiListSet(connectedWifiInfo.ssid, connectType)
 //                LogUtil.instance.d("当前在使用WiFi上网")
@@ -400,7 +424,6 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
             val connectedWifiInfo: WifiInfo = wifiManager.connectionInfo
             //连接成功 跳转界面 传递ip地址
-            Toast.makeText(this@WifiActivity, "wifi连接上了", Toast.LENGTH_SHORT).show()
             val connectType = 1
             wifiListSet(connectedWifiInfo.ssid, connectType)
         }
@@ -478,19 +501,26 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 val wifiBean = adapter.data[position] as WifiBean
                 val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
                 mWifiAdmin?.removeWifi(wifiConfiguration?.networkId!!)
+                SPUtils.syncPutData("wifi" + wifiBean.wifiName, false)
                 ToastUtils.showShort(this, "正在忽略此网络并断开连接")
             }
         }
         wifiListAdapter?.setOnItemClickListener { adapter, view, position ->
+            activeConnect = true
             val wifiBean = adapter.data[position] as WifiBean
+            this.mWifiBean = wifiBean
+            val savePwd = SPUtils.getData("wifi" + wifiBean.wifiName, false) as Boolean
+            var wifiConfiguration: WifiConfiguration? = null
             //正在连接的点击不做处理
             if (wifiBean.state == 2)
                 return@setOnItemClickListener
-            val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
+            if (savePwd) {
+                wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
+            }
 //            val index = mWifiAdmin?.getConfigIndex(wifiBean.wifiName)!!
             if (wifiBean.state == 1) {
                 //已连接的wifi
-            } else if (wifiConfiguration != null) {
+            } else if (wifiConfiguration != null && savePwd) {
                 //有记录的wifi 无需输入密码 直接连接
                 // 连接配置好的指定ID的网络
 //                wifiManager.enableNetwork(
@@ -527,10 +557,15 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 }
                 etWifiPwd.setSelection(etWifiPwd.text.toString().length)
             }
-        /* powerDialog.findViewById<CheckBox>(R.id.cb_record_pwd)
-                     .setOnCheckedChangeListener { buttonView, isChecked ->
-                         //记录密码
-                     }*/
+        powerDialog.findViewById<CheckBox>(R.id.cb_record_pwd)
+            .setOnCheckedChangeListener { buttonView, isChecked ->
+                //记录密码
+                if (isChecked) {
+                    SPUtils.syncPutData("wifi" + wifiBean.wifiName, true)
+                } else {
+                    SPUtils.syncPutData("wifi" + wifiBean.wifiName, false)
+                }
+            }
         powerDialog.findViewById<TextView>(R.id.tv_connect_cancel).setOnClickListener {
             //取消
             powerDialog.dismiss()
