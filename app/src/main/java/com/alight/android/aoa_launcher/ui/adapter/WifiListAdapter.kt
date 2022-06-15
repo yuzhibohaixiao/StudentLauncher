@@ -25,12 +25,20 @@ class WifiListAdapter : BaseQuickAdapter<WifiBean, BaseViewHolder>(R.layout.item
     val wifiManager =
         LauncherApplication.getContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
+    init {
+        addChildClickViewIds(R.id.tv_ignore_network)
+    }
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun convert(holder: BaseViewHolder, item: WifiBean) {
+
         val ivTick = holder.getView<ImageView>(R.id.iv_wifi_tick)
         val ivWifiConnecting = holder.getView<ImageView>(R.id.iv_wifi_connecting)
         val line = holder.getView<View>(R.id.view_wifi_item)
+        //可以忽略此网络
+        val tvIgnoreNetwork = holder.getView<View>(R.id.tv_ignore_network)
+        //wifi是否加密
+        val ivLock = holder.getView<ImageView>(R.id.iv_wifi_lock_item)
         //wifi名称
         holder.itemView.visibility = View.VISIBLE
         holder.setText(R.id.tv_wifi_name, item.wifiName)
@@ -41,6 +49,8 @@ class WifiListAdapter : BaseQuickAdapter<WifiBean, BaseViewHolder>(R.layout.item
                 ivTick.visibility = View.VISIBLE
                 line.visibility = View.VISIBLE
                 ivWifiConnecting.visibility = View.GONE
+                tvIgnoreNetwork.visibility = View.VISIBLE
+                ivLock.visibility = View.GONE
             }
             //正在连接的wifi
             2 -> {
@@ -48,12 +58,18 @@ class WifiListAdapter : BaseQuickAdapter<WifiBean, BaseViewHolder>(R.layout.item
                 line.visibility = View.GONE
                 Glide.with(context).asGif().load(R.drawable.wifi_connecting).into(ivWifiConnecting);
                 ivWifiConnecting.visibility = View.VISIBLE
+                tvIgnoreNetwork.visibility = View.GONE
+                ivLock.visibility =
+                    if (getWifiCipher(item.capabilities)) View.VISIBLE else View.GONE
             }
             //未连接
             3 -> {
                 ivTick.visibility = View.GONE
                 line.visibility = View.GONE
                 ivWifiConnecting.visibility = View.GONE
+                tvIgnoreNetwork.visibility = View.GONE
+                ivLock.visibility =
+                    if (getWifiCipher(item.capabilities)) View.VISIBLE else View.GONE
             }
         }
 /*
@@ -101,9 +117,6 @@ class WifiListAdapter : BaseQuickAdapter<WifiBean, BaseViewHolder>(R.layout.item
         } else {//较弱
             holder.setImageResource(R.id.iv_wifi_signal_item, R.drawable.wifi_connect_small)
         }
-        //wifi是否加密
-        val ivLock = holder.getView<ImageView>(R.id.iv_wifi_lock_item)
-        ivLock.visibility = if (getWifiCipher(item.capabilities)) View.VISIBLE else View.GONE
 
         /*    if (wifi > -50 && wifi < 0) {//最强
 

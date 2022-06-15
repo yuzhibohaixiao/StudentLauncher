@@ -382,6 +382,15 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 //                listView.setVisibility(View.GONE);
             }
         }
+        wifiListAdapter?.setOnItemChildClickListener { adapter, view, position ->
+            //忽略此网络
+            if (view.id == R.id.tv_ignore_network) {
+                val wifiBean = adapter.data[position] as WifiBean
+                val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
+                mWifiAdmin?.removeWifi(wifiConfiguration?.networkId!!)
+                ToastUtils.showShort(this, "正在忽略此网络并断开连接")
+            }
+        }
         wifiListAdapter?.setOnItemClickListener { adapter, view, position ->
             val wifiBean = adapter.data[position] as WifiBean
             //正在连接的点击不做处理
