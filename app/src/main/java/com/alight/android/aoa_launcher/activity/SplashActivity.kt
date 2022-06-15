@@ -639,7 +639,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                     iv_splash_progress.setImageResource(R.drawable.splash2_progress)
                     showSplash2QRCode()
                 } else {
-                    ToastUtils.showLong(this, getString(R.string.splash_network_connections))
+                    ToastUtils.showShort(this, getString(R.string.splash_network_connections))
                     getPresenter().startWifiModule(true)
 //                    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
                 }
