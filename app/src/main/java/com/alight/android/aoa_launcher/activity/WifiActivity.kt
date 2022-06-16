@@ -485,10 +485,10 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             if (savePwd) {
                 wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
             }
-            ToastUtils.showShort(
+         /*   ToastUtils.showShort(
                 this,
                 "wifiConfiguration null = ${wifiConfiguration == null} savePwd = $savePwd"
-            )
+            )*/
 //            val index = mWifiAdmin?.getConfigIndex(wifiBean.wifiName)!!
             if (wifiBean.state == 1) {
                 //已连接的wifi
