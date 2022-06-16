@@ -1,14 +1,15 @@
 package com.alight.android.aoa_launcher.activity
 
-import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import android.net.wifi.*
+import android.net.wifi.SupplicantState
+import android.net.wifi.WifiConfiguration
+import android.net.wifi.WifiInfo
+import android.net.wifi.WifiManager
 import android.net.wifi.WifiManager.EXTRA_SUPPLICANT_ERROR
 import android.text.InputType
 import android.util.Log
@@ -32,7 +33,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
-import java.util.*
 
 class WifiActivity : BaseActivity(), View.OnClickListener {
 
@@ -43,6 +43,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     private var realWifiList: ArrayList<WifiBean> = ArrayList()
     private var adbBackdoorFlag = 0
     private var wifiBackdoorFlag = 0
+//    private var wifiLock = false
 
     private var mWifiBean: WifiBean? = null
 
@@ -123,7 +124,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                     val ping = InternetUtil.ping()
                     //经历过连接
                     if (connecting) {
-                        ToastUtil.showToast(this@WifiActivity, "连接成功！")
+                        ToastUtil.showToast(LauncherApplication.getContext(), "连接成功！")
                         connecting = false
                         activeConnect = false
                         if (startWifi) {
@@ -473,7 +474,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             }
         }
         wifiListAdapter?.setOnItemClickListener { adapter, view, position ->
-            activeConnect = true
+            if (connecting) return@setOnItemClickListener
             val wifiBean = adapter.data[position] as WifiBean
             this.mWifiBean = wifiBean
             val savePwd = SPUtils.getData("wifi" + wifiBean.wifiName, false) as Boolean
@@ -484,10 +485,15 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             if (savePwd) {
                 wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
             }
+            ToastUtils.showShort(
+                this,
+                "wifiConfiguration null = ${wifiConfiguration == null} savePwd = $savePwd"
+            )
 //            val index = mWifiAdmin?.getConfigIndex(wifiBean.wifiName)!!
             if (wifiBean.state == 1) {
                 //已连接的wifi
             } else if (wifiConfiguration != null && savePwd) {
+                activeConnect = true
                 //有记录的wifi 无需输入密码 直接连接
                 // 连接配置好的指定ID的网络
 //                wifiManager.enableNetwork(
@@ -502,6 +508,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 //                    showWifiDialog(wifiBean)
 //                }
             } else {
+                activeConnect = true
                 //未连接的wifi
                 showWifiDialog(wifiBean)
             }

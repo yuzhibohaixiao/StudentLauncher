@@ -42,6 +42,7 @@ public class ToastUtil {
      * @param content
      */
     public static void showToast(Context context, String content) {
+        if (context == null) return;
         if (toast == null) {
             toast = Toast.makeText(context,
                     content,
