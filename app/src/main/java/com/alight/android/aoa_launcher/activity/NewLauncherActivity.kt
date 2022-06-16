@@ -47,6 +47,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_launcher.*
+import kotlinx.android.synthetic.main.activity_wifi.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -185,11 +186,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     override fun onResume() {
         super.onResume()
-        if (onresumeFlag) {
-            return
-        } else {
-            onresumeFlag = true
-        }
+        //给onResume增加限制
+        /* if (onresumeFlag) {
+             return
+         } else {
+             onresumeFlag = true
+         }*/
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
         Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
 
