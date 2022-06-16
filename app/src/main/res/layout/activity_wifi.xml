@@ -88,24 +88,16 @@
             android:background="@drawable/wifi_list_bg" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_margin="30dp">
+    <FrameLayout
+        android:id="@+id/fl_adb_backdoor"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom" />
 
-        <ImageView
-            android:id="@+id/iv_adb_wifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:src="@mipmap/ic_launcher" />
+    <FrameLayout
+        android:id="@+id/fl_wifi_backdoor"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end" />
 
-        <ImageView
-            android:id="@+id/iv_setting_wifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:src="@drawable/launcher_setting" />
-    </LinearLayout>
 </FrameLayout>

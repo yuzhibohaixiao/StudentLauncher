@@ -18,6 +18,7 @@ import com.alight.android.aoa_launcher.common.bean.UpdateBean
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.CheckUpdateEvent
 import com.alight.android.aoa_launcher.common.event.SplashEvent
+import com.alight.android.aoa_launcher.common.event.SplashStepEvent
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
@@ -164,6 +165,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         if (event.showSelectChild) {
             //网络正常 展示选择孩子
             showChildUser()
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onGetSplashEvent(event: SplashStepEvent) {
+        //step是指需要跳转到步骤几
+        if (event.step == 2) {
+            fl_splash1.visibility = View.GONE
+            ll_splash2.visibility = View.VISIBLE
+            iv_splash_progress.setImageResource(R.drawable.splash2_progress)
+            showSplash2QRCode()
         }
     }
 

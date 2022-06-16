@@ -1,17 +1,16 @@
 package com.alight.android.aoa_launcher.activity
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.net.*
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.wifi.*
 import android.net.wifi.WifiManager.EXTRA_SUPPLICANT_ERROR
 import android.text.InputType
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.CheckBox
@@ -23,6 +22,7 @@ import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.WifiBean
+import com.alight.android.aoa_launcher.common.event.SplashStepEvent
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.WifiListAdapter
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
@@ -31,8 +31,8 @@ import kotlinx.android.synthetic.main.activity_wifi.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import java.util.*
-
 
 class WifiActivity : BaseActivity(), View.OnClickListener {
 
@@ -41,6 +41,8 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     private var wifiConfigList: List<WifiConfiguration>? = null
     private var mWifiAdmin: WifiAdmin? = null
     private var realWifiList: ArrayList<WifiBean> = ArrayList()
+    private var adbBackdoorFlag = 0
+    private var wifiBackdoorFlag = 0
 
     private var mWifiBean: WifiBean? = null
 
@@ -125,6 +127,8 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                         connecting = false
                         activeConnect = false
                         if (startWifi) {
+                            //直接跳转到步骤2
+                            EventBus.getDefault().post(SplashStepEvent.getInstance(2))
                             finish()
                         }
                     } else if (!ping) {
@@ -445,8 +449,8 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun setListener() {
-        iv_setting_wifi.setOnClickListener(this)
-        iv_adb_wifi.setOnClickListener(this)
+//        iv_setting_wifi.setOnClickListener(this)
+//        iv_adb_wifi.setOnClickListener(this)
         ll_back.setOnClickListener(this)
         switch_wifi.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
@@ -461,10 +465,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             //忽略此网络
             if (view.id == R.id.tv_ignore_network) {
                 val wifiBean = adapter.data[position] as WifiBean
-                val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
-                mWifiAdmin?.removeWifi(wifiConfiguration?.networkId!!)
-                SPUtils.syncPutData("wifi" + wifiBean.wifiName, false)
-                ToastUtils.showShort(this, "正在忽略此网络并断开连接")
+                showWifiIgnoreDialog(wifiBean)
             }
         }
         wifiListAdapter?.setOnItemClickListener { adapter, view, position ->
@@ -500,6 +501,25 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 //未连接的wifi
                 showWifiDialog(wifiBean)
             }
+        }
+    }
+
+    /**
+     * 忽略网络的确认框
+     */
+    private fun showWifiIgnoreDialog(wifiBean: WifiBean) {
+        val customDialog = CustomDialog(this, R.layout.dialog_wifi_connect)
+        val tvWifiName = customDialog.findViewById<TextView>(R.id.tv_wifi_name_dialog)
+        tvWifiName.text = wifiBean.wifiName
+        customDialog.findViewById<TextView>(R.id.confirm).setOnClickListener {
+            val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
+            mWifiAdmin?.removeWifi(wifiConfiguration?.networkId!!)
+            SPUtils.syncPutData("wifi" + wifiBean.wifiName, false)
+            ToastUtils.showShort(this, "正在忽略此网络并断开连接")
+            customDialog.dismiss()
+        }
+        customDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {
+            customDialog.dismiss()
         }
     }
 
@@ -585,143 +605,6 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         return TYPE
     }
 
-    @SuppressLint("MissingPermission")
-    private fun IsExsits(SSID: String): WifiConfiguration? {
-        var existingConfigs = wifiManager.configuredNetworks
-        existingConfigs.forEach {
-            if (it.SSID.equals("\"" + SSID + "\"")) {
-                return it;
-            }
-        }
-        return null;
-    }
-
-    //将搜索到的wifi根据信号从强到弱进行排序
-    private fun sortByLevel(list: MutableList<ScanResult>): MutableList<ScanResult> {
-        var temp: ScanResult? = null
-        for (i in list.indices) for (j in list.indices) {
-            if (list[i].level > list[j].level) //level属性即为强度
-            {
-                temp = list[i]
-                list[i] = list[j]
-                list[j] = temp
-            }
-        }
-
-        for (i in list.indices) {
-            if (list[i].SSID.isNotEmpty() && list[i].SSID == getWifiSsid()) {
-                //把已连接的元素放在首位
-                Collections.swap(list, i, 0)
-                break
-            }
-        }
-        return list
-    }
-
-    /**
-     * 获取当前连接的wifi名称
-     */
-    private fun getWifiSsid(): String {
-
-        var ssid = ""
-
-        var networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        if (networkInfo?.isConnected!!) {
-
-            var connectionInfo = wifiManager.connectionInfo;
-
-            if (connectionInfo != null && !TextUtils.isEmpty(connectionInfo.ssid)) {
-
-                ssid = connectionInfo.ssid;
-
-            }
-
-        }
-
-        return ssid.replace("\"", "")
-
-    }
-
-    /**
-     *flag 返回true 并不能代表热点连接成功，但是返回false一定代表连接不成功
-     *当密码位数不对时也会直接返回false，因此不能用该参数来判别是否连接成功
-     *这也是我在项目中碰到的一个难题
-     */
-
-    /**
-
-    连接到WPA2网络
-
-    @param ssid 热点名
-
-    @param password 密码
-
-    @return 配置是否成功
-
-     */
-
-
-    //添加指定WIFI的配置信息,原列表不存在此SSID
-    fun addWifiConfig(wifiList: List<ScanResult>, ssid: String, pwd: String): Int {
-        var wifiId = -1
-        for (i in wifiList.indices) {
-            val wifi = wifiList[i]
-            if (wifi.SSID == ssid) {
-                Log.i("AddWifiConfig", "equals")
-                val wifiCong = WifiConfiguration()
-                wifiCong.SSID = "\"" + wifi.SSID + "\"" //\"转义字符，代表"
-                wifiCong.preSharedKey = "\"" + pwd + "\"" //WPA-PSK密码
-                wifiCong.hiddenSSID = false
-                wifiCong.status = WifiConfiguration.Status.ENABLED
-                wifiId =
-                    wifiManager.addNetwork(wifiCong) //将配置好的特定WIFI密码信息添加,添加完成后默认是不激活状态，成功返回ID，否则为-1
-                if (wifiId != -1) {
-                    return wifiId
-                }
-            }
-        }
-        return wifiId
-    }
-
-    //连接指定Id的WIFI
-    fun connectWifi(wifiId: Int): Boolean {
-        for (i in wifiConfigList!!.indices) {
-            val wifi = wifiConfigList!![i]
-            if (wifi.networkId == wifiId) {
-                while (!wifiManager.enableNetwork(wifiId, true)) { //激活该Id，建立连接
-                    //status:0--已经连接，1--不可连接，2--可以连接
-                    Log.i("ConnectWifi", wifiConfigList!![wifiId].status.toString())
-                }
-                return true
-            }
-        }
-        return false
-    }
-
-    //判定指定WIFI是否已经配置好,依据WIFI的地址BSSID,返回NetId
-    fun isConfiguration(SSID: String): Int {
-        Log.i("IsConfiguration", wifiConfigList!!.size.toString())
-        for (i in wifiConfigList!!.indices) {
-            Log.i(wifiConfigList!![i].SSID, wifiConfigList!![i].networkId.toString())
-            if (wifiConfigList!![i].SSID == SSID) { //地址相同
-                return wifiConfigList!![i].networkId
-            }
-        }
-        return -1
-    }
-
-    /**
-     * 移除wifi，因为权限，无法移除的时候，需要手动去翻wifi列表删除
-     * 注意：！！！只能移除自己应用创建的wifi。
-     * 删除掉app，再安装的，都不算自己应用，具体看removeNetwork源码
-     *
-     * @param netId wifi的id
-     */
-    fun removeWifi(netId: Int): Boolean {
-        return wifiManager.removeNetwork(netId)
-    }
-
     override fun initPresenter(): PresenterImpl {
         return PresenterImpl()
     }
@@ -738,11 +621,19 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.iv_adb_wifi -> {
-                getPresenter().showAdbWifi()
+            R.id.fl_adb_backdoor -> {
+                if (adbBackdoorFlag < 5) {
+                    adbBackdoorFlag++
+                } else {
+                    getPresenter().showAdbWifi()
+                }
             }
-            R.id.iv_setting_wifi -> {
-                getPresenter().showWifiSetting(this)
+            R.id.fl_wifi_backdoor -> {
+                if (wifiBackdoorFlag < 5) {
+                    wifiBackdoorFlag++
+                } else {
+                    getPresenter().showWifiSetting(this)
+                }
             }
             R.id.ll_back -> {
                 finish()
