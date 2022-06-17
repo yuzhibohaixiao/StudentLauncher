@@ -32,6 +32,8 @@ class AppConstants {
         //硬件控制包名
         const val AHWCX_PACKAGE_NAME = "com.alight.ahwcx"
 
+        const val ADB_WIFI_PACKAGE_NAME = "com.rair.adbwifi"
+
         const val AHWCX_SERVICE_NAME = "com.alight.ahwcx.startup.services.StartupService"
 
         //Launcher 包名

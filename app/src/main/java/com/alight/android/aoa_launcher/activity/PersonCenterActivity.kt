@@ -39,6 +39,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.xw.repo.BubbleSeekBar
 import kotlinx.android.synthetic.main.activity_personal_center.*
+import kotlinx.android.synthetic.main.activity_personal_center.tv_grade_person_center
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -79,17 +80,18 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 //            hashMapOf("device_type" to "LAMP"),
             UpdateBean::class.java
         )
+        iv_wifi_icon.setImageResource(getPresenter().getCurrentWifiPersonDrawable(this))
     }
 
     private fun initWifiState() {
         val wifiSsid = getPresenter().getWifiSsid(this)
         if (wifiSsid.isEmpty()) {
-            iv_wifi_icon.setImageResource(R.drawable.wifi_not_connected)
+//            iv_wifi_icon.setImageResource(R.drawable.wifi_not_connected)
             tv_wifi_state.text = "未连接"
             tv_wifi_name.text = "点此连接Wifi"
             tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_gray))
         } else {
-            iv_wifi_icon.setImageResource(R.drawable.wifi_connect)
+//            iv_wifi_icon.setImageResource(R.drawable.wifi_connect_person_big)
             tv_wifi_state.text = "已连接"
             tv_wifi_name.text = wifiSsid.substring(1, wifiSsid.length - 1)
             tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_blue))
@@ -275,7 +277,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 }
             }
         }
-
+        RxTimerUtil.interval(5000) {
+            iv_wifi_icon.setImageResource(getPresenter().getCurrentWifiPersonDrawable(this))
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -680,7 +684,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         any.data.forEach {
             if (it.format == 1 && SPUtils.getData(
                     "configVersion",
-                    0
+                    1
                 ) as Int >= it.version_code
                 || AppUtils.getVersionCode(
                     this,
@@ -696,12 +700,12 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         if (needUpdate) {
             //需要更新
             tv_update_state.text = "有新版本"
-            iv_update_icon.setImageResource(R.drawable.system_need_update)
+//            iv_update_icon.setImageResource(R.drawable.system_need_update)
             tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_blue))
         } else {
             //无需更新
             tv_update_state.text = "已是最新版本"
-            iv_update_icon.setImageResource(R.drawable.system_no_update)
+//            iv_update_icon.setImageResource(R.drawable.system_no_update)
             tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_gray))
         }
     }

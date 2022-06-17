@@ -35,6 +35,7 @@ import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.activity.UpdateActivity
+import com.alight.android.aoa_launcher.activity.WifiActivity
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BasePresenter
 import com.alight.android.aoa_launcher.common.bean.*
@@ -483,6 +484,14 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     /**
+     * 打开AdbWifi
+     */
+    fun showAdbWifi() {
+        val activity = getView() as Activity
+        StartAppUtils.startApp(activity, AppConstants.ADB_WIFI_PACKAGE_NAME)
+    }
+
+    /**
      * 打开酷安市场
      */
     fun showKAMarket() {
@@ -707,7 +716,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         var isHaveSystemUpdate = false;
         val configVersion = SPUtils.getData(
             "configVersion",
-            0
+            1
         ) as Int
         for (i in systemAppList.indices) {
             val systemApp = systemAppList[i]
@@ -964,7 +973,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
-    private fun startApp(context: Context, appPackName: String) {
+    fun startApp(context: Context, appPackName: String) {
         try {
             val mmkv = LauncherApplication.getMMKV()
             val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
@@ -978,12 +987,12 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             var startTime = playTimeBean.data.playtime.start_playtime
             var endTime = playTimeBean.data.playtime.stop_playtime
 
-            playTimeBean.data.app_manage.forEach {
-                if (appPackName == it.app_info.package_name
+            for (it in playTimeBean.data.app_manage) {
+                if (it.app_info.package_name.isNotEmpty() && appPackName == it.app_info.package_name
                 ) {
                     if ((it.app_permission == 3)) {
                         ToastUtils.showLong(context, "该应用已被禁用")
-                        return@startApp
+                        return
                     } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
                             startTime,
                             endTime,
@@ -992,10 +1001,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     ) {
                         //限时禁用
                         ToastUtils.showLong(context, "该应用已被限时禁用")
-                        return@startApp
+                        return
                     }
-                    return@forEach
-                }
+                    break
+                } else continue
             }
 
             val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
@@ -1349,6 +1358,41 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
+    /**
+     * @param startWifi true wifi默认被开启
+     */
+    fun startWifiModule(startWifi: Boolean) {
+        val activity = getView() as Activity
+        val intent = Intent(activity, WifiActivity::class.java)
+        intent.putExtra("startWifi", startWifi)
+        activity.startActivity(intent)
+    }
+
+    fun getCurrentWifiDrawable(context: Context): Int {
+        val networkAvalible = InternetUtil.isNetworkAvalible(context)
+        if (!networkAvalible) return R.drawable.wifi_no_connect
+        val wifi = WifiUtil.getCurrentNetworkRssi(context)
+        return if (wifi > -70 && wifi < 0) {//最强
+            R.drawable.wifi_connect_big
+        } else if (wifi > -80 && wifi <= -70) {//较强
+            R.drawable.wifi_connect_middle
+        } else {//较弱
+            R.drawable.wifi_connect_small
+        }
+    }
+
+    fun getCurrentWifiPersonDrawable(context: Context): Int {
+        val networkAvalible = InternetUtil.isNetworkAvalible(context)
+        if (!networkAvalible) return R.drawable.wifi_not_connected
+        val wifi = WifiUtil.getCurrentNetworkRssi(context)
+        return if (wifi > -70 && wifi < 0) {//最强
+            R.drawable.wifi_connect_person_big
+        } else if (wifi > -80 && wifi <= -70) {//较强
+            R.drawable.wifi_connect_person_middle
+        } else {//较弱
+            R.drawable.wifi_connect_person_small
+        }
+    }
 
     /**
      * 更新解析器

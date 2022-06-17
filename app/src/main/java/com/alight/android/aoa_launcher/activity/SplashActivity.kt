@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
-import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -20,6 +19,7 @@ import com.alight.android.aoa_launcher.common.bean.UpdateBean
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.CheckUpdateEvent
 import com.alight.android.aoa_launcher.common.event.SplashEvent
+import com.alight.android.aoa_launcher.common.event.SplashStepEvent
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
@@ -102,12 +102,14 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         tv_skip_splash.setOnClickListener(this)
         ll_no_child_splash.setOnClickListener(this)
         tv_download_app.setOnClickListener(this)
+        fl_wifi_module.setOnClickListener(this)
         btn_code_renew.setOnClickListener(this)
     }
 
     override fun onResume() {
         super.onResume()
         getPresenter().sendMenuEnableBroadcast(this, false)
+        iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
     }
 
     override fun onPause() {
@@ -134,6 +136,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 showNewUserSplash()
             }
             onlyShowSelectChild -> showChildUser()
+        }
+        RxTimerUtil.interval(5000) {
+            iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
         }
     }
 
@@ -182,6 +187,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         if (event.showSelectChild) {
             //网络正常 展示选择孩子
             showChildUser()
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onGetSplashEvent(event: SplashStepEvent) {
+        //step是指需要跳转到步骤几
+        if (event.step == 2) {
+            fl_splash1.visibility = View.GONE
+            ll_splash2.visibility = View.VISIBLE
+            iv_splash_progress.setImageResource(R.drawable.splash2_progress)
+            showSplash2QRCode()
         }
     }
 
@@ -397,6 +413,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun showNewUserSplash() {
+        fl_wifi_module.visibility = View.GONE
         fl_splash.setBackgroundResource(userSplashBgList[0])
         fl_splash1.visibility = View.GONE
         sc_next_launcher_splash.visibility = View.VISIBLE
@@ -659,8 +676,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                     iv_splash_progress.setImageResource(R.drawable.splash2_progress)
                     showSplash2QRCode()
                 } else {
-                    ToastUtils.showLong(this, getString(R.string.splash_network_connections))
-                    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
+                    ToastUtils.showShort(this, getString(R.string.splash_network_connections))
+                    getPresenter().startWifiModule(true)
+//                    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) //直接进入手机中的wifi网络设置界面
                 }
             }
             R.id.tv_download_app -> {
@@ -698,6 +716,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.btn_code_renew -> {
                 fetchCDK()
+            }
+            R.id.fl_wifi_module -> {
+                getPresenter().startWifiModule(false)
             }
         }
     }

@@ -111,7 +111,7 @@ object StartAppUtils {
             var endTime = playTimeBean.data.playtime.stop_playtime
 
             playTimeBean.data.app_manage.forEach {
-                if (packName == it.app_info.package_name && className == it.class_name && (params == null || params.isEmpty() || params.values.indexOf(
+                if (it.app_info.package_name.isNotEmpty() && packName == it.app_info.package_name && className == it.class_name && (params == null || params.isEmpty() || params.values.indexOf(
                         it.args
                     ) != -1)
                 ) {

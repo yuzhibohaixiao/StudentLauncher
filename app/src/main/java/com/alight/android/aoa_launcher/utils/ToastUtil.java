@@ -1,5 +1,8 @@
 package com.alight.android.aoa_launcher.utils;
 
+import android.content.Context;
+import android.widget.Toast;
+
 /**
  * desc ToastUtil
  * <p>
@@ -17,6 +20,7 @@ public class ToastUtil {
 
     /**
      * 按钮在指定时间内是否被连续点击
+     *
      * @return
      */
     public static boolean isFastShow() {
@@ -28,5 +32,26 @@ public class ToastUtil {
         lastShowTime = curShowkTime;
         return flag;
     }
+
+    private static Toast toast;
+
+    /**
+     * 限制弹出次数
+     *
+     * @param context
+     * @param content
+     */
+    public static void showToast(Context context, String content) {
+        if (context == null) return;
+        if (toast == null) {
+            toast = Toast.makeText(context,
+                    content,
+                    Toast.LENGTH_LONG);
+        } else {
+            toast.setText(content);
+        }
+        toast.show();
+    }
+
 }
 

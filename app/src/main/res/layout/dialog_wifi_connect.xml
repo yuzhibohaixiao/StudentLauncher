@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="346.5dp"
+        android:layout_height="219.5dp"
+        android:background="@drawable/white_bg_12oval"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="23dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30.5dp"
+                android:layout_height="23dp"
+                android:src="@drawable/wifi_dialog" />
+
+            <TextView
+                android:id="@+id/tv_wifi_name_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="12dp"
+                android:text="buaasp"
+                android:textColor="@color/person_center_text_green"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="23.5dp">
+
+            <TextView
+                android:layout_width="37dp"
+                android:layout_height="17dp"
+                android:text="密码："
+                android:textColor="@color/person_center_text_green"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/et_wifi_pwd"
+                android:layout_width="228dp"
+                android:layout_height="26.5dp"
+                android:background="@drawable/gray_bg_6oval"
+                android:hint="请输入wifi密码"
+                android:inputType="textPassword"
+                android:paddingStart="10dp"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="74.5dp"
+            android:layout_marginTop="10dp">
+
+            <CheckBox
+                android:id="@+id/cb_show_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/MyGreenCheckBox" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="显示密码"
+                android:textColor="@color/person_center_text_green"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="74.5dp">
+
+            <CheckBox
+                android:id="@+id/cb_record_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/MyGreenCheckBox" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="记住该网络"
+                android:textColor="@color/person_center_text_green"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="42dp">
+
+            <TextView
+                android:id="@+id/tv_connect_cancel"
+                android:layout_width="57.5dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="17.5dp"
+                android:background="@drawable/dark_gray_bg_6oval"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/person_center_text_green"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_connect_wifi"
+                android:layout_width="57.5dp"
+                android:layout_height="25dp"
+                android:background="@drawable/dark_gray_bg_6oval"
+                android:gravity="center"
+                android:text="加入"
+                android:textColor="@color/person_center_text_green"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

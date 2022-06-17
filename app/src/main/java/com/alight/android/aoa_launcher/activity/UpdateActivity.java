@@ -732,7 +732,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     systemList.add(file);
                     //跳过ota应用
                     continue;
-                } else if ((systemUpdateBean.getFormat() == 1 && (int) SPUtils.getData("configVersion", 0) >= systemUpdateBean.getVersion_code())
+                } else if ((systemUpdateBean.getFormat() == 1 && (int) SPUtils.getData("configVersion", 1) >= systemUpdateBean.getVersion_code())
                         || (file.getPackName() != null && AppUtils.getVersionCode(this, file.getPackName()) >= systemUpdateBean.getVersion_code())) {
                     if (systemUpdateBean.getFormat() == 1) {
                         //配置文件已经是最新
@@ -800,7 +800,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     otherList.add(file);
                     //跳过ota应用
                     continue;
-                } else if ((otherUpdateBean.getFormat() == 1 && (int) SPUtils.getData("configVersion", 0) >= otherUpdateBean.getVersion_code())
+                } else if ((otherUpdateBean.getFormat() == 1 && (int) SPUtils.getData("configVersion", 1) >= otherUpdateBean.getVersion_code())
                         || (file.getPackName() != null && AppUtils.getVersionCode(this, file.getPackName()) >= otherUpdateBean.getVersion_code())) {
                     file.setFormat(4);
                     otherList.add(file);
@@ -1017,7 +1017,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private boolean isExistSystemUpdate() {
         Integer configVersion = (Integer) SPUtils.getData(
                 "configVersion",
-                0
+                1
         );
         for (int i = 0; i < systemAppList.size(); i++) {
             UpdateBeanData updateBeanData = systemAppList.get(i);
@@ -1253,7 +1253,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private void syncDownloadProgress() {
         int configVersion = (int) SPUtils.getData(
                 "configVersion",
-                0
+                1
         );
         RxTimerUtil.interval(1000, number -> {
             int a = 0;

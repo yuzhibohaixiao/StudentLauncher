@@ -47,6 +47,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_launcher.*
+import kotlinx.android.synthetic.main.activity_wifi.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -83,6 +84,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var playTimeBean: PlayTimeBean? = null
     private var shutdownReceiver: ShutdownReceiver? = null
     private var startHeart = false
+    private var onresumeFlag = false
     private var selectBook: AppTypeBean = AppTypeBean(
         R.drawable.yxkw, "com.jxw.pedu.clickread",
         "com.jxw.pedu.clickread.MainActivity",
@@ -179,10 +181,17 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         tv_book_click.setOnClickListener(this)
         fl_classroom_sync.setOnClickListener(this)
         iv_ip_image.setOnClickListener(this)
+        fl_wifi_module.setOnClickListener(this)
     }
 
     override fun onResume() {
         super.onResume()
+        //给onResume增加限制
+        /* if (onresumeFlag) {
+             return
+         } else {
+             onresumeFlag = true
+         }*/
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
         Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
 
@@ -230,6 +239,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         splashCloseFlag = false
         qualityHorizontalAdapter?.resetAppNotifyAdapter()
+        iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
+        GlobalScope.launch(Dispatchers.IO) {
+            delay(3000)
+            //放开onResume限制
+            onresumeFlag = false
+        }
     }
 
     /**
@@ -432,6 +447,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         initAbility()
         initShutdownReceiver()
         Log.i(TAG, "DSN: " + AccountUtil.getDSN())
+        RxTimerUtil.interval(5000) {
+            iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
+        }
     }
 
     private fun initShutdownReceiver() {
@@ -782,7 +800,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 showLeftSelectUI(v.id)
                 showSelectUI(v.id)
             }
-            //书本指读（AR指读）
+            //书本指读（AR指读 学王指读）
             R.id.iv_book_reading -> {
                 val startActivity = getPresenter().startActivity(
                     this,
@@ -941,6 +959,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             R.id.iv_ip_image -> {
                 audioAbility?.wakeup()
+            }
+            R.id.fl_wifi_module -> {
+                getPresenter().startWifiModule(false)
             }
         }
     }

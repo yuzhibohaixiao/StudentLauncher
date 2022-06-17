@@ -84,11 +84,26 @@
             android:layout_marginEnd="45dp"
             android:orientation="horizontal">
 
+            <FrameLayout
+                android:id="@+id/fl_wifi_module"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="19.5dp"
+                android:background="@drawable/wifi_oval_gray">
+
+                <ImageView
+                    android:id="@+id/iv_wifi_module"
+                    android:layout_width="16dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/wifi_connect_big" />
+            </FrameLayout>
+
             <ImageView
                 android:id="@+id/iv_user_icon_new_launcher"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="27.5dp"
                 android:src="@drawable/splash_boy" />
 
             <TextView

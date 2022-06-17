@@ -16,6 +16,8 @@
     <color name="launcher_transparent">#00000000</color>
     <color name="launcher_purple">#545492</color>
     <color name="launcher_scroll_bg">#BECECE</color>
+
+    <color name="wifi_list_trans_white">#70ffffff</color>
     <color name="gray_bg">#1a000000</color>
     <color name="transparent">#00000000</color>
     <color name="celadon">#E2F7F4</color>
