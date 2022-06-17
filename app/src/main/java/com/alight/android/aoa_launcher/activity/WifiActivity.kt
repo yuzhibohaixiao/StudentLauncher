@@ -121,7 +121,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                     //连接成功 跳转界面 传递ip地址
 //                    hidingProgressBar()
                     val connectedWifiInfo: WifiInfo = wifiManager.connectionInfo
-                    val ping = InternetUtil.ping()
+//                    val ping = InternetUtil.ping()
                     //经历过连接
                     if (connecting) {
                         ToastUtil.showToast(LauncherApplication.getContext(), "连接成功！")
