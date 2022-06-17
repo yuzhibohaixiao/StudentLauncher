@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
@@ -47,6 +48,7 @@ import java.util.*
  */
 class SplashActivity : BaseActivity(), View.OnClickListener {
 
+    private lateinit var splashViews: List<View>;
     private var wifiFlag = false
     private val userSplashBgList = arrayListOf(
         R.drawable.launcher_splash1,
@@ -62,10 +64,33 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private val USER_LOGIN_ACTION = "com.alight.android.user_login" // 自定义ACTION
     private var onlySplash = false
     private var closeSplash = false
+    private var cdk: String? = null;
+    private var lastCDKFetchTime: Long = 0;
+    private var fetchCDKTimer: TimerTask? = null;
+
 
     //初始化控件
     override fun initView() {
         tv_download_app.paint.flags = Paint.UNDERLINE_TEXT_FLAG
+        bind_code_text.paintFlags = bind_code_text.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        splashViews = listOf<View>(
+            fl_splash1,
+            ll_splash2,
+            ll_splash3,
+            fl_splash4,
+        )
+    }
+
+    private fun showSplash(activeIndex: Int) {
+        val realIndex = activeIndex - 1;
+        splashViews.forEachIndexed { index, view ->
+            if (realIndex == index && view.visibility != View.VISIBLE) {
+                view.visibility = View.VISIBLE;
+            }
+            if (realIndex != index && view.visibility == View.VISIBLE) {
+                view.visibility = View.GONE
+            }
+        }
     }
 
     override fun setListener() {
@@ -77,6 +102,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         tv_skip_splash.setOnClickListener(this)
         ll_no_child_splash.setOnClickListener(this)
         tv_download_app.setOnClickListener(this)
+        btn_code_renew.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -102,16 +128,12 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         isRebinding = SPUtils.getData("rebinding", false) as Boolean
         getSystemDate()
         when {
-            isRebinding -> {
-                showSplash3(isRebinding)
-            }
+            isRebinding -> showSplash3(isRebinding)
             openUserSplash -> {   //直接跳转到用户引导
                 onlySplash = true
                 showNewUserSplash()
             }
-            onlyShowSelectChild -> {
-                showChildUser()
-            }
+            onlyShowSelectChild -> showChildUser()
         }
     }
 
@@ -168,9 +190,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
      * @return
      */
     fun isActivityEnable(): Boolean {
-        return if (this == null || isDestroyed || isFinishing) {
-            false
-        } else true
+        return !(this == null || isDestroyed || isFinishing)
     }
 
     /**
@@ -183,95 +203,100 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         //判断网络是否连接
         if (InternetUtil.isNetworkAvalible(this)) {
             GlobalScope.launch(Dispatchers.Main) {
-                fl_splash1.visibility = View.GONE
-                ll_splash2.visibility = View.GONE
-                ll_splash3.visibility = View.VISIBLE
+                showSplash(3)
                 iv_splash_progress.setImageResource(R.drawable.splash3_progress)
             }
-            GlobalScope.launch(Dispatchers.IO) {
-                try {
-                    val qrCode = AccountUtil.getQrCode()
-                    if (isActivityEnable()) {
-                        GlobalScope.launch(Dispatchers.Main) {
-                            Glide.with(this@SplashActivity).load(qrCode)
-                                .listener(object : RequestListener<Drawable> {
-                                    override fun onLoadFailed(
-                                        e: GlideException?,
-                                        model: Any,
-                                        target: Target<Drawable>,
-                                        isFirstResource: Boolean
-                                    ): Boolean {
-                                        //加载失败
-                                        return false
-                                    }
-
-                                    override fun onResourceReady(
-                                        resource: Drawable,
-                                        model: Any,
-                                        target: Target<Drawable>,
-                                        dataSource: DataSource,
-                                        isFirstResource: Boolean
-                                    ): Boolean {
-                                        //加载成功
-                                        getPresenter().getModel(
-                                            Urls.DEVICE_BIND,
-                                            hashMapOf("dsn" to AccountUtil.getDSN()),
-                                            DeviceBindBean::class.java
-                                        )
-                                        return false
-                                    }
-                                }).into(iv_qr_splash)
-                        }
-                    }
-                } catch (e: Exception) {
-                    delay(2000L)
-                    showSplash3(isRebinding)
-                    e.printStackTrace()
-                }
-            }
-
+            loadQRCode(iv_qr_splash)
+            fetchCDK()
         } else {
             ToastUtils.showLong(this, getString(R.string.splash_reconnection))
         }
     }
 
-    private fun showSplash2QRCode() {
+    private var fetchSDKThrottleTimeLock: Long = 0;
+
+    private fun fetchCDK() {
+        if (cdk == null) {
+            bind_code_text.text = "获取中";
+        }
+        // 加锁
+        val now = System.currentTimeMillis()
+        if (now - fetchSDKThrottleTimeLock < 5000) {
+            ToastUtils.showShort(this, "获取过于频繁，请稍候再试")
+            return;
+        }
+        fetchSDKThrottleTimeLock = now;
+        var failed = true;
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                cdk = AccountUtil.getCDK()
+                failed = false
+                lastCDKFetchTime = System.currentTimeMillis()
+                if (fetchCDKTimer == null) {
+                    fetchCDKTimer = object : TimerTask() {
+                        override fun run() {
+                            fetchCDK()
+                        }
+                    }
+                    // 5分钟自动刷新
+                    Timer().schedule(fetchCDKTimer, 5 * 60 * 1000)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+//                cdk = "获取失败，点击按钮重试"
+                failed = true
+                ToastUtils.showLong(this@SplashActivity, "获取失败，稍后点击按钮重试")
+            }
+            if (!failed) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    bind_code_text.text = cdk
+                }
+            }
+        }
+
+    }
+
+    private fun loadQRCode(view: ImageView) {
+        if (!isActivityEnable()) return
+
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val qrCode = AccountUtil.getQrCode()
-                if (isActivityEnable()) {
-                    GlobalScope.launch(Dispatchers.Main) {
-                        Glide.with(this@SplashActivity).load(qrCode)
-                            .listener(object : RequestListener<Drawable> {
-                                override fun onLoadFailed(
-                                    e: GlideException?,
-                                    model: Any,
-                                    target: Target<Drawable>,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    //加载失败
-                                    return false
-                                }
+                GlobalScope.launch(Dispatchers.Main) {
+                    val loader = Glide.with(this@SplashActivity).load(qrCode)
+                    loader.listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?, model: Any,
+                            target: Target<Drawable>, isFirstResource: Boolean
+                        ): Boolean {
+                            //加载失败
+                            return false
+                        }
 
-                                override fun onResourceReady(
-                                    resource: Drawable,
-                                    model: Any,
-                                    target: Target<Drawable>,
-                                    dataSource: DataSource,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    //加载成功
-                                    return false
-                                }
-                            }).into(iv_qr_download_splash)
-                    }
+                        override fun onResourceReady(
+                            resource: Drawable, model: Any, target: Target<Drawable>,
+                            dataSource: DataSource, isFirstResource: Boolean
+                        ): Boolean {
+                            //加载成功
+                            getPresenter().getModel(
+                                Urls.DEVICE_BIND,
+                                hashMapOf("dsn" to AccountUtil.getDSN()),
+                                DeviceBindBean::class.java
+                            )
+                            return false
+                        }
+                    }).into(view)
                 }
             } catch (e: Exception) {
                 delay(2000L)
-                showSplash2QRCode()
+                loadQRCode(view)
                 e.printStackTrace()
             }
         }
+    }
+
+    private fun showSplash2QRCode() {
+        loadQRCode(iv_qr_download_splash)
     }
 
     private fun showChildUser() {
@@ -670,6 +695,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             R.id.ll_no_child_splash -> {
                 ll_no_child_splash.visibility = View.GONE
                 showChildUser()
+            }
+            R.id.btn_code_renew -> {
+                fetchCDK()
             }
         }
     }

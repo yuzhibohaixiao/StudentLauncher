@@ -17,6 +17,7 @@ import io.socket.client.Socket
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import org.xutils.common.util.LogUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Retrofit
@@ -209,6 +210,29 @@ object AccountUtil : LauncherProvider {
             )
         }
     }
+
+    override fun getCDK(): String {
+        val resp = service.getCDK(DSN).execute()
+        if(resp.isSuccessful) {
+            var bodyStr = resp.body()?.string();
+            LogUtil.d("cdk bodyStr = $bodyStr")
+            val jsonObj = JsonParser.parseString(bodyStr).asJsonObject
+            val cod = jsonObj.get("code").asInt
+            if (cod >= 400) {
+                throw Exception(
+                    jsonObj.get("msg").asString
+                )
+            }
+            val gson = Gson()
+            var data = jsonObj.get("data")
+            LogUtil.d("getCDK = $data")
+            return data.asString
+        } else {
+            LogUtil.e(resp.toString())
+            throw Exception(resp.message())
+        }
+    }
+
 
     override fun postMessage(message: TokenMessage) {
         val tk = getValidToken()
