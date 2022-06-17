@@ -222,7 +222,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 showSplash(3)
                 iv_splash_progress.setImageResource(R.drawable.splash3_progress)
             }
-            loadQRCode(iv_qr_splash)
+            loadQRCode(iv_qr_splash, true)
             fetchCDK()
         } else {
             ToastUtils.showLong(this, getString(R.string.splash_reconnection))
@@ -272,7 +272,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     }
 
-    private fun loadQRCode(view: ImageView) {
+    private fun loadQRCode(view: ImageView, isShowChild: Boolean) {
         if (!isActivityEnable()) return
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -293,26 +293,28 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                             resource: Drawable, model: Any, target: Target<Drawable>,
                             dataSource: DataSource, isFirstResource: Boolean
                         ): Boolean {
-                            //加载成功
-                            getPresenter().getModel(
-                                Urls.DEVICE_BIND,
-                                hashMapOf("dsn" to AccountUtil.getDSN()),
-                                DeviceBindBean::class.java
-                            )
+                            if (isShowChild) {
+                                //加载成功
+                                getPresenter().getModel(
+                                    Urls.DEVICE_BIND,
+                                    hashMapOf("dsn" to AccountUtil.getDSN()),
+                                    DeviceBindBean::class.java
+                                )
+                            }
                             return false
                         }
                     }).into(view)
                 }
             } catch (e: Exception) {
                 delay(2000L)
-                loadQRCode(view)
+                loadQRCode(view, true)
                 e.printStackTrace()
             }
         }
     }
 
     private fun showSplash2QRCode() {
-        loadQRCode(iv_qr_download_splash)
+        loadQRCode(iv_qr_download_splash, false)
     }
 
     private fun showChildUser() {
