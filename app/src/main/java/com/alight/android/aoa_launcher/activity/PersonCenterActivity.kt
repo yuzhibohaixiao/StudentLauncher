@@ -813,7 +813,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 calibrationAbility?.startCalibration()
             }
             R.id.fl_wifi_set ->
-                getPresenter().showWifiSetting(this)
+                getPresenter().startWifiModule(false)
             R.id.ll_family_info_offline -> {
                 showOfflineDialog()
             }
@@ -920,7 +920,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             //清理内存
             R.id.fl_clear_memory -> {
                 if (isFeatureAbilityInit) {
-                    featureAbility?.startMemoryClearn()
+                    featureAbility?.startUserMemoryClearn()
                     ToastUtils.showShort(this, "清理成功！")
                 }
             }

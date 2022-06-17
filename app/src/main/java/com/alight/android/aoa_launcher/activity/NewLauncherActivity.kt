@@ -8,6 +8,7 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cn.jpush.android.api.JPushInterface
 import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.AudioAbility
+import com.alight.ahwcx.ahwsdk.abilities.FeatureAbility
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
 import com.alight.ahwcx.ahwsdk.abilities.TouchAbility
 import com.alight.ahwcx.ahwsdk.common.AbilityConnectionHandler
@@ -47,7 +49,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_launcher.*
-import kotlinx.android.synthetic.main.activity_wifi.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -85,6 +86,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var shutdownReceiver: ShutdownReceiver? = null
     private var startHeart = false
     private var onresumeFlag = false
+    private var featureAbility: FeatureAbility? = null //内存 护眼相关
+    private var isFeatureAbilityInit = false
+
     private var selectBook: AppTypeBean = AppTypeBean(
         R.drawable.yxkw, "com.jxw.pedu.clickread",
         "com.jxw.pedu.clickread.MainActivity",
@@ -244,6 +248,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             delay(3000)
             //放开onResume限制
             onresumeFlag = false
+        }
+        //每次回首页调用内存清理
+        if (isFeatureAbilityInit) {
+            featureAbility?.startTaskMemoryClearn()
         }
     }
 
@@ -491,6 +499,20 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     private fun initAbility() {
+        if (featureAbility == null) {
+            featureAbility =
+                abilityManager.getAbility(
+                    FeatureAbility::class.java,
+                    true,
+                    applicationContext
+                )
+            featureAbility?.bindLooper(Looper.myLooper()!!)
+            featureAbility?.waitConnection(object : AbilityConnectionHandler {
+                override fun onServerConnected() {
+                    isFeatureAbilityInit = true
+                }
+            })
+        }
         if (audioAbility == null) {
             audioAbility =
                 abilityManager.getAbility(
