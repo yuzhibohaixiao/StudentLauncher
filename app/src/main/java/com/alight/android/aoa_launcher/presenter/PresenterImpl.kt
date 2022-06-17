@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
+import com.alight.ahwcx.ahwsdk.abilities.PanelAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
 import com.alight.android.aoa_launcher.activity.UpdateActivity
@@ -1095,6 +1096,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     }
 
     /**
+     * 带有动画的切换触控模式
      * @param interactiveMode
      *  PEN_POINT 交互笔点读模式
      *  PEN_RECT 交互笔划选区模式
@@ -1107,6 +1109,20 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
     ) {
         try {
             ability.setInteractiveMode(interactiveMode)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * 不带动画的切换触控模式
+     */
+    fun startInteractionWindowNoAnim(
+        ability: PanelAbility,
+        touchMode: PanelAbility.TouchMode
+    ) {
+        try {
+            ability.setTouchMode(touchMode)
         } catch (e: Exception) {
             e.printStackTrace()
         }

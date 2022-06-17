@@ -20,10 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.jpush.android.api.JPushInterface
 import com.alight.ahwcx.ahwsdk.AbilityManager
-import com.alight.ahwcx.ahwsdk.abilities.AudioAbility
-import com.alight.ahwcx.ahwsdk.abilities.FeatureAbility
-import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
-import com.alight.ahwcx.ahwsdk.abilities.TouchAbility
+import com.alight.ahwcx.ahwsdk.abilities.*
 import com.alight.ahwcx.ahwsdk.common.AbilityConnectionHandler
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
@@ -75,6 +72,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var splashCloseFlag = false
     private var qualityHorizontalAdapter: QualityHorizontalAdapter? = null
     private var interactionAbility: InteractionAbility? = null //交互模式相关
+    private var panelAbility: PanelAbility? = null //交互模式相关(无动画)
     private var audioAbility: AudioAbility? = null //语音助手相关
     private var touchAbility: TouchAbility? = null //触控乱点相关
     private val abilityManager = AbilityManager("launcher", "5", "234")
@@ -88,6 +86,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var onresumeFlag = false
     private var featureAbility: FeatureAbility? = null //内存 护眼相关
     private var isFeatureAbilityInit = false
+
 
     private var selectBook: AppTypeBean = AppTypeBean(
         R.drawable.yxkw, "com.jxw.pedu.clickread",
@@ -281,7 +280,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 e.printStackTrace()
             }
         }
-
     }
 
 
@@ -289,6 +287,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
      * 交互模式初始化
      */
     private fun setInteraction() {
+        if (panelAbility == null) {
+            panelAbility =
+                abilityManager.getAbility(PanelAbility::class.java, true, applicationContext)
+        }
         if (interactionAbility == null) {
             interactionAbility =
                 abilityManager.getAbility(
@@ -841,27 +843,27 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             R.id.iv_query_word -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 135, "/home")
                 if (startAoaApp)
-                    getPresenter().startInteractionWindow(
-                        interactionAbility!!,
-                        InteractionAbility.InteractiveMode.PEN_POINT
+                    getPresenter().startInteractionWindowNoAnim(
+                        panelAbility!!,
+                        PanelAbility.TouchMode.PEN_MODE
                     )
             }
             //查字词
             R.id.iv_chinese_words -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 134, "/home")
                 if (startAoaApp)
-                    getPresenter().startInteractionWindow(
-                        interactionAbility!!,
-                        InteractionAbility.InteractiveMode.PEN_POINT
+                    getPresenter().startInteractionWindowNoAnim(
+                        panelAbility!!,
+                        PanelAbility.TouchMode.PEN_MODE
                     )
             }
             //翻译-AOA翻译
             R.id.iv_english_translation -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 138, "/app/138/home")
                 if (startAoaApp)
-                    getPresenter().startInteractionWindow(
-                        interactionAbility!!,
-                        InteractionAbility.InteractiveMode.PEN_RECT
+                    getPresenter().startInteractionWindowNoAnim(
+                        panelAbility!!,
+                        PanelAbility.TouchMode.PEN_MODE
                     )
             }
             //求助老师-AOA 的远程辅导页面
@@ -874,13 +876,13 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     )
             }
 
-            //答题-AOA搜题
+            //答题-AOA搜题 题目查询
             R.id.iv_title_query -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 139, "/apps/139/main")
                 if (startAoaApp)
-                    getPresenter().startInteractionWindow(
-                        interactionAbility!!,
-                        InteractionAbility.InteractiveMode.PEN_RECT
+                    getPresenter().startInteractionWindowNoAnim(
+                        panelAbility!!,
+                        PanelAbility.TouchMode.PEN_MODE
                     )
             }
             //趣味卡牌-自己做的卡牌游戏
@@ -901,18 +903,18 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             R.id.iv_oral_correction -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 142, "/app/142/home")
                 if (startAoaApp)
-                    getPresenter().startInteractionWindow(
-                        interactionAbility!!,
-                        InteractionAbility.InteractiveMode.PEN_POINT
+                    getPresenter().startInteractionWindowNoAnim(
+                        panelAbility!!,
+                        PanelAbility.TouchMode.PEN_MODE
                     )
             }
             //语文作文批改
             R.id.iv_article_correction -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 143, "/app/143/home")
                 if (startAoaApp)
-                    getPresenter().startInteractionWindow(
-                        interactionAbility!!,
-                        InteractionAbility.InteractiveMode.PEN_POINT
+                    getPresenter().startInteractionWindowNoAnim(
+                        panelAbility!!,
+                        PanelAbility.TouchMode.PEN_MODE
                     )
             }
             //英语作文批改
