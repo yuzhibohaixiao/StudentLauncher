@@ -1,5 +1,6 @@
 package com.alight.android.aoa_launcher.activity
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Paint
@@ -65,8 +66,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private var onlySplash = false
     private var closeSplash = false
     private var cdk: String? = null;
-    private var lastCDKFetchTime: Long = 0;
-    private var fetchCDKTimer: TimerTask? = null;
+    private var autoFetchCDKTimerTask: TimerTask? = null;
+    private var _refreshTimerTask: TimerTask? = null;
+    private var refreshTimerTask: TimerTask? = null;
+    private var fetchCDKRemain: Int = 0;
 
 
     //初始化控件
@@ -79,6 +82,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             ll_splash3,
             fl_splash4,
         )
+
+
     }
 
     private fun showSplash(activeIndex: Int) {
@@ -230,37 +235,37 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private var fetchSDKThrottleTimeLock: Long = 0;
+    private var fetchCDK_CD = 15;
+    private var fetchCDK_failed_CD = 3;
 
+    @SuppressLint("SetTextI18n")
     private fun fetchCDK() {
+        // 倒计时
+        if (fetchCDKRemain > 0) return;
         if (cdk == null) {
             bind_code_text.text = "获取中";
         }
         // 加锁
-        val now = System.currentTimeMillis()
-        if (now - fetchSDKThrottleTimeLock < 5000) {
-            ToastUtils.showShort(this, "获取过于频繁，请稍候再试")
-            return;
-        }
-        fetchSDKThrottleTimeLock = now;
         var failed = true;
         GlobalScope.launch(Dispatchers.IO) {
             try {
+                startRenewCodeBtnTimeCounter(fetchCDK_CD)
                 cdk = AccountUtil.getCDK()
                 failed = false
-                lastCDKFetchTime = System.currentTimeMillis()
-                if (fetchCDKTimer == null) {
-                    fetchCDKTimer = object : TimerTask() {
-                        override fun run() {
-                            fetchCDK()
-                        }
-                    }
-                    // 5分钟自动刷新
-                    Timer().schedule(fetchCDKTimer, 5 * 60 * 1000)
-                }
+//                autoFetchCDKTimerTask?.cancel()
+//                autoFetchCDKTimerTask = object : TimerTask() {
+//                    override fun run() {
+//                        fetchCDK()
+//                    }
+//                }
+//                // 5分钟自动刷新
+//                Timer().scheduleAtFixedRate(autoFetchCDKTimerTask, 5 * 60 * 1000,5 * 60 * 1000)
+
             } catch (e: Exception) {
                 e.printStackTrace()
 //                cdk = "获取失败，点击按钮重试"
                 failed = true
+                startRenewCodeBtnTimeCounter(fetchCDK_failed_CD)
                 ToastUtils.showLong(this@SplashActivity, "获取失败，稍后点击按钮重试")
             }
             if (!failed) {
@@ -270,6 +275,49 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
         }
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun startRenewCodeBtnTimeCounter(cd: Int = fetchCDK_CD) {
+        // 灰掉
+        fetchCDKRemain = cd
+        runOnUiThread {
+            disableRenewCodeBtn()
+            btn_code_renew.text = "刷新($cd)";
+        }
+        // 先取消之前的
+        refreshTimerTask?.cancel()
+        refreshTimerTask = null
+        refreshTimerTask = object : TimerTask() {
+            override fun run() {
+                fetchCDKRemain--;
+                if (fetchCDKRemain <= 0) {
+                    fetchCDKRemain = 0;
+                    runOnUiThread {
+                        btn_code_renew.text = "刷新";
+                        enableRenewCodeBtn()
+                    }
+                    refreshTimerTask?.cancel()
+                    refreshTimerTask = null;
+                    return;
+                }
+                runOnUiThread {
+                    btn_code_renew.text = "刷新($fetchCDKRemain)";
+                }
+            }
+        }
+        Timer().scheduleAtFixedRate(refreshTimerTask, 1000, 1 * 1000)
+
+    }
+
+    private fun disableRenewCodeBtn() {
+        btn_code_renew.setTextColor(getColor(R.color.splash_renew_btn_color_disabled))
+        btn_code_renew.background = getDrawable(R.drawable.btn_gray_bg)
+    }
+
+    private fun enableRenewCodeBtn() {
+        btn_code_renew.setTextColor(getColor(R.color.splash_renew_btn_color))
+        btn_code_renew.background = getDrawable(R.drawable.grade_white_bg)
     }
 
     private fun loadQRCode(view: ImageView, isShowChild: Boolean) {

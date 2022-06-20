@@ -111,7 +111,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="142dp"
                     android:gravity="center_horizontal"
                     android:text="点击开启\nAR之旅"
@@ -195,7 +195,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:layout_marginStart="20dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -239,16 +239,16 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="62dp"
+                android:layout_width="70dp"
                 android:layout_height="25dp"
-                android:text="192032"
+                android:text="000000"
                 android:id="@+id/bind_code_text"
                 android:textColor="#ffffffff"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/btn_code_renew"
-                android:layout_width="50dp"
+                android:layout_width="63dp"
                 android:layout_height="23dp"
                 android:layout_marginLeft="23dp"
                 android:layout_marginTop="0dp"
@@ -256,6 +256,7 @@
                 android:gravity="center"
                 android:layout_gravity="top"
                 android:text="刷新"
+                android:letterSpacing="0.1"
                 android:textColor="#ff3d7075"
                 android:textSize="12sp"/>
 
