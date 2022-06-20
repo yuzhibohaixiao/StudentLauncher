@@ -82,7 +82,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var stopHeart = false
     private var playTimeBean: PlayTimeBean? = null
     private var shutdownReceiver: ShutdownReceiver? = null
-    private var startHeart = false
+    private var isStartHeart = false
     private var onresumeFlag = false
     private var featureAbility: FeatureAbility? = null //内存 护眼相关
     private var isFeatureAbilityInit = false
@@ -340,6 +340,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                             //重新选择用户的逻辑可以写在这里
                             AccountUtil.selectUser(it.userId)
                             stopHeart = false
+                            isStartHeart = false
                             // 获取学习计划
                             getPresenter().getModel(
                                 "${Urls.STUDY_PLAN}${it.userId}",
@@ -752,8 +753,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 }
             } else if (any is JPushBindBean) {
                 if (any.code == 201) {
-                    if (!startHeart) {
-                        startHeart = true
+                    if (!isStartHeart) {
+                        isStartHeart = true
                         heartbeat()
                     }
                 }
