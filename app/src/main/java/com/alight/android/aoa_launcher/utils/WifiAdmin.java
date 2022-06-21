@@ -206,6 +206,7 @@ public class WifiAdmin {
     public void removeWifi(int netId) {
         disconnectWifi(netId);
         mWifiManager.removeNetwork(netId);
+        mWifiManager.saveConfiguration();
     }
 
 //然后是一个实际应用方法，只验证过没有密码的情况：

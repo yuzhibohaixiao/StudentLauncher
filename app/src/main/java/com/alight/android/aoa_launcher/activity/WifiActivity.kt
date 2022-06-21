@@ -640,17 +640,21 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
+            //adb后门
             R.id.fl_adb_backdoor -> {
-                if (adbBackdoorFlag < 5) {
+                if (adbBackdoorFlag < 10) {
                     adbBackdoorFlag++
                 } else {
+                    adbBackdoorFlag = 0
                     getPresenter().showAdbWifi()
                 }
             }
+            //wifi后门
             R.id.fl_wifi_backdoor -> {
-                if (wifiBackdoorFlag < 5) {
+                if (wifiBackdoorFlag < 10) {
                     wifiBackdoorFlag++
                 } else {
+                    wifiBackdoorFlag = 0
                     getPresenter().showWifiSetting(this)
                 }
             }
