@@ -56,6 +56,8 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     //true 表示主动触发了一次连接
     private var activeConnect = false
 
+    private var isConnected = false
+
     val wifiManager =
         LauncherApplication.getContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
     val connectivityManager =
@@ -124,7 +126,22 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 //                    val ping = InternetUtil.ping()
                     //经历过连接
                     if (connecting) {
-                        ToastUtil.showToast(LauncherApplication.getContext(), "连接成功！")
+                        isConnected = true
+                        ToastUtil.showToast(
+                            LauncherApplication.getContext(),
+                            "连接成功！"
+//                            "连接成功！realWifiList size = ${realWifiList.size}"
+                        )
+                        if (realWifiList.size == 0) {
+                            RxTimerUtil.interval(500) {
+                                if (wifiManager.scanResults != null && wifiManager.scanResults.size > 0) {
+                                    RxTimerUtil.cancel()
+                                    sortScaResult()
+                                    val connectType = 1
+                                    wifiListSet(connectedWifiInfo.ssid, connectType)
+                                }
+                            }
+                        }
                         connecting = false
                         activeConnect = false
                         if (startWifi) {
@@ -248,6 +265,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
      * 获取wifi列表然后将bean转成自己定义的WifiBean
      */
     private fun sortScaResult() {
+        if (isConnected) return
         val scanResults = WifiBeanUtil.noSameName(wifiManager.scanResults)
         realWifiList.clear()
         if (scanResults != null && scanResults.size > 0) {
@@ -461,10 +479,16 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             if (isChecked) {
                 openWifiAndScan()
             } else {
+                isConnected = false
                 mWifiAdmin?.closeWifi(this)
                 realWifiList.clear()
                 wifiListAdapter?.notifyDataSetChanged()
             }
+            /* buttonView.isEnabled = false
+             GlobalScope.launch(Dispatchers.Main) {
+                 delay(2000)
+                 buttonView.isEnabled = true
+             }*/
         }
         wifiListAdapter?.setOnItemChildClickListener { adapter, view, position ->
             //忽略此网络
