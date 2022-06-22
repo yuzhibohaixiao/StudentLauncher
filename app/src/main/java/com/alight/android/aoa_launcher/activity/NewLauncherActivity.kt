@@ -339,8 +339,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         if (it.userId == userId) {
                             //重新选择用户的逻辑可以写在这里
                             AccountUtil.selectUser(it.userId)
-                            stopHeart = false
-                            isStartHeart = false
+//                            stopHeart = false
+//                            isStartHeart = false
                             // 获取学习计划
                             getPresenter().getModel(
                                 "${Urls.STUDY_PLAN}${it.userId}",
@@ -348,18 +348,19 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                 StudyPlanBean::class.java
                             )
                             // 用户绑定极光推送
-                            getPresenter().postModel(
-                                Urls.BIND_PUSH,
-                                RequestBody.create(
-                                    null,
-                                    mapOf(
-                                        AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(
-                                            this@NewLauncherActivity
-                                        )
-                                    ).toJson()
-                                ),
-                                JPushBindBean::class.java
-                            )
+                            if (!isStartHeart)
+                                getPresenter().postModel(
+                                    Urls.BIND_PUSH,
+                                    RequestBody.create(
+                                        null,
+                                        mapOf(
+                                            AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(
+                                                this@NewLauncherActivity
+                                            )
+                                        ).toJson()
+                                    ),
+                                    JPushBindBean::class.java
+                                )
                             getPresenter().getModel(
                                 Urls.PLAY_TIME,
                                 hashMapOf("user_id" to it.userId),
@@ -422,6 +423,21 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             when (it.resultCode) {
                 //选择用户后的用户刷新逻辑
                 AppConstants.RESULT_CODE_SELECT_USER_BACK -> {
+                    stopHeart = false
+                    isStartHeart = false
+                    if (!isStartHeart)
+                        getPresenter().postModel(
+                            Urls.BIND_PUSH,
+                            RequestBody.create(
+                                null,
+                                mapOf(
+                                    AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(
+                                        this@NewLauncherActivity
+                                    )
+                                ).toJson()
+                            ),
+                            JPushBindBean::class.java
+                        )
                     splashCloseFlag = true
                     guideUserUpdate = true
                     SPUtils.syncPutData("rebinding", false)
@@ -432,21 +448,24 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 }
                 //使用Launcher调起选择用户
                 AppConstants.RESULT_CODE_LAUNCHER_START_SELECT_USER -> {
+                    stopHeart = true
+                    isStartHeart = false
                     activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
                 }
             }
         }
         // 用户绑定极光推送
-        getPresenter().postModel(
-            Urls.BIND_PUSH,
-            RequestBody.create(
-                null,
-                mapOf(
-                    AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(this@NewLauncherActivity)
-                ).toJson()
-            ),
-            JPushBindBean::class.java
-        )
+        if (!isStartHeart)
+            getPresenter().postModel(
+                Urls.BIND_PUSH,
+                RequestBody.create(
+                    null,
+                    mapOf(
+                        AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(this@NewLauncherActivity)
+                    ).toJson()
+                ),
+                JPushBindBean::class.java
+            )
         getPresenter().getModel(
             Urls.PLAY_TIME,
             hashMapOf("user_id" to tokenPair?.userId.toString()),
@@ -1222,18 +1241,19 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 initAccountUtil()
                 EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
                 // 用户绑定极光推送
-                getPresenter().postModel(
-                    Urls.BIND_PUSH,
-                    RequestBody.create(
-                        null,
-                        mapOf(
-                            AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(
-                                this@NewLauncherActivity
-                            )
-                        ).toJson()
-                    ),
-                    JPushBindBean::class.java
-                )
+                if (!isStartHeart)
+                    getPresenter().postModel(
+                        Urls.BIND_PUSH,
+                        RequestBody.create(
+                            null,
+                            mapOf(
+                                AppConstants.REGISTRATION_ID to JPushInterface.getRegistrationID(
+                                    this@NewLauncherActivity
+                                )
+                            ).toJson()
+                        ),
+                        JPushBindBean::class.java
+                    )
                 val splashClose = SPUtils.getData("splashClose", false) as Boolean
                 Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
 

@@ -477,7 +477,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             if (connecting) return@setOnItemClickListener
             val wifiBean = adapter.data[position] as WifiBean
             this.mWifiBean = wifiBean
-            val savePwd = SPUtils.getData("wifi" + wifiBean.wifiName, false) as Boolean
+            val savePwd = SPUtils.getData("wifi" + wifiBean.wifiName, true) as Boolean
             var wifiConfiguration: WifiConfiguration? = null
             //正在连接的点击不做处理
             if (wifiBean.state == 2)
@@ -485,10 +485,10 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             if (savePwd) {
                 wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
             }
-         /*   ToastUtils.showShort(
-                this,
-                "wifiConfiguration null = ${wifiConfiguration == null} savePwd = $savePwd"
-            )*/
+            /*   ToastUtils.showShort(
+                   this,
+                   "wifiConfiguration null = ${wifiConfiguration == null} savePwd = $savePwd"
+               )*/
 //            val index = mWifiAdmin?.getConfigIndex(wifiBean.wifiName)!!
             if (wifiBean.state == 1) {
                 //已连接的wifi
@@ -549,6 +549,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     private fun showWifiDialog(wifiBean: WifiBean) {
         val powerDialog = CustomDialog(this, R.layout.dialog_wifi_connect)
         val tvWifiName = powerDialog.findViewById<TextView>(R.id.tv_wifi_name_dialog)
+        val cbRecordPwd = powerDialog.findViewById<CheckBox>(R.id.cb_record_pwd)
         tvWifiName.text = wifiBean.wifiName
         val etWifiPwd = powerDialog.findViewById<EditText>(R.id.et_wifi_pwd)
         powerDialog.findViewById<CheckBox>(R.id.cb_show_pwd)
@@ -562,7 +563,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 }
                 etWifiPwd.setSelection(etWifiPwd.text.toString().length)
             }
-        powerDialog.findViewById<CheckBox>(R.id.cb_record_pwd)
+        cbRecordPwd
             .setOnCheckedChangeListener { buttonView, isChecked ->
                 //记录密码
                 if (isChecked) {
@@ -581,6 +582,12 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 return@setOnClickListener
             }
             //                    SPUtils.syncPutData("wifi" + scanResult.SSID, true)
+            //记录密码
+            if (cbRecordPwd.isChecked) {
+                SPUtils.syncPutData("wifi" + wifiBean.wifiName, true)
+            } else {
+                SPUtils.syncPutData("wifi" + wifiBean.wifiName, false)
+            }
             //加入（连接wifi）
             val isConnected = mWifiAdmin?.addNetwork(
                 mWifiAdmin?.CreateWifiInfo(
@@ -633,17 +640,21 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
+            //adb后门
             R.id.fl_adb_backdoor -> {
-                if (adbBackdoorFlag < 5) {
+                if (adbBackdoorFlag < 10) {
                     adbBackdoorFlag++
                 } else {
+                    adbBackdoorFlag = 0
                     getPresenter().showAdbWifi()
                 }
             }
+            //wifi后门
             R.id.fl_wifi_backdoor -> {
-                if (wifiBackdoorFlag < 5) {
+                if (wifiBackdoorFlag < 10) {
                     wifiBackdoorFlag++
                 } else {
+                    wifiBackdoorFlag = 0
                     getPresenter().showWifiSetting(this)
                 }
             }
