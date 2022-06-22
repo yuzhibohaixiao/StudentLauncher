@@ -14,10 +14,7 @@ import android.net.wifi.WifiManager.EXTRA_SUPPLICANT_ERROR
 import android.text.InputType
 import android.util.Log
 import android.view.View
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
@@ -480,7 +477,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 openWifiAndScan()
             } else {
                 isConnected = false
-                mWifiAdmin?.closeWifi(this)
+                mWifiAdmin?.closeWifi(this, switch_wifi)
                 realWifiList.clear()
                 wifiListAdapter?.notifyDataSetChanged()
             }
@@ -560,7 +557,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun openWifiAndScan() {
-        mWifiAdmin?.openWifi(this)
+        mWifiAdmin?.openWifi(this, switch_wifi)
         ToastUtils.showShort(this, "wifi已开启，正在扫描wifi请稍等")
         RxTimerUtil.interval(500) {
             if (wifiManager.scanResults != null && wifiManager.scanResults.size > 0) {

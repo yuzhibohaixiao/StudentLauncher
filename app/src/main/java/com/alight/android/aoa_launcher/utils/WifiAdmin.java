@@ -11,6 +11,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.util.Log;
+import android.widget.Switch;
 import android.widget.Toast;
 
 public class WifiAdmin {
@@ -36,7 +37,8 @@ public class WifiAdmin {
     }
 
     // 打开WIFI
-    public void openWifi(Context context) {
+    public void openWifi(Context context, Switch swc) {
+        swc.setChecked(true);
         if (!mWifiManager.isWifiEnabled()) {
             mWifiManager.setWifiEnabled(true);
         } else if (mWifiManager.getWifiState() == 2) {
@@ -47,14 +49,18 @@ public class WifiAdmin {
     }
 
     // 关闭WIFI
-    public void closeWifi(Context context) {
+    public void closeWifi(Context context, Switch swc) {
         if (mWifiManager.isWifiEnabled()) {
+            swc.setChecked(false);
             mWifiManager.setWifiEnabled(false);
         } else if (mWifiManager.getWifiState() == 1) {
+            swc.setChecked(false);
             Toast.makeText(context, "亲，Wifi已经关闭，不用再关了", Toast.LENGTH_SHORT).show();
         } else if (mWifiManager.getWifiState() == 0) {
+            swc.setChecked(false);
             Toast.makeText(context, "亲，Wifi正在关闭，不用再关了", Toast.LENGTH_SHORT).show();
         } else {
+            swc.setChecked(true);
             Toast.makeText(context, "请重新关闭", Toast.LENGTH_SHORT).show();
         }
     }
