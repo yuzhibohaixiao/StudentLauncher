@@ -55,6 +55,8 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
     private var isConnected = false
 
+    private var mSsid = ""
+
     val wifiManager =
         LauncherApplication.getContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
     val connectivityManager =
@@ -97,20 +99,26 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                 val info: NetworkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO)!!
                 Log.d(TAG, "--NetworkInfo--$info")
                 if (NetworkInfo.State.DISCONNECTED == info.state) { //wifi没连接上
-
                     Log.d(TAG, "wifi没连接上")
 //                    Toast.makeText(this@WifiActivity, "wifi没连接上", Toast.LENGTH_SHORT).show()
 //                    hidingProgressBar()
                     for (i in realWifiList.indices) { //没连接上将 所有的连接状态都置为“未连接”
                         realWifiList[i].state = 3
                     }
-                    wifiListAdapter?.notifyDataSetChanged()
+                    if (realWifiList.size == 0) {
+                        if (wifiManager.scanResults != null && wifiManager.scanResults.size > 0) {
+                            sortScaResult()
+                        }
+                    } else {
+                        wifiListAdapter?.notifyDataSetChanged()
+                    }
                     //经历过连接
                     if (connecting) {
-                        ToastUtils.showShort(this@WifiActivity, "连接失败，请重试！")
+                        ToastUtil.showToast(LauncherApplication.getContext(), "连接失败，请重试！")
                         //主动连接且未连接成功，提示弹窗
                         if (mWifiBean != null && activeConnect) {
-                            showWifiDialog(mWifiBean!!)
+//                            showWifiDialog(mWifiBean!!)
+                            SPUtils.syncPutData("wifi" + mWifiBean?.wifiName, false)
                             activeConnect = false
                         }
                         connecting = false
@@ -124,6 +132,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                     //经历过连接
                     if (connecting) {
                         isConnected = true
+                        mSsid = connectedWifiInfo.ssid
                         ToastUtil.showToast(
                             LauncherApplication.getContext(),
                             "连接成功！"
@@ -262,7 +271,6 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
      * 获取wifi列表然后将bean转成自己定义的WifiBean
      */
     private fun sortScaResult() {
-        if (isConnected) return
         val scanResults = WifiBeanUtil.noSameName(wifiManager.scanResults)
         realWifiList.clear()
         if (scanResults != null && scanResults.size > 0) {
@@ -283,6 +291,10 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                     }
                 }
             }
+        }
+        if (mSsid.isNotEmpty() && isConnected) {
+            val connectType = 1
+            wifiListSet(mSsid, connectType)
         }
     }
 
@@ -406,6 +418,22 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         if (wifiEnabled) {
             mWifiAdmin?.startScan(this)
         }
+        switch_wifi.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                openWifiAndScan()
+            } else {
+                isConnected = false
+                mWifiAdmin?.closeWifi(this, switch_wifi)
+                realWifiList.clear()
+                wifiListAdapter?.notifyDataSetChanged()
+            }
+            /* buttonView.isEnabled = false
+             GlobalScope.launch(Dispatchers.Main) {
+                 delay(2000)
+                 buttonView.isEnabled = true
+             }*/
+        }
+
 
 /*
         if (InternetUtil.isNetworkAvalible(this)) {
@@ -438,6 +466,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        RxTimerUtil.cancel()
 //        unregisterReceiver(wifiScanReceiver)
     }
 
@@ -472,24 +501,11 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         fl_adb_backdoor.setOnClickListener(this)
         fl_wifi_backdoor.setOnClickListener(this)
         ll_back.setOnClickListener(this)
-        switch_wifi.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                openWifiAndScan()
-            } else {
-                isConnected = false
-                mWifiAdmin?.closeWifi(this, switch_wifi)
-                realWifiList.clear()
-                wifiListAdapter?.notifyDataSetChanged()
-            }
-            /* buttonView.isEnabled = false
-             GlobalScope.launch(Dispatchers.Main) {
-                 delay(2000)
-                 buttonView.isEnabled = true
-             }*/
-        }
         wifiListAdapter?.setOnItemChildClickListener { adapter, view, position ->
             //忽略此网络
             if (view.id == R.id.tv_ignore_network) {
+                mSsid = ""
+                connecting = false
                 val wifiBean = adapter.data[position] as WifiBean
                 showWifiIgnoreDialog(wifiBean)
             }
@@ -547,7 +563,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
             mWifiAdmin?.removeWifi(wifiConfiguration?.networkId!!)
             SPUtils.syncPutData("wifi" + wifiBean.wifiName, false)
-            ToastUtils.showShort(this, "正在忽略此网络并断开连接")
+            ToastUtils.showShort(LauncherApplication.getContext(), "正在忽略此网络并断开连接")
             customDialog.dismiss()
         }
         customDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {
@@ -558,7 +574,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
     private fun openWifiAndScan() {
         mWifiAdmin?.openWifi(this, switch_wifi)
-        ToastUtils.showShort(this, "wifi已开启，正在扫描wifi请稍等")
+        ToastUtils.showShort(LauncherApplication.getContext(), "wifi已开启，正在扫描wifi请稍等")
         RxTimerUtil.interval(500) {
             if (wifiManager.scanResults != null && wifiManager.scanResults.size > 0) {
                 RxTimerUtil.cancel()
