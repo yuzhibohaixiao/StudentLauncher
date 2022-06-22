@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseActivity
-import com.alight.android.aoa_launcher.common.bean.DeviceBindBean
-import com.alight.android.aoa_launcher.common.bean.TokenManagerException
-import com.alight.android.aoa_launcher.common.bean.TokenPair
-import com.alight.android.aoa_launcher.common.bean.UpdateBean
+import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.CheckUpdateEvent
 import com.alight.android.aoa_launcher.common.event.SplashEvent
@@ -37,6 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -70,6 +68,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private var _refreshTimerTask: TimerTask? = null;
     private var refreshTimerTask: TimerTask? = null;
     private var fetchCDKRemain: Int = 0;
+    private var mUserId = -1
 
 
     //初始化控件
@@ -406,7 +405,19 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                                 AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
                                                 tokenPair.token
                                             )
-                                            AccountUtil.selectUser(tokenPair.userId)
+                                            mUserId = tokenPair.userId
+                                            //新替换的登录接口
+                                            getPresenter().postModel(
+                                                Urls.STUDENT_LOGIN,
+                                                RequestBody.create(
+                                                    null,
+                                                    mapOf(
+                                                        "user_id" to tokenPair.userId,
+                                                        "dsn" to AccountUtil.getDSN()
+                                                    ).toJson()
+                                                ), BaseBean::class.java
+                                            )
+//                                            AccountUtil.selectUser(tokenPair.userId)
                                             GlobalScope.launch(Dispatchers.Main) {
                                                 //保存用户信息
                                                 writeUserInfo(tokenPair)
@@ -673,6 +684,27 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                         any,
                         this
                     )
+            }
+            is BaseBean -> {
+                if (any.code == 201) {
+                    if (mUserId != -1) {
+                        AccountUtil.currentUserId = mUserId
+                    }
+                } else {
+                    //重新尝试调用登录接口
+                    if (mUserId != -1) {
+                        getPresenter().postModel(
+                            Urls.STUDENT_LOGIN,
+                            RequestBody.create(
+                                null,
+                                mapOf(
+                                    "user_id" to mUserId,
+                                    "dsn" to AccountUtil.getDSN()
+                                ).toJson()
+                            ), BaseBean::class.java
+                        )
+                    }
+                }
             }
         }
     }

@@ -86,6 +86,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var onresumeFlag = false
     private var featureAbility: FeatureAbility? = null //内存 护眼相关
     private var isFeatureAbilityInit = false
+    private var mUserId = -1
 
 
     private var selectBook: AppTypeBean = AppTypeBean(
@@ -337,8 +338,20 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     val allToken = AccountUtil.getAllToken()
                     allToken.forEach {
                         if (it.userId == userId) {
+                            mUserId = it.userId
+                            //新替换的登录接口
+                            getPresenter().postModel(
+                                Urls.STUDENT_LOGIN,
+                                RequestBody.create(
+                                    null,
+                                    mapOf(
+                                        "user_id" to it.userId,
+                                        "dsn" to AccountUtil.getDSN()
+                                    ).toJson()
+                                ), LoginBean::class.java
+                            )
                             //重新选择用户的逻辑可以写在这里
-                            AccountUtil.selectUser(it.userId)
+//                            AccountUtil.selectUser(it.userId)
 //                            stopHeart = false
 //                            isStartHeart = false
                             // 获取学习计划
@@ -814,6 +827,28 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 playTimeBean = any
                 val mmkv = LauncherApplication.getMMKV()
                 mmkv.encode(AppConstants.PLAY_TIME, Gson().toJson(playTimeBean))
+            } else if (any is LoginBean) {
+                //登录接口处理
+                if (any.code == 201) {
+                    if (mUserId != -1) {
+                        AccountUtil.currentUserId = mUserId
+                    }
+                } else {
+                    //重新尝试调用登录接口
+                    if (mUserId != -1) {
+                        getPresenter().postModel(
+                            Urls.STUDENT_LOGIN,
+                            RequestBody.create(
+                                null,
+                                mapOf(
+                                    "user_id" to mUserId,
+                                    "dsn" to AccountUtil.getDSN()
+                                ).toJson()
+                            ), LoginBean::class.java
+                        )
+                    }
+                }
+
             }
         }
     }

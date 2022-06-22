@@ -45,5 +45,8 @@ object Urls {
     //学习计划
     const val STUDY_PLAN = "/study_plan/v1/student/plan/status/"
 
+    //登录
+    const val STUDENT_LOGIN = "device/v1/student/login"
+
 
 }
