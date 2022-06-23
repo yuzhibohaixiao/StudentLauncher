@@ -141,8 +141,19 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             }
             onlyShowSelectChild -> showChildUser()
         }
-        RxTimerUtil.interval(5000) {
-            iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
+        refreshNetWorkIcon()
+        /* RxTimerUtil.interval(5000) {
+             iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this@SplashActivity))
+         }*/
+    }
+
+    private fun refreshNetWorkIcon() {
+        GlobalScope.launch(Dispatchers.IO) {
+            delay(5000)
+            GlobalScope.launch(Dispatchers.Main) {
+                iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this@SplashActivity))
+            }
+            refreshNetWorkIcon()
         }
     }
 
@@ -200,6 +211,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         if (event.step == 2) {
             fl_splash1.visibility = View.GONE
             ll_splash2.visibility = View.VISIBLE
+            ll_splash3.visibility = View.GONE
+            fl_splash4.visibility = View.GONE
             iv_splash_progress.setImageResource(R.drawable.splash2_progress)
             showSplash2QRCode()
         }
@@ -265,7 +278,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 //                cdk = "获取失败，点击按钮重试"
                 failed = true
                 startRenewCodeBtnTimeCounter(fetchCDK_failed_CD)
-                ToastUtils.showLong(this@SplashActivity, "获取失败，稍后点击按钮重试")
+                GlobalScope.launch(Dispatchers.Main) {
+                    ToastUtils.showLong(this@SplashActivity, "获取失败，稍后点击按钮重试")
+                }
             }
             if (!failed) {
                 GlobalScope.launch(Dispatchers.Main) {
