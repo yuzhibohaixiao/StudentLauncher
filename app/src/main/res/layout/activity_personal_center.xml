@@ -744,156 +744,172 @@
                 android:layout_marginBottom="12dp"
                 android:src="@drawable/dotted_line" />
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="277.5dp"
-                android:layout_marginTop="19.5dp">
+                android:layout_marginTop="19.5dp"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/ll_camera_calibration"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="23.5dp"
-                        android:layout_height="23.5dp"
-                        android:layout_marginTop="10.5dp"
-                        android:src="@drawable/camera_calibration" />
+                    <LinearLayout
+                        android:id="@+id/ll_camera_calibration"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5.5dp"
-                        android:text="摄像头校准"
-                        android:textColor="#215558"
-                        android:textSize="10sp" />
+                        <ImageView
+                            android:layout_width="23.5dp"
+                            android:layout_height="23.5dp"
+                            android:layout_marginTop="10.5dp"
+                            android:src="@drawable/camera_calibration" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5.5dp"
+                            android:text="摄像头校准"
+                            android:textColor="#215558"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_mode_set"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="25dp"
+                        android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="23.5dp"
+                            android:layout_height="23.5dp"
+                            android:layout_marginTop="10.5dp"
+                            android:src="@drawable/mode_set" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5.5dp"
+                            android:text="模式设置"
+                            android:textColor="#215558"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_unbind_device"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="25dp"
+                        android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="23.5dp"
+                            android:layout_height="23.5dp"
+                            android:layout_marginTop="10.5dp"
+                            android:src="@drawable/unbind_device" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5.5dp"
+                            android:text="解绑设备"
+                            android:textColor="#215558"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_splash"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="25dp"
+                        android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="23.5dp"
+                            android:layout_height="23.5dp"
+                            android:layout_marginTop="10.5dp"
+                            android:src="@drawable/splash" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5.5dp"
+                            android:text="用户引导"
+                            android:textColor="#215558"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_about_deivce"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="25dp"
+                        android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="23.5dp"
+                            android:layout_height="23.5dp"
+                            android:layout_marginTop="10.5dp"
+                            android:src="@drawable/about_device" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5.5dp"
+                            android:text="关于设备"
+                            android:textColor="#215558"
+                            android:textSize="10sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ll_mode_set"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="85dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17.5dp"
+                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="23.5dp"
-                        android:layout_height="23.5dp"
-                        android:layout_marginTop="10.5dp"
-                        android:src="@drawable/mode_set" />
+                    <LinearLayout
+                        android:id="@+id/ll_power"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5.5dp"
-                        android:text="模式设置"
-                        android:textColor="#215558"
-                        android:textSize="10sp" />
+                        <ImageView
+                            android:layout_width="23.5dp"
+                            android:layout_height="23.5dp"
+                            android:layout_marginTop="10.5dp"
+                            android:src="@drawable/power" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5.5dp"
+                            android:text="电源"
+                            android:textColor="#215558"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_unbind_device"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="170dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="23.5dp"
-                        android:layout_height="23.5dp"
-                        android:layout_marginTop="10.5dp"
-                        android:src="@drawable/unbind_device" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5.5dp"
-                        android:text="解绑设备"
-                        android:textColor="#215558"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_splash"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="255dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="23.5dp"
-                        android:layout_height="23.5dp"
-                        android:layout_marginTop="10.5dp"
-                        android:src="@drawable/splash" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5.5dp"
-                        android:text="用户引导"
-                        android:textColor="#215558"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_about_deivce"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="77.5dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="23.5dp"
-                        android:layout_height="23.5dp"
-                        android:layout_marginTop="10.5dp"
-                        android:src="@drawable/about_device" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5.5dp"
-                        android:text="关于设备"
-                        android:textColor="#215558"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_power"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="85dp"
-                    android:layout_marginTop="77.5dp"
-                    android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="23.5dp"
-                        android:layout_height="23.5dp"
-                        android:layout_marginTop="10.5dp"
-                        android:src="@drawable/power" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5.5dp"
-                        android:text="电源"
-                        android:textColor="#215558"
-                        android:textSize="10sp" />
-                </LinearLayout>
-            </FrameLayout>
+            </LinearLayout>
         </FrameLayout>
 
         <FrameLayout
