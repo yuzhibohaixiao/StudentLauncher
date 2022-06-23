@@ -201,7 +201,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         val rebinding = SPUtils.getData("rebinding", false) as Boolean
-        if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || rebinding && !splashClose) {
+        if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || (rebinding && !splashClose)) {
+          /*  ToastUtils.showShort(
+                this,
+                "展示引导页 $splashClose $splashCloseFlag ${tokenPairCache.isNullOrEmpty()} $rebinding"
+            )*/
             Log.i(TAG, "展示引导页")
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))

@@ -405,6 +405,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                                 AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
                                                 tokenPair.token
                                             )
+                                            SPUtils.syncPutData("rebinding", false)
                                             mUserId = tokenPair.userId
                                             //新替换的登录接口
                                             getPresenter().postModel(
