@@ -273,6 +273,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     private fun sortScaResult() {
         val scanResults = WifiBeanUtil.noSameName(wifiManager.scanResults)
         realWifiList.clear()
+        wifiListAdapter?.notifyDataSetChanged()
         if (scanResults != null && scanResults.size > 0) {
             for (i in scanResults.indices) {
                 val wifiBean = WifiBean()
