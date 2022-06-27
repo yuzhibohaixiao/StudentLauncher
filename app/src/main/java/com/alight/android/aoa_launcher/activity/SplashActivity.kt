@@ -87,12 +87,15 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     private fun showSplash(activeIndex: Int) {
         val realIndex = activeIndex - 1;
-        splashViews.forEachIndexed { index, view ->
-            if (realIndex == index && view.visibility != View.VISIBLE) {
-                view.visibility = View.VISIBLE;
-            }
-            if (realIndex != index && view.visibility == View.VISIBLE) {
-                view.visibility = View.GONE
+        runOnUiThread {
+            for (index in 0..splashViews.size) {
+                val view = splashViews[index]
+                if (realIndex == index) {
+                    view.visibility = View.VISIBLE;
+                }
+                if (realIndex != index) {
+                    view.visibility = View.GONE
+                }
             }
         }
     }
