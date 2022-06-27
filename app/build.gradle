@@ -143,11 +143,11 @@ android {
         String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
         def version_env = "test";
         if (tskReqStr.contains("_pre")) {
-            version_env = "pre"
+            version_env = "pre-release"
         } else if (tskReqStr.contains("_test")) {
             version_env = "test"
         } else if (tskReqStr.contains("_prod")) {
-            version_env = "release"
+            version_env = "prod-release"
         }
         def versionName = oldVersion + "-" + version_env
         Pattern chip_pattern = Pattern.compile("_chip_(\\w+)(_)")
