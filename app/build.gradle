@@ -110,6 +110,11 @@ android {
             buildConfigField("String", "API_HOST", "\"test.api.alight-sys.com\"")
         }
 
+        _oem_self_pre {
+            dimension "oem"
+            buildConfigField("String", "API_HOST", "\"pre-api.alight-sys.com\"")
+        }
+
         _oem_self_prod {
             dimension "oem"
             buildConfigField("String", "API_HOST", "\"api.alight-sys.com\"")
@@ -252,6 +257,9 @@ dependencies {
 
 task aos_custom_3399_self_test_builder(group: "aos") {
     dependsOn("assemble_chip_3399_oem_self_testRelease")
+}
+task aos_custom_3399_self_pre_builder(group: "aos") {
+    dependsOn("assemble_chip_3399_oem_self_preRelease")
 }
 task aos_custom_3399_self_prod_builder(group: "aos") {
     dependsOn("assemble_chip_3399_oem_self_prodRelease")
