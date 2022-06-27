@@ -36,6 +36,7 @@ android {
             keyAlias 'android' //'nanopc-system' 鑫中宏 android ubi: key
             keyPassword '123456' // system  鑫中宏123456   ubi: android
             v1SigningEnabled true
+            v2SigningEnabled true
         }
 
         release_3566 {
@@ -44,6 +45,7 @@ android {
             keyAlias 'caration'
             keyPassword 'caration'
             v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
 
