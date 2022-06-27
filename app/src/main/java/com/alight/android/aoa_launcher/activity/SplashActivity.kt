@@ -88,7 +88,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private fun showSplash(activeIndex: Int) {
         val realIndex = activeIndex - 1;
         runOnUiThread {
-            for (index in 0..splashViews.size) {
+            for (index in splashViews.indices) {
                 val view = splashViews[index]
                 if (realIndex == index) {
                     view.visibility = View.VISIBLE;
