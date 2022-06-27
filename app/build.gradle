@@ -1,3 +1,6 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -72,7 +75,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            setProperty("archivesBaseName", "launcher_" + project.APP_VERSION_CODE + "_v" + project.APP_VERSION_NAME + "_" + "${project.AOS_VERSION}" + "_" + releaseTime())
+
         }
         debug {
             signingConfig signingConfigs.debug
@@ -134,10 +137,31 @@ android {
 
     // copy 到对应的位置
     applicationVariants.all { variant ->
+        def oldVersion = variant.versionName;
+        String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+        def version_env = "test";
+        if (tskReqStr.contains("_pre")) {
+            version_env = "pre"
+        } else if (tskReqStr.contains("_test")) {
+            version_env = "test"
+        } else if (tskReqStr.contains("_prod")) {
+            version_env = "release"
+        }
+        def versionName = oldVersion + "-" + version_env
+        Pattern chip_pattern = Pattern.compile("_chip_(\\w+)(_)")
+        Matcher chip_matcher = chip_pattern.matcher(tskReqStr)
+        String chip = "3399"
+        if (chip_matcher.find()) {
+            chip = chip_matcher.group(1)
+        }
+        def name = "launcher_${chip}_${project.APP_VERSION_CODE}_${versionName}_${project.AOS_VERSION}_${releaseTime()}.apk"
+        variant.outputs.each { output ->
+            output.versionNameOverride = versionName;
+        }
         variant.assemble.doLast {
             variant.outputs.forEach { file ->
                 ant.copy file: file.outputFile,
-                        todir: "${project.rootDir}/launcher_build"
+                        tofile: "${project.rootDir}/launcher_build/$name"
             }
         }
     }
@@ -258,15 +282,15 @@ dependencies {
 task aos_custom_3399_self_test_builder(group: "aos") {
     dependsOn("assemble_chip_3399_oem_self_testRelease")
 }
-task aos_custom_3399_self_pre_builder(group: "aos") {
+task aos_chip_3399_self_pre_builder(group: "aos") {
     dependsOn("assemble_chip_3399_oem_self_preRelease")
 }
-task aos_custom_3399_self_prod_builder(group: "aos") {
+task aos_chip_3399_self_prod_builder(group: "aos") {
     dependsOn("assemble_chip_3399_oem_self_prodRelease")
 }
-task aos_custom_3566_self_test_builder(group: "aos") {
+task aos_chip_3566_self_test_builder(group: "aos") {
     dependsOn("assemble_chip_3566_oem_self_testRelease")
 }
-task aos_custom_3566_self_prod_builder(group: "aos") {
+task aos_chip_3566_self_prod_builder(group: "aos") {
     dependsOn("assemble_chip_3566_oem_self_prodRelease")
 }
