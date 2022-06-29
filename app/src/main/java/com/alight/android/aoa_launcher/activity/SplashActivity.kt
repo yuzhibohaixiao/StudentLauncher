@@ -43,7 +43,7 @@ import java.util.*
 
 
 /**
- * Launcher主页
+ * 开机引导页
  */
 class SplashActivity : BaseActivity(), View.OnClickListener {
 

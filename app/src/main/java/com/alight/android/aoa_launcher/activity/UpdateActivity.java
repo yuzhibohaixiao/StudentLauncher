@@ -78,7 +78,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * 多文件列表下载
+ * 多文件列表下载（更新页）
  *
  * @author wangzhe
  */

@@ -32,6 +32,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 
+/**
+ * wifi模块页面
+ */
 class WifiActivity : BaseActivity(), View.OnClickListener {
 
     private val TAG = "WifiActivity"

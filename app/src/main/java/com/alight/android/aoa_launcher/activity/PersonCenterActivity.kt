@@ -50,7 +50,9 @@ import org.greenrobot.eventbus.ThreadMode
 import java.math.BigDecimal
 import java.text.DecimalFormat
 
-
+/**
+ * 个人中心页
+ */
 class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
     private val TAG: String = "PersonCenterActivity"
