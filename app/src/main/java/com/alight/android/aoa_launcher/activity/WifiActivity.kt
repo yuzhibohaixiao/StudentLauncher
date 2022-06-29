@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.SupplicantState
@@ -600,6 +601,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
                         InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 }
                 etWifiPwd.setSelection(etWifiPwd.text.toString().length)
+                etWifiPwd.typeface = Typeface.MONOSPACE
             }
         cbRecordPwd
             .setOnCheckedChangeListener { buttonView, isChecked ->
