@@ -49,6 +49,7 @@ import com.alight.android.aoa_launcher.common.event.SplashEvent
 import com.alight.android.aoa_launcher.common.listener.DownloadListener
 import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.contract.IContract
+import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.ui.adapter.GradeDialogAdapter
 import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
@@ -1146,12 +1147,23 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             startAoaApp(context, 36, "/mine")
         }
         ivAudio.setOnClickListener {
+            //获取家长信息
+            getModel(
+                Urls.FAMILY_INFO,
+                HashMap(),
+                FamilyInfoBean::class.java
+            )
             ToastUtils.showShort(context, "audio")
-            avDialog.dismiss()
+
         }
         ivVideo.setOnClickListener {
+            //获取家长信息
+            getModel(
+                Urls.FAMILY_INFO,
+                HashMap(),
+                FamilyInfoBean::class.java
+            )
             ToastUtils.showShort(context, "video")
-            avDialog.dismiss()
         }
         avDialog.show()
 
