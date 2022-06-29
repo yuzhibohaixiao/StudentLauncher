@@ -1006,7 +1006,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //呼叫家长
             R.id.iv_call_parent -> {
-                getPresenter().startAoaApp(this, 36, "/mine")
+                getPresenter().showAVDialog(this)
+//                getPresenter().startAoaApp(this, 36, "/mine")
             }
             //个人中心
             R.id.iv_user_icon_new_launcher, R.id.tv_user_name_new_launcher

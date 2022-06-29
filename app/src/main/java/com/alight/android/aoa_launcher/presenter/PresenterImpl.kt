@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -1126,6 +1127,34 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun showAVDialog(context: Context) {
+        //音视频dialog
+        val avDialog =
+            CustomDialog(context, R.layout.dialog_home_av)
+        avDialog.window?.setGravity(Gravity.START or Gravity.TOP)
+        val ar = avDialog.findViewById<ImageView>(R.id.iv_ar_dialog)
+        val ivAudio = avDialog.findViewById<ImageView>(R.id.iv_audio_dialog)
+        val ivVideo = avDialog.findViewById<ImageView>(R.id.iv_video_dialog)
+        val ivClose = avDialog.findViewById<ImageView>(R.id.iv_close_dialog)
+        ivClose.setOnClickListener {
+            avDialog.dismiss()
+        }
+        ar.setOnClickListener {
+            avDialog.dismiss()
+            startAoaApp(context, 36, "/mine")
+        }
+        ivAudio.setOnClickListener {
+            ToastUtils.showShort(context, "audio")
+            avDialog.dismiss()
+        }
+        ivVideo.setOnClickListener {
+            ToastUtils.showShort(context, "video")
+            avDialog.dismiss()
+        }
+        avDialog.show()
+
     }
 
     fun startAoaApp(context: Context, appId: Int, route: String): Boolean {
