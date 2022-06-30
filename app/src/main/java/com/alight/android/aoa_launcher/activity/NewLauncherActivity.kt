@@ -852,10 +852,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         )
                     }
                 }
-            } else if (any is FamilyInfoBean) {
+            }
+            /*else if (any is FamilyInfoBean) {
+                familyInfoBean = any
                 ToastUtils.showShort(this@NewLauncherActivity, "获取到家长信息")
 //                familyAdapter.addData(any.data.parents)
-            }
+            }*/
         }
     }
 

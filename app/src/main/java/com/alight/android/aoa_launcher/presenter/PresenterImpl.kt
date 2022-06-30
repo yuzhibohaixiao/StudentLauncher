@@ -25,6 +25,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -51,6 +52,7 @@ import com.alight.android.aoa_launcher.common.provider.LauncherContentProvider
 import com.alight.android.aoa_launcher.net.contract.IContract
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.ui.adapter.GradeDialogAdapter
+import com.alight.android.aoa_launcher.ui.adapter.HorizontalParentAdapter
 import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
@@ -72,14 +74,13 @@ import com.xuexiang.xupdate.listener.IUpdateParseCallback
 import com.xuexiang.xupdate.proxy.IUpdateParser
 import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.android.synthetic.main.dialog_update.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.lang.Runnable
 import java.util.*
 
 
@@ -1147,26 +1148,61 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             startAoaApp(context, 36, "/mine")
         }
         ivAudio.setOnClickListener {
-            //获取家长信息
-            getModel(
-                Urls.FAMILY_INFO,
-                HashMap(),
-                FamilyInfoBean::class.java
-            )
-            ToastUtils.showShort(context, "audio")
-
+            showAvParentInfoDialog(context, avDialog)
         }
         ivVideo.setOnClickListener {
-            //获取家长信息
-            getModel(
-                Urls.FAMILY_INFO,
-                HashMap(),
-                FamilyInfoBean::class.java
-            )
-            ToastUtils.showShort(context, "video")
+            showAvParentInfoDialog(context, avDialog)
         }
         avDialog.show()
 
+    }
+
+    private fun showAvParentInfoDialog(
+        context: Context,
+        avDialog: CustomDialog
+    ) {
+        val llAvSelect = avDialog.findViewById<LinearLayout>(R.id.ll_av_select_dialog)
+        val llParentInfo = avDialog.findViewById<LinearLayout>(R.id.ll_parent_info)
+        var familyInfoBean: FamilyInfoBean? = null
+        var splitFamilyList: List<List<Parent>>?
+        NetUtils.intance.getInfo(Urls.FAMILY_INFO,
+            HashMap(),
+            FamilyInfoBean::class.java, object : NetUtils.NetCallback {
+                override fun onSuccess(any: Any) {
+                    if (any is FamilyInfoBean) {
+                        familyInfoBean = any
+                    }
+                    if (familyInfoBean != null && !familyInfoBean?.data?.parents!!.isNullOrEmpty()) {
+                        splitFamilyList =
+                            ListSplitUtil.splitList(
+                                familyInfoBean?.data?.parents,
+                                12
+                            ) as List<List<Parent>>
+                        val scrollAdapter =
+                            HorizontalParentAdapter(
+                                context,
+                                splitFamilyList
+                            )
+
+                        val viewPager = avDialog.findViewById<ViewPager>(R.id.horizontalScrollView)
+                        val circlePageIndicator =
+                            avDialog.findViewById<CirclePageIndicator>(R.id.circleIndicator)
+                        viewPager.adapter = scrollAdapter
+                        circlePageIndicator.setViewPager(viewPager)
+                        val coroutineScope = CoroutineScope(Dispatchers.Main)
+                        coroutineScope.launch {
+                            llAvSelect.visibility = View.GONE
+                            llParentInfo.visibility = View.VISIBLE
+                        }
+                    } else {
+                        ToastUtils.showShort(context, "您暂时还未设置家长")
+                    }
+                }
+
+                override fun onError(error: String) {
+                    ToastUtils.showShort(context, "没有获取到家庭信息")
+                }
+            })
     }
 
     fun startAoaApp(context: Context, appId: Int, route: String): Boolean {
