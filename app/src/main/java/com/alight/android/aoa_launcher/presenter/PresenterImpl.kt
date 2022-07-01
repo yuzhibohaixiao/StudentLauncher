@@ -18,6 +18,7 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
@@ -1140,6 +1141,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         val ivAudio = avDialog.findViewById<ImageView>(R.id.iv_audio_dialog)
         val ivVideo = avDialog.findViewById<ImageView>(R.id.iv_video_dialog)
         val ivClose = avDialog.findViewById<ImageView>(R.id.iv_close_dialog)
+        val coroutineScopeIo = CoroutineScope(Dispatchers.IO)
         ivClose.setOnClickListener {
             avDialog.dismiss()
         }
@@ -1148,13 +1150,23 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             startAoaApp(context, 36, "/mine")
         }
         ivAudio.setOnClickListener {
+            coroutineScopeIo.cancel()
             showAvParentInfoDialog(context, avDialog, "audio")
         }
         ivVideo.setOnClickListener {
+            coroutineScopeIo.cancel()
             showAvParentInfoDialog(context, avDialog, "video")
         }
         avDialog.show()
-
+        avDialog.setOnDismissListener {
+            //dialog关闭时同步销毁协程
+            coroutineScopeIo.cancel()
+        }
+        //6s内不做操作自动关闭
+        coroutineScopeIo.launch {
+            delay(6000)
+            avDialog.dismiss()
+        }
     }
 
     private fun showAvParentInfoDialog(
@@ -1168,6 +1180,23 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         tvCallType.text = if (callType == "video") "视频通话" else "语音通话"
         var familyInfoBean: FamilyInfoBean? = null
         var splitFamilyList: List<List<Parent>>?
+
+        //计时器
+        val mhandle = Handler()
+        var currentSecond: Long = 0 //当前毫秒数
+        val timeRunable: Runnable = object : Runnable {
+            override fun run() {
+                currentSecond = currentSecond + 1000
+                Log.i(TAG, "计时器: currentSecond = $currentSecond")
+                //递归调用本runable对象，实现每隔一秒一次执行任务
+                if (currentSecond >= 6000) {
+                    currentSecond = 0
+                    avDialog.dismiss()
+                } else {
+                    mhandle.postDelayed(this, 1000)
+                }
+            }
+        }
         NetUtils.intance.getInfo(Urls.FAMILY_INFO,
             HashMap(),
             FamilyInfoBean::class.java, object : NetUtils.NetCallback {
@@ -1186,16 +1215,22 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                                 context,
                                 splitFamilyList, callType, avDialog
                             )
-
+                        timeRunable.run()
                         val viewPager = avDialog.findViewById<ViewPager>(R.id.horizontalScrollView)
                         val circlePageIndicator =
                             avDialog.findViewById<CirclePageIndicator>(R.id.circleIndicator)
                         viewPager.adapter = scrollAdapter
+                        viewPager.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                            if (currentSecond >= 0) {
+                                currentSecond = 0
+                            }
+                        }
                         circlePageIndicator.setViewPager(viewPager)
                         val coroutineScope = CoroutineScope(Dispatchers.Main)
                         coroutineScope.launch {
                             llAvSelect.visibility = View.GONE
                             llParentInfo.visibility = View.VISIBLE
+                            coroutineScope.cancel()
                         }
                     } else {
                         ToastUtils.showShort(context, "您暂时还未设置家长")
