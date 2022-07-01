@@ -1148,10 +1148,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             startAoaApp(context, 36, "/mine")
         }
         ivAudio.setOnClickListener {
-            showAvParentInfoDialog(context, avDialog)
+            showAvParentInfoDialog(context, avDialog, "audio")
         }
         ivVideo.setOnClickListener {
-            showAvParentInfoDialog(context, avDialog)
+            showAvParentInfoDialog(context, avDialog, "video")
         }
         avDialog.show()
 
@@ -1159,10 +1159,13 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
     private fun showAvParentInfoDialog(
         context: Context,
-        avDialog: CustomDialog
+        avDialog: CustomDialog,
+        callType: String
     ) {
         val llAvSelect = avDialog.findViewById<LinearLayout>(R.id.ll_av_select_dialog)
         val llParentInfo = avDialog.findViewById<LinearLayout>(R.id.ll_parent_info)
+        val tvCallType = avDialog.findViewById<TextView>(R.id.tv_call_type)
+        tvCallType.text = if (callType == "video") "视频通话" else "语音通话"
         var familyInfoBean: FamilyInfoBean? = null
         var splitFamilyList: List<List<Parent>>?
         NetUtils.intance.getInfo(Urls.FAMILY_INFO,
@@ -1181,7 +1184,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                         val scrollAdapter =
                             HorizontalParentAdapter(
                                 context,
-                                splitFamilyList
+                                splitFamilyList, callType, avDialog
                             )
 
                         val viewPager = avDialog.findViewById<ViewPager>(R.id.horizontalScrollView)
