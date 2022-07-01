@@ -25,13 +25,13 @@
             android:layout_marginEnd="15dp"
             android:background="@drawable/dialog_av_bg"
             android:orientation="vertical"
-            android:paddingStart="17.5dp"
             android:paddingTop="25dp">
 
             <LinearLayout
                 android:id="@+id/ll_av_select_dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="17.5dp"
                 android:orientation="vertical"
                 android:visibility="visible">
 
@@ -72,6 +72,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
                     android:text="视频通话"
                     android:textColor="@color/person_center_text_green"
                     android:textSize="14sp" />
@@ -80,23 +81,21 @@
                     android:id="@+id/horizontalScrollView"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_marginStart="5dp"
                     android:layout_marginTop="17.5dp"
-                    android:layout_marginEnd="17.5dp"
-                    android:layout_weight="1"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp" />
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1" />
 
                 <com.viewpagerindicator.CirclePageIndicator
                     android:id="@+id/circleIndicator"
                     android:layout_width="match_parent"
-                    android:layout_height="16dp"
-                    android:layout_marginTop="19dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="17.5dp"
-                    android:layout_marginBottom="20dp"
-                    app:fillColor="@android:color/white"
-                    app:pageColor="@android:color/darker_gray"
-                    app:radius="4dp"
-                    app:strokeColor="@android:color/darker_gray" />
+                    android:layout_marginBottom="15.5dp"
+                    app:fillColor="@color/person_center_text_blue"
+                    app:pageColor="@color/parent_dot_gray"
+                    app:radius="2.5dp"
+                    app:strokeColor="@color/parent_dot_gray" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
