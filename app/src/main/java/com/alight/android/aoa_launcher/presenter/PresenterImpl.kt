@@ -58,6 +58,8 @@ import com.alight.android.aoa_launcher.ui.adapter.HorizontalScrollAdapter
 import com.alight.android.aoa_launcher.ui.view.ConfirmDialog
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.*
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.zhouwei.library.CustomPopWindow
 import com.google.gson.Gson
 import com.qweather.sdk.bean.base.Code
@@ -1137,6 +1139,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         val avDialog =
             CustomDialog(context, R.layout.dialog_home_av)
         avDialog.window?.setGravity(Gravity.START or Gravity.TOP)
+        val llAv = avDialog.findViewById<LinearLayout>(R.id.ll_av_select_dialog)
         val ar = avDialog.findViewById<ImageView>(R.id.iv_ar_dialog)
         val ivAudio = avDialog.findViewById<ImageView>(R.id.iv_audio_dialog)
         val ivVideo = avDialog.findViewById<ImageView>(R.id.iv_video_dialog)
@@ -1152,10 +1155,17 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         ivAudio.setOnClickListener {
             coroutineScopeIo.cancel()
             showAvParentInfoDialog(context, avDialog, "audio")
+            YoYo.with(Techniques.FadeOutDown)
+                .duration(1000)
+                .playOn(llAv)
+
         }
         ivVideo.setOnClickListener {
             coroutineScopeIo.cancel()
             showAvParentInfoDialog(context, avDialog, "video")
+            YoYo.with(Techniques.FadeOutDown)
+                .duration(1000)
+                .playOn(llAv)
         }
         avDialog.show()
         avDialog.setOnDismissListener {
@@ -1231,6 +1241,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                             llAvSelect.visibility = View.GONE
                             llParentInfo.visibility = View.VISIBLE
                             coroutineScope.cancel()
+
+                            YoYo.with(Techniques.FadeInUp)
+                                .duration(1000)
+                                .playOn(llParentInfo)
                         }
                     } else {
                         ToastUtils.showShort(context, "您暂时还未设置家长")
