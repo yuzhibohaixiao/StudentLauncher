@@ -1139,12 +1139,16 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         val avDialog =
             CustomDialog(context, R.layout.dialog_home_av)
         avDialog.window?.setGravity(Gravity.START or Gravity.TOP)
+        val llHomeAvBg = avDialog.findViewById<LinearLayout>(R.id.ll_home_av_bg)
         val llAv = avDialog.findViewById<LinearLayout>(R.id.ll_av_select_dialog)
         val ar = avDialog.findViewById<ImageView>(R.id.iv_ar_dialog)
         val ivAudio = avDialog.findViewById<ImageView>(R.id.iv_audio_dialog)
         val ivVideo = avDialog.findViewById<ImageView>(R.id.iv_video_dialog)
         val ivClose = avDialog.findViewById<ImageView>(R.id.iv_close_dialog)
         val coroutineScopeIo = CoroutineScope(Dispatchers.IO)
+        llHomeAvBg.setOnClickListener {
+            avDialog.dismiss()
+        }
         ivClose.setOnClickListener {
             avDialog.dismiss()
         }
@@ -1156,7 +1160,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             coroutineScopeIo.cancel()
             showAvParentInfoDialog(context, avDialog, "audio")
             YoYo.with(Techniques.FadeOutDown)
-                .duration(1000)
+                .duration(700)
                 .playOn(llAv)
 
         }
@@ -1164,7 +1168,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             coroutineScopeIo.cancel()
             showAvParentInfoDialog(context, avDialog, "video")
             YoYo.with(Techniques.FadeOutDown)
-                .duration(1000)
+                .duration(700)
                 .playOn(llAv)
         }
         avDialog.show()
@@ -1243,7 +1247,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                             coroutineScope.cancel()
 
                             YoYo.with(Techniques.FadeInUp)
-                                .duration(1000)
+                                .duration(700)
                                 .playOn(llParentInfo)
                         }
                     } else {
