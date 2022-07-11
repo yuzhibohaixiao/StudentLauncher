@@ -119,7 +119,7 @@ class QualityHorizontalAdapter :
         NewAppTypeBean(
             "喜马拉雅儿童",
             R.drawable.quality_default_icon,
-            "com.ximalaya.ting.kid",
+            "com.ximalayaos.pad.tingkid",
             null,
             null,
         ),
