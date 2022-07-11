@@ -117,9 +117,9 @@ class QualityHorizontalAdapter :
             null
         ),
         NewAppTypeBean(
-            "喜马拉雅",
+            "喜马拉雅儿童",
             R.drawable.quality_default_icon,
-            "com.ximalaya.ting.android",
+            "com.ximalaya.ting.kid",
             null,
             null,
         ),
@@ -151,8 +151,8 @@ class QualityHorizontalAdapter :
             null
         ),
         NewAppTypeBean(
-            "alook-浏览器",
-            R.drawable.science, "alook.browser",
+            "星尘浏览器",
+            R.drawable.science, "com.chaozhuo.browser",
             null,
             null
         ),
@@ -355,6 +355,18 @@ class QualityHorizontalAdapter :
             "",
             R.drawable.quality_default_icon,
             "com.jxw.pedu.clickread",
+            null,
+            null
+        ),
+        NewAppTypeBean(
+            "alook-浏览器",
+            R.drawable.science, "alook.browser",
+            null,
+            null
+        ),
+        NewAppTypeBean(
+            "浏览器",
+            R.drawable.science, "com.android.browser",
             null,
             null
         ),
