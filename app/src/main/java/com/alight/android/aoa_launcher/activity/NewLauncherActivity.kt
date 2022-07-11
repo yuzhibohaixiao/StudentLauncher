@@ -256,7 +256,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         //每次回首页调用内存清理
         if (isFeatureAbilityInit) {
-            featureAbility?.startTaskMemoryClearn()
+            featureAbility?.startTaskMemoryClean()
         }
         //将输入法重置
 //        getPresenter().resetInputType(this)
