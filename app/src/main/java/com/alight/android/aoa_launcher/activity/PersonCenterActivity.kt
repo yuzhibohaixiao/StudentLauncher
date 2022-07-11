@@ -922,7 +922,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             //清理内存
             R.id.fl_clear_memory -> {
                 if (isFeatureAbilityInit) {
-                    featureAbility?.startUserMemoryClearn()
+                    featureAbility?.startUserMemoryClean()
                     ToastUtils.showShort(this, "清理成功！")
                 }
             }
