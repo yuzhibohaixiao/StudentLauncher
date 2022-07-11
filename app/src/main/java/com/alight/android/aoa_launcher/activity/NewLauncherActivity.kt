@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.OvershootInterpolator
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -257,6 +258,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         if (isFeatureAbilityInit) {
             featureAbility?.startTaskMemoryClearn()
         }
+        //将输入法重置
+//        getPresenter().resetInputType(this)
     }
 
     /**
@@ -497,6 +500,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         RxTimerUtil.interval(5000) {
             iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
         }
+        //将输入法重置
+//        getPresenter().resetInputType(this)
     }
 
     private fun initShutdownReceiver() {
@@ -999,6 +1004,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     )
             }
             //学习计划-AOA学习计划
+
             R.id.iv_study_plan
             -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 33, "/home")
@@ -1011,7 +1017,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //呼叫家长
             R.id.iv_call_parent -> {
                 getPresenter().showAVDialog(this)
-//                getPresenter().startAoaApp(this, 36, "/mine")
             }
             //个人中心
             R.id.iv_user_icon_new_launcher, R.id.tv_user_name_new_launcher

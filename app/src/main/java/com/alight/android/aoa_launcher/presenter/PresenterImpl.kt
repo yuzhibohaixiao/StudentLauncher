@@ -25,10 +25,12 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -1542,6 +1544,27 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             R.drawable.wifi_connect_person_small
         }
     }
+
+    /**
+     * 重置为谷歌输入法
+     */
+    fun resetInputType(activity: Activity) {
+        InputMethodUtil.setDefaultInputMethod(activity)
+      /*  var imm = activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val list = imm.inputMethodList
+        //        var inputTypeId = "com.android.inputmethod.latin/.LatinIME"
+        //        var inputTypeId = "jp.co.omronsoft.openwnn/.OpenWnnJAJP"
+        var inputTypeId =
+            "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME"
+        for (index in list.indices) {
+            Log.i(TAG, "inputMethodList: " + list[index].id)
+            if (list[index].id == inputTypeId) {
+                imm.setInputMethod(activity.currentFocus?.windowToken, inputTypeId)
+                break
+            }
+        }*/
+    }
+
 
     /**
      * 更新解析器
