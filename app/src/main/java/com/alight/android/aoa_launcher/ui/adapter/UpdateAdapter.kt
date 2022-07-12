@@ -1,11 +1,9 @@
 package com.alight.android.aoa_launcher.ui.adapter
 
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.alight.android.aoa_launcher.R
