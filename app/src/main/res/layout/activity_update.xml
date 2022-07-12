@@ -22,16 +22,15 @@
 
         <TextView
             android:id="@+id/tv_update_all"
-            android:layout_width="60dp"
+            android:layout_width="95.5dp"
             android:layout_height="30dp"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="38.5dp"
             android:background="@drawable/launcher_ota_update"
             android:gravity="center"
             android:text="一键更新"
-            android:textColor="#598E97"
-            android:textSize="9sp"
-            android:textStyle="bold"
+            android:textColor="@color/person_center_text_green"
+            android:textSize="16sp"
             android:visibility="gone" />
     </FrameLayout>
 

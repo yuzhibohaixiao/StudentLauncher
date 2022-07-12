@@ -30,6 +30,7 @@
     <color name="person_center_text_gray">#8AA1A2</color>
 
     <color name="person_center_text_green">#215558</color>
+    <color name="person_center_text_alpha_green">#90215558</color>
 
     <color name="splash_renew_btn_color">#ff3d7075</color>
     <color name="splash_renew_btn_color_disabled">#555</color>

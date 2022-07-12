@@ -210,7 +210,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     break;
                 } else if (i == systemAdapter.getData().size() - 1) {
                     tvUpdateAll.setBackgroundResource(R.drawable.update_oval);
-                    tvUpdateAll.setTextColor(Color.parseColor("#50ffffff"));
+                    tvUpdateAll.setTextColor(getColor(R.color.person_center_text_alpha_green));
                     tvUpdateAll.setEnabled(false);
                     tvUpdateAll.setClickable(false);
                     tvUpdateAll.setText("无需更新");
@@ -951,7 +951,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             case R.id.tv_update_all:
                 ToastUtils.showShort(this, "开始一键更新");
                 tvUpdateAll.setBackgroundResource(R.drawable.update_oval);
-                tvUpdateAll.setTextColor(Color.parseColor("#50ffffff"));
+                tvUpdateAll.setTextColor(Color.parseColor("#80215558"));
                 tvUpdateAll.setEnabled(false);
                 tvUpdateAll.setClickable(false);
                 startSystemAppDownload();

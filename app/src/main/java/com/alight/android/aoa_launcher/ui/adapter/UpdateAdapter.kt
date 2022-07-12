@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.alight.android.aoa_launcher.R
@@ -82,17 +83,17 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                     tvSize.visibility = View.GONE
                     tvUpdate.text = "无需更新"
                 } else {
-                    tvUpdate.text = "可更新"
+                    tvUpdate.text = "更新"
                     tvSize.visibility = View.VISIBLE
                 }
                 //表示已经加载过图片
                 data[holder.layoutPosition].iconState = 1
             }
-            tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+            tvUpdate.setTextColor(context.getColor(R.color.person_center_text_alpha_green))
             if (pbUpdate.progress == 100) {
                 tvUpdate.text = "安装中"
                 pbUpdate.visibility = View.GONE
-                tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                tvUpdate.setTextColor(context.getColor(R.color.person_center_text_alpha_green))
             } else {
                 when (file.status) {
                     File.DOWNLOAD_PAUSE ->//暂停->开始
@@ -105,7 +106,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                         pbUpdate.visibility = View.VISIBLE
                         pbUpdate.progress = file.progress
                         if (pbUpdate.progress != 100) {
-                            tvUpdate.setTextColor(Color.WHITE)
+//                            tvUpdate.setTextColor(Color.WHITE)
                         }
                         tvUpdate.text = "${pbUpdate.progress}%";
                     }
@@ -117,7 +118,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                     {
                         tvUpdate.text = "安装中"
                         pbUpdate.visibility = View.GONE
-                        tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                        tvUpdate.setTextColor(context.getColor(R.color.person_center_text_alpha_green))
                     }
                     File.DOWNLOAD_REDYA ->//准备下载 ->开始
                     {
@@ -175,7 +176,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 if (file.format == 3) {
                     tvSize.visibility = View.GONE
                     tvUpdate.text = "无需更新"
-                    tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                    tvUpdate.setTextColor(context.getColor(R.color.person_center_text_alpha_green))
                     holder.setText(
                         R.id.tv_app_code_update_item,
                         "版本：" + Build.DISPLAY
@@ -184,11 +185,11 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 } else if (file.format == 4) {
                     tvSize.visibility = View.GONE
                     tvUpdate.text = "无需更新"
-                    tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                    tvUpdate.setTextColor(context.getColor(R.color.person_center_text_alpha_green))
                 } else {
                     tvUpdate.isEnabled = true
-                    tvUpdate.text = "可更新"
-                    tvUpdate.setTextColor(Color.parseColor("#598E97"))
+                    tvUpdate.text = "更新"
+                    tvUpdate.setTextColor(context.getColor(R.color.person_center_text_green))
                     tvUpdate.setBackgroundResource(R.drawable.launcher_ota_update)
                     tvSize.visibility = View.VISIBLE
                 }
@@ -198,7 +199,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
             if (pbUpdate.progress == 100) {
                 tvUpdate.text = "安装中"
                 pbUpdate.visibility = View.GONE
-                tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                tvUpdate.setTextColor(context.getColor(R.color.person_center_text_alpha_green))
             } else {
                 when (file.status) {
                     File.DOWNLOAD_PAUSE ->//暂停->开始
@@ -211,7 +212,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                         pbUpdate.visibility = View.VISIBLE
                         pbUpdate.progress = file.progress
                         if (pbUpdate.progress != 100) {
-                            tvUpdate.setTextColor(Color.WHITE)
+//                            tvUpdate.setTextColor(Color.WHITE)
                         }
                         tvUpdate.setBackgroundResource(R.drawable.update_oval_trans20)
                         tvUpdate.text = "${pbUpdate.progress}%";
@@ -225,7 +226,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                     {
                         tvUpdate.text = "安装中"
                         tvUpdate.isEnabled = false
-                        tvUpdate.setTextColor(Color.parseColor("#50ffffff"))
+                        tvUpdate.setTextColor(context.getColor(R.color.person_center_text_alpha_green))
                         pbUpdate.visibility = View.GONE
                     }
                     File.DOWNLOAD_REDYA ->//准备下载 ->开始
@@ -244,7 +245,11 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
     }
 
     private fun refreshInstallState(file: File, tvUpdate: TextView) {
-        if (file.isInstalled && AppUtils.getVersionCode(context,file.packName) >= file.versionCode) {
+        if (file.isInstalled && AppUtils.getVersionCode(
+                context,
+                file.packName
+            ) >= file.versionCode
+        ) {
             GlobalScope.launch(Dispatchers.Main) {
                 tvUpdate.text = "已完成"
             }
