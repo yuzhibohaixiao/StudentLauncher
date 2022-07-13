@@ -5,6 +5,7 @@ import static com.alight.android.aoa_launcher.common.constants.AppConstants.LAUN
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StatFs;
 import android.util.Log;
 import android.view.View;
@@ -74,8 +76,13 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * 多文件列表下载（更新页）
@@ -136,6 +143,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private boolean isStartOtaUpdate = false;
     private int installApp = 0;//强更过程已安装的应用个数
     private boolean forceUpdateUnzipFlag = false;
+
+    private String launcherApkPath;
+    //已安装的系统应用个数
+    private int installedSystemAppNumber;
 
     @Override
     public void initData() {
@@ -1116,12 +1127,50 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 }
                                 if (file.getPackName() != null && file.getPackName().equals(AppConstants.LAUNCHER_PACKAGE_NAME) && containsConfigFile) {
                                 } else if (file.getFormat() == 2) {
-                                    if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)) {
+                                    if (file.getPackName() != null && file.getPackName().equals(AppConstants.LAUNCHER_PACKAGE_NAME)) {
+                                        launcherApkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
+                                    } else if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), apkPath)) {
                                         if (!isStartOtaUpdate) {
                                             file.setInstalled(true);
                                             systemAdapter.notifyItemChanged(i);
 //                                        sendUpdateBroadcast(file.getPackName());
                                         }
+                                        //每安装完一个记录一次
+                                        installedSystemAppNumber++;
+                                    }
+                                    //当其他所有系统应用应用更新完再进行安装
+                                    if (installedSystemAppNumber == needUpdateSystemList.size() - 1 && !StringUtils.isEmpty(launcherApkPath)) {
+                                        Observable.timer(5, TimeUnit.SECONDS).subscribe(new Observer<Long>() {
+                                            @Override
+                                            public void onSubscribe(Disposable d) {
+                                                System.out.println("onSubscribe");
+                                            }
+
+                                            @Override
+                                            public void onNext(Long value) {
+                                                if (ApkController.slienceInstallWithSysSign(LauncherApplication.Companion.getContext(), launcherApkPath)) {
+                                                    for (int j = 0; j < systemAdapter.getData().size(); j++) {
+                                                        if (LAUNCHER_PACKAGE_NAME.equals(systemAdapter.getData().get(j).getPackName())) {
+                                                            updatePostion = j;
+                                                            systemList.get(updatePostion).setInstalled(true);
+                                                            installedSystemAppNumber++;
+                                                            runOnUiThread(() -> systemAdapter.notifyItemChanged(updatePostion));
+                                                        }
+                                                    }
+                                                }
+                                                System.out.println("延迟了:" + value + "秒.");
+                                            }
+
+                                            @Override
+                                            public void onError(Throwable e) {
+                                                System.out.println("onError");
+                                            }
+
+                                            @Override
+                                            public void onComplete() {
+                                                System.out.println("onComplete");
+                                            }
+                                        });
                                     }
 
                                 } else if (file.getFormat() == 1) {
@@ -1248,6 +1297,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         }
+
     }
 
     private void syncDownloadProgress() {
