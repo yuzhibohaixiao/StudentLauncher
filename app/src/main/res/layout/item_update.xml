@@ -28,7 +28,7 @@
             android:singleLine="true"
             android:text="深光智能交互系统"
             android:textColor="@color/person_center_text_green"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <FrameLayout
             android:layout_width="66dp"
