@@ -547,6 +547,18 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 //            val index = mWifiAdmin?.getConfigIndex(wifiBean.wifiName)!!
             if (wifiBean.state == 1) {
                 //已连接的wifi
+            } else if (!getWifiCipher(wifiBean.capabilities)) {
+                mWifiAdmin?.connectWifiNoPws(wifiBean.wifiName)
+//                wifiConfiguration = mWifiAdmin?.IsExs its(wifiBean.wifiName)
+//                mWifiAdmin?.addNetwork(wifiConfiguration)
+                //未加密直接连接
+                /*  val isConnected = mWifiAdmin?.addNetwork(
+                      mWifiAdmin?.CreateWifiInfo(
+                          wifiBean.wifiName,
+                          "",
+                          getWifiType(wifiBean)
+                      )
+                  )*/
             } else if (wifiConfiguration != null && savePwd) {
                 activeConnect = true
                 //有记录的wifi 无需输入密码 直接连接
@@ -660,6 +672,29 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 //            }
         }
         powerDialog.show()
+    }
+
+    /**
+     * 判断wifi热点是否加密
+     */
+    private fun getWifiCipher(capabilities: String): Boolean {
+        return if (capabilities.contains("WEP")) {
+            true
+        } else capabilities.contains("WPA") || capabilities.contains("WPA2") || capabilities.contains(
+            "WPS"
+        )
+        /*if (capabilities.isEmpty()) {
+            return WifiCipherType.WIFICIPHER_INVALID;
+        } else if (capabilities.contains("WEP")) {
+            return WifiCipherType.WIFICIPHER_WEP;
+        } else if (capabilities.contains("WPA") || capabilities.contains("WPA2") || capabilities.contains(
+                "WPS"
+            )
+        ) {
+            return WifiCipherType.WIFICIPHER_WPA;
+        } else {
+            return WifiCipherType.WIFICIPHER_NOPASS;
+        }*/
     }
 
     private fun getWifiType(wifiBean: WifiBean): Int {

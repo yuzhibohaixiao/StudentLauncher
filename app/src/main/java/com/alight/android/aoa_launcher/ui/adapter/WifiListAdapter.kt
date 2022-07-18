@@ -17,7 +17,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 
 /**
- *  年级选择的适配器
+ *  wifi选择的适配器
  */
 class WifiListAdapter : BaseQuickAdapter<WifiBean, BaseViewHolder>(R.layout.item_wifi) {
     val connectivityManager =
@@ -41,7 +41,7 @@ class WifiListAdapter : BaseQuickAdapter<WifiBean, BaseViewHolder>(R.layout.item
         val ivLock = holder.getView<ImageView>(R.id.iv_wifi_lock_item)
         //wifi名称
         holder.itemView.visibility = View.VISIBLE
-        holder.setText(R.id.tv_wifi_name, item.wifiName)
+        holder.setText(R.id.tv_wifi_name, item.wifiName.trim())
 //        val currentWifiSsid = getWifiSsid()
         when (item.state) {
             //当前连接的wifi

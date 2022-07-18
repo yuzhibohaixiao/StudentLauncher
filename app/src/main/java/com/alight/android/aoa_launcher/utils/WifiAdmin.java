@@ -203,6 +203,77 @@ public class WifiAdmin {
         return mWifiManager.enableNetwork(wcg.networkId, true);
     }
 
+    /**
+     * 无密码连接
+     *
+     * @param ssid
+     */
+    public void connectWifiNoPws(String ssid) {
+        mWifiManager.disableNetwork(mWifiManager.getConnectionInfo().getNetworkId());
+        int netId = mWifiManager.addNetwork(getWifiConfig(ssid, "", false));
+        mWifiManager.enableNetwork(netId, true);
+    }
+
+    /**
+     * wifi设置
+     *
+     * @param ssid
+     * @param pws
+     * @param isHasPws
+     */
+    private WifiConfiguration getWifiConfig(String ssid, String pws, boolean isHasPws) {
+
+        WifiConfiguration config = new WifiConfiguration();
+        config.allowedAuthAlgorithms.clear();
+        config.allowedGroupCiphers.clear();
+        config.allowedKeyManagement.clear();
+        config.allowedPairwiseCiphers.clear();
+        config.allowedProtocols.clear();
+        config.SSID = "\"" + ssid + "\"";
+
+        WifiConfiguration tempConfig = isExist(ssid);
+        if (tempConfig != null) {
+
+            mWifiManager.removeNetwork(tempConfig.networkId);
+        }
+        if (isHasPws) {
+
+            config.preSharedKey = "\"" + pws + "\"";
+            config.hiddenSSID = true;
+            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+            config.status = WifiConfiguration.Status.ENABLED;
+        } else {
+
+            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        }
+        return config;
+    }
+
+    /**
+     * 得到配置好的网络连接
+     *
+     * @param ssid
+     * @return
+     */
+    private WifiConfiguration isExist(String ssid) {
+
+        @SuppressLint("MissingPermission") List<WifiConfiguration> configs = mWifiManager.getConfiguredNetworks();
+        for (WifiConfiguration config : configs) {
+
+            if (config.SSID.equals("\"" + ssid + "\"")) {
+
+                return config;
+            }
+        }
+        return null;
+    }
+
+
     // 断开指定ID的网络
     public void disconnectWifi(int netId) {
         mWifiManager.disableNetwork(netId);
