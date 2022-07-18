@@ -27,9 +27,7 @@ import com.alight.android.aoa_launcher.ui.adapter.WifiListAdapter
 import com.alight.android.aoa_launcher.ui.view.CustomDialog
 import com.alight.android.aoa_launcher.utils.*
 import kotlinx.android.synthetic.main.activity_wifi.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -403,6 +401,8 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     }
 */
 
+    private var coroutineScope: CoroutineScope? = null
+
     override fun initData() {
 //        setNetStateListener()
 
@@ -424,9 +424,22 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             mWifiAdmin?.startScan(this)
         }
         switch_wifi.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (coroutineScope != null) {
+                coroutineScope?.cancel()
+            } else {
+                coroutineScope = CoroutineScope(Dispatchers.Main)
+            }
             if (isChecked) {
+                coroutineScope?.launch {
+                    //延迟五秒后切换文案
+                    delay(5 * 1000)
+                    wifiListAdapter?.emptyLayout?.findViewById<TextView>(R.id.tv_wifi_hint_empty)?.text =
+                        "目前Wi-Fi已关闭，无法搜索可用的Wi-Fi"
+                }
                 openWifiAndScan()
             } else {
+                wifiListAdapter?.emptyLayout?.findViewById<TextView>(R.id.tv_wifi_hint_empty)?.text =
+                    "目前Wi-Fi已关闭，无法搜索可用的Wi-Fi"
                 isConnected = false
                 mWifiAdmin?.closeWifi(this, switch_wifi)
                 realWifiList.clear()

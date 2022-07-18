@@ -5,10 +5,11 @@
     android:orientation="horizontal">
 
     <TextView
+        android:id="@+id/tv_wifi_hint_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="目前WIFI已关闭，无法搜索可用的WIFI"
+        android:text="目前Wi-Fi已关闭，无法搜索可用的Wi-Fi"
         android:textColor="@color/person_center_text_green"
         android:textSize="12sp" />
 

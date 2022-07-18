@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="34.5dp"
-            android:text="请选择需要连接的WiFi"
+            android:text="请选择需要连接的Wi-Fi"
             android:textColor="@color/person_center_text_green"
             android:textSize="18sp" />
 
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:text="WiFi"
+                android:text="Wi-Fi"
                 android:textColor="@color/person_center_text_green"
                 android:textSize="12sp" />
 
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="17.5dp"
-            android:text="可用WiFi列表"
+            android:text="可用Wi-Fi列表"
             android:textColor="@color/person_center_text_green"
             android:textSize="12sp" />
 

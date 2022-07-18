@@ -68,6 +68,7 @@
                 android:id="@+id/cb_show_pwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:theme="@style/MyGreenCheckBox" />
 
             <TextView
@@ -87,6 +88,7 @@
                 android:id="@+id/cb_record_pwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:theme="@style/MyGreenCheckBox" />
 
             <TextView
