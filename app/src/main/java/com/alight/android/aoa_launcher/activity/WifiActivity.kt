@@ -529,7 +529,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             }
         }
         wifiListAdapter?.setOnItemClickListener { adapter, view, position ->
-            if (connecting) return@setOnItemClickListener
+            if (connecting || BtnClickUtil.isFastShow()) return@setOnItemClickListener
             val wifiBean = adapter.data[position] as WifiBean
             this.mWifiBean = wifiBean
             val savePwd = SPUtils.getData("wifi" + wifiBean.wifiName, true) as Boolean
