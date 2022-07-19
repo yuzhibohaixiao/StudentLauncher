@@ -25,12 +25,10 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -1527,8 +1525,11 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             R.drawable.wifi_connect_big
         } else if (wifi > -80 && wifi <= -70) {//较强
             R.drawable.wifi_connect_middle
-        } else {//较弱
+        } else if (wifi > -95 && wifi <= -80) {//较弱
             R.drawable.wifi_connect_small
+        } else {
+            //网络极弱
+            R.drawable.wifi_connect_minimum
         }
     }
 
@@ -1540,8 +1541,11 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             R.drawable.wifi_connect_person_big
         } else if (wifi > -80 && wifi <= -70) {//较强
             R.drawable.wifi_connect_person_middle
-        } else {//较弱
+        } else if (wifi > -95 && wifi <= -80) {//较弱
             R.drawable.wifi_connect_person_small
+        } else {
+            //网络极弱
+            R.drawable.wifi_connect_person_minimum
         }
     }
 
@@ -1550,19 +1554,19 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      */
     fun resetInputType(activity: Activity) {
         InputMethodUtil.setDefaultInputMethod(activity)
-      /*  var imm = activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-        val list = imm.inputMethodList
-        //        var inputTypeId = "com.android.inputmethod.latin/.LatinIME"
-        //        var inputTypeId = "jp.co.omronsoft.openwnn/.OpenWnnJAJP"
-        var inputTypeId =
-            "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME"
-        for (index in list.indices) {
-            Log.i(TAG, "inputMethodList: " + list[index].id)
-            if (list[index].id == inputTypeId) {
-                imm.setInputMethod(activity.currentFocus?.windowToken, inputTypeId)
-                break
-            }
-        }*/
+        /*  var imm = activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+          val list = imm.inputMethodList
+          //        var inputTypeId = "com.android.inputmethod.latin/.LatinIME"
+          //        var inputTypeId = "jp.co.omronsoft.openwnn/.OpenWnnJAJP"
+          var inputTypeId =
+              "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME"
+          for (index in list.indices) {
+              Log.i(TAG, "inputMethodList: " + list[index].id)
+              if (list[index].id == inputTypeId) {
+                  imm.setInputMethod(activity.currentFocus?.windowToken, inputTypeId)
+                  break
+              }
+          }*/
     }
 
 

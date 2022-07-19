@@ -84,7 +84,7 @@
             android:layout_width="16dp"
             android:layout_height="12dp"
             android:layout_marginEnd="15.5dp"
-            android:src="@drawable/wifi_connect_big" />
+            android:src="@drawable/wifi_connect_big_item" />
 
     </LinearLayout>
 

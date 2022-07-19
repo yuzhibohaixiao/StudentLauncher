@@ -111,11 +111,11 @@ class WifiListAdapter : BaseQuickAdapter<WifiBean, BaseViewHolder>(R.layout.item
         val wifi = item.level
 //        val wifi = WifiManager.calculateSignalLevel(level,4)
         if (wifi > -70 && wifi < 0) {//最强
-            holder.setImageResource(R.id.iv_wifi_signal_item, R.drawable.wifi_connect_big)
+            holder.setImageResource(R.id.iv_wifi_signal_item, R.drawable.wifi_connect_big_item)
         } else if (wifi > -80 && wifi <= -70) {//较强
-            holder.setImageResource(R.id.iv_wifi_signal_item, R.drawable.wifi_connect_middle)
+            holder.setImageResource(R.id.iv_wifi_signal_item, R.drawable.wifi_connect_middle_item)
         } else {//较弱
-            holder.setImageResource(R.id.iv_wifi_signal_item, R.drawable.wifi_connect_small)
+            holder.setImageResource(R.id.iv_wifi_signal_item, R.drawable.wifi_connect_small_item)
         }
 
         /*    if (wifi > -50 && wifi < 0) {//最强
