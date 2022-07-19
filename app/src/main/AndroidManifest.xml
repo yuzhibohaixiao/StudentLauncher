@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.alight.android.aoa_launcher"
     android:persistent="true"
-    android:sharedUserId="android.uid.system"
-    >
+    android:sharedUserId="android.uid.system">
 
     <!--   android:sharedUserId="android.uid.system"-->
     <uses-sdk tools:overrideLibrary="com.alight.ahwcx.ahwsdk,com.common.bridge" />
@@ -70,7 +69,7 @@
         <activity
             android:name=".activity.NewLauncherActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="landscape"
             android:theme="@style/theme_Launcher">
             <intent-filter>
