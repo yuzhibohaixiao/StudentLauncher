@@ -514,8 +514,6 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun setListener() {
-//        iv_setting_wifi.setOnClickListener(this)
-//        iv_adb_wifi.setOnClickListener(this)
         fl_adb_backdoor.setOnClickListener(this)
         fl_wifi_backdoor.setOnClickListener(this)
         ll_back.setOnClickListener(this)
@@ -540,40 +538,15 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             if (savePwd) {
                 wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
             }
-            /*   ToastUtils.showShort(
-                   this,
-                   "wifiConfiguration null = ${wifiConfiguration == null} savePwd = $savePwd"
-               )*/
-//            val index = mWifiAdmin?.getConfigIndex(wifiBean.wifiName)!!
             if (wifiBean.state == 1) {
                 //已连接的wifi
             } else if (!getWifiCipher(wifiBean.capabilities)) {
-                mWifiAdmin?.connectWifiNoPws(wifiBean.wifiName)
-//                wifiConfiguration = mWifiAdmin?.IsExs its(wifiBean.wifiName)
-//                mWifiAdmin?.addNetwork(wifiConfiguration)
                 //未加密直接连接
-                /*  val isConnected = mWifiAdmin?.addNetwork(
-                      mWifiAdmin?.CreateWifiInfo(
-                          wifiBean.wifiName,
-                          "",
-                          getWifiType(wifiBean)
-                      )
-                  )*/
+                mWifiAdmin?.connectWifiNoPws(wifiBean.wifiName)
             } else if (wifiConfiguration != null && savePwd) {
                 activeConnect = true
                 //有记录的wifi 无需输入密码 直接连接
-                // 连接配置好的指定ID的网络
-//                wifiManager.enableNetwork(
-//                    wifiConfiguration.networkId,
-//                    true
-//                )
                 val isConnected = mWifiAdmin?.addNetwork(wifiConfiguration)
-//                if (isConnected!!) {
-//                    ToastUtils.showShort(this@WifiActivity, "连接成功！")
-//                } else {
-//                    ToastUtils.showShort(this@WifiActivity, "连接失败，请重试！")
-//                    showWifiDialog(wifiBean)
-//                }
             } else {
                 activeConnect = true
                 //未连接的wifi
