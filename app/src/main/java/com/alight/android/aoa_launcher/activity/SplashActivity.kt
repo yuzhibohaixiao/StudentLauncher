@@ -505,7 +505,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun backNewUserSplash() {
-        userSplashNumber--
+        if (userSplashNumber != 0) {
+            userSplashNumber--
+        }
         if (userSplashNumber == 0) {
             sc_next_launcher_splash.visibility = View.VISIBLE
             tv_date_splash.visibility = View.GONE
@@ -527,7 +529,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     private fun nextNewUserSplash() {
         if (lastSplashClose()) return
-        userSplashNumber++
+        if (userSplashBgList.size - 1 > userSplashNumber) {
+            userSplashNumber++
+        }
         //显示launcher引导
         if (userSplashNumber == 0) {
             sc_next_launcher_splash.visibility = View.VISIBLE
