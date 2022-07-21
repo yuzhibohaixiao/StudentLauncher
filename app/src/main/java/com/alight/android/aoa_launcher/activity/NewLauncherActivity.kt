@@ -264,9 +264,13 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         //将输入法重置
 //        getPresenter().resetInputType(this)
         if (true) {
+            //幼教版Launcher
             launcherPagerAdapter = LauncherPagerAdapter(this)
             vp2_launcher.adapter = launcherPagerAdapter
 //            launcherPager2.currentItem = 0
+        } else {
+            //常规版Launcher
+            fl_launcher.setBackgroundResource(R.drawable.launcher_bg_new)
         }
     }
 
