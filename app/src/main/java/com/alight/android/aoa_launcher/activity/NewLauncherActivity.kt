@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import cn.jpush.android.api.JPushInterface
 import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.*
@@ -37,6 +38,7 @@ import com.alight.android.aoa_launcher.net.NetTools
 import com.alight.android.aoa_launcher.net.urls.Urls
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.LauncherCenterAdapter
+import com.alight.android.aoa_launcher.ui.adapter.LauncherPagerAdapter
 import com.alight.android.aoa_launcher.ui.adapter.LauncherRightAdapter
 import com.alight.android.aoa_launcher.ui.adapter.QualityHorizontalAdapter
 import com.alight.android.aoa_launcher.utils.*
@@ -87,6 +89,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var featureAbility: FeatureAbility? = null //内存 护眼相关
     private var isFeatureAbilityInit = false
     private var mUserId = -1
+
+    private lateinit var launcherPagerAdapter: LauncherPagerAdapter
 
 
     private var selectBook: AppTypeBean = AppTypeBean(
@@ -259,6 +263,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         //将输入法重置
 //        getPresenter().resetInputType(this)
+        if (true) {
+            launcherPagerAdapter = LauncherPagerAdapter(this)
+            vp2_launcher.adapter = launcherPagerAdapter
+//            launcherPager2.currentItem = 0
+        }
     }
 
     /**
