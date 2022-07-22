@@ -18,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
 import cn.jpush.android.api.JPushInterface
 import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.*
@@ -190,6 +189,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         fl_classroom_sync.setOnClickListener(this)
         iv_ip_image.setOnClickListener(this)
         fl_wifi_module.setOnClickListener(this)
+        iv_call_parent_child.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -1027,7 +1027,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     )
             }
             //呼叫家长
-            R.id.iv_call_parent -> {
+            R.id.iv_call_parent, R.id.iv_call_parent_child -> {
                 getPresenter().showAVDialog(this)
             }
             //个人中心

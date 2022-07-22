@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="189dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_icon_app_list"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_app_name"
+            android:layout_width="76dp"
+            android:layout_height="24.5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/white_bg_12oval"
+            android:gravity="center"
+            android:text="深光科技"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="189dp"
+        android:layout_height="142dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="37dp"
+        android:layout_marginBottom="35dp"
+        android:src="@drawable/child_app_bottom" />
+</FrameLayout>
