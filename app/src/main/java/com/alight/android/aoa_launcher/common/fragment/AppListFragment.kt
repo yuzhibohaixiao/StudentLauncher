@@ -6,7 +6,7 @@ import com.alight.android.aoa_launcher.common.base.BaseFragment
 import com.alight.android.aoa_launcher.common.bean.AppBean
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import com.alight.android.aoa_launcher.ui.adapter.ChildAppListAdapter
-import com.alight.android.aoa_launcher.ui.view.HDHeadItemDecoration
+import com.alight.android.aoa_launcher.ui.view.OverlapItemDecoration
 import com.alight.android.aoa_launcher.utils.ScreenUtils
 import kotlinx.android.synthetic.main.fragment_app_list.view.*
 
@@ -28,13 +28,15 @@ class AppListFragment : BaseFragment() {
         appBeanList.add(AppBean("斑马英语", "", null))
         appBeanList.add(AppBean("斑马英语", "", null))
         appBeanList.add(AppBean("斑马英语", "", null))
+        appBeanList.add(AppBean("斑马英语", "", null))
+        appBeanList.add(AppBean("斑马英语", "", null))
 
         if (childAppListAdapter == null) {
             childAppListAdapter = ChildAppListAdapter()
             childAppListAdapter?.addData(appBeanList)
             getInflateView().rv_app_list.adapter = childAppListAdapter
             getInflateView().rv_app_list.addItemDecoration(
-                HDHeadItemDecoration(
+                OverlapItemDecoration(
                     ScreenUtils.dp2px(
                         context,
                         -38f
