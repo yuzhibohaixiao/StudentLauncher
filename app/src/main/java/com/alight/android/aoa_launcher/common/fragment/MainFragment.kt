@@ -4,6 +4,9 @@ import android.view.View
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseFragment
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import com.alight.android.aoa_launcher.utils.ToastUtils
+import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainFragment : BaseFragment(), View.OnClickListener {
     override fun initData() {
@@ -17,7 +20,14 @@ class MainFragment : BaseFragment(), View.OnClickListener {
     }
 
     override fun setListener() {
-//        getInflateView().iv_game_launcher.setOnClickListener(this)
+        getInflateView().iv_hongen_py.setOnClickListener(this)
+        getInflateView().iv_hongen_sz.setOnClickListener(this)
+//        iv_hongen_bc.setOnClickListener(this)
+//        iv_hongen_bc.setOnClickListener(this)
+//        iv_hongen_bc.setOnClickListener(this)
+//        iv_hongen_bc.setOnClickListener(this)
+//        iv_hongen_bc.setOnClickListener(this)
+//        iv_hongen_bc.setOnClickListener(this)
 //        getInflateView().iv_video_launcher.setOnClickListener(this)
 //        getInflateView().iv_education_launcher.setOnClickListener(this)
 //        getInflateView().iv_work_launcher.setOnClickListener(this)
@@ -43,29 +53,13 @@ class MainFragment : BaseFragment(), View.OnClickListener {
      * @param v The view that was clicked.
      */
     override fun onClick(v: View) {
-        /*  when (v.id) {
-              R.id.iv_game_launcher -> {
-                  context?.let { getPresenter().showDialog(it, AppConstants.GAME_APP) }
-              }
-              R.id.iv_video_launcher -> {
-                  context?.let { getPresenter().showDialog(it, AppConstants.VIDEO_APP) }
-              }
-              R.id.iv_work_launcher -> {
-                  //切换到工作Fragment
-                  (activity as LauncherActivity).switchPager(0)
-              }
-              R.id.iv_education_launcher -> {
-                  context?.let { getPresenter().showDialog(it, AppConstants.EDUCATION_APP) }
-              }
-              R.id.iv_app_store -> {
-                  getPresenter().showKAMarket()
-              }
-              R.id.iv_all_app_launcher -> {
-                  context?.let { getPresenter().showDialog(it, AppConstants.ALL_APP) }
-              }
-              R.id.iv_setting -> {
-                  getPresenter().showSystemSetting()
-              }*/
+        when (v.id) {
+            R.id.iv_hongen_py -> {
+                ToastUtils.showShort(context, "别点我1！")
+            }
+            R.id.iv_hongen_sz -> {
+                ToastUtils.showShort(context, "别点我2！")
+            }
+        }
     }
-
 }

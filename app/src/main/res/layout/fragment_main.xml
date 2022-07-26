@@ -4,11 +4,93 @@
     android:layout_height="match_parent"
     android:background="@drawable/child_launcher_bg">
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Main页面"
-        android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="122dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_hongen_py"
+                android:layout_width="165dp"
+                android:layout_height="262dp"
+                android:src="@drawable/hongen_py" />
+
+            <ImageView
+                android:id="@+id/iv_hongen_sz"
+                android:layout_width="165dp"
+                android:layout_height="262dp"
+                android:layout_marginStart="73dp"
+                android:src="@drawable/hongen_sz" />
+
+            <ImageView
+                android:id="@+id/iv_hongen_sw"
+                android:layout_width="165dp"
+                android:layout_height="262dp"
+                android:layout_marginStart="73dp"
+                android:src="@drawable/hongen_sw" />
+
+            <ImageView
+                android:layout_width="165dp"
+                android:layout_height="262dp"
+                android:layout_marginStart="73dp"
+                android:src="@drawable/hongen_abc" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="8.5dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_hongen_fjyd"
+                android:layout_width="124dp"
+                android:layout_height="115dp"
+                android:src="@drawable/hongen_fjyd" />
+
+            <ImageView
+                android:id="@+id/iv_hongen_cy"
+                android:layout_width="124dp"
+                android:layout_height="115dp"
+                android:layout_marginStart="27dp"
+                android:src="@drawable/hongen_cy" />
+
+            <ImageView
+                android:id="@+id/iv_hongen_sww"
+                android:layout_width="124dp"
+                android:layout_height="115dp"
+                android:layout_marginStart="27dp"
+                android:src="@drawable/hongen_sww" />
+
+            <ImageView
+                android:id="@+id/iv_hongen_bc"
+                android:layout_width="124dp"
+                android:layout_height="115dp"
+                android:layout_marginStart="27dp"
+                android:src="@drawable/hongen_bc" />
+
+            <ImageView
+                android:id="@+id/iv_hongen_syhb"
+                android:layout_width="124dp"
+                android:layout_height="115dp"
+                android:layout_marginStart="27dp"
+                android:src="@drawable/hongen_syhb" />
+
+            <ImageView
+                android:id="@+id/iv_hongen_yd"
+                android:layout_width="124dp"
+                android:layout_height="115dp"
+                android:layout_marginStart="27dp"
+                android:src="@drawable/hongen_yd" />
+        </LinearLayout>
+
+    </LinearLayout>
 </FrameLayout>
