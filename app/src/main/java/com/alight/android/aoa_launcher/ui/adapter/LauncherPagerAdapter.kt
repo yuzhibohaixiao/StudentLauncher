@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.alight.android.aoa_launcher.common.base.BaseFragment
 import com.alight.android.aoa_launcher.common.fragment.AppListFragment
+import com.alight.android.aoa_launcher.common.fragment.AppSelectFragment
 import com.alight.android.aoa_launcher.common.fragment.MainFragment
 
 class LauncherPagerAdapter(fragmentActivity: FragmentActivity) :
@@ -15,6 +16,7 @@ class LauncherPagerAdapter(fragmentActivity: FragmentActivity) :
 
     init {
         fragments.put(PAGE_MAIN, MainFragment())
+        fragments.put(PAGE_APP_SELECT, AppSelectFragment())
         fragments.put(PAGE_APP_LIST, AppListFragment())
     }
 
@@ -29,7 +31,8 @@ class LauncherPagerAdapter(fragmentActivity: FragmentActivity) :
     companion object {
 
         const val PAGE_MAIN = 0
-        const val PAGE_APP_LIST = 1
+        const val PAGE_APP_SELECT = 1
+        const val PAGE_APP_LIST = 2
 
     }
 }

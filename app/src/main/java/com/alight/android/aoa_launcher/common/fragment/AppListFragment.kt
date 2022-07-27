@@ -16,20 +16,17 @@ class AppListFragment : BaseFragment() {
 
     override fun initData() {
         val appBeanList = mutableListOf<AppBean>()
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
-        appBeanList.add(AppBean("斑马英语", "", null))
+        appBeanList.add(AppBean("中国象棋", "", null))
+        appBeanList.add(AppBean("宝宝巴士", "", null))
+        appBeanList.add(AppBean("蒙台梭利启蒙乐园", "", null))
+        appBeanList.add(AppBean("天天练", "", null))
+        appBeanList.add(AppBean("宝宝乐器", "", null))
+        appBeanList.add(AppBean("喜马拉雅儿童", "", null))
+        appBeanList.add(AppBean("熊猫博士识字", "", null))
+        appBeanList.add(AppBean("阿布睡前故事", "", null))
+        appBeanList.add(AppBean("科魔大战", "", null))
+        appBeanList.add(AppBean("星尘浏览器", "", null))
+        appBeanList.add(AppBean("少年得到", "", null))
 
         if (childAppListAdapter == null) {
             childAppListAdapter = ChildAppListAdapter()
@@ -43,6 +40,12 @@ class AppListFragment : BaseFragment() {
                     )
                 )
             )
+            childAppListAdapter?.setOnItemClickListener { adapter, view, position ->
+                getPresenter().startApp(
+                    requireContext(),
+                    childAppListAdapter!!.data[position].appPackName
+                )
+            }
         }
     }
 
