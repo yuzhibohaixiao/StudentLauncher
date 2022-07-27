@@ -52,36 +52,36 @@ class MainFragment : BaseFragment(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.iv_hongen_py -> {
-                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+                getPresenter().startApp(requireContext(), "com.ihuman.pinyin")
             }
             R.id.iv_hongen_sz -> {
                 getPresenter().startApp(requireContext(), "com.hongen.app.word")
             }
             R.id.iv_hongen_sw -> {
-                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+                getPresenter().startApp(requireContext(), "com.ihuman.imath")
             }
             R.id.iv_hongen_abc -> {
-                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+                getPresenter().startApp(requireContext(),  "com.ihuman.english")
             }
 
 
             R.id.iv_hongen_fjyd -> {
-                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+                getPresenter().startApp(requireContext(), "com.ihuman.oxford")
             }
             R.id.iv_hongen_cy -> {
-                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+                getPresenter().startApp(requireContext(), "com.ihuman.guoxue")
             }
             R.id.iv_hongen_sww -> {
-                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+                getPresenter().startApp(requireContext(), "com.ihuman.ibaike")
             }
             R.id.iv_hongen_bc -> {
-                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+                getPresenter().startApp(requireContext(), "com.ihuman.kaka")
             }
             R.id.iv_hongen_syhb -> {
-                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+                getPresenter().startApp(requireContext(), "com.ihuman.book")
             }
             R.id.iv_hongen_yd -> {
-                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+                getPresenter().startApp(requireContext(), "com.ihuman.yuedu")
             }
         }
     }
