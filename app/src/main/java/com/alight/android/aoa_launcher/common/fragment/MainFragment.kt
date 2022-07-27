@@ -22,18 +22,15 @@ class MainFragment : BaseFragment(), View.OnClickListener {
     override fun setListener() {
         getInflateView().iv_hongen_py.setOnClickListener(this)
         getInflateView().iv_hongen_sz.setOnClickListener(this)
-//        iv_hongen_bc.setOnClickListener(this)
-//        iv_hongen_bc.setOnClickListener(this)
-//        iv_hongen_bc.setOnClickListener(this)
-//        iv_hongen_bc.setOnClickListener(this)
-//        iv_hongen_bc.setOnClickListener(this)
-//        iv_hongen_bc.setOnClickListener(this)
-//        getInflateView().iv_video_launcher.setOnClickListener(this)
-//        getInflateView().iv_education_launcher.setOnClickListener(this)
-//        getInflateView().iv_work_launcher.setOnClickListener(this)
-//        getInflateView().iv_app_store.setOnClickListener(this)
-//        getInflateView().iv_all_app_launcher.setOnClickListener(this)
-//        getInflateView().iv_setting.setOnClickListener(this)
+        getInflateView().iv_hongen_sw.setOnClickListener(this)
+        getInflateView().iv_hongen_abc.setOnClickListener(this)
+
+        getInflateView().iv_hongen_fjyd.setOnClickListener(this)
+        getInflateView().iv_hongen_cy.setOnClickListener(this)
+        getInflateView().iv_hongen_sww.setOnClickListener(this)
+        getInflateView().iv_hongen_bc.setOnClickListener(this)
+        getInflateView().iv_hongen_syhb.setOnClickListener(this)
+        getInflateView().iv_hongen_yd.setOnClickListener(this)
     }
 
 
@@ -55,10 +52,36 @@ class MainFragment : BaseFragment(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.iv_hongen_py -> {
-                ToastUtils.showShort(context, "别点我1！")
+                getPresenter().startApp(requireContext(), "com.hongen.app.word")
             }
             R.id.iv_hongen_sz -> {
-                ToastUtils.showShort(context, "别点我2！")
+                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+            }
+            R.id.iv_hongen_sw -> {
+                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+            }
+            R.id.iv_hongen_abc -> {
+                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+            }
+
+
+            R.id.iv_hongen_fjyd -> {
+                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+            }
+            R.id.iv_hongen_cy -> {
+                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+            }
+            R.id.iv_hongen_sww -> {
+                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+            }
+            R.id.iv_hongen_bc -> {
+                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+            }
+            R.id.iv_hongen_syhb -> {
+                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+            }
+            R.id.iv_hongen_yd -> {
+                getPresenter().startApp(requireContext(), "com.hongen.app.word")
             }
         }
     }
