@@ -89,6 +89,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var featureAbility: FeatureAbility? = null //内存 护眼相关
     private var isFeatureAbilityInit = false
     private var mUserId = -1
+    private var mode = "student"
 
     private lateinit var launcherPagerAdapter: LauncherPagerAdapter
 
@@ -273,25 +274,28 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         //将输入法重置
 //        getPresenter().resetInputType(this)
-        val mode = LauncherApplication.getMMKV().decodeString("mode")
-        if (mode == "child") {
-            iv_call_parent_child.visibility = View.VISIBLE
-            ll_child_top.visibility = View.VISIBLE
-            vp2_launcher.visibility = View.VISIBLE
-            ll_student_top.visibility = View.GONE
-            fl_student_main.visibility = View.GONE
-            //幼教版Launcher
-            launcherPagerAdapter = LauncherPagerAdapter(this)
-            vp2_launcher.adapter = launcherPagerAdapter
+        val newMode = LauncherApplication.getMMKV().decodeString("mode")!!
+        if (mode != newMode) {
+            mode = newMode
+            if (mode == "child") {
+                iv_call_parent_child.visibility = View.VISIBLE
+                ll_child_top.visibility = View.VISIBLE
+                vp2_launcher.visibility = View.VISIBLE
+                ll_student_top.visibility = View.GONE
+                fl_student_main.visibility = View.GONE
+                //幼教版Launcher
+                launcherPagerAdapter = LauncherPagerAdapter(this)
+                vp2_launcher.adapter = launcherPagerAdapter
 //            launcherPager2.currentItem = 0
-        } else {
-            ll_student_top.visibility = View.VISIBLE
-            fl_student_main.visibility = View.VISIBLE
-            iv_call_parent_child.visibility = View.GONE
-            ll_child_top.visibility = View.GONE
-            vp2_launcher.visibility = View.GONE
-            //常规版Launcher
-            fl_launcher.setBackgroundResource(R.drawable.launcher_bg_new)
+            } else {
+                ll_student_top.visibility = View.VISIBLE
+                fl_student_main.visibility = View.VISIBLE
+                iv_call_parent_child.visibility = View.GONE
+                ll_child_top.visibility = View.GONE
+                vp2_launcher.visibility = View.GONE
+                //常规版Launcher
+                fl_launcher.setBackgroundResource(R.drawable.launcher_bg_new)
+            }
         }
     }
 
