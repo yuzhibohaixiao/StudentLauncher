@@ -41,10 +41,10 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/iv_qwhb_child_launcher"
+            android:id="@+id/iv_msqm_child_launcher"
             android:layout_width="270dp"
             android:layout_height="176dp"
-            android:src="@drawable/qwhb_child_launcher" />
+            android:src="@drawable/msqm_child_launcher" />
 
         <ImageView
             android:id="@+id/iv_yzyx_child_launcher"

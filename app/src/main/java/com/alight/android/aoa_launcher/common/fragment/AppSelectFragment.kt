@@ -4,6 +4,7 @@ import android.view.View
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseFragment
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
+import kotlinx.android.synthetic.main.fragment_app_select.view.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class AppSelectFragment : BaseFragment(), View.OnClickListener {
@@ -18,17 +19,11 @@ class AppSelectFragment : BaseFragment(), View.OnClickListener {
     }
 
     override fun setListener() {
-//        getInflateView().iv_hongen_py.setOnClickListener(this)
-//        getInflateView().iv_hongen_sz.setOnClickListener(this)
-//        getInflateView().iv_hongen_sw.setOnClickListener(this)
-//        getInflateView().iv_hongen_abc.setOnClickListener(this)
-//
-//        getInflateView().iv_hongen_fjyd.setOnClickListener(this)
-//        getInflateView().iv_hongen_cy.setOnClickListener(this)
-//        getInflateView().iv_hongen_sww.setOnClickListener(this)
-//        getInflateView().iv_hongen_bc.setOnClickListener(this)
-//        getInflateView().iv_hongen_syhb.setOnClickListener(this)
-//        getInflateView().iv_hongen_yd.setOnClickListener(this)
+        getInflateView().iv_sxqm_child_launcher.setOnClickListener(this)
+        getInflateView().iv_kxts_child_launcher.setOnClickListener(this)
+        getInflateView().iv_msqm_child_launcher.setOnClickListener(this)
+        getInflateView().iv_hbyd_child_launcher.setOnClickListener(this)
+        getInflateView().iv_yzyx_child_launcher.setOnClickListener(this)
     }
 
 
@@ -48,39 +43,28 @@ class AppSelectFragment : BaseFragment(), View.OnClickListener {
      * @param v The view that was clicked.
      */
     override fun onClick(v: View) {
-     /*   when (v.id) {
-            R.id.iv_hongen_py -> {
-                getPresenter().startApp(requireContext(), "com.ihuman.pinyin")
+        when (v.id) {
+            //数学启蒙
+            R.id.iv_sxqm_child_launcher -> {
+                getPresenter().startApp(requireContext(), "com.enuma.todomathcn")
             }
-            R.id.iv_hongen_sz -> {
-                getPresenter().startApp(requireContext(), "com.hongen.app.word")
+            //科学实验
+            R.id.iv_kxts_child_launcher -> {
+                getPresenter().startApp(requireContext(), "org.pbskids.playandlearnscience")
             }
-            R.id.iv_hongen_sw -> {
-                getPresenter().startApp(requireContext(), "com.ihuman.imath")
+            //蒙氏启蒙
+            R.id.iv_msqm_child_launcher -> {
+                getPresenter().startApp(requireContext(), "com.sagosago.World.googleplay")
             }
-            R.id.iv_hongen_abc -> {
-                getPresenter().startApp(requireContext(), "com.ihuman.english")
+            //绘本阅读
+            R.id.iv_hbyd_child_launcher -> {
+                getPresenter().startApp(requireContext(), "com.jojoread.huiben")
+            }
+            //益智游戏
+            R.id.iv_yzyx_child_launcher -> {
+                getPresenter().startApp(requireContext(), "com.popoko.reversijp")
             }
 
-
-            R.id.iv_hongen_fjyd -> {
-                getPresenter().startApp(requireContext(), "com.ihuman.oxford")
-            }
-            R.id.iv_hongen_cy -> {
-                getPresenter().startApp(requireContext(), "com.ihuman.guoxue")
-            }
-            R.id.iv_hongen_sww -> {
-                getPresenter().startApp(requireContext(), "com.ihuman.ibaike")
-            }
-            R.id.iv_hongen_bc -> {
-                getPresenter().startApp(requireContext(), "com.ihuman.kaka")
-            }
-            R.id.iv_hongen_syhb -> {
-                getPresenter().startApp(requireContext(), "com.ihuman.book")
-            }
-            R.id.iv_hongen_yd -> {
-                getPresenter().startApp(requireContext(), "com.ihuman.yuedu")
-            }
-        }*/
+        }
     }
 }

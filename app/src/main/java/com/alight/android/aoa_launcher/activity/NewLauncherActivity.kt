@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import cn.jpush.android.api.JPushInterface
 import com.alight.ahwcx.ahwsdk.AbilityManager
 import com.alight.ahwcx.ahwsdk.abilities.*
@@ -194,6 +195,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         iv_main_top_child_launcher.setOnClickListener(this)
         iv_app_select_top_child_launcher.setOnClickListener(this)
         iv_app_list_top_child_launcher.setOnClickListener(this)
+        vp2_launcher.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                selectChildUI(position)
+            }
+        })
     }
 
     override fun onResume() {
@@ -1085,7 +1091,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     private fun selectChildUI(index: Int) {
-        vp2_launcher.currentItem = index
+        if (vp2_launcher.currentItem != index) {
+            vp2_launcher.currentItem = index
+        }
         iv_main_top_child_launcher.alpha = if (index == 0) 1f else 0.6f
         iv_app_select_top_child_launcher.alpha = if (index == 1) 1f else 0.6f
         iv_app_list_top_child_launcher.alpha = if (index == 2) 1f else 0.6f

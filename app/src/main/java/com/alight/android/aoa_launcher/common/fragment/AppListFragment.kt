@@ -18,7 +18,7 @@ class AppListFragment : BaseFragment() {
         val appBeanList = mutableListOf<AppBean>()
         appBeanList.add(AppBean("中国象棋", "com.cnvcs.xiangqi", null))
         appBeanList.add(AppBean("宝宝巴士", "com.sinyee.babybus.recommendapp", null))
-        appBeanList.add(AppBean("蒙台梭利启蒙乐园", "", null))
+        appBeanList.add(AppBean("蒙台梭利启蒙乐园", "com.edokiacademy.montessoripreschool.huawei", null))
         appBeanList.add(AppBean("天天练", "com.leleketang.SchoolFantasy", null))
         appBeanList.add(AppBean("宝宝乐器", "com.sinyee.babybus.songIV", null))
         appBeanList.add(AppBean("喜马拉雅儿童", "com.ximalayaos.pad.tingkid", null))
