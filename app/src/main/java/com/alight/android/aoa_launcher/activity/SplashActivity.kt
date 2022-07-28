@@ -12,6 +12,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alight.android.aoa_launcher.R
+import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.constants.AppConstants
@@ -80,13 +81,17 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             ll_splash2,
             ll_splash3,
             fl_splash4,
+            ll_splash5
         )
 
 
     }
 
+    /**
+     * @param activeIndex 需要跳转的引导页码
+     */
     private fun showSplash(activeIndex: Int) {
-        val realIndex = activeIndex - 1;
+        val realIndex = activeIndex - 1
         runOnUiThread {
             for (index in splashViews.indices) {
                 val view = splashViews[index]
@@ -111,6 +116,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         tv_download_app.setOnClickListener(this)
         fl_wifi_module.setOnClickListener(this)
         btn_code_renew.setOnClickListener(this)
+
+        ll_child_mode.setOnClickListener(this)
+        ll_student_mode.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -442,17 +450,20 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                                 writeUserInfo(tokenPair)
                                                 //发送用户登陆的广播
                                                 sendUserLoginBroadcast()
-                                                val onlyShowSelectChild =
-                                                    SPUtils.getData(
-                                                        "onlyShowSelectChild",
-                                                        false
-                                                    ) as Boolean
-                                                if (onlyShowSelectChild) {
-                                                    //仅展示用户选择
-                                                    finishSplash()
-                                                } else {
-                                                    showNewUserSplash()
-                                                }
+                                                //展示模式切换
+                                                iv_splash_progress.setImageResource(R.drawable.splash5_progress)
+                                                showSplash(5)
+                                                /* val onlyShowSelectChild =
+                                                     SPUtils.getData(
+                                                         "onlyShowSelectChild",
+                                                         false
+                                                     ) as Boolean
+                                                 if (onlyShowSelectChild) {
+                                                     //仅展示用户选择
+                                                     finishSplash()
+                                                 } else {
+                                                     showNewUserSplash()
+                                                 }*/
 
                                             }
                                         }
@@ -825,6 +836,32 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             R.id.fl_wifi_module -> {
                 getPresenter().startWifiModule(false)
             }
+            //儿童模式
+            R.id.ll_child_mode -> {
+                val mmkv = LauncherApplication.getMMKV()
+                mmkv.encode("mode", "child")
+                selectMode()
+            }
+            //学生模式
+            R.id.ll_student_mode -> {
+                val mmkv = LauncherApplication.getMMKV()
+                mmkv.encode("mode", "student")
+                selectMode()
+            }
+        }
+    }
+
+    private fun selectMode() {
+        val onlyShowSelectChild =
+            SPUtils.getData(
+                "onlyShowSelectChild",
+                false
+            ) as Boolean
+        if (onlyShowSelectChild) {
+            //仅展示用户选择
+            finishSplash()
+        } else {
+            showNewUserSplash()
         }
     }
 

@@ -23,6 +23,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/ll_student_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone">
@@ -91,6 +92,7 @@
             android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/ll_child_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -161,6 +163,7 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/fl_student_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="86.5dp"

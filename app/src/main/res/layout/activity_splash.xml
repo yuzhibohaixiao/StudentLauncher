@@ -273,6 +273,84 @@
     </LinearLayout>
 
 
+    <LinearLayout
+        android:id="@+id/ll_splash5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="86.5dp"
+            android:text="请点击选择页面布局"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="（可以在个人中心的模式切换处更换）"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/ll_child_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="339.5dp"
+                    android:layout_height="192.5dp"
+                    android:src="@drawable/splash_select_mode_normal_launcher" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11.5dp"
+                    android:text="儿童模式"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_student_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="51dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="339.5dp"
+                    android:layout_height="192.5dp"
+                    android:src="@drawable/splash_select_mode_child_launcher" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11.5dp"
+                    android:text="学生模式"
+                    android:textColor="#80ffffff"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/fl_splash4"
         android:layout_width="match_parent"
@@ -330,6 +408,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
     </FrameLayout>
+
 
     <LinearLayout
         android:layout_width="wrap_content"
