@@ -779,30 +779,6 @@
                             android:textSize="10sp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/ll_mode_set"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="25dp"
-                        android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:layout_width="23.5dp"
-                            android:layout_height="23.5dp"
-                            android:layout_marginTop="10.5dp"
-                            android:src="@drawable/mode_set" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5.5dp"
-                            android:text="模式设置"
-                            android:textColor="#215558"
-                            android:textSize="10sp" />
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ll_unbind_device"
@@ -884,9 +860,34 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/ll_mode_set"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:layout_width="23.5dp"
+                            android:layout_height="23.5dp"
+                            android:layout_marginTop="10.5dp"
+                            android:src="@drawable/mode_set" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5.5dp"
+                            android:text="模式设置"
+                            android:textColor="#215558"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/ll_power"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
+                        android:layout_marginStart="25dp"
                         android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
                         android:gravity="center_horizontal"
                         android:orientation="vertical">

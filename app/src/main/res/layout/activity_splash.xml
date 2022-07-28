@@ -313,7 +313,7 @@
                 <ImageView
                     android:layout_width="339.5dp"
                     android:layout_height="192.5dp"
-                    android:src="@drawable/splash_select_mode_normal_launcher" />
+                    android:src="@drawable/splash_select_mode_child_launcher_selected" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -336,7 +336,7 @@
                 <ImageView
                     android:layout_width="339.5dp"
                     android:layout_height="192.5dp"
-                    android:src="@drawable/splash_select_mode_child_launcher" />
+                    android:src="@drawable/splash_select_mode_student_launcher" />
 
                 <TextView
                     android:layout_width="wrap_content"

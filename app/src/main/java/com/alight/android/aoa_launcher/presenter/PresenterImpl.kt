@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.location.Criteria
 import android.location.Location
@@ -1567,6 +1568,43 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                   break
               }
           }*/
+    }
+
+    fun showModeSetDialog(activity: Activity) {
+        var dialog = CustomDialog(activity, R.layout.dialog_mode_set)
+        val ivChildModeSet = dialog.findViewById<ImageView>(R.id.iv_child_mode_set)
+        val ivStudentModeSet = dialog.findViewById<ImageView>(R.id.iv_student_mode_set)
+        val cancel = dialog.findViewById<TextView>(R.id.cancel)
+        val confirm = dialog.findViewById<TextView>(R.id.confirm)
+        val tvChildModeSet = dialog.findViewById<TextView>(R.id.tv_child_mode_set)
+        val tvStudentModeSet = dialog.findViewById<TextView>(R.id.tv_student_mode_set)
+        ivChildModeSet.isSelected = true
+        ivChildModeSet.setOnClickListener {
+            ivChildModeSet.isSelected = true
+            ivStudentModeSet.isSelected = false
+            tvChildModeSet.setTextColor(Color.parseColor("#215558"))
+            tvStudentModeSet.setTextColor(Color.parseColor("#50215558"))
+        }
+        ivStudentModeSet.setOnClickListener {
+            ivStudentModeSet.isSelected = true
+            ivChildModeSet.isSelected = false
+            tvChildModeSet.setTextColor(Color.parseColor("#50215558"))
+            tvStudentModeSet.setTextColor(Color.parseColor("#215558"))
+        }
+        cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        confirm.setOnClickListener {
+            dialog.dismiss()
+            if (ivChildModeSet.isSelected) {
+                LauncherApplication.getMMKV().encode("mode", "child")
+                activity.finish()
+            } else {
+                LauncherApplication.getMMKV().encode("mode", "student")
+                activity.finish()
+            }
+        }
+        dialog.show()
     }
 
 

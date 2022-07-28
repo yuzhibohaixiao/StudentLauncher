@@ -947,6 +947,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                     })
                 }
             }
+            R.id.ll_mode_set -> {
+                getPresenter().showModeSetDialog(this)
+            }
         }
     }
 
