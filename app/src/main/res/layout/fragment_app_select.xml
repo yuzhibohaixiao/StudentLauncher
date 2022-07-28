@@ -7,6 +7,7 @@
     android:paddingTop="124dp">
 
     <ImageView
+        android:id="@+id/iv_sxqm_child_launcher"
         android:layout_width="270dp"
         android:layout_height="373dp"
         android:layout_marginStart="54dp"
@@ -20,14 +21,16 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/iv_kxts_child_launcher"
             android:layout_width="270dp"
             android:layout_height="176dp"
             android:src="@drawable/kxts_child_launcher" />
 
         <ImageView
+            android:id="@+id/iv_hbyd_child_launcher"
             android:layout_width="270dp"
             android:layout_height="176dp"
-            android:src="@drawable/kxts_child_launcher" />
+            android:src="@drawable/hbyd_child_launcher" />
     </LinearLayout>
 
     <LinearLayout
@@ -38,14 +41,16 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/iv_qwhb_child_launcher"
             android:layout_width="270dp"
             android:layout_height="176dp"
-            android:src="@drawable/kxts_child_launcher" />
+            android:src="@drawable/qwhb_child_launcher" />
 
         <ImageView
+            android:id="@+id/iv_yzyx_child_launcher"
             android:layout_width="270dp"
             android:layout_height="176dp"
-            android:src="@drawable/kxts_child_launcher" />
+            android:src="@drawable/yzyx_child_launcher" />
     </LinearLayout>
 
 

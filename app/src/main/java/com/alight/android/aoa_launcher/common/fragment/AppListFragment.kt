@@ -16,17 +16,17 @@ class AppListFragment : BaseFragment() {
 
     override fun initData() {
         val appBeanList = mutableListOf<AppBean>()
-        appBeanList.add(AppBean("中国象棋", "", null))
-        appBeanList.add(AppBean("宝宝巴士", "", null))
+        appBeanList.add(AppBean("中国象棋", "com.cnvcs.xiangqi", null))
+        appBeanList.add(AppBean("宝宝巴士", "com.sinyee.babybus.recommendapp", null))
         appBeanList.add(AppBean("蒙台梭利启蒙乐园", "", null))
-        appBeanList.add(AppBean("天天练", "", null))
-        appBeanList.add(AppBean("宝宝乐器", "", null))
-        appBeanList.add(AppBean("喜马拉雅儿童", "", null))
-        appBeanList.add(AppBean("熊猫博士识字", "", null))
-        appBeanList.add(AppBean("阿布睡前故事", "", null))
-        appBeanList.add(AppBean("科魔大战", "", null))
-        appBeanList.add(AppBean("星尘浏览器", "", null))
-        appBeanList.add(AppBean("少年得到", "", null))
+        appBeanList.add(AppBean("天天练", "com.leleketang.SchoolFantasy", null))
+        appBeanList.add(AppBean("宝宝乐器", "com.sinyee.babybus.songIV", null))
+        appBeanList.add(AppBean("喜马拉雅儿童", "com.ximalayaos.pad.tingkid", null))
+        appBeanList.add(AppBean("熊猫博士识字", "com.drpanda.chineseacademy.b2b", null))
+        appBeanList.add(AppBean("阿布睡前故事", "com.android.abustory", null))
+        appBeanList.add(AppBean("科魔大战", "com.lotfun.svmAndroid", null))
+        appBeanList.add(AppBean("星尘浏览器", "com.chaozhuo.browser", null))
+        appBeanList.add(AppBean("少年得到", "com.dedao.juvenile", null))
 
         if (childAppListAdapter == null) {
             childAppListAdapter = ChildAppListAdapter()

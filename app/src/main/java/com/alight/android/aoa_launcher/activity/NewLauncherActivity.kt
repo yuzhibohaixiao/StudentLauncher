@@ -190,6 +190,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         iv_ip_image.setOnClickListener(this)
         fl_wifi_module.setOnClickListener(this)
         iv_call_parent_child.setOnClickListener(this)
+
+        iv_main_top_child_launcher.setOnClickListener(this)
+        iv_app_select_top_child_launcher.setOnClickListener(this)
+        iv_app_list_top_child_launcher.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -1068,7 +1072,23 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             R.id.fl_wifi_module -> {
                 getPresenter().startWifiModule(false)
             }
+            R.id.iv_main_top_child_launcher -> {
+                selectChildUI(0)
+            }
+            R.id.iv_app_select_top_child_launcher -> {
+                selectChildUI(1)
+            }
+            R.id.iv_app_list_top_child_launcher -> {
+                selectChildUI(2)
+            }
         }
+    }
+
+    private fun selectChildUI(index: Int) {
+        vp2_launcher.currentItem = index
+        iv_main_top_child_launcher.alpha = if (index == 0) 1f else 0.6f
+        iv_app_select_top_child_launcher.alpha = if (index == 1) 1f else 0.6f
+        iv_app_list_top_child_launcher.alpha = if (index == 2) 1f else 0.6f
     }
 
     override fun onPause() {

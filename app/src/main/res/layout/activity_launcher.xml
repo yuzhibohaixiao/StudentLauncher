@@ -93,6 +93,35 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp">
+
+            <ImageView
+                android:id="@+id/iv_main_top_child_launcher"
+                android:layout_width="71dp"
+                android:layout_height="77.5dp"
+                android:src="@drawable/main_top_child_launcher" />
+
+            <ImageView
+                android:id="@+id/iv_app_select_top_child_launcher"
+                android:layout_width="71dp"
+                android:layout_height="77.5dp"
+                android:layout_marginStart="@dimen/dp_40"
+                android:alpha="0.6"
+                android:src="@drawable/app_select_top_child_launcher" />
+
+            <ImageView
+                android:id="@+id/iv_app_list_top_child_launcher"
+                android:layout_width="71dp"
+                android:layout_height="77.5dp"
+                android:layout_marginStart="@dimen/dp_40"
+                android:alpha="0.6"
+                android:src="@drawable/app_list_top_child_launcher" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="27.5dp"
             android:layout_marginEnd="45dp"
