@@ -109,4 +109,23 @@ public class AppUtils {
         return bm;
     }
 
+    /**
+     * 根据包名返回对应的应用图标
+     *
+     * @param context
+     * @param packName 包名
+     * @return
+     */
+    public static synchronized Drawable getIcon(Context context, String packName) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            ApplicationInfo appInfo = pm.getApplicationInfo(packName, PackageManager.GET_META_DATA);
+            //应用图标
+            return pm.getApplicationIcon(appInfo);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
