@@ -31,7 +31,7 @@
 
         <ImageView
             android:id="@+id/iv_splash_progress"
-            android:layout_width="438dp"
+            android:layout_width="573.5dp"
             android:layout_height="34.5dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="7dp"
@@ -47,22 +47,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="连接wifi"
+                android:layout_marginStart="5dp"
+                android:text="连接WIFI"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="65dp"
-                android:text="下载深光家长APP"
+                android:layout_marginStart="85dp"
+                android:text="下载应用"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="55dp"
+                android:layout_marginStart="75dp"
                 android:text="扫码绑定设备"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
@@ -70,8 +71,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
+                android:layout_marginStart="70dp"
                 android:text="选择孩子"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="85dp"
+                android:text="选择布局"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
@@ -192,9 +201,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginStart="20dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_marginStart="20dp"
         android:visibility="gone">
 
         <TextView
@@ -219,9 +228,9 @@
                 android:id="@+id/iv_qr_splash"
                 android:layout_width="185dp"
                 android:layout_height="185dp"
-                android:layout_marginEnd="60dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="22.5dp"
+                android:layout_marginEnd="60dp"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -239,10 +248,10 @@
                 android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/bind_code_text"
                 android:layout_width="70dp"
                 android:layout_height="25dp"
                 android:text="获取中"
-                android:id="@+id/bind_code_text"
                 android:textColor="#ffffffff"
                 android:textSize="18sp" />
 
@@ -250,15 +259,15 @@
                 android:id="@+id/btn_code_renew"
                 android:layout_width="63dp"
                 android:layout_height="23dp"
+                android:layout_gravity="top"
                 android:layout_marginLeft="23dp"
                 android:layout_marginTop="0dp"
                 android:background="@drawable/grade_white_bg"
                 android:gravity="center"
-                android:layout_gravity="top"
-                android:text="刷新"
                 android:letterSpacing="0.1"
+                android:text="刷新"
                 android:textColor="#ff3d7075"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
         </LinearLayout>
     </LinearLayout>
@@ -400,14 +409,12 @@
         android:layout_height="25dp"
         android:layout_gravity="end"
         android:layout_marginTop="40dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/wifi_oval_gray">
+        android:layout_marginEnd="40dp">
 
         <ImageView
             android:id="@+id/iv_wifi_module"
-            android:layout_width="16dp"
-            android:layout_height="12dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:src="@drawable/wifi_connect_big" />
     </FrameLayout>
 
