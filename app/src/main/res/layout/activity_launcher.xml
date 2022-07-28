@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fl_launcher"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/launcher_bg_new">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp2_launcher"
@@ -27,7 +28,7 @@
             android:id="@+id/ll_student_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_call_parent"
@@ -170,7 +171,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="86.5dp"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <FrameLayout
             android:layout_width="195dp"

@@ -274,8 +274,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         //将输入法重置
 //        getPresenter().resetInputType(this)
-        val newMode = LauncherApplication.getMMKV().decodeString("mode")!!
-        if (mode != newMode) {
+        val mmkv = LauncherApplication.getMMKV()
+        val newMode = mmkv.decodeString("mode")
+        if (newMode != null && mode != newMode) {
             mode = newMode
             if (mode == "child") {
                 iv_call_parent_child.visibility = View.VISIBLE
