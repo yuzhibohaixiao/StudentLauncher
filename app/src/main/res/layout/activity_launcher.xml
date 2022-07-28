@@ -11,11 +11,12 @@
 
     <ImageView
         android:id="@+id/iv_call_parent_child"
-        android:layout_width="51.5dp"
-        android:layout_height="61.5dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="18.5dp"
-        android:src="@drawable/call_parent_child" />
+        android:layout_width="71dp"
+        android:layout_height="77.5dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/call_parent_child"
+        android:visibility="gone" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -96,7 +97,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="24dp"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_main_top_child_launcher"

@@ -1048,8 +1048,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     )
             }
             //呼叫家长
-            R.id.iv_call_parent, R.id.iv_call_parent_child -> {
+            R.id.iv_call_parent -> {
                 getPresenter().showAVDialog(this)
+            }
+            R.id.iv_call_parent_child -> {
+                getPresenter().showChildAVDialog(this)
             }
             //个人中心
             R.id.iv_user_icon_new_launcher, R.id.tv_user_name_new_launcher
