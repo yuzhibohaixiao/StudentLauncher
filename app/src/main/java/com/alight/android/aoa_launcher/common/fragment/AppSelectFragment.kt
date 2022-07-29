@@ -54,7 +54,7 @@ class AppSelectFragment : BaseFragment(), View.OnClickListener {
             }
             //蒙氏启蒙
             R.id.iv_msqm_child_launcher -> {
-                getPresenter().startApp(requireContext(), "com.sagosago.World.googleplay")
+                getPresenter().startApp(requireContext(), "com.edokiacademy.montessoripreschool.huawei")
             }
             //绘本阅读
             R.id.iv_hbyd_child_launcher -> {
