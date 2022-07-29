@@ -512,7 +512,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         tv_skip_splash.visibility = View.VISIBLE
         rv_select_child_splash.visibility = View.GONE
         ll_progress_splash.visibility = View.GONE
-        fl_splash4.visibility = View.GONE
+        ll_splash5.visibility = View.GONE
     }
 
     private fun backNewUserSplash() {
