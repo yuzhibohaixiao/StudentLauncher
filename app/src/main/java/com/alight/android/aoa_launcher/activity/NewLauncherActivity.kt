@@ -287,7 +287,22 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 //幼教版Launcher
                 launcherPagerAdapter = LauncherPagerAdapter(this)
                 vp2_launcher.adapter = launcherPagerAdapter
-//            launcherPager2.currentItem = 0
+                fl_launcher.setBackgroundResource(R.drawable.child_launcher_bg)
+/*
+                Glide.with(this).load(R.drawable.child_launcher_bg).into(object :
+                    CustomTarget<Drawable>() {
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        transition: Transition<in Drawable>?
+                    ) {
+                        fl_launcher.background = resource
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+
+                })
+*/
             } else {
                 ll_student_top.visibility = View.VISIBLE
                 fl_student_main.visibility = View.VISIBLE
@@ -296,6 +311,21 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 vp2_launcher.visibility = View.GONE
                 //常规版Launcher
                 fl_launcher.setBackgroundResource(R.drawable.launcher_bg_new)
+/*
+                Glide.with(this).load(R.drawable.launcher_bg_new).into(object :
+                    CustomTarget<Drawable>() {
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        transition: Transition<in Drawable>?
+                    ) {
+                        fl_launcher.background = resource
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+
+                })
+*/
             }
         }
     }
