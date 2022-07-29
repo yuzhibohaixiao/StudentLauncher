@@ -60,8 +60,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 } else {
                     //资源文件
                     Glide.with(context)
-                        .load(R.mipmap.ic_launcher)
-                        .error(R.mipmap.ic_launcher)
+                        .load(R.mipmap.jxw_config_file)
                         .into(holder.getView(R.id.iv_app_icon_update_item))
                     holder.setText(
                         R.id.tv_app_code_update_item,
