@@ -683,20 +683,14 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
      */
     private fun setUpdateBtn(any: UpdateBean) {
         var needUpdate = false
-        any.data.forEach {
-            if (it.format == 1 && SPUtils.getData(
-                    "configVersion",
-                    1
-                ) as Int >= it.version_code
-                || AppUtils.getVersionCode(
-                    this,
-                    it.app_info.package_name
-                ) >= it.version_code
-                || (it.format == 3 && it.version_name == Build.DISPLAY)
+        for (position in 0 until any.data.size) {
+            val data = any.data[position]
+            Log.i(TAG, "setUpdateBtn: $data")
+            if (data.format == 1 && SPUtils.getData("configVersion",1) as Int >= data.version_code|| AppUtils.getVersionCode(this, data.app_info.package_name) >= data.version_code || (data.format == 3 && data.version_name == Build.DISPLAY)
             ) {
             } else {
                 needUpdate = true
-                return@forEach
+                break
             }
         }
         if (needUpdate) {
