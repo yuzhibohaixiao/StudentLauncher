@@ -1136,7 +1136,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
     }
 
-    fun showAVDialog(context: Context) {
+    fun showAVDialog(context: Context, interactionAbility: InteractionAbility?) {
         //音视频dialog
         val avDialog =
             CustomDialog(context, R.layout.dialog_home_av)
@@ -1156,7 +1156,13 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         }
         ar.setOnClickListener {
             avDialog.dismiss()
-            startAoaApp(context, 36, "/mine")
+            val startAoaApp = startAoaApp(context, 36, "/mine")
+            if (startAoaApp && interactionAbility != null) {
+                startInteractionWindow(
+                    interactionAbility,
+                    InteractionAbility.InteractiveMode.PEN_POINT
+                )
+            }
         }
         ivAudio.setOnClickListener {
             coroutineScopeIo.cancel()
@@ -1209,7 +1215,6 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             YoYo.with(Techniques.FadeOutDown)
                 .duration(700)
                 .playOn(llAv)
-
         }
         ivVideo.setOnClickListener {
             coroutineScopeIo.cancel()

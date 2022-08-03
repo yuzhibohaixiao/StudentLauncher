@@ -1084,7 +1084,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //呼叫家长
             R.id.iv_call_parent -> {
-                getPresenter().showAVDialog(this)
+                getPresenter().showAVDialog(this,interactionAbility)
             }
             R.id.iv_call_parent_child -> {
                 getPresenter().showChildAVDialog(this)
