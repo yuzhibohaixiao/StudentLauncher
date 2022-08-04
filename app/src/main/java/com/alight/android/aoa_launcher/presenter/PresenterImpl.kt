@@ -749,7 +749,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
 
         //强更标记
         var isStartOtaUpdate = mmkv.getBoolean("isStartOtaUpdate", false)
-        if (newOtaVersionName.isNotEmpty() && !localSystemVersionName.equals(newOtaVersionName)) {
+        if (newOtaVersionName.isNotEmpty() && !localSystemVersionName.equals(newOtaVersionName)) {//有ota更新
             intent.putExtra("source", "splash")
             activity.startActivity(intent)
         } else if (isStartOtaUpdate && isHaveSystemUpdate) {    //有强更新标记并且包含系统更新
@@ -759,6 +759,8 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             intent.putExtra("source", "onlySystemUpdate")
             activity.startActivity(intent)
         } else {
+            //没有更新
+            mmkv.encode("isStartOtaUpdate", false)
             EventBus.getDefault().post(SplashEvent.getInstance(true))
         }
 
