@@ -465,6 +465,7 @@ class QualityHorizontalAdapter :
     }
 
     @DelicateCoroutinesApi
+    @Synchronized
     fun resetAppNotifyAdapter() {
         GlobalScope.launch(Dispatchers.IO) {
             val appDatas = AppGetUtil.getAppData()
