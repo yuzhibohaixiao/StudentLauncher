@@ -166,6 +166,7 @@ public class UpdateService extends Service {
 
                 @Override
                 public void taskEnd(@NonNull DownloadTask task, @NonNull EndCause cause, @Nullable Exception realCause, @NonNull SpeedCalculator taskSpeed) {
+                    if (task.getInfo() == null) return;
                     int percent = (int) (((float) task.getInfo().getTotalOffset() / task.getInfo().getTotalLength()) * 100);
                     String totalSize = Util.humanReadableBytes(task.getInfo().getTotalLength(), true).toString();
 //                String size = totalSize + "(" + (int) percent + "%)";
