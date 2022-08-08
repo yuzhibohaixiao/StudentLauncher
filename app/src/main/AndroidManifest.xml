@@ -91,7 +91,6 @@
         <activity
             android:name=".activity.WifiActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
             android:screenOrientation="landscape">
 
         </activity>
@@ -123,7 +122,6 @@
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
             android:screenOrientation="landscape" />
         <activity
             android:name=".activity.PersonCenterActivity"
