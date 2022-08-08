@@ -5,7 +5,6 @@ import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseFragment
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
 import kotlinx.android.synthetic.main.fragment_app_select.view.*
-import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class AppSelectFragment : BaseFragment(), View.OnClickListener {
     override fun initData() {

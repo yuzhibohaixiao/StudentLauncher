@@ -48,10 +48,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_launcher.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -274,20 +271,26 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         //将输入法重置
 //        getPresenter().resetInputType(this)
+        setLauncherMode()
+    }
+
+    @Synchronized
+    private fun setLauncherMode() {
         val mmkv = LauncherApplication.getMMKV()
         val newMode = mmkv.decodeString("mode")
         if (newMode != null && mode != newMode) {
             mode = newMode
-            if (mode == "child") {
-                ll_student_top.visibility = View.GONE
-                fl_student_main.visibility = View.GONE
-                iv_call_parent_child.visibility = View.VISIBLE
-                ll_child_top.visibility = View.VISIBLE
-                vp2_launcher.visibility = View.VISIBLE
-                //幼教版Launcher
-                launcherPagerAdapter = LauncherPagerAdapter(this)
-                vp2_launcher.adapter = launcherPagerAdapter
-                fl_launcher.setBackgroundResource(R.drawable.child_launcher_bg)
+            CoroutineScope(Dispatchers.Main).launch {
+                if (mode == "child") {
+                    ll_student_top.visibility = View.GONE
+                    fl_student_main.visibility = View.GONE
+                    iv_call_parent_child.visibility = View.VISIBLE
+                    ll_child_top.visibility = View.VISIBLE
+                    vp2_launcher.visibility = View.VISIBLE
+                    //幼教版Launcher
+                    launcherPagerAdapter = LauncherPagerAdapter(this@NewLauncherActivity)
+                    vp2_launcher.adapter = launcherPagerAdapter
+                    fl_launcher.setBackgroundResource(R.drawable.child_launcher_bg)
 /*
                 Glide.with(this).load(R.drawable.child_launcher_bg).into(object :
                     CustomTarget<Drawable>() {
@@ -303,14 +306,14 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
                 })
 */
-            } else {
-                iv_call_parent_child.visibility = View.GONE
-                ll_child_top.visibility = View.GONE
-                vp2_launcher.visibility = View.GONE
-                ll_student_top.visibility = View.VISIBLE
-                fl_student_main.visibility = View.VISIBLE
-                //常规版Launcher
-                fl_launcher.setBackgroundResource(R.drawable.launcher_bg_new)
+                } else {
+                    iv_call_parent_child.visibility = View.GONE
+                    ll_child_top.visibility = View.GONE
+                    vp2_launcher.visibility = View.GONE
+                    ll_student_top.visibility = View.VISIBLE
+                    fl_student_main.visibility = View.VISIBLE
+                    //常规版Launcher
+                    fl_launcher.setBackgroundResource(R.drawable.launcher_bg_new)
 /*
                 Glide.with(this).load(R.drawable.launcher_bg_new).into(object :
                     CustomTarget<Drawable>() {
@@ -326,6 +329,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
                 })
 */
+                }
             }
         }
     }
@@ -1084,7 +1088,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             //呼叫家长
             R.id.iv_call_parent -> {
-                getPresenter().showAVDialog(this,interactionAbility)
+                getPresenter().showAVDialog(this, interactionAbility)
             }
             R.id.iv_call_parent_child -> {
                 getPresenter().showChildAVDialog(this)
