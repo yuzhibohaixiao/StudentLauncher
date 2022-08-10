@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:paddingTop="124dp">
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/iv_sxqm_child_launcher"
@@ -12,45 +11,37 @@
         android:layout_marginStart="54dp"
         android:src="@drawable/sxqm_child_launcher" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/iv_kxts_child_launcher"
-            android:layout_width="270dp"
-            android:layout_height="176dp"
-            android:src="@drawable/kxts_child_launcher" />
+    <ImageView
+        android:id="@+id/iv_kxts_child_launcher"
+        android:layout_width="270dp"
+        android:layout_height="176dp"
+        android:layout_marginStart="345dp"
+        android:layout_marginTop="15.5dp"
+        android:src="@drawable/kxts_child_launcher" />
 
-        <ImageView
-            android:id="@+id/iv_hbyd_child_launcher"
-            android:layout_width="270dp"
-            android:layout_height="176dp"
-            android:src="@drawable/hbyd_child_launcher" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/iv_hbyd_child_launcher"
+        android:layout_width="270dp"
+        android:layout_height="176dp"
+        android:layout_marginStart="345dp"
+        android:layout_marginTop="196.5dp"
+        android:src="@drawable/hbyd_child_launcher" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical">
+    <ImageView
+        android:id="@+id/iv_msqm_child_launcher"
+        android:layout_width="270dp"
+        android:layout_height="176dp"
+        android:layout_marginStart="635dp"
+        android:layout_marginTop="15.5dp"
+        android:src="@drawable/msqm_child_launcher" />
 
-        <ImageView
-            android:id="@+id/iv_msqm_child_launcher"
-            android:layout_width="270dp"
-            android:layout_height="176dp"
-            android:src="@drawable/msqm_child_launcher" />
+    <ImageView
+        android:id="@+id/iv_yzyx_child_launcher"
+        android:layout_width="270dp"
+        android:layout_height="176dp"
+        android:layout_marginStart="635dp"
+        android:layout_marginTop="196.5dp"
+        android:src="@drawable/yzyx_child_launcher" />
 
-        <ImageView
-            android:id="@+id/iv_yzyx_child_launcher"
-            android:layout_width="270dp"
-            android:layout_height="176dp"
-            android:src="@drawable/yzyx_child_launcher" />
-    </LinearLayout>
-
-
-</LinearLayout>
+</FrameLayout>

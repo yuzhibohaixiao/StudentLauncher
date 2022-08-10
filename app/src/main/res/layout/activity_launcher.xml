@@ -8,7 +8,8 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp2_launcher"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="122dp" />
 
     <ImageView
         android:id="@+id/iv_call_parent_child"
