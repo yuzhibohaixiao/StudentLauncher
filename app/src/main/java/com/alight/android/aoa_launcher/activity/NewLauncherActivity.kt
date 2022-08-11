@@ -1126,7 +1126,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 )
             }
             R.id.iv_ip_image -> {
-                audioAbility?.wakeup()
+                //由于容易误触，暂时取消语音唤醒
+//                audioAbility?.wakeup()
             }
             R.id.fl_wifi_module -> {
                 getPresenter().startWifiModule(false)
