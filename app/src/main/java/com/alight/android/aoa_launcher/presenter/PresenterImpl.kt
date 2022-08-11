@@ -1735,9 +1735,18 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 activity.finish()
             }
         }
+        val mmkv = LauncherApplication.getMMKV()
+        val newMode = mmkv.decodeString("mode")
+        if (newMode != null) {
+            if (newMode != "child") {
+                ivStudentModeSet.isSelected = true
+                ivChildModeSet.isSelected = false
+                tvChildModeSet.setTextColor(Color.parseColor("#50215558"))
+                tvStudentModeSet.setTextColor(Color.parseColor("#215558"))
+            }
+        }
         dialog.show()
     }
-
 
     /**
      * 更新解析器
