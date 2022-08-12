@@ -31,10 +31,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.networkbench.agent.impl.NBSAppAgent
 import kotlinx.android.synthetic.main.activity_splash.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -358,6 +355,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                             e: GlideException?, model: Any,
                             target: Target<Drawable>, isFirstResource: Boolean
                         ): Boolean {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                delay(2000L)
+                                loadQRCode(view, true)
+                            }
                             //加载失败
                             return false
                         }

@@ -202,15 +202,6 @@ object AccountUtil : LauncherProvider {
     override fun getQrCode(): ByteArray {
         val rep = service.getQrCode(DSN).execute()
         if (rep.isSuccessful()) {
-            var bodyStr = rep.body()?.string();
-            LogUtil.d("cdk bodyStr = $bodyStr")
-            val jsonObj = JsonParser.parseString(bodyStr).asJsonObject
-            val cod = jsonObj.get("code").asInt
-            if (cod >= 400) {
-                throw Exception(
-                    jsonObj.get("msg").asString
-                )
-            }
             return rep.body()!!.bytes()
         } else {
             throw TokenManagerException(
