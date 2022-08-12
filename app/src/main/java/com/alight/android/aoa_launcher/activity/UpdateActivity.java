@@ -49,6 +49,7 @@ import com.alight.android.aoa_launcher.utils.RxTimerUtil;
 import com.alight.android.aoa_launcher.utils.SPUtils;
 import com.alight.android.aoa_launcher.utils.StringUtils;
 import com.alight.android.aoa_launcher.utils.ToastUtils;
+import com.liulishuo.okdownload.DownloadTask;
 import com.tencent.mmkv.MMKV;
 
 import org.greenrobot.eventbus.EventBus;
@@ -1289,7 +1290,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         otaInstall = true;
                     }
                     if (status == File.DOWNLOAD_ERROR) {
-                        LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId()).cancel();
+                        DownloadTask downloadTask = LauncherApplication.Companion.getDownloadTaskHashMap().get(file.getId());
+                        if (downloadTask != null) {
+                            downloadTask.cancel();
+                        }
                         file.setStatus(File.DOWNLOAD_ERROR);
                     }
                 }
