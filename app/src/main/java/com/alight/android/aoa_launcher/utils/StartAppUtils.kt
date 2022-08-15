@@ -56,31 +56,34 @@ object StartAppUtils {
             var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
             var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
             var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
-            var startTime = playTimeBean.data.playtime.start_playtime
-            var endTime = playTimeBean.data.playtime.stop_playtime
-
-            for (it in playTimeBean.data.app_manage) {
-                if (it.app_info.package_name.isNotEmpty() && appPackName == it.app_info.package_name
-                ) {
-                    if ((it.app_permission == 3)) {
-                        ToastUtils.showLong(context, "该应用已被禁用")
-                        return
-                    } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
-                            startTime,
-                            endTime,
-                            sysTime
-                        )
+            if (playTimeBean.data != null) {
+                var startTime = playTimeBean.data.playtime.start_playtime
+                var endTime = playTimeBean.data.playtime.stop_playtime
+                for (it in playTimeBean.data.app_manage) {
+                    if (it.app_info.package_name!=null && appPackName == it.app_info.package_name
                     ) {
-                        //限时禁用
-                        ToastUtils.showLong(context, "该应用已被限时禁用")
-                        return
-                    }
-                    break
-                } else continue
+                        if ((it.app_permission == 3)) {
+                            ToastUtils.showLong(context, "该应用已被禁用")
+                            return
+                        } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
+                                startTime,
+                                endTime,
+                                sysTime
+                            )
+                        ) {
+                            //限时禁用
+                            ToastUtils.showLong(context, "该应用已被限时禁用")
+                            return
+                        }
+                        break
+                    } else continue
+                }
+                val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
+                context.startActivity(intent)
+            } else {
+                val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
+                context.startActivity(intent)
             }
-
-            val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
-            context.startActivity(intent)
         } catch (e: Exception) {
             ToastUtils.showShort(context, "该应用缺失，请安装后重试")
             e.printStackTrace()
