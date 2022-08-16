@@ -39,6 +39,7 @@ import com.alight.ahwcx.ahwsdk.abilities.InteractionAbility
 import com.alight.ahwcx.ahwsdk.abilities.PanelAbility
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.activity.LauncherActivity
+import com.alight.android.aoa_launcher.activity.NewLauncherActivity
 import com.alight.android.aoa_launcher.activity.UpdateActivity
 import com.alight.android.aoa_launcher.activity.WifiActivity
 import com.alight.android.aoa_launcher.application.LauncherApplication
@@ -1746,6 +1747,16 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             }
         }
         dialog.show()
+    }
+
+    /**
+     * 直接返回首页同时强转关闭当前页和首页外的其他页面资源
+     */
+    fun backLauncher(context: Context) {
+        var intent = Intent(context, NewLauncherActivity::class.java)
+        intent.flags =
+            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+        context.startActivity(intent)
     }
 
     /**

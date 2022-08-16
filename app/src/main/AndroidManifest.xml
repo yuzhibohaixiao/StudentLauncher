@@ -67,9 +67,10 @@
             android:value="540" />
 
         <activity
-            android:excludeFromRecents="true"
             android:name=".activity.NewLauncherActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:launchMode="standard"
             android:screenOrientation="landscape"
             android:theme="@style/theme_Launcher">
             <intent-filter>

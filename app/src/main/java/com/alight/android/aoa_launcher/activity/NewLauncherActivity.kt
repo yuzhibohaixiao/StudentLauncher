@@ -4,6 +4,7 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.content.*
 import android.content.Intent.ACTION_SHUTDOWN
+import android.content.pm.PackageManager
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
@@ -27,6 +28,7 @@ import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.base.BaseActivity
 import com.alight.android.aoa_launcher.common.bean.*
+import com.alight.android.aoa_launcher.common.broadcast.HomeWatcherReceiver
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.CheckUpdateEvent
 import com.alight.android.aoa_launcher.common.event.NetMessageEvent
@@ -122,6 +124,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     companion object {
         lateinit var mINetEvent: INetEvent
+//        var isRegister: Boolean = false
     }
 
     private val handler =
@@ -567,7 +570,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             netState = 0
         }
         initAbility()
-        initShutdownReceiver()
+        initReceiver()
         Log.i(TAG, "DSN: " + AccountUtil.getDSN())
         RxTimerUtil.interval(5000) {
             iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
@@ -576,13 +579,35 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //        getPresenter().resetInputType(this)
     }
 
-    private fun initShutdownReceiver() {
+    private var mHomeKeyReceiver: HomeWatcherReceiver? = null
+
+    private fun initReceiver() {
         if (shutdownReceiver == null) {
             shutdownReceiver = ShutdownReceiver()
             val intentFilter = IntentFilter()
             intentFilter.addAction(ACTION_SHUTDOWN)
             registerReceiver(shutdownReceiver, intentFilter)
         }
+        if (mHomeKeyReceiver == null) {
+            mHomeKeyReceiver = HomeWatcherReceiver()
+            val homeFilter = IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+            registerReceiver(mHomeKeyReceiver, homeFilter)
+//                isRegister = true
+        }
+        /*     val pm: PackageManager = packageManager
+             val intent = Intent()
+             intent.action = Intent.ACTION_CLOSE_SYSTEM_DIALOGS
+             val resolveInfos = pm.queryBroadcastReceivers(intent, 0)
+             if (resolveInfos == null || resolveInfos.isEmpty()) {*/
+        //查询到相应的BroadcastReceiver
+
+        /*  var isContains = false
+          resolveInfos.forEach {
+              if (it.activityInfo.name == HomeWatcherReceiver::class.java.name) {
+                  isContains = true
+                  return@forEach
+              }
+          }*/
     }
 
     inner class ShutdownReceiver : BroadcastReceiver() {
@@ -1159,6 +1184,19 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             audioAbility?.stopRecording()
     }
 
+    /* override fun onAttachedToWindow() {
+         this.window.setType(WindowManager.LayoutParams.TYPE_KEYGUARD)
+         super.onAttachedToWindow()
+     }
+
+     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+         if (KeyEvent.KEYCODE_HOME == keyCode) { //判断是否为home键
+             finish() //结束该activity
+             return true
+         }
+         return super.onKeyDown(keyCode, event)
+     }*/
+
     private fun showSelectUI(id: Int) {
         when (id) {
             R.id.tv_ar_launcher -> {
@@ -1480,5 +1518,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         abilityManager.onStop()
         EventBus.getDefault().unregister(this)
         unregisterReceiver(shutdownReceiver)
+        unregisterReceiver(mHomeKeyReceiver)
+//        isRegister = false
     }
 }

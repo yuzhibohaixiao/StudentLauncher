@@ -464,20 +464,14 @@ class QualityHorizontalAdapter :
         resetAppNotifyAdapter()
     }
 
-    @DelicateCoroutinesApi
-    @Synchronized
     fun resetAppNotifyAdapter() {
-        GlobalScope.launch(Dispatchers.IO) {
-            val appDatas = AppGetUtil.getAppData()
-            //过滤掉不需要的应用（素质拓展和系统应用）
-            val appFilter = appFilter(appDatas)
-            appList4.clear()
-            appList4.addAll(tempList)
-            appList4.addAll(appFilter)
-            GlobalScope.launch(Dispatchers.Main) {
-                notifyItemChanged(itemCount - 1)
-            }
-        }
+        val appDatas = AppGetUtil.getAppData()
+        //过滤掉不需要的应用（素质拓展和系统应用）
+        val appFilter = appFilter(appDatas)
+        appList4.clear()
+        appList4.addAll(tempList)
+        appList4.addAll(appFilter)
+        notifyItemChanged(itemCount - 1)
     }
 
     /**
