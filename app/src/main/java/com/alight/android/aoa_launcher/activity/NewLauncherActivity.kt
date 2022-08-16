@@ -91,7 +91,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var mUserId = -1
     private var mode = "student"
     private var isRefresh = false
-    private var heartCoroutineScope: CoroutineScope? = null
+    private var heartCoroutineScope: Job? = null
 
     private lateinit var launcherPagerAdapter: LauncherPagerAdapter
 
@@ -214,11 +214,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
          } else {
              onresumeFlag = true
          }*/
-    /*    if (!isRefresh) {
-            isRefresh = true
-            Log.i(TAG, "onResume: 未刷新")
-            return
-        }*/
+        /*    if (!isRefresh) {
+                isRefresh = true
+                Log.i(TAG, "onResume: 未刷新")
+                return
+            }*/
         Log.i(TAG, "onResume: 刷新了")
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
         Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
@@ -974,10 +974,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     private fun heartbeat() {
         if (!stopHeart) {
-            if (heartCoroutineScope == null) {
-                heartCoroutineScope = CoroutineScope(Dispatchers.IO)
-            }
-            heartCoroutineScope?.launch() {
+            heartCoroutineScope?.cancel()
+            heartCoroutineScope = GlobalScope.launch(Dispatchers.IO) {
                 getPresenter().getModel(Urls.HEART_BEAT, hashMapOf(), HeartBean::class.java)
                 //每15秒调用一次打点接口
                 delay(1000 * 15)
@@ -1550,9 +1548,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         super.onDestroy()
         abilityManager.onStop()
         EventBus.getDefault().unregister(this)
-        heartCoroutineScope?.cancel()
         unregisterReceiver(shutdownReceiver)
         unregisterReceiver(mHomeKeyReceiver)
+        heartCoroutineScope?.cancel()
 //        isRegister = false
     }
 }
