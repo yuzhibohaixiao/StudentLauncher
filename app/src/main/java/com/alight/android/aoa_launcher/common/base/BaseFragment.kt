@@ -32,7 +32,7 @@ abstract class BaseFragment : Fragment(), IContract.IView {
         super.onViewCreated(view, savedInstanceState)
         //初始化Presenter希望父类进行实现
         mPresenter = initPresenter()
-        mPresenter!!.onAttach(this)
+        mPresenter?.onAttach(this)
         initData()
     }
 

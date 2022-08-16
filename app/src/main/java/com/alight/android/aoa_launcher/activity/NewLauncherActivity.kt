@@ -31,6 +31,7 @@ import com.alight.android.aoa_launcher.common.bean.*
 import com.alight.android.aoa_launcher.common.broadcast.HomeWatcherReceiver
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.alight.android.aoa_launcher.common.event.CheckUpdateEvent
+import com.alight.android.aoa_launcher.common.event.HomeKeyEvent
 import com.alight.android.aoa_launcher.common.event.NetMessageEvent
 import com.alight.android.aoa_launcher.common.event.ParentControlEvent
 import com.alight.android.aoa_launcher.common.i.LauncherListener
@@ -89,6 +90,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var isFeatureAbilityInit = false
     private var mUserId = -1
     private var mode = "student"
+    private var isRefresh = false
+    private var heartCoroutineScope: CoroutineScope? = null
 
     private lateinit var launcherPagerAdapter: LauncherPagerAdapter
 
@@ -211,6 +214,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
          } else {
              onresumeFlag = true
          }*/
+    /*    if (!isRefresh) {
+            isRefresh = true
+            Log.i(TAG, "onResume: 未刷新")
+            return
+        }*/
+        Log.i(TAG, "onResume: 刷新了")
         val splashClose = SPUtils.getData("splashClose", false) as Boolean
         Log.i(TAG, "splashClose = $splashClose splashCloseFlag = $splashCloseFlag")
 
@@ -965,7 +974,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     private fun heartbeat() {
         if (!stopHeart) {
-            GlobalScope.launch(Dispatchers.IO) {
+            if (heartCoroutineScope == null) {
+                heartCoroutineScope = CoroutineScope(Dispatchers.IO)
+            }
+            heartCoroutineScope?.launch() {
                 getPresenter().getModel(Urls.HEART_BEAT, hashMapOf(), HeartBean::class.java)
                 //每15秒调用一次打点接口
                 delay(1000 * 15)
@@ -1180,8 +1192,14 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
     override fun onPause() {
         super.onPause()
+        /*if (!isRefresh) {
+            Log.i(TAG, "onPause: 未刷新")
+            return
+        }*/
+        Log.i(TAG, "onPause: 刷新了")
         if (audioInitSuccessful)
             audioAbility?.stopRecording()
+
     }
 
     /* override fun onAttachedToWindow() {
@@ -1483,6 +1501,21 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     /**
+     * home监听
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onHomeKeyEvent(event: HomeKeyEvent) {
+        var isForeground =
+            CommonUtil.isForeground(this@NewLauncherActivity, NewLauncherActivity::class.java.name)
+        if (isForeground) {
+            isRefresh = false
+        } else {
+            isRefresh = true
+        }
+
+    }
+
+    /**
      * 进行检测更新
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1517,6 +1550,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         super.onDestroy()
         abilityManager.onStop()
         EventBus.getDefault().unregister(this)
+        heartCoroutineScope?.cancel()
         unregisterReceiver(shutdownReceiver)
         unregisterReceiver(mHomeKeyReceiver)
 //        isRegister = false
