@@ -516,6 +516,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 //                familyAdapter.setOnlineState(any.data)
             }
             is DeviceRelationBean -> {
+                //用户解绑成功
 //                if (any.code == 200) {
                 //重新绑定
                 ToastUtils.showShort(this, any.data)
@@ -523,6 +524,9 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 SPUtils.syncPutData("rebinding", true)
                 //让引导再次开启
                 SPUtils.syncPutData("splashClose", false)
+                //清除通知中心
+                val mmkv = LauncherApplication.getMMKV()
+                mmkv.putString("notifyInfo", "")
                 finish()
                 var intent = Intent(this, SplashActivity::class.java)
                 startActivity(intent)
