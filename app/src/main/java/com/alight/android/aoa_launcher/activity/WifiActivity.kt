@@ -538,6 +538,9 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
             if (savePwd) {
                 wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
             }
+            Log.i(TAG, "wifiBean.state: " + wifiBean.state)
+            Log.i(TAG, "wifiConfiguration $wifiConfiguration")
+            Log.i(TAG, "savePwd $savePwd")
             if (wifiBean.state == 1) {
                 //已连接的wifi
             } else if (!getWifiCipher(wifiBean.capabilities)) {
@@ -555,24 +558,30 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private var customDialog: CustomDialog? = null
+
     /**
      * 忽略网络的确认框
      */
     private fun showWifiIgnoreDialog(wifiBean: WifiBean) {
-        val customDialog = CustomDialog(this, R.layout.dialog_wifi_ignore)
-        val tvWifiName = customDialog.findViewById<TextView>(R.id.tv_wifi_name_dialog)
-        tvWifiName.text = wifiBean.wifiName
-        customDialog.findViewById<TextView>(R.id.confirm).setOnClickListener {
-            val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
-            mWifiAdmin?.removeWifi(wifiConfiguration?.networkId!!)
-            SPUtils.syncPutData("wifi" + wifiBean.wifiName, false)
-            ToastUtils.showShort(LauncherApplication.getContext(), "正在忽略此网络并断开连接")
-            customDialog.dismiss()
+        if (customDialog == null) {
+            customDialog = CustomDialog(this, R.layout.dialog_wifi_ignore)
+            val tvWifiName = customDialog?.findViewById<TextView>(R.id.tv_wifi_name_dialog)
+            tvWifiName?.text = wifiBean.wifiName
+            customDialog?.findViewById<TextView>(R.id.confirm)?.setOnClickListener {
+                val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
+                mWifiAdmin?.removeWifi(wifiConfiguration?.networkId!!)
+                SPUtils.syncPutData("wifi" + wifiBean.wifiName, false)
+                ToastUtils.showShort(LauncherApplication.getContext(), "正在忽略此网络并断开连接")
+                customDialog?.dismiss()
+            }
+            customDialog?.findViewById<TextView>(R.id.cancel)?.setOnClickListener {
+                customDialog?.dismiss()
+            }
+        } else {
+            customDialog?.cancel()
+            customDialog?.show()
         }
-        customDialog.findViewById<TextView>(R.id.cancel).setOnClickListener {
-            customDialog.dismiss()
-        }
-        customDialog.show()
     }
 
     private fun openWifiAndScan() {
