@@ -61,7 +61,7 @@ object StartAppUtils {
                     var startTime = playTimeBean.data.playtime.start_playtime
                     var endTime = playTimeBean.data.playtime.stop_playtime
                     for (it in playTimeBean.data.app_manage) {
-                        if (it.app_info.package_name.isNullOrEmpty() && appPackName == it.app_info.package_name
+                        if (it.app_info != null && it.app_info.package_name.isNotEmpty() && appPackName == it.app_info.package_name
                         ) {
                             if ((it.app_permission == 3)) {
                                 CoroutineScope(Dispatchers.Main).launch {
@@ -121,7 +121,7 @@ object StartAppUtils {
                 var endTime = playTimeBean.data.playtime.stop_playtime
 
                 playTimeBean.data.app_manage.forEach {
-                    if (it.app_info.package_name.isNullOrEmpty() && packName == it.app_info.package_name && className == it.class_name && (params == null || params.isEmpty() || params.values.indexOf(
+                    if (it.app_info != null && it.app_info.package_name.isNotEmpty() && packName == it.app_info.package_name && className == it.class_name && (params == null || params.isEmpty() || params.values.indexOf(
                             it.args
                         ) != -1)
                     ) {
