@@ -7,8 +7,8 @@ import com.alight.android.aoa_launcher.application.LauncherApplication
 import com.alight.android.aoa_launcher.common.bean.PlayTimeBean
 import com.alight.android.aoa_launcher.common.constants.AppConstants
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -47,42 +47,48 @@ object StartAppUtils {
      */
     fun startApp(context: Context, appPackName: String) {
         try {
-            val mmkv = LauncherApplication.getMMKV()
-            val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
-            val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
+            CoroutineScope(Dispatchers.IO).launch {
+                val mmkv = LauncherApplication.getMMKV()
+                val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
+                val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
 
-            var calendar = Calendar.getInstance()
-            calendar.timeZone = TimeZone.getDefault();//默认当前时区
-            var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
-            var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
-            var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
-            if (playTimeBean.data != null) {
-                var startTime = playTimeBean.data.playtime.start_playtime
-                var endTime = playTimeBean.data.playtime.stop_playtime
-                for (it in playTimeBean.data.app_manage) {
-                    if (it.app_info.package_name!=null && appPackName == it.app_info.package_name
-                    ) {
-                        if ((it.app_permission == 3)) {
-                            ToastUtils.showLong(context, "该应用已被禁用")
-                            return
-                        } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
-                                startTime,
-                                endTime,
-                                sysTime
-                            )
+                var calendar = Calendar.getInstance()
+                calendar.timeZone = TimeZone.getDefault();//默认当前时区
+                var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
+                var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
+                var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
+                if (playTimeBean.data != null) {
+                    var startTime = playTimeBean.data.playtime.start_playtime
+                    var endTime = playTimeBean.data.playtime.stop_playtime
+                    for (it in playTimeBean.data.app_manage) {
+                        if (it.app_info.package_name.isNullOrEmpty() && appPackName == it.app_info.package_name
                         ) {
-                            //限时禁用
-                            ToastUtils.showLong(context, "该应用已被限时禁用")
-                            return
-                        }
-                        break
-                    } else continue
+                            if ((it.app_permission == 3)) {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    ToastUtils.showLong(context, "该应用已被禁用")
+                                }
+                                return@launch
+                            } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
+                                    startTime,
+                                    endTime,
+                                    sysTime
+                                )
+                            ) {
+                                //限时禁用
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    ToastUtils.showLong(context, "该应用已被限时禁用")
+                                }
+                                return@launch
+                            }
+                            break
+                        } else continue
+                    }
+                    val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
+                    context.startActivity(intent)
+                } else {
+                    val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
+                    context.startActivity(intent)
                 }
-                val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
-                context.startActivity(intent)
-            } else {
-                val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
-                context.startActivity(intent)
             }
         } catch (e: Exception) {
             ToastUtils.showShort(context, "该应用缺失，请安装后重试")
@@ -101,60 +107,66 @@ object StartAppUtils {
         params: Map<String, Any>?
     ) {
         try {
-            val mmkv = LauncherApplication.getMMKV()
-            val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
-            val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
+            CoroutineScope(Dispatchers.IO).launch {
+                val mmkv = LauncherApplication.getMMKV()
+                val playTimeJson = mmkv.decodeString(AppConstants.PLAY_TIME)
+                val playTimeBean = Gson().fromJson(playTimeJson, PlayTimeBean::class.java)
 
-            var calendar = Calendar.getInstance()
-            calendar.timeZone = TimeZone.getDefault();//默认当前时区
-            var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
-            var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
-            var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
-            var startTime = playTimeBean.data.playtime.start_playtime
-            var endTime = playTimeBean.data.playtime.stop_playtime
+                var calendar = Calendar.getInstance()
+                calendar.timeZone = TimeZone.getDefault();//默认当前时区
+                var hour = calendar.get(Calendar.HOUR_OF_DAY)// 获取当前小时
+                var minute = calendar.get(Calendar.MINUTE)// 获取当前分钟
+                var sysTime = "$hour:" + if (minute >= 10) minute else "0$minute"
+                var startTime = playTimeBean.data.playtime.start_playtime
+                var endTime = playTimeBean.data.playtime.stop_playtime
 
-            playTimeBean.data.app_manage.forEach {
-                if (it.app_info.package_name.isNotEmpty() && packName == it.app_info.package_name && className == it.class_name && (params == null || params.isEmpty() || params.values.indexOf(
-                        it.args
-                    ) != -1)
-                ) {
-                    if ((it.app_permission == 3)) {
-                        ToastUtils.showLong(context, "该应用已被禁用")
-                        return@startActivity
-                    } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
-                            startTime,
-                            endTime,
-                            sysTime
-                        )
+                playTimeBean.data.app_manage.forEach {
+                    if (it.app_info.package_name.isNullOrEmpty() && packName == it.app_info.package_name && className == it.class_name && (params == null || params.isEmpty() || params.values.indexOf(
+                            it.args
+                        ) != -1)
                     ) {
-                        //限时禁用
-                        ToastUtils.showLong(context, "该应用已被限时禁用")
-                        return@startActivity
+                        if ((it.app_permission == 3)) {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                ToastUtils.showLong(context, "该应用已被禁用")
+                            }
+                            return@launch
+                        } else if (it.app_permission == 2 && !TimeUtils.inTimeInterval(
+                                startTime,
+                                endTime,
+                                sysTime
+                            )
+                        ) {
+                            //限时禁用
+                            CoroutineScope(Dispatchers.Main).launch {
+                                ToastUtils.showLong(context, "该应用已被限时禁用")
+                            }
+                            return@launch
+                        }
+                        return@forEach
                     }
-                    return@forEach
                 }
-            }
 
-            val intent = Intent()
-            val componentName =
-                ComponentName(packName, className)
-            params?.forEach {
-                when (it.value) {
-                    is String -> {
-                        intent.putExtra(it.key, it.value.toString())
-                    }
-                    is Boolean -> {
-                        intent.putExtra(it.key, it.value as? Boolean)
-                    }
-                    is Int -> {
-                        intent.putExtra(it.key, it.value as? Int)
+                val intent = Intent()
+                val componentName =
+                    ComponentName(packName, className)
+                params?.forEach {
+                    when (it.value) {
+                        is String -> {
+                            intent.putExtra(it.key, it.value.toString())
+                        }
+                        is Boolean -> {
+                            intent.putExtra(it.key, it.value as? Boolean)
+                        }
+                        is Int -> {
+                            intent.putExtra(it.key, it.value as? Int)
+                        }
                     }
                 }
+                intent.component = componentName
+                context.startActivity(intent)
             }
-            intent.component = componentName
-            context.startActivity(intent)
         } catch (e: java.lang.Exception) {
-            GlobalScope.launch(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 ToastUtils.showLong(context, "该应用正在开发中，敬请期待！")
             }
             e.printStackTrace()
