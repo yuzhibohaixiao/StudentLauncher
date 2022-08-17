@@ -83,6 +83,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             UpdateBean::class.java
         )
         iv_wifi_icon.setImageResource(getPresenter().getCurrentWifiPersonDrawable(this))
+        UpdateActivity.selectPage = 0
     }
 
     private fun initWifiState() {
@@ -686,7 +687,13 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         for (position in 0 until any.data.size) {
             val data = any.data[position]
             Log.i(TAG, "setUpdateBtn: $data")
-            if (data.format == 1 && SPUtils.getData("configVersion",1) as Int >= data.version_code|| AppUtils.getVersionCode(this, data.app_info.package_name) >= data.version_code || (data.format == 3 && data.version_name == Build.DISPLAY)
+            if (data.format == 1 && SPUtils.getData(
+                    "configVersion",
+                    1
+                ) as Int >= data.version_code || AppUtils.getVersionCode(
+                    this,
+                    data.app_info.package_name
+                ) >= data.version_code || (data.format == 3 && data.version_name == Build.DISPLAY)
             ) {
             } else {
                 needUpdate = true

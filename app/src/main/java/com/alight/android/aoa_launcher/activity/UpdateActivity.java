@@ -1,5 +1,6 @@
 package com.alight.android.aoa_launcher.activity;
 
+import static com.alight.android.aoa_launcher.common.constants.AppConstants.AHWCX_PACKAGE_NAME;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.LAUNCHER_PACKAGE_NAME;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
@@ -13,7 +14,9 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.os.StatFs;
 import android.util.Log;
 import android.view.View;
@@ -147,7 +150,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     //已安装的系统应用个数
     private int installedSystemAppNumber;
 
+    public static int selectPage;
+
     @Override
+
     public void initData() {
         EventBus.getDefault().register(this);
         systemAppList = (ArrayList<UpdateBeanData>) getIntent().getSerializableExtra("systemApp");
@@ -207,6 +213,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             tvOtaApp.setVisibility(View.GONE);
             tvOtherApp.setVisibility(View.GONE);
             setSelectRefreshUI(tvSystemApp);
+            selectPage = 1;
         } else {
             isShowDialog = true;
         }
@@ -232,6 +239,16 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         //开始强更流程
         if (isStartOtaUpdate && !isHaveOtaUpdate && !StringUtils.isEmpty(source)) {
             startForceUpdate();
+        }
+        if (selectPage == 1) {
+            setSelectRefreshUI(tvSystemApp);
+        } else if (selectPage == 2) {
+            setSelectRefreshUI(tvOtherApp);
+            if (otherList.size() == 0) {
+                getData(2);
+                otherAdapter.setNewInstance(otherList);
+                otherAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -272,6 +289,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     public void onGetUpdateEvent(UpdateEvent updateEvent) {
         String packageName = updateEvent.packageName;
         refreshInstallState(packageName);
+       /* if (packageName.equals(AHWCX_PACKAGE_NAME) && selectPage == 1) {
+            setSelectRefreshUI(tvSystemApp);
+        }*/
     }
 
     private void refreshInstallState(String packageName) {
@@ -914,6 +934,27 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvUpdating = findViewById(R.id.tv_updating);
     }
 
+/*
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        switch (selectPage) {
+            case 0: {
+                setSelectRefreshUI(tvOtaApp);
+                break;
+            }
+            case 1: {
+                setSelectRefreshUI(tvSystemApp);
+                break;
+            }
+//            case 2: {
+//                setSelectRefreshUI(tvOtherApp);
+//                break;
+//            }
+        }
+    }
+*/
+
     @Nullable
     @Override
     public PresenterImpl initPresenter() {
@@ -945,9 +986,11 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.tv_ota_app:
                 setSelectRefreshUI(tvOtaApp);
+                selectPage = 0;
                 break;
             case R.id.tv_system_app:
                 setSelectRefreshUI(tvSystemApp);
+                selectPage = 1;
                 break;
             case R.id.tv_other_app:
                 setSelectRefreshUI(tvOtherApp);
@@ -956,6 +999,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     otherAdapter.setNewInstance(otherList);
                     otherAdapter.notifyDataSetChanged();
                 }
+                selectPage = 2;
                 break;
             //开始下载
             case R.id.tv_update_all:

@@ -558,29 +558,29 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private var customDialog: CustomDialog? = null
+    private var ignoreDialog: CustomDialog? = null
 
     /**
      * 忽略网络的确认框
      */
     private fun showWifiIgnoreDialog(wifiBean: WifiBean) {
-        if (customDialog == null) {
-            customDialog = CustomDialog(this, R.layout.dialog_wifi_ignore)
-            val tvWifiName = customDialog?.findViewById<TextView>(R.id.tv_wifi_name_dialog)
+        if (ignoreDialog == null) {
+            ignoreDialog = CustomDialog(this, R.layout.dialog_wifi_ignore)
+            val tvWifiName = ignoreDialog?.findViewById<TextView>(R.id.tv_wifi_name_dialog)
             tvWifiName?.text = wifiBean.wifiName
-            customDialog?.findViewById<TextView>(R.id.confirm)?.setOnClickListener {
+            ignoreDialog?.findViewById<TextView>(R.id.confirm)?.setOnClickListener {
                 val wifiConfiguration = mWifiAdmin?.IsExsits(wifiBean.wifiName)
                 mWifiAdmin?.removeWifi(wifiConfiguration?.networkId!!)
                 SPUtils.syncPutData("wifi" + wifiBean.wifiName, false)
                 ToastUtils.showShort(LauncherApplication.getContext(), "正在忽略此网络并断开连接")
-                customDialog?.dismiss()
+                ignoreDialog?.dismiss()
             }
-            customDialog?.findViewById<TextView>(R.id.cancel)?.setOnClickListener {
-                customDialog?.dismiss()
+            ignoreDialog?.findViewById<TextView>(R.id.cancel)?.setOnClickListener {
+                ignoreDialog?.dismiss()
             }
         } else {
-            customDialog?.cancel()
-            customDialog?.show()
+            ignoreDialog?.cancel()
+            ignoreDialog?.show()
         }
     }
 
