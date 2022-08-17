@@ -4,7 +4,6 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.content.*
 import android.content.Intent.ACTION_SHUTDOWN
-import android.content.pm.PackageManager
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
@@ -272,11 +271,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         splashCloseFlag = false
         qualityHorizontalAdapter?.resetAppNotifyAdapter()
         iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
-        CoroutineScope(Dispatchers.IO).launch {
+       /* CoroutineScope(Dispatchers.IO).launch {
             delay(3000)
             //放开onResume限制
             onresumeFlag = false
-        }
+        }*/
         //每次回首页调用内存清理
         if (isFeatureAbilityInit) {
             featureAbility?.startTaskMemoryClean()
