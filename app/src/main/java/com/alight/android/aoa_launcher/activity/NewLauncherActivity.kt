@@ -192,7 +192,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         iv_av_launcher.setOnClickListener(this)
         tv_book_click.setOnClickListener(this)
         fl_classroom_sync.setOnClickListener(this)
-        iv_ip_image.setOnClickListener(this)
+//        iv_ip_image.setOnClickListener(this)
         fl_wifi_module.setOnClickListener(this)
         iv_call_parent_child.setOnClickListener(this)
 
@@ -1160,10 +1160,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     selectBook.params
                 )
             }
-            R.id.iv_ip_image -> {
+//            R.id.iv_ip_image -> {
                 //由于容易误触，暂时取消语音唤醒
 //                audioAbility?.wakeup()
-            }
+//            }
             R.id.fl_wifi_module -> {
                 getPresenter().startWifiModule(false)
             }
