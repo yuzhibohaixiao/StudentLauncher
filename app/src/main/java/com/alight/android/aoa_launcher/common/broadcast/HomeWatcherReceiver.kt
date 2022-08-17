@@ -21,6 +21,7 @@ class HomeWatcherReceiver : BroadcastReceiver() {
     private val SYSTEM_DIALOG_REASON_ASSIST = "assist" //某些三星手机的程序列表键
     private var isForeground = false
 
+    @Synchronized
     override fun onReceive(context: Context, intent: Intent) {
         CoroutineScope(Dispatchers.IO).launch {
             val action = intent.action

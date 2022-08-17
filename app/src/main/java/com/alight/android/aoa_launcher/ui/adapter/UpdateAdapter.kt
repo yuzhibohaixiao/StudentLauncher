@@ -264,6 +264,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
     }
 
     private fun getIcon(packName: String): Drawable? {
+        if (packName.isEmpty()) return null
         val pm: PackageManager = context.packageManager
         try {
             var appInfo = pm.getApplicationInfo(packName, PackageManager.GET_META_DATA)
