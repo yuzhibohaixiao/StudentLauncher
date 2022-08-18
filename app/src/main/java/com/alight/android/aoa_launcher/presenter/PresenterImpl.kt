@@ -1020,7 +1020,9 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
             }
 
             val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
-            context.startActivity(intent)
+            if (intent != null) {
+                context.startActivity(intent)
+            }
         } catch (e: Exception) {
             ToastUtils.showShort(context, "该应用缺失，请安装后重试")
             e.printStackTrace()

@@ -84,10 +84,14 @@ object StartAppUtils {
                         } else continue
                     }
                     val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
-                    context.startActivity(intent)
+                    if (intent != null) {
+                        context.startActivity(intent)
+                    }
                 } else {
                     val intent = context.packageManager.getLaunchIntentForPackage(appPackName)
-                    context.startActivity(intent)
+                    if (intent != null) {
+                        context.startActivity(intent)
+                    }
                 }
             }
         } catch (e: Exception) {

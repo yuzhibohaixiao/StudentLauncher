@@ -20,6 +20,7 @@ class HomeWatcherReceiver : BroadcastReceiver() {
     private val SYSTEM_DIALOG_REASON_LOCK = "lock" //锁屏键
     private val SYSTEM_DIALOG_REASON_ASSIST = "assist" //某些三星手机的程序列表键
     private var isForeground = false
+    private var isClear = false
 
     @Synchronized
     override fun onReceive(context: Context, intent: Intent) {
@@ -52,8 +53,13 @@ class HomeWatcherReceiver : BroadcastReceiver() {
 
     private fun backLauncher(context: Context) {
         var intent = Intent(context, NewLauncherActivity::class.java)
+//        if (isClear) {
         intent.flags =
             Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+//        } else {
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) //清除任务栈中的所有activity
+//            isClear = true
+//        }
         context.startActivity(intent)
     }
 }
