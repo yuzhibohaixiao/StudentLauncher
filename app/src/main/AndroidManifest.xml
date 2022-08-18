@@ -50,8 +50,9 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
+        tools:replace="android:allowBackup"
         android:name=".application.LauncherApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher_new"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -80,14 +81,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+<!--
             <intent-filter>
                 <data android:scheme="tingyun.42759" />
-                <!--                &lt;!&ndash;请将 scheme 中的“tingyun.xxxx”替换为听云报表设置页面中的 URL Scheme&ndash;&gt;-->
+                &lt;!&ndash;                &lt;!&ndash;请将 scheme 中的“tingyun.xxxx”替换为听云报表设置页面中的 URL Scheme&ndash;&gt;&ndash;&gt;
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
+-->
         </activity>
         <activity
             android:name=".activity.WifiActivity"

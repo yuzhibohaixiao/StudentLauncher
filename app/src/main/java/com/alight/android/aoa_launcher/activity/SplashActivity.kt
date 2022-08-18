@@ -29,7 +29,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.networkbench.agent.impl.NBSAppAgent
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.*
 import okhttp3.RequestBody
@@ -423,7 +422,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                                     try {
                                         GlobalScope.launch(Dispatchers.IO) {
                                             val tokenPair = allUser[position]
-                                            NBSAppAgent.setUserIdentifier(tokenPair.userId.toString())
+//                                            NBSAppAgent.setUserIdentifier(tokenPair.userId.toString())
                                             SPUtils.syncPutData(
                                                 AppConstants.USER_ID,
                                                 tokenPair.userId

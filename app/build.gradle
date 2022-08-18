@@ -3,9 +3,10 @@ import java.util.regex.Pattern
 
 plugins {
     id 'com.android.application'
+    id 'com.aliyun.ams.emas-services'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
-    id 'newlens'
+//    id 'newlens'
 }
 
 def releaseTime() {
@@ -185,6 +186,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    implementation "com.aliyun.dpa:oss-android-sdk:2.9.5"
+    implementation('com.aliyun.ams:alicloud-android-ha-adapter:1.1.5.1-open')
+    implementation('com.aliyun.ams:alicloud-android-ha-crashreporter:1.2.5')
+
     //utils
 //    implementation 'com.blankj:utilcodex:1.29.0'
 
@@ -241,9 +246,9 @@ dependencies {
     implementation 'com.github.xuexiangjys.XUpdateAPI:xupdate-downloader-aria:1.0.0'
 
     //听云
-    implementation "com.networkbench:tingyun-ea-agent-android:$tingyun_sdk_version"
+//    implementation "com.networkbench:tingyun-ea-agent-android:$tingyun_sdk_version"
     //听云采集native carsh 需集成此包
-    implementation "com.networkbench.newlens.agent.android2:nbs.newlens.nativecrash:$tingyun_ndk_version"
+//    implementation "com.networkbench.newlens.agent.android2:nbs.newlens.nativecrash:$tingyun_ndk_version"
 
     //动态权限获取库
     implementation 'com.permissionx.guolindev:permissionx:1.4.0'
