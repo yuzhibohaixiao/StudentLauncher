@@ -225,10 +225,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         val rebinding = SPUtils.getData("rebinding", false) as Boolean
         if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || (rebinding && !splashClose)) {
-            /*  ToastUtils.showShort(
-                  this,
-                  "展示引导页 $splashClose $splashCloseFlag ${tokenPairCache.isNullOrEmpty()} $rebinding"
-              )*/
+            ToastUtils.showShort(
+                this,
+                "展示引导页 $splashClose $splashCloseFlag ${tokenPairCache.isNullOrEmpty()} $rebinding"
+            )
             Log.i(TAG, "展示引导页")
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
@@ -237,7 +237,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             if (audioInitSuccessful) {
                 audioAbility?.startRecording()
             }
-            getPresenter().sendMenuEnableBroadcast(this, true)
+//            getPresenter().sendMenuEnableBroadcast(this, true)
             /*if (!splashCloseFlag && !guideUserUpdate)  //检测系统更新
             {
                 getPresenter().getModel(Urls.UPDATE, hashMapOf(), UpdateBean::class.java)
@@ -271,11 +271,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         splashCloseFlag = false
         qualityHorizontalAdapter?.resetAppNotifyAdapter()
         iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
-       /* CoroutineScope(Dispatchers.IO).launch {
-            delay(3000)
-            //放开onResume限制
-            onresumeFlag = false
-        }*/
         //每次回首页调用内存清理
         if (isFeatureAbilityInit) {
             featureAbility?.startTaskMemoryClean()
@@ -1007,7 +1002,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     mapOf("StartArgs" to "keben")       //课本指读
 //                    mapOf("StartArgs" to "huiben")    //绘本指读
                 )
-                if (startActivity)
+                if (startActivity && interactionAbility != null)
                     getPresenter().startInteractionWindow(
                         interactionAbility!!,
                         InteractionAbility.InteractiveMode.PEN_POINT
@@ -1016,7 +1011,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //查单词
             R.id.iv_query_word -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 135, "/home")
-                if (startAoaApp)
+                if (startAoaApp && panelAbility != null)
                     getPresenter().startInteractionWindowNoAnim(
                         panelAbility!!,
                         PanelAbility.TouchMode.PEN_MODE
@@ -1025,7 +1020,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //查字词
             R.id.iv_chinese_words -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 134, "/home")
-                if (startAoaApp)
+                if (startAoaApp && panelAbility != null)
                     getPresenter().startInteractionWindowNoAnim(
                         panelAbility!!,
                         PanelAbility.TouchMode.PEN_MODE
@@ -1034,7 +1029,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //翻译-AOA翻译
             R.id.iv_english_translation -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 138, "/app/138/home")
-                if (startAoaApp)
+                if (startAoaApp && panelAbility != null)
                     getPresenter().startInteractionWindowNoAnim(
                         panelAbility!!,
                         PanelAbility.TouchMode.PEN_MODE
@@ -1043,7 +1038,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //求助老师-AOA 的远程辅导页面
             R.id.tv_seek_help_launcher -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 140, "/home/140")
-                if (startAoaApp)
+                if (startAoaApp && interactionAbility != null)
                     getPresenter().startInteractionWindow(
                         interactionAbility!!,
                         InteractionAbility.InteractiveMode.PEN_POINT
@@ -1053,7 +1048,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //答题-AOA搜题 题目查询
             R.id.iv_title_query -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 139, "/apps/139/main")
-                if (startAoaApp)
+                if (startAoaApp && panelAbility != null)
                     getPresenter().startInteractionWindowNoAnim(
                         panelAbility!!,
                         PanelAbility.TouchMode.PEN_MODE
@@ -1076,7 +1071,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //口算批改
             R.id.iv_oral_correction -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 142, "/app/142/home")
-                if (startAoaApp)
+                if (startAoaApp && panelAbility != null)
                     getPresenter().startInteractionWindowNoAnim(
                         panelAbility!!,
                         PanelAbility.TouchMode.PEN_MODE
@@ -1085,7 +1080,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //语文作文批改
             R.id.iv_article_correction -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 143, "/app/143/home")
-                if (startAoaApp)
+                if (startAoaApp && panelAbility != null)
                     getPresenter().startInteractionWindowNoAnim(
                         panelAbility!!,
                         PanelAbility.TouchMode.PEN_MODE
@@ -1103,7 +1098,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             //收藏夹-AOA收藏夹
             R.id.iv_favorites -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 141, "/app/141/home")
-                if (startAoaApp)
+                if (startAoaApp && interactionAbility != null)
                     getPresenter().startInteractionWindow(
                         interactionAbility!!,
                         InteractionAbility.InteractiveMode.PEN_POINT
@@ -1114,7 +1109,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             R.id.iv_study_plan
             -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 33, "/home")
-                if (startAoaApp)
+                if (startAoaApp && interactionAbility != null)
                     getPresenter().startInteractionWindow(
                         interactionAbility!!,
                         InteractionAbility.InteractiveMode.PEN_POINT
@@ -1160,7 +1155,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 )
             }
 //            R.id.iv_ip_image -> {
-                //由于容易误触，暂时取消语音唤醒
+            //由于容易误触，暂时取消语音唤醒
 //                audioAbility?.wakeup()
 //            }
             R.id.fl_wifi_module -> {
@@ -1295,22 +1290,23 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                             className: String?,
                             params: Map<String, Any>?
                         ) {
-                            if (!StringUtils.isEmpty(className) && params != null) {
-                                StartAppUtils.startActivity(
-                                    this@NewLauncherActivity,
-                                    packName,
-                                    className!!,
-                                    params
-                                )
-                            } else {
-                                StartAppUtils.startApp(this@NewLauncherActivity, packName)
-                            }
-                            if (StartAppUtils.isNeedStopTouchPoint(packName) && touchAbilityInitSuccessful) {
-                                touchAbility?.disableDisorderlyPointChecker()
-                                Log.i(TAG, "乱点监控被禁用 disableDisorderlyPointChecker: ")
+                            CoroutineScope(Dispatchers.IO).launch {
+                                if (!StringUtils.isEmpty(className) && params != null) {
+                                    StartAppUtils.startActivity(
+                                        this@NewLauncherActivity,
+                                        packName,
+                                        className!!,
+                                        params
+                                    )
+                                } else {
+                                    StartAppUtils.startApp(this@NewLauncherActivity, packName)
+                                }
+                                if (StartAppUtils.isNeedStopTouchPoint(packName) && touchAbilityInitSuccessful) {
+                                    touchAbility?.disableDisorderlyPointChecker()
+                                    Log.i(TAG, "乱点监控被禁用 disableDisorderlyPointChecker: ")
+                                }
                             }
                         }
-
                     })
                     val linearLayoutManager = LinearLayoutManager(this)
                     linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
