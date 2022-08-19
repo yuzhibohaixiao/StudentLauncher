@@ -189,6 +189,7 @@ dependencies {
     implementation "com.aliyun.dpa:oss-android-sdk:2.9.5"
     implementation('com.aliyun.ams:alicloud-android-ha-adapter:1.1.5.1-open')
     implementation('com.aliyun.ams:alicloud-android-ha-crashreporter:1.2.5')
+    implementation 'com.aliyun.ams:alicloud-android-apm:1.1.0.0-open'
 
     //utils
 //    implementation 'com.blankj:utilcodex:1.29.0'

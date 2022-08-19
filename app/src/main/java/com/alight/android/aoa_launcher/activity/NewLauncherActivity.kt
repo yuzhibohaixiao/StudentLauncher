@@ -183,12 +183,12 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 
         iv_user_icon_new_launcher.setOnClickListener(this)
         tv_user_name_new_launcher.setOnClickListener(this)
-        iv_all_app_launcher.setOnClickListener(this)
-        tv_grade_person_center.setOnClickListener(this)
+//        iv_all_app_launcher.setOnClickListener(this)
+//        tv_grade_person_center.setOnClickListener(this)
         iv_book_reading.setOnClickListener(this)
-        iv_az_store.setOnClickListener(this)
-        tv_task_challenges.setOnClickListener(this)
-        iv_av_launcher.setOnClickListener(this)
+//        iv_az_store.setOnClickListener(this)
+//        tv_task_challenges.setOnClickListener(this)
+//        iv_av_launcher.setOnClickListener(this)
         tv_book_click.setOnClickListener(this)
         fl_classroom_sync.setOnClickListener(this)
 //        iv_ip_image.setOnClickListener(this)
@@ -225,10 +225,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         val rebinding = SPUtils.getData("rebinding", false) as Boolean
         if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || (rebinding && !splashClose)) {
-            ToastUtils.showShort(
+         /*   ToastUtils.showShort(
                 this,
                 "展示引导页 $splashClose $splashCloseFlag ${tokenPairCache.isNullOrEmpty()} $rebinding"
-            )
+            )*/
             Log.i(TAG, "展示引导页")
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
@@ -411,8 +411,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     private fun initAccountUtil() {
-        if (AccountUtil.currentUserId != null && !splashCloseFlag && tokenPair == null && tv_user_name_new_launcher.text.toString()
-                .isNotEmpty()
+        if (AccountUtil.currentUserId != null && !splashCloseFlag && tv_user_name_new_launcher.text.toString()
+                .isNotEmpty() && tokenPair == null
         )
             return
         AccountUtil.register(this)
@@ -900,7 +900,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     }
                 }
             } else if (any is StudyPlanBean) {
-                try {
+               /* try {
                     val planCompleteTotal = any.data.plan_complete_total
                     val planTotal = any.data.plan_total
                     if (planTotal > 0) {
@@ -909,7 +909,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                }
+                }*/
             } else if (any is BaseBean) {
                 if (any.code == 401 && tokenPair != null) {
                     stopHeart = true
@@ -1131,20 +1131,20 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 intent.putExtra("netState", netState)
                 activityResultLauncher?.launch(intent)
             }
-            R.id.iv_all_app_launcher -> {
-                getPresenter().showDialog(AppConstants.ALL_APP)
-            }
-            //选年级
-            R.id.tv_grade_person_center -> {
-                getPresenter().showSelectGradeDialog(this, tv_grade_person_center)
-            }
-            //应用商店
-            R.id.iv_az_store -> {
-                getPresenter().showKAMarket()
-            }
-            R.id.iv_av_launcher, R.id.tv_task_challenges -> {
+//            R.id.iv_all_app_launcher -> {
+//                getPresenter().showDialog(AppConstants.ALL_APP)
+//            }
+//            //选年级
+//            R.id.tv_grade_person_center -> {
+//                getPresenter().showSelectGradeDialog(this, tv_grade_person_center)
+//            }
+//            //应用商店
+//            R.id.iv_az_store -> {
+//                getPresenter().showKAMarket()
+//            }
+          /*  R.id.iv_av_launcher, R.id.tv_task_challenges -> {
                 ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
-            }
+            }*/
             //打开预习课文
             R.id.tv_book_click, R.id.fl_classroom_sync -> {
                 StartAppUtils.startActivity(

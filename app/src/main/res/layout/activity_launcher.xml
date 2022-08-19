@@ -48,52 +48,6 @@
                 android:src="@drawable/launcher_top_study_plan" />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="87.5dp"
-            android:layout_height="77dp"
-            android:layout_marginStart="23.5dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/top_ip_img"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tv_study_plan_launcher"
-            android:layout_width="300dp"
-            android:layout_height="37.5dp"
-            android:layout_marginStart="14.5dp"
-            android:layout_marginBottom="24.5dp"
-            android:background="@drawable/new_launcher_top_text_bg"
-            android:gravity="center"
-            android:text="今天暂无学习计划，快去创建学习计划吧！"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tv_task_challenges"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="169.5dp"
-            android:layout_marginTop="15dp"
-            android:drawableTop="@drawable/task"
-            android:drawablePadding="3dp"
-            android:text="任务挑战"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tv_grade_person_center"
-            android:layout_width="135dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="31.5dp"
-            android:background="@drawable/white_bg_oval"
-            android:gravity="center"
-            android:text="一年级      ▼"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:visibility="gone" />
-
         <LinearLayout
             android:id="@+id/ll_child_top"
             android:layout_width="wrap_content"
@@ -238,7 +192,6 @@
                     android:layout_marginStart="13dp"
                     android:layout_marginEnd="13dp"
                     android:background="@color/black" />
-
 
                 <TextView
                     android:id="@+id/tv_chinese_launcher"
@@ -688,61 +641,6 @@
                 android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
-
         </LinearLayout>
-
     </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="135dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:src="@drawable/launcher_study_plan"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/iv_av_launcher"
-            android:layout_width="135dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:src="@drawable/launcher_av"
-            android:visibility="gone" />
-
-        <ImageView
-            android:layout_width="135dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:src="@drawable/launcher_call_parent"
-            android:text=""
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/iv_az_store"
-            android:layout_width="135dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:src="@drawable/launcher_app_store_bottom"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/iv_all_app_launcher"
-            android:layout_width="135dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:src="@drawable/launcher_all_app"
-            android:visibility="gone" />
-    </LinearLayout>
 </FrameLayout>

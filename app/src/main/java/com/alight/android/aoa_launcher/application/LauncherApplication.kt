@@ -125,6 +125,7 @@ class LauncherApplication : Application() {
             AliHaAdapter.getInstance().addPlugin(Plugin.crashreporter)
             AliHaAdapter.getInstance().addPlugin(Plugin.tlog)
             AliHaAdapter.getInstance().openDebug(false)
+            AliHaAdapter.getInstance().addPlugin(Plugin.apm);
             AliHaAdapter.getInstance().start(config)
             TLogService.updateLogLevel(TLogLevel.INFO)
         }
