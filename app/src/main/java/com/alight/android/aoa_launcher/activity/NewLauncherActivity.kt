@@ -872,6 +872,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     }
 
     override fun onSuccess(any: Any) {
+        //避免网络请求但acitivity会销毁导致的崩溃
+        if (this == null || isDestroyed || isFinishing) {
+            return
+        }
         GlobalScope.launch(Dispatchers.Main) {
             //网络请求成功后的结果 让对应视图进行刷新
             if (any is TokenPair) {
