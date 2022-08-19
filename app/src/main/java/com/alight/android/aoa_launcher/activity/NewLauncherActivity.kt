@@ -225,10 +225,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         val tokenPairCache = SPUtils.getData("tokenPair", "") as String
         val rebinding = SPUtils.getData("rebinding", false) as Boolean
         if (!splashClose && !splashCloseFlag && tokenPairCache.isNullOrEmpty() || (rebinding && !splashClose)) {
-         /*   ToastUtils.showShort(
-                this,
-                "展示引导页 $splashClose $splashCloseFlag ${tokenPairCache.isNullOrEmpty()} $rebinding"
-            )*/
+            /*   ToastUtils.showShort(
+                   this,
+                   "展示引导页 $splashClose $splashCloseFlag ${tokenPairCache.isNullOrEmpty()} $rebinding"
+               )*/
             Log.i(TAG, "展示引导页")
 //        如果未展示过引导则展示引导页
             activityResultLauncher?.launch(Intent(this, SplashActivity::class.java))
@@ -900,16 +900,16 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     }
                 }
             } else if (any is StudyPlanBean) {
-               /* try {
-                    val planCompleteTotal = any.data.plan_complete_total
-                    val planTotal = any.data.plan_total
-                    if (planTotal > 0) {
-                        tv_study_plan_launcher.text =
-                            "今天有${planTotal}项学习计划，已完成${planCompleteTotal}项，加油哟!"
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }*/
+                /* try {
+                     val planCompleteTotal = any.data.plan_complete_total
+                     val planTotal = any.data.plan_total
+                     if (planTotal > 0) {
+                         tv_study_plan_launcher.text =
+                             "今天有${planTotal}项学习计划，已完成${planCompleteTotal}项，加油哟!"
+                     }
+                 } catch (e: Exception) {
+                     e.printStackTrace()
+                 }*/
             } else if (any is BaseBean) {
                 if (any.code == 401 && tokenPair != null) {
                     stopHeart = true
@@ -1142,9 +1142,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //            R.id.iv_az_store -> {
 //                getPresenter().showKAMarket()
 //            }
-          /*  R.id.iv_av_launcher, R.id.tv_task_challenges -> {
-                ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
-            }*/
+            /*  R.id.iv_av_launcher, R.id.tv_task_challenges -> {
+                  ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
+              }*/
             //打开预习课文
             R.id.tv_book_click, R.id.fl_classroom_sync -> {
                 StartAppUtils.startActivity(
@@ -1291,6 +1291,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                             params: Map<String, Any>?
                         ) {
                             CoroutineScope(Dispatchers.IO).launch {
+                                if (BtnClickUtil.isFastShow()) return@launch
                                 if (!StringUtils.isEmpty(className) && params != null) {
                                     StartAppUtils.startActivity(
                                         this@NewLauncherActivity,
@@ -1322,6 +1323,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         if (launcherCenterAdapter == null) {
             launcherCenterAdapter = LauncherCenterAdapter()
             launcherCenterAdapter?.setOnItemClickListener { adapter, view, position ->
+                if (BtnClickUtil.isFastShow()) return@setOnItemClickListener
                 val appPackName = launcherCenterAdapter!!.data[position].appPackName
                 val className = launcherCenterAdapter!!.data[position].className
                 val params = launcherCenterAdapter!!.data[position].params

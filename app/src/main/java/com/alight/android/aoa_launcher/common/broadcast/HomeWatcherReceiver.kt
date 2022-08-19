@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.alight.android.aoa_launcher.activity.NewLauncherActivity
+import com.alight.android.aoa_launcher.utils.BtnClickUtil
 import com.alight.android.aoa_launcher.utils.CommonUtil
+import com.alight.android.aoa_launcher.utils.TimeUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +27,7 @@ class HomeWatcherReceiver : BroadcastReceiver() {
     @Synchronized
     override fun onReceive(context: Context, intent: Intent) {
         CoroutineScope(Dispatchers.IO).launch {
+            if (BtnClickUtil.isFastShow()) return@launch
             val action = intent.action
             isForeground =
                 CommonUtil.isForeground(context, NewLauncherActivity::class.java.name)

@@ -3,9 +3,9 @@ package com.alight.android.aoa_launcher.utils;
 public class BtnClickUtil {
 
     /**
-     * 两次点击按钮之间的点击间隔不能少于500毫秒
+     * 两次点击按钮之间的点击间隔不能少于 MIN_SHOW_DELAY_TIME 毫秒
      */
-    private static final int MIN_SHOW_DELAY_TIME = 1000;
+    private static final int MIN_SHOW_DELAY_TIME = 2000;
     private static long lastShowTime;
 
     /**

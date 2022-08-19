@@ -23,10 +23,14 @@ class AppListFragment : BaseFragment() {
         appBeanList.add(AppBean("宝宝乐器", "com.sinyee.babybus.songIV", null))
         appBeanList.add(AppBean("喜马拉雅儿童", "com.ximalayaos.pad.tingkid", null))
         appBeanList.add(AppBean("熊猫博士识字", "com.drpanda.chineseacademy.b2b", null))
-        appBeanList.add(AppBean("阿布睡前故事", "com.android.abustory", null))
-        appBeanList.add(AppBean("科魔大战", "com.lotfun.svmAndroid", null))
-        appBeanList.add(AppBean("星尘浏览器", "com.chaozhuo.browser", null))
+//        appBeanList.add(AppBean("阿布睡前故事", "com.android.abustory", null))
+//        appBeanList.add(AppBean("科魔大战", "com.lotfun.svmAndroid", null))
+//        appBeanList.add(AppBean("星尘浏览器", "com.chaozhuo.browser", null))
         appBeanList.add(AppBean("少年得到", "com.dedao.juvenile", null))
+
+        appBeanList.add(AppBean("爱奇艺奇巴布", "com.qiyi.video.child", null))
+        appBeanList.add(AppBean("小猪佩奇绘画", "com.qiyi.video.child", null))
+        appBeanList.add(AppBean("火狐浏览器", "org.mozilla.firefox", null))
 
         if (childAppListAdapter == null) {
             childAppListAdapter = ChildAppListAdapter()

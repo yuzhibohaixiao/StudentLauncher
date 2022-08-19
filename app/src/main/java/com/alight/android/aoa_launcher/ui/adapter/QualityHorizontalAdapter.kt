@@ -21,6 +21,9 @@ class QualityHorizontalAdapter :
         R.drawable.text_fun_learning
     )
 
+    /**
+     * 思维启蒙分类
+     */
     private val appList1: ArrayList<NewAppTypeBean> = arrayListOf(
         NewAppTypeBean(
             "天天练",
@@ -62,16 +65,13 @@ class QualityHorizontalAdapter :
         ),
     )
 
+    /**
+     * 艺术启蒙分类
+     */
     private val appList2: ArrayList<NewAppTypeBean> = arrayListOf(
         NewAppTypeBean(
             "架子鼓",
             R.drawable.quality_default_icon, "com.gamestar.xdrum",
-            null,
-            null
-        ),
-        NewAppTypeBean(
-            "完美钢琴",
-            R.drawable.quality_default_icon, "com.gamestar.perfectpiano",
             null,
             null
         ),
@@ -82,22 +82,20 @@ class QualityHorizontalAdapter :
             null
         ),
         NewAppTypeBean(
-            "儿童画画填色",
-            R.drawable.quality_default_icon, "com.melestudio.paintd",
+            "小猪佩奇绘画",
+            R.drawable.quality_default_icon, "air.com.peppapig.paintbox",
             null,
             null
         ),
     )
+
+    /**
+     * 语言启蒙分类
+     */
     private val appList3: ArrayList<NewAppTypeBean> = arrayListOf(
         NewAppTypeBean(
             "洪恩识字",
             R.drawable.quality_default_icon, "com.hongen.app.word",
-            null,
-            null
-        ),
-        NewAppTypeBean(
-            "阿布睡前故事",
-            R.drawable.quality_default_icon, "com.android.abustory",
             null,
             null
         ),
@@ -126,15 +124,20 @@ class QualityHorizontalAdapter :
             null,
             null
         ),
-    )
-    private val appList4: ArrayList<NewAppTypeBean> = arrayListOf(
-
         NewAppTypeBean(
-            "科魔大战",
-            R.drawable.quality_default_icon, "com.lotfun.svmAndroid",
+            "爱奇艺奇巴布",
+            R.drawable.quality_default_icon, "com.qiyi.video.child",
             null,
             null
         ),
+
+        )
+
+    /**
+     * 趣味学习分类
+     */
+    private val appList4: ArrayList<NewAppTypeBean> = arrayListOf(
+
         NewAppTypeBean(
             "作业帮",
             R.drawable.quality_default_icon, "com.baidu.homework",
@@ -148,8 +151,8 @@ class QualityHorizontalAdapter :
             null
         ),
         NewAppTypeBean(
-            "星尘浏览器",
-            R.drawable.science, "com.chaozhuo.browser",
+            "火狐浏览器",
+            R.drawable.quality_default_icon, "org.mozilla.firefox",
             null,
             null
         ),
@@ -164,6 +167,12 @@ class QualityHorizontalAdapter :
             R.drawable.moral, "com.jxw.online_study",
             "com.jxw.online_study.activity.BookCaseWrapperActivity",
             mapOf<String, Any>("StartArgs" to "d:/同步学习/政治|e:JWFD")
+        ),
+        NewAppTypeBean(
+            "五子棋",
+            R.drawable.quality_default_icon, "com.alight.game.gobang",
+            null,
+            null
         ),
     )
 
@@ -364,6 +373,36 @@ class QualityHorizontalAdapter :
         NewAppTypeBean(
             "浏览器",
             R.drawable.science, "com.android.browser",
+            null,
+            null
+        ),
+        NewAppTypeBean(
+            "完美钢琴",
+            R.drawable.quality_default_icon, "com.gamestar.perfectpiano",
+            null,
+            null
+        ),
+        NewAppTypeBean(
+            "星尘浏览器",
+            R.drawable.science, "com.chaozhuo.browser",
+            null,
+            null
+        ),
+        NewAppTypeBean(
+            "儿童画画填色",
+            R.drawable.quality_default_icon, "com.melestudio.paintd",
+            null,
+            null
+        ),
+        NewAppTypeBean(
+            "阿布睡前故事",
+            R.drawable.quality_default_icon, "com.android.abustory",
+            null,
+            null
+        ),
+        NewAppTypeBean(
+            "科魔大战",
+            R.drawable.quality_default_icon, "com.lotfun.svmAndroid",
             null,
             null
         ),
