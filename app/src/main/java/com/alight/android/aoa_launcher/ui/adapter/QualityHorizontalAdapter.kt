@@ -87,6 +87,13 @@ class QualityHorizontalAdapter :
             null,
             null
         ),
+        NewAppTypeBean(
+            "喜马拉雅儿童",
+            R.drawable.quality_default_icon,
+            "com.ximalayaos.pad.tingkid",
+            null,
+            null,
+        ),
     )
 
     /**
@@ -110,13 +117,6 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon, "com.hhdd.kada",
             null,
             null
-        ),
-        NewAppTypeBean(
-            "喜马拉雅儿童",
-            R.drawable.quality_default_icon,
-            "com.ximalayaos.pad.tingkid",
-            null,
-            null,
         ),
         NewAppTypeBean(
             "熊猫博士识字",
