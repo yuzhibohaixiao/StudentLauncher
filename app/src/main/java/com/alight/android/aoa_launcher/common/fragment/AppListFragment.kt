@@ -29,7 +29,7 @@ class AppListFragment : BaseFragment() {
         appBeanList.add(AppBean("少年得到", "com.dedao.juvenile", null))
 
         appBeanList.add(AppBean("爱奇艺奇巴布", "com.qiyi.video.child", null))
-        appBeanList.add(AppBean("小猪佩奇绘画", "com.qiyi.video.child", null))
+        appBeanList.add(AppBean("小猪佩奇绘画", "air.com.peppapig.paintbox", null))
         appBeanList.add(AppBean("火狐浏览器", "org.mozilla.firefox", null))
 
         if (childAppListAdapter == null) {
