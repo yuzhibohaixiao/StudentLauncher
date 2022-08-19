@@ -415,7 +415,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 .isNotEmpty() && tokenPair == null
         )
             return
-        AccountUtil.register(this)
+//        AccountUtil.register(this)
         val userId = SPUtils.getData(AppConstants.USER_ID, -1) as Int
         if (userId != -1) {
             GlobalScope.launch(Dispatchers.IO) {
@@ -491,11 +491,13 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     override fun initData() {
         mINetEvent = this
         EventBus.getDefault().register(this)
-        val tokenPairCache = SPUtils.getData("tokenPair", "") as String
-        //满足条件时展示引导页
-        if (tokenPairCache.isNotEmpty()) {
-            tokenPair = Gson().fromJson(tokenPairCache, TokenPair::class.java)
-            writeUserInfo(tokenPair!!)
+        CoroutineScope(Dispatchers.IO).launch {
+            val tokenPairCache = SPUtils.getData("tokenPair", "") as String
+            //满足条件时展示引导页
+            if (tokenPairCache.isNotEmpty()) {
+                tokenPair = Gson().fromJson(tokenPairCache, TokenPair::class.java)
+                writeUserInfo(tokenPair!!)
+            }
         }
         //获取用户信息之前必须调用的初始化方法
         AccountUtil.run()
@@ -876,16 +878,18 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         if (this == null || isDestroyed || isFinishing) {
             return
         }
-        GlobalScope.launch(Dispatchers.Main) {
+        CoroutineScope(Dispatchers.Main).launch {
             //网络请求成功后的结果 让对应视图进行刷新
             if (any is TokenPair) {
                 tokenPair = any
                 if (tokenPair != null) {
-                    if (!UserDBUtil.isLocalChanged) {
-                        getPresenter().setInitGrade(tokenPair!!.gradeType!!)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        if (!UserDBUtil.isLocalChanged) {
+                            getPresenter().setInitGrade(tokenPair!!.gradeType!!)
+                        }
+                        writeUserInfo(tokenPair!!)
+                        SPUtils.syncPutData("tokenPair", Gson().toJson(tokenPair))
                     }
-                    writeUserInfo(tokenPair!!)
-                    SPUtils.syncPutData("tokenPair", Gson().toJson(tokenPair))
                 }
                 Glide.with(this@NewLauncherActivity)
                     .load(tokenPair?.avatar)

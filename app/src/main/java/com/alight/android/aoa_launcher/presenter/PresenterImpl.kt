@@ -673,10 +673,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      * 发送菜单禁用的广播
      */
     fun sendMenuEnableBroadcast(context: Context, isEnable: Boolean) {
-        val intent = Intent()
+     /*   val intent = Intent()
         intent.action = "com.alight.android.menu"
         intent.putExtra("state", isEnable);
-        context.sendBroadcast(intent)
+        context.sendBroadcast(intent)*/
     }
 
     /**
