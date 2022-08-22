@@ -12,14 +12,15 @@
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="695px"
+        android:minHeight="695px"
         android:layout_marginTop="39dp"
         android:background="@drawable/launcher_quality_bg">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_quality_app_content"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="25dp" />
     </FrameLayout>
 </FrameLayout>
