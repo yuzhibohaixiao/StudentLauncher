@@ -50,6 +50,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_launcher.*
+import kotlinx.android.synthetic.main.view_stub_center_launcher.*
 import kotlinx.coroutines.*
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
@@ -93,6 +94,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private var heartCoroutineScope: Job? = null
 
     private lateinit var launcherPagerAdapter: LauncherPagerAdapter
+    private var vsCenterInflate: View? = null
 
 
     private var selectBook: AppTypeBean = AppTypeBean(
@@ -170,13 +172,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         iv_query_word.setOnClickListener(this)
         iv_chinese_words.setOnClickListener(this)
         iv_english_translation.setOnClickListener(this)
-        tv_seek_help_launcher.setOnClickListener(this)
         iv_title_query.setOnClickListener(this)
-        tv_fun_card_launcher.setOnClickListener(this)
-        tv_wrong_topic_launcher.setOnClickListener(this)
         iv_oral_correction.setOnClickListener(this)
         iv_article_correction.setOnClickListener(this)
-        tv_yyzwpg_launcher.setOnClickListener(this)
         iv_favorites.setOnClickListener(this)
         iv_study_plan.setOnClickListener(this)
         iv_call_parent.setOnClickListener(this)
@@ -189,8 +187,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //        iv_az_store.setOnClickListener(this)
 //        tv_task_challenges.setOnClickListener(this)
 //        iv_av_launcher.setOnClickListener(this)
-        tv_book_click.setOnClickListener(this)
-        fl_classroom_sync.setOnClickListener(this)
+        vs_center_launcher.setOnInflateListener { stub, inflated ->
+            tv_book_click.setOnClickListener(this)
+            fl_classroom_sync.setOnClickListener(this)
+        }
 //        iv_ip_image.setOnClickListener(this)
         fl_wifi_module.setOnClickListener(this)
         iv_call_parent_child.setOnClickListener(this)
@@ -1043,7 +1043,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         PanelAbility.TouchMode.PEN_MODE
                     )
             }
-            //求助老师-AOA 的远程辅导页面
+          /*  //求助老师-AOA 的远程辅导页面
             R.id.tv_seek_help_launcher -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 140, "/home/140")
                 if (startAoaApp && interactionAbility != null)
@@ -1051,7 +1051,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         interactionAbility!!,
                         InteractionAbility.InteractiveMode.PEN_POINT
                     )
-            }
+            }*/
 
             //答题-AOA搜题 题目查询
             R.id.iv_title_query -> {
@@ -1062,7 +1062,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         PanelAbility.TouchMode.PEN_MODE
                     )
             }
-            //趣味卡牌-自己做的卡牌游戏
+         /*   //趣味卡牌-自己做的卡牌游戏
             R.id.tv_fun_card_launcher -> {
                 ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
 //                getPresenter().startInteractionWindow(interactionAbility!!,InteractionAbility.InteractiveMode.FINGER_TOUCH)
@@ -1075,7 +1075,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //                    interactionAbility!!,
 //                    InteractionAbility.InteractiveMode.PEN_POINT
 //                )
-            }
+            }*/
             //口算批改
             R.id.iv_oral_correction -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 142, "/app/142/home")
@@ -1095,6 +1095,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     )
             }
             //英语作文批改
+/*
             R.id.tv_yyzwpg_launcher -> {
                 ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
 //                getPresenter().startAoaApp(this, 144, "/app/144/home")
@@ -1103,6 +1104,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //                    InteractionAbility.InteractiveMode.PEN_POINT
 //                )
             }
+*/
             //收藏夹-AOA收藏夹
             R.id.iv_favorites -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 141, "/app/141/home")
@@ -1238,16 +1240,15 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
     private fun showArUI(launcherType: String) {
         when (launcherType) {
             AppConstants.LAUNCHER_TYPE_AR -> {
+                inflateCenterView(false)
                 iv_ip_image.visibility = View.VISIBLE
                 rv_quality_launcher.visibility = View.GONE
-                ll_center_launcher.visibility = View.GONE
                 rl_ar_launcher.visibility = View.VISIBLE
             }
             AppConstants.LAUNCHER_TYPE_CHINESE, AppConstants.LAUNCHER_TYPE_MATHEMATICS, AppConstants.LAUNCHER_TYPE_ENGLISH -> {
+                inflateCenterView(true)
                 iv_ip_image.visibility = View.GONE
                 rv_quality_launcher.visibility = View.GONE
-                fl_book_launcher.visibility = View.VISIBLE
-                ll_center_launcher.visibility = View.VISIBLE
                 rl_ar_launcher.visibility = View.GONE
                 setAdapterUI(launcherType)
                 setRightAdapter(launcherType)
@@ -1285,9 +1286,9 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 fl_extracurricular_counselling.setBackgroundResource(launcherBg)
             }
             AppConstants.LAUNCHER_TYPE_QUALITY -> {
+                inflateCenterView(false)
                 iv_ip_image.visibility = View.GONE
                 rv_quality_launcher.visibility = View.VISIBLE
-                ll_center_launcher.visibility = View.GONE
                 rl_ar_launcher.visibility = View.GONE
                 if (qualityHorizontalAdapter == null) {
                     qualityHorizontalAdapter = QualityHorizontalAdapter()
@@ -1324,6 +1325,27 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 }
             }
 
+        }
+    }
+
+    /**
+     * @param isInflate 表示需要填充
+     */
+    private fun inflateCenterView(isVisible: Boolean) {
+        //needInflate为true表示需要填充布局（未填充过）
+        val needInflate = if (vs_center_launcher == null && vsCenterInflate != null) {
+            false
+        } else {
+            vs_center_launcher.parent != null
+        }
+        if (isVisible) {
+            if (needInflate) {
+                vsCenterInflate = vs_center_launcher.inflate()
+            } else {
+                vsCenterInflate?.visibility = View.VISIBLE
+            }
+        } else if (!needInflate) {
+            vsCenterInflate?.visibility = View.GONE
         }
     }
 
@@ -1479,7 +1501,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                      getPresenter().getModel(
                          Urls.UPDATE,
                          hashMapOf("device_type" to Build.DEVICE.toUpperCase()),
- //                                    hashMapOf("device_type" to "LAMP"),
+    //                                    hashMapOf("device_type" to "LAMP"),
                          UpdateBean::class.java
                      )
                      //表示引导过用户升级

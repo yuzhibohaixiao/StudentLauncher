@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_center_launcher"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:id="@+id/fl_book_launcher"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp">
+
+        <ImageView
+            android:id="@+id/iv_classroom_sync"
+            android:layout_width="118.5dp"
+            android:layout_height="27dp"
+            android:src="@drawable/text_classroom_sync" />
+
+        <FrameLayout
+            android:id="@+id/fl_classroom_sync"
+            android:layout_width="187.5dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="39dp"
+            android:background="@drawable/launcher_english_book">
+
+            <TextView
+                android:id="@+id/tv_book_click"
+                android:layout_width="146dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="27dp"
+                android:background="@drawable/white_bg_oval"
+                android:gravity="center"
+                android:text="课本预习"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:layout_marginStart="18dp">
+
+        <ImageView
+            android:id="@+id/iv_study_tools"
+            android:layout_width="118.5dp"
+            android:layout_height="27dp"
+            android:src="@drawable/text_study_tools" />
+
+        <FrameLayout
+            android:id="@+id/fl_study_tools"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="39dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_center_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="25dp"
+                android:scrollbarSize="5dp"
+                android:scrollbarThumbVertical="@color/launcher_scroll_bg"
+                android:scrollbars="horizontal" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:layout_marginStart="18dp">
+
+        <ImageView
+            android:id="@+id/iv_extracurricular_counselling"
+            android:layout_width="118.5dp"
+            android:layout_height="27dp"
+            android:src="@drawable/text_extracurricular_counselling" />
+
+        <FrameLayout
+            android:id="@+id/fl_extracurricular_counselling"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="39dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_right_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="25dp" />
+        </FrameLayout>
+    </FrameLayout>
+
+</LinearLayout>
