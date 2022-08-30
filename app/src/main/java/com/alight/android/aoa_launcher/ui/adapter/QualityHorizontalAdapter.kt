@@ -119,12 +119,6 @@ class QualityHorizontalAdapter :
             null
         ),
         NewAppTypeBean(
-            "熊猫博士识字",
-            R.drawable.quality_default_icon, "com.drpanda.chineseacademy.b2b",
-            null,
-            null
-        ),
-        NewAppTypeBean(
             "爱奇艺奇巴布",
             R.drawable.quality_default_icon, "com.qiyi.video.child",
             null,
@@ -403,6 +397,12 @@ class QualityHorizontalAdapter :
         NewAppTypeBean(
             "科魔大战",
             R.drawable.quality_default_icon, "com.lotfun.svmAndroid",
+            null,
+            null
+        ),
+        NewAppTypeBean(
+            "熊猫博士识字",
+            R.drawable.quality_default_icon, "com.drpanda.chineseacademy.b2b",
             null,
             null
         ),

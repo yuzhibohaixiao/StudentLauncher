@@ -22,7 +22,7 @@ class AppListFragment : BaseFragment() {
         appBeanList.add(AppBean("天天练", "com.leleketang.SchoolFantasy", null))
         appBeanList.add(AppBean("宝宝乐器", "com.sinyee.babybus.songIV", null))
         appBeanList.add(AppBean("喜马拉雅儿童", "com.ximalayaos.pad.tingkid", null))
-        appBeanList.add(AppBean("熊猫博士识字", "com.drpanda.chineseacademy.b2b", null))
+//        appBeanList.add(AppBean("熊猫博士识字", "com.drpanda.chineseacademy.b2b", null))
 //        appBeanList.add(AppBean("阿布睡前故事", "com.android.abustory", null))
 //        appBeanList.add(AppBean("科魔大战", "com.lotfun.svmAndroid", null))
 //        appBeanList.add(AppBean("星尘浏览器", "com.chaozhuo.browser", null))

@@ -387,7 +387,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="35dp"
-                android:text="当前家庭没有孩子，需要在小程序上添加一个孩子哦"
+                android:text="@string/no_child_hint"
                 android:textColor="#ff000000"
                 android:textSize="9sp" />
         </LinearLayout>

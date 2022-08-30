@@ -8,4 +8,5 @@
     <string name="splash_reconnection">您未连接网络，请点击任意处重新连接</string>
     <string name="splash_welcome">欢迎使用本系统，首次使用本系统时需要进行联网操作，并在手机端进行账号的添加
 请用交互笔，点击页面任意位置，进行联网操作！</string>
+    <string name="no_child_hint">当前家庭没有孩子信息，请在\u0022深光家长App\u0022添加一个孩子信息哦</string>
 </resources>
