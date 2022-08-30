@@ -27,6 +27,7 @@ import java.net.URI
 
 object AccountUtil : LauncherProvider {
     //    const val DSN = "d7f0c2f9-3b2f-4193-9e7d-7fea378d5932"
+//    private var DSN: String = "808A9F684D009368"  //测试dsn
     private var DSN: String = SerialUtils.getCPUSerial()
     var isShutdown = false
 
