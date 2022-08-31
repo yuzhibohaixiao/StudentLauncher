@@ -19,7 +19,8 @@
 
         <FrameLayout
             android:id="@+id/fl_classroom_sync"
-            android:layout_width="187.5dp"
+            android:layout_width="375px"
+            android:minWidth="375px"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:layout_marginTop="39dp"
@@ -61,7 +62,7 @@
                 android:id="@+id/rv_center_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="690px"
-                android:layout_marginStart="18dp"
+                android:layout_marginStart="22dp"
                 android:layout_marginTop="25dp"
                 android:minHeight="690px"
                 android:scrollbarSize="5dp"
@@ -91,7 +92,7 @@
                 android:id="@+id/rv_right_launcher"
                 android:layout_width="wrap_content"
                 android:layout_height="690px"
-                android:layout_marginStart="18dp"
+                android:layout_marginStart="22dp"
                 android:layout_marginTop="25dp"
                 android:minHeight="690px" />
         </FrameLayout>
