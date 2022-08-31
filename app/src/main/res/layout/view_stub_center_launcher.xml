@@ -8,8 +8,8 @@
     <FrameLayout
         android:id="@+id/fl_book_launcher"
         android:layout_width="wrap_content"
-        android:layout_height="770px"
-        android:minHeight="770px">
+        android:layout_height="780px"
+        android:minHeight="780px">
 
         <ImageView
             android:id="@+id/iv_classroom_sync"
@@ -41,7 +41,7 @@
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="400dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="18dp">
 
         <ImageView
@@ -60,9 +60,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_center_launcher"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="690px"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="25dp"
+                android:minHeight="690px"
                 android:scrollbarSize="5dp"
                 android:scrollbarThumbVertical="@color/launcher_scroll_bg"
                 android:scrollbars="horizontal" />
@@ -71,7 +72,7 @@
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="400dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="18dp">
 
         <ImageView
@@ -89,9 +90,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_right_launcher"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="690px"
                 android:layout_marginStart="18dp"
-                android:layout_marginTop="25dp" />
+                android:layout_marginTop="25dp"
+                android:minHeight="690px" />
         </FrameLayout>
     </FrameLayout>
 
