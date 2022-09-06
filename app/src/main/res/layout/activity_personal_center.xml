@@ -436,7 +436,7 @@
                         android:layout_marginTop="6dp"
                         android:layout_marginEnd="5dp"
                         android:singleLine="true"
-                        android:text="点此连接Wifi"
+                        android:text="点此连接Wi-Fi"
                         android:textColor="#215558"
                         android:textSize="12sp" />
 

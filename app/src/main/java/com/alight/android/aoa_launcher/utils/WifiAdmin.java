@@ -42,9 +42,9 @@ public class WifiAdmin {
         if (!mWifiManager.isWifiEnabled()) {
             mWifiManager.setWifiEnabled(true);
         } else if (mWifiManager.getWifiState() == 2) {
-            Toast.makeText(context, "亲，Wifi正在开启，不用再开了", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "亲，Wi-Fi正在开启，不用再开了", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "亲，Wifi已经开启,不用再开了", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "亲，Wi-Fi已经开启,不用再开了", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -55,10 +55,10 @@ public class WifiAdmin {
             mWifiManager.setWifiEnabled(false);
         } else if (mWifiManager.getWifiState() == 1) {
             swc.setChecked(false);
-            Toast.makeText(context, "亲，Wifi已经关闭，不用再关了", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "亲，Wi-Fi已经关闭，不用再关了", Toast.LENGTH_SHORT).show();
         } else if (mWifiManager.getWifiState() == 0) {
             swc.setChecked(false);
-            Toast.makeText(context, "亲，Wifi正在关闭，不用再关了", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "亲，Wi-Fi正在关闭，不用再关了", Toast.LENGTH_SHORT).show();
         } else {
             swc.setChecked(true);
             Toast.makeText(context, "请重新关闭", Toast.LENGTH_SHORT).show();
@@ -68,15 +68,15 @@ public class WifiAdmin {
     // 检查当前WIFI状态
     public void checkState(Context context) {
         if (mWifiManager.getWifiState() == 0) {
-            Toast.makeText(context, "Wifi正在关闭", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Wi-Fi正在关闭", Toast.LENGTH_SHORT).show();
         } else if (mWifiManager.getWifiState() == 1) {
-            Toast.makeText(context, "Wifi已经关闭", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Wi-Fi已经关闭", Toast.LENGTH_SHORT).show();
         } else if (mWifiManager.getWifiState() == 2) {
-            Toast.makeText(context, "Wifi正在开启", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Wi-Fi正在开启", Toast.LENGTH_SHORT).show();
         } else if (mWifiManager.getWifiState() == 3) {
-            Toast.makeText(context, "Wifi已经开启", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Wi-Fi已经开启", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "没有获取到WiFi状态", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "没有获取到Wi-Fi状态", Toast.LENGTH_SHORT).show();
         }
     }
 

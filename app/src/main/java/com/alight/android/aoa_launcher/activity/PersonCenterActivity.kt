@@ -91,7 +91,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         if (wifiSsid.isEmpty()) {
 //            iv_wifi_icon.setImageResource(R.drawable.wifi_not_connected)
             tv_wifi_state.text = "未连接"
-            tv_wifi_name.text = "点此连接Wifi"
+            tv_wifi_name.text = "点此连接Wi-Fi"
             tv_wifi_state.setTextColor(resources.getColor(R.color.person_center_text_gray))
         } else {
 //            iv_wifi_icon.setImageResource(R.drawable.wifi_connect_person_big)

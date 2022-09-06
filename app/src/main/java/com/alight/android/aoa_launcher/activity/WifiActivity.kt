@@ -586,7 +586,7 @@ class WifiActivity : BaseActivity(), View.OnClickListener {
 
     private fun openWifiAndScan() {
         mWifiAdmin?.openWifi(this, switch_wifi)
-        ToastUtils.showShort(LauncherApplication.getContext(), "wifi已开启，正在扫描wifi请稍等")
+        ToastUtils.showShort(LauncherApplication.getContext(), "Wi-Fi已开启，正在扫描Wi-Fi请稍等")
         RxTimerUtil.interval(500) {
             if (wifiManager.scanResults != null && wifiManager.scanResults.size > 0) {
                 RxTimerUtil.cancel()
