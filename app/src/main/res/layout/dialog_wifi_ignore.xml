@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="确定忽略此WIFI吗？"
+            android:text="确定忽略此Wi-Fi吗？"
             android:textColor="@color/black"
             android:textSize="15sp" />
 

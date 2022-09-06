@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:padding="10dp"
         android:autoLink="all"
-        android:text="当前无网络，请点击此处链接wifi"
+        android:text="当前无网络，请点击此处链接Wi-Fi"
         android:textColor="@color/launcher_cambridge_blue"
         android:textSize="15sp" />
 
