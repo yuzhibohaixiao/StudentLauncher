@@ -4,8 +4,6 @@ import android.view.View
 import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.base.BaseFragment
 import com.alight.android.aoa_launcher.presenter.PresenterImpl
-import com.alight.android.aoa_launcher.utils.ToastUtils
-import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainFragment : BaseFragment(), View.OnClickListener {

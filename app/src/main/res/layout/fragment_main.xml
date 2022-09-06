@@ -31,57 +31,89 @@
         android:layout_marginStart="750dp"
         android:src="@drawable/hongen_abc" />
 
-    <ImageView
-        android:id="@+id/iv_hongen_fjyd"
-        android:layout_width="124dp"
-        android:layout_height="115dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/hongen_fjyd" />
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="41.5dp"
+        android:paddingBottom="12dp"
+        android:background="@drawable/child_bottom_bg"
+        android:orientation="horizontal"
+        android:paddingTop="14dp">
 
-    <ImageView
-        android:id="@+id/iv_hongen_cy"
-        android:layout_width="124dp"
-        android:layout_height="115dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="187dp"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/hongen_cy" />
+        <TextView
+            android:id="@+id/iv_hongen_fjyd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14.5dp"
+            android:drawableTop="@drawable/hongen_fjyd"
+            android:drawablePadding="11.5dp"
+            android:gravity="center_horizontal"
+            android:text="洪恩分级阅读"
+            android:textColor="#2D5C14"
+            android:textSize="14sp" />
 
-    <ImageView
-        android:id="@+id/iv_hongen_sww"
-        android:layout_width="124dp"
-        android:layout_height="115dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="337.5dp"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/hongen_sww" />
+        <TextView
+            android:id="@+id/iv_hongen_cy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="69.5dp"
+            android:drawableTop="@drawable/hongen_cy"
+            android:drawablePadding="11.5dp"
+            android:gravity="center_horizontal"
+            android:text="洪恩成语"
+            android:textColor="#2D5C14"
+            android:textSize="14sp" />
 
-    <ImageView
-        android:id="@+id/iv_hongen_bc"
-        android:layout_width="124dp"
-        android:layout_height="115dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="488.5dp"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/hongen_bc" />
+        <TextView
+            android:id="@+id/iv_hongen_sww"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="73dp"
+            android:drawableTop="@drawable/hongen_sww"
+            android:drawablePadding="11.5dp"
+            android:gravity="center_horizontal"
+            android:text="洪恩十万问"
+            android:textColor="#2D5C14"
+            android:textSize="14sp" />
 
-    <ImageView
-        android:id="@+id/iv_hongen_syhb"
-        android:layout_width="124dp"
-        android:layout_height="115dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="639.5dp"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/hongen_syhb" />
+        <TextView
+            android:id="@+id/iv_hongen_bc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="73dp"
+            android:drawableTop="@drawable/hongen_bc"
+            android:drawablePadding="11.5dp"
+            android:gravity="center_horizontal"
+            android:text="洪恩编程"
+            android:textColor="#2D5C14"
+            android:textSize="14sp" />
 
-    <ImageView
-        android:id="@+id/iv_hongen_yd"
-        android:layout_width="124dp"
-        android:layout_height="115dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="790.5dp"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/hongen_yd" />
+        <TextView
+            android:id="@+id/iv_hongen_syhb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="73dp"
+            android:drawableTop="@drawable/hongen_syhb"
+            android:drawablePadding="11.5dp"
+            android:gravity="center_horizontal"
+            android:text="洪恩双语绘本"
+            android:textColor="#2D5C14"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_marginEnd="14.5dp"
+            android:id="@+id/iv_hongen_yd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="73dp"
+            android:drawableTop="@drawable/hongen_yd"
+            android:drawablePadding="11.5dp"
+            android:gravity="center_horizontal"
+            android:text="洪恩阅读"
+            android:textColor="#2D5C14"
+            android:textSize="14sp" />
+    </LinearLayout>
 </FrameLayout>
