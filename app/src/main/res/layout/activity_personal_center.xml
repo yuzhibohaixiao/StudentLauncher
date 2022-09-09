@@ -884,6 +884,30 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_lab"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="25dp"
+                        android:background="@drawable/launcher_personal_center_rounded_rectangle_right"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="23.5dp"
+                            android:layout_height="23.5dp"
+                            android:layout_marginTop="10.5dp"
+                            android:src="@drawable/lab" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5.5dp"
+                            android:text="ALight实验室"
+                            android:textColor="#215558"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/ll_power"
                         android:layout_width="60dp"
                         android:layout_height="60dp"

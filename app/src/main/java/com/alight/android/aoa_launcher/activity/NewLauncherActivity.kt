@@ -580,6 +580,17 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         RxTimerUtil.interval(5000) {
             iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
         }
+        panelAbility?.getOpticalEngineMode(object : PanelAbility.OpticalEngineModeHandler {
+            override fun onError(result: Map<String, Any>) {
+            }
+
+            override fun onSuccess(mode: PanelAbility.OpticalEngineMode) {
+                val highFpsMode = LauncherApplication.getMMKV().getBoolean("highFpsMode", false)
+                if (mode == PanelAbility.OpticalEngineMode.HIGH_FPS_MODE && !highFpsMode) {
+                    panelAbility?.setOpticalEngineMode(PanelAbility.OpticalEngineMode.NORMAL_MODE)
+                }
+            }
+        })
         //将输入法重置
 //        getPresenter().resetInputType(this)
     }
@@ -1043,15 +1054,15 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         PanelAbility.TouchMode.PEN_MODE
                     )
             }
-          /*  //求助老师-AOA 的远程辅导页面
-            R.id.tv_seek_help_launcher -> {
-                val startAoaApp = getPresenter().startAoaApp(this, 140, "/home/140")
-                if (startAoaApp && interactionAbility != null)
-                    getPresenter().startInteractionWindow(
-                        interactionAbility!!,
-                        InteractionAbility.InteractiveMode.PEN_POINT
-                    )
-            }*/
+            /*  //求助老师-AOA 的远程辅导页面
+              R.id.tv_seek_help_launcher -> {
+                  val startAoaApp = getPresenter().startAoaApp(this, 140, "/home/140")
+                  if (startAoaApp && interactionAbility != null)
+                      getPresenter().startInteractionWindow(
+                          interactionAbility!!,
+                          InteractionAbility.InteractiveMode.PEN_POINT
+                      )
+              }*/
 
             //答题-AOA搜题 题目查询
             R.id.iv_title_query -> {
@@ -1062,20 +1073,20 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         PanelAbility.TouchMode.PEN_MODE
                     )
             }
-         /*   //趣味卡牌-自己做的卡牌游戏
-            R.id.tv_fun_card_launcher -> {
-                ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
-//                getPresenter().startInteractionWindow(interactionAbility!!,InteractionAbility.InteractiveMode.FINGER_TOUCH)
-            }
-            //错题本-AOA收藏夹
-            R.id.tv_wrong_topic_launcher -> {
-                ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
-//                getPresenter().startAoaApp(this, 141, "/app/141/home")
-//                getPresenter().startInteractionWindow(
-//                    interactionAbility!!,
-//                    InteractionAbility.InteractiveMode.PEN_POINT
-//                )
-            }*/
+            /*   //趣味卡牌-自己做的卡牌游戏
+               R.id.tv_fun_card_launcher -> {
+                   ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
+   //                getPresenter().startInteractionWindow(interactionAbility!!,InteractionAbility.InteractiveMode.FINGER_TOUCH)
+               }
+               //错题本-AOA收藏夹
+               R.id.tv_wrong_topic_launcher -> {
+                   ToastUtils.showLong(this, "该应用正在开发中，敬请期待！")
+   //                getPresenter().startAoaApp(this, 141, "/app/141/home")
+   //                getPresenter().startInteractionWindow(
+   //                    interactionAbility!!,
+   //                    InteractionAbility.InteractiveMode.PEN_POINT
+   //                )
+               }*/
             //口算批改
             R.id.iv_oral_correction -> {
                 val startAoaApp = getPresenter().startAoaApp(this, 142, "/app/142/home")

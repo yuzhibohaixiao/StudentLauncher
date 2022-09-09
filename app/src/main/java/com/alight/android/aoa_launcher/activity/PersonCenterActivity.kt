@@ -341,6 +341,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
         fl_eyeshield_mode.setOnClickListener(this)
         fl_clear_memory.setOnClickListener(this)
+        ll_lab.setOnClickListener(this)
 
         familyAdapter.setOnItemClickListener { adapter, view, position ->
             val status = familyAdapter.data[position].status
@@ -954,6 +955,11 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.ll_mode_set -> {
                 getPresenter().showModeSetDialog(this)
+            }
+            R.id.ll_lab -> {
+                if (panelAbility != null) {
+                    getPresenter().showLabDialog(this, panelAbility!!)
+                }
             }
         }
     }

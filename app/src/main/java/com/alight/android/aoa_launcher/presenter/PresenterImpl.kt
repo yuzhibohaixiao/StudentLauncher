@@ -26,10 +26,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -79,6 +76,7 @@ import com.xuexiang.xupdate.entity.UpdateEntity
 import com.xuexiang.xupdate.listener.IUpdateParseCallback
 import com.xuexiang.xupdate.proxy.IUpdateParser
 import kotlinx.android.synthetic.main.activity_launcher.*
+import kotlinx.android.synthetic.main.activity_wifi.*
 import kotlinx.android.synthetic.main.dialog_update.*
 import kotlinx.coroutines.*
 import okhttp3.MediaType
@@ -673,10 +671,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
      * 发送菜单禁用的广播
      */
     fun sendMenuEnableBroadcast(context: Context, isEnable: Boolean) {
-     /*   val intent = Intent()
-        intent.action = "com.alight.android.menu"
-        intent.putExtra("state", isEnable);
-        context.sendBroadcast(intent)*/
+        /*   val intent = Intent()
+           intent.action = "com.alight.android.menu"
+           intent.putExtra("state", isEnable);
+           context.sendBroadcast(intent)*/
     }
 
     /**
@@ -1702,6 +1700,61 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                   break
               }
           }*/
+    }
+
+    fun showLabDialog(activity: Activity, panelAbility: PanelAbility) {
+        panelAbility.getOpticalEngineMode(object : PanelAbility.OpticalEngineModeHandler {
+            override fun onError(result: Map<String, Any>) {
+
+            }
+
+            override fun onSuccess(mode: PanelAbility.OpticalEngineMode) {
+                var dialog = CustomDialog(activity, R.layout.dialog_lab)
+                val switch = dialog.findViewById<Switch>(R.id.switch_high_fps_mode)
+                dialog.findViewById<ImageView>(R.id.iv_close_dialog).setOnClickListener {
+                    dialog.dismiss()
+                }
+                if (mode == PanelAbility.OpticalEngineMode.HIGH_FPS_MODE) {
+                    switch.isChecked = true
+                    //高帧率
+                } else if (mode == PanelAbility.OpticalEngineMode.NORMAL_MODE) {
+                    //普通模式
+                    switch.isChecked = false
+                }
+                switch.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if (isChecked) {
+                        val coroutineScope = CoroutineScope(Dispatchers.IO)
+                        panelAbility.setOpticalEngineMode(PanelAbility.OpticalEngineMode.HIGH_FPS_MODE)
+                        var highFpsDialog = CustomDialog(activity, R.layout.dialog_high_fps)
+                        highFpsDialog.findViewById<ImageView>(R.id.iv_close_dialog)
+                            .setOnClickListener {
+                                highFpsDialog.dismiss()
+                            }
+                        val retain = highFpsDialog.findViewById<TextView>(R.id.retain)
+                        val restore = highFpsDialog.findViewById<TextView>(R.id.restore)
+                        retain.setOnClickListener {
+                            val encode = LauncherApplication.getMMKV().encode("highFpsMode", true)
+                            highFpsDialog.dismiss()
+                        }
+                        restore.setOnClickListener {
+                            switch.isChecked = false
+                        }
+                        highFpsDialog.show()
+                        //5s后不确定则恢复关闭状态
+                        coroutineScope.launch {
+                            delay(5000)
+                            highFpsDialog.dismiss()
+                            switch.isChecked = false
+                        }
+
+                    } else {
+                        panelAbility.setOpticalEngineMode(PanelAbility.OpticalEngineMode.NORMAL_MODE)
+                    }
+                }
+                dialog.show()
+            }
+        })
+
     }
 
     fun showModeSetDialog(activity: Activity) {
