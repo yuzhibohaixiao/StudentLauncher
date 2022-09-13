@@ -376,6 +376,23 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         if (panelAbility == null) {
             panelAbility =
                 abilityManager.getAbility(PanelAbility::class.java, true, applicationContext)
+            GlobalScope.launch(Dispatchers.Main) {
+                if (panelAbility?.waitConnectionAsync()!!) {
+                    panelAbility?.getOpticalEngineMode(object :
+                        PanelAbility.OpticalEngineModeHandler {
+                        override fun onError(result: Map<String, Any>) {
+                        }
+
+                        override fun onSuccess(mode: PanelAbility.OpticalEngineMode) {
+                            val highFpsMode =
+                                LauncherApplication.getMMKV().getBoolean("highFpsMode", false)
+                            if (mode == PanelAbility.OpticalEngineMode.HIGH_FPS_MODE && !highFpsMode) {
+                                panelAbility?.setOpticalEngineMode(PanelAbility.OpticalEngineMode.NORMAL_MODE)
+                            }
+                        }
+                    })
+                }
+            }
         }
         if (interactionAbility == null) {
             interactionAbility =
@@ -580,17 +597,6 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         RxTimerUtil.interval(5000) {
             iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
         }
-        panelAbility?.getOpticalEngineMode(object : PanelAbility.OpticalEngineModeHandler {
-            override fun onError(result: Map<String, Any>) {
-            }
-
-            override fun onSuccess(mode: PanelAbility.OpticalEngineMode) {
-                val highFpsMode = LauncherApplication.getMMKV().getBoolean("highFpsMode", false)
-                if (mode == PanelAbility.OpticalEngineMode.HIGH_FPS_MODE && !highFpsMode) {
-                    panelAbility?.setOpticalEngineMode(PanelAbility.OpticalEngineMode.NORMAL_MODE)
-                }
-            }
-        })
         //将输入法重置
 //        getPresenter().resetInputType(this)
     }

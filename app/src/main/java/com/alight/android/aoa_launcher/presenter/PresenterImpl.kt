@@ -1738,11 +1738,14 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                         retain.setOnClickListener {
                             //保留
                             coroutineScope.cancel()
-                            val encode = LauncherApplication.getMMKV().encode("highFpsMode", true)
+                            LauncherApplication.getMMKV().encode("highFpsMode", true)
+                            Log.i(TAG, "highFpsMode: true")
                             highFpsDialog.dismiss()
                         }
                         restore.setOnClickListener {
                             coroutineScope.cancel()
+                            LauncherApplication.getMMKV().encode("highFpsMode", false)
+                            Log.i(TAG, "highFpsMode: false")
                             highFpsDialog.dismiss()
                             //还原
                             switch.isChecked = false
@@ -1757,6 +1760,8 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                             }
                         }
                     } else {
+                        LauncherApplication.getMMKV().encode("highFpsMode", false)
+                        Log.i(TAG, "highFpsMode: false")
                         panelAbility.setOpticalEngineMode(PanelAbility.OpticalEngineMode.NORMAL_MODE)
                     }
                 }
