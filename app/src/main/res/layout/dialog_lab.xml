@@ -5,7 +5,7 @@
     android:layout_gravity="center">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="170dp"
                     android:layout_marginTop="32dp"
-                    android:checked="true"
+                    android:checked="false"
                     android:textOff=""
                     android:textOn=""
                     android:thumb="@drawable/switch_thumb"

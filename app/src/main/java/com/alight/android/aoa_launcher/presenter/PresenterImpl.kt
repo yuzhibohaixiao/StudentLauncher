@@ -1728,15 +1728,23 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                         var highFpsDialog = CustomDialog(activity, R.layout.dialog_high_fps)
                         highFpsDialog.findViewById<ImageView>(R.id.iv_close_dialog)
                             .setOnClickListener {
+                                coroutineScope.cancel()
+                                //还原
+                                switch.isChecked = false
                                 highFpsDialog.dismiss()
                             }
                         val retain = highFpsDialog.findViewById<TextView>(R.id.retain)
                         val restore = highFpsDialog.findViewById<TextView>(R.id.restore)
                         retain.setOnClickListener {
+                            //保留
+                            coroutineScope.cancel()
                             val encode = LauncherApplication.getMMKV().encode("highFpsMode", true)
                             highFpsDialog.dismiss()
                         }
                         restore.setOnClickListener {
+                            coroutineScope.cancel()
+                            highFpsDialog.dismiss()
+                            //还原
                             switch.isChecked = false
                         }
                         highFpsDialog.show()
@@ -1744,9 +1752,10 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                         coroutineScope.launch {
                             delay(5000)
                             highFpsDialog.dismiss()
-                            switch.isChecked = false
+                            CoroutineScope(Dispatchers.Main).launch {
+                                switch.isChecked = false
+                            }
                         }
-
                     } else {
                         panelAbility.setOpticalEngineMode(PanelAbility.OpticalEngineMode.NORMAL_MODE)
                     }
