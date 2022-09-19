@@ -603,22 +603,18 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //        getPresenter().resetInputType(this)
         //静默卸载
 //        MyAppManager.init(this)
-/*
-        CoroutineScope(Dispatchers.IO).launch {
-            val result = MyAppManager.tryUninstall(
-                this@NewLauncherActivity,
-                "com.alight.game.gobang",
-                10010
-            )
-      */
-/*      MyAppManager.tryUninstall(
-                this@NewLauncherActivity,
-                "com.qiyi.video.child",
-                10011
-            )*//*
-
-        }
-*/
+    /*    var list = arrayListOf("com.alight.game.gobang", "com.qiyi.video.child")
+        runBlocking {
+            list.forEach {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val result = MyAppManager.tryUninstall(
+                        this@NewLauncherActivity,
+                        it,
+                        10010
+                    )
+                }
+            }
+        }*/
     }
 
     private var mHomeKeyReceiver: HomeWatcherReceiver? = null
