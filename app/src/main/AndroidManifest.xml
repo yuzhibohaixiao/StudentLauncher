@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.alight.android.aoa_launcher"
     android:persistent="true"
-    android:sharedUserId="android.uid.system"
-    >
+    android:sharedUserId="android.uid.system">
 
     <!--   android:sharedUserId="android.uid.system"-->
     <uses-sdk tools:overrideLibrary="com.alight.ahwcx.ahwsdk,com.common.bridge" />
@@ -13,6 +12,7 @@
         android:name="com.alight.android.aoa_launcher.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
+    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -51,7 +51,6 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        tools:replace="android:allowBackup"
         android:name=".application.LauncherApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher_new"
@@ -59,7 +58,8 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_new"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar.WindowFullscreen">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar.WindowFullscreen"
+        tools:replace="android:allowBackup">
         <!-- 屏幕适配参数 1920*1080 / 3-->
         <meta-data
             android:name="design_width_in_dp"
@@ -82,16 +82,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-<!--
-            <intent-filter>
-                <data android:scheme="tingyun.42759" />
-                &lt;!&ndash;                &lt;!&ndash;请将 scheme 中的“tingyun.xxxx”替换为听云报表设置页面中的 URL Scheme&ndash;&gt;&ndash;&gt;
-                <action android:name="android.intent.action.VIEW" />
+            <!--
+                        <intent-filter>
+                            <data android:scheme="tingyun.42759" />
+                            &lt;!&ndash;                &lt;!&ndash;请将 scheme 中的“tingyun.xxxx”替换为听云报表设置页面中的 URL Scheme&ndash;&gt;&ndash;&gt;
+                            <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
--->
+                            <category android:name="android.intent.category.DEFAULT" />
+                            <category android:name="android.intent.category.BROWSABLE" />
+                        </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".activity.WifiActivity"
@@ -147,6 +147,12 @@
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.PACKAGE_INSTALL" />
 
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".common.broadcast.UninstallApkReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>

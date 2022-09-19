@@ -4,6 +4,7 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.content.*
 import android.content.Intent.ACTION_SHUTDOWN
+import android.content.pm.PackageInfo
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
@@ -56,6 +57,7 @@ import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.xutils.common.util.LogUtil
 
 
 /**
@@ -599,6 +601,15 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         }
         //将输入法重置
 //        getPresenter().resetInputType(this)
+        //静默卸载
+//        MyAppManager.init(this)
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = MyAppManager.tryUninstall(
+                this@NewLauncherActivity,
+                "com.alight.game.gobang",
+                10010
+            )
+        }
     }
 
     private var mHomeKeyReceiver: HomeWatcherReceiver? = null
