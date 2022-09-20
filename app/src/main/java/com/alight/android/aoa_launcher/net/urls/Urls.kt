@@ -48,5 +48,8 @@ object Urls {
     //登录
     const val STUDENT_LOGIN = "device/v1/student/login"
 
+    //静默卸载相关
+    const val DEVICE_INSTALL = "device/v1/student/app/install"
+
 
 }

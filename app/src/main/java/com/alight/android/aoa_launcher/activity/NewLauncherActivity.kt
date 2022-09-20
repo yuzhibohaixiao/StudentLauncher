@@ -599,22 +599,15 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         RxTimerUtil.interval(5000) {
             iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
         }
+        /*getPresenter().getModel(
+            Urls.DEVICE_INSTALL,
+            hashMapOf("dsn" to AccountUtil.getDSN()),
+            AppUninstallBean::class.java
+        )*/
         //将输入法重置
 //        getPresenter().resetInputType(this)
         //静默卸载
 //        MyAppManager.init(this)
-    /*    var list = arrayListOf("com.alight.game.gobang", "com.qiyi.video.child")
-        runBlocking {
-            list.forEach {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val result = MyAppManager.tryUninstall(
-                        this@NewLauncherActivity,
-                        it,
-                        10010
-                    )
-                }
-            }
-        }*/
     }
 
     private var mHomeKeyReceiver: HomeWatcherReceiver? = null
@@ -996,6 +989,21 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                 ).toJson()
                             ), LoginBean::class.java
                         )
+                    }
+                }
+            } else if (any is AppUninstallBean) {
+                val appUninstallBean: AppUninstallBean = any
+                if (appUninstallBean.data.isNotEmpty()) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        runBlocking {
+                            appUninstallBean.data.forEach {
+                                val result = MyAppManager.tryUninstall(
+                                    this@NewLauncherActivity,
+                                    it.package_name,
+                                    10010
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -1495,6 +1503,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             NetTools.NETWORK_MOBILE, NetTools.NETWORK_WIFI -> {
                 netState = 1
+                getPresenter().getModel(
+                    Urls.DEVICE_INSTALL,
+                    hashMapOf("dsn" to AccountUtil.getDSN()),
+                    AppUninstallBean::class.java
+                )
                 initAccountUtil()
                 EventBus.getDefault().post(NetMessageEvent.getInstance(netState, "网络恢复正常"));
                 // 用户绑定极光推送
