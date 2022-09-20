@@ -30,4 +30,8 @@ interface Apiservice {
     @Headers("Content-Type: application/json")
     @POST
     fun postAllInfo(@Url url: String, @Body requestBody: RequestBody): Observable<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @PUT
+    fun putAllInfo(@Url url: String, @Body requestBody: RequestBody): Observable<ResponseBody>
 }

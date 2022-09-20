@@ -108,6 +108,45 @@ class NetUtils private constructor() {
             })
     }
 
+    fun <T> putInfo(
+        url: String,
+        requestBody: RequestBody,
+        cls: Class<T>,
+        callback: NetCallback
+    ) {
+        apiService.putAllInfo(url, requestBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ResponseBody> {
+                override fun onComplete() {
+
+                }
+
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onNext(t: ResponseBody) {
+                    var gson = Gson()
+                    try {
+                        var any = gson.fromJson(t.string(), cls)
+                        if (callback != null && any != null) {
+                            //回调到model层
+                            callback.onSuccess(any)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    if (callback != null) {
+                        callback.onError(e.message!!)
+                    }
+                }
+
+            })
+    }
+
     fun <T> postInfo(
         url: String,
         requestBody: RequestBody,
