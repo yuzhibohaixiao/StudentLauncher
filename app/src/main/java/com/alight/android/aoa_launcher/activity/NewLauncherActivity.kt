@@ -993,7 +993,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 }
             } else if (any is AppUninstallBean) {
                 val appUninstallBean: AppUninstallBean = any
-                if (appUninstallBean.data.isNotEmpty()) {
+                if (appUninstallBean?.data != null && appUninstallBean.data.isNotEmpty()) {
                     CoroutineScope(Dispatchers.IO).launch {
                         runBlocking {
                             appUninstallBean.data.forEach {
