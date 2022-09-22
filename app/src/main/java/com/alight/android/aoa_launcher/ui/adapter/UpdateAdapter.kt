@@ -3,6 +3,7 @@ package com.alight.android.aoa_launcher.ui.adapter
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -251,7 +252,8 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 tvUpdate.text = "已完成"
                 //安装完成后删除安装包
                 CoroutineScope(Dispatchers.IO).launch {
-                    deleteSingleFile(file)
+                    val isUninstall = deleteSingleFile(file)
+                    Log.i("UpdateAdapter", "删除安装包${file.path}:" + if (isUninstall) "成功" else "失败")
                 }
             }
         } else {
@@ -268,7 +270,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
      * @param filePath 被删除文件的文件名
      * @return 文件删除成功返回true，否则返回false
      */
-    fun deleteSingleFile(file: File): Boolean {
+    private fun deleteSingleFile(file: File): Boolean {
         val file = java.io.File(file.path)
         return if (file.isFile && file.exists()) {
             file.delete()
