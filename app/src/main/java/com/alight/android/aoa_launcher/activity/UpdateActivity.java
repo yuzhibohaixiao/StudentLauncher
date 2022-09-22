@@ -1,6 +1,5 @@
 package com.alight.android.aoa_launcher.activity;
 
-import static com.alight.android.aoa_launcher.common.constants.AppConstants.AHWCX_PACKAGE_NAME;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.EXTRA_IMAGE_PATH;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.LAUNCHER_PACKAGE_NAME;
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
@@ -14,9 +13,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
-import android.os.PersistableBundle;
 import android.os.StatFs;
 import android.util.Log;
 import android.view.View;

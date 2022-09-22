@@ -4,7 +4,6 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.content.*
 import android.content.Intent.ACTION_SHUTDOWN
-import android.content.pm.PackageInfo
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
@@ -57,7 +56,6 @@ import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.xutils.common.util.LogUtil
 
 
 /**
