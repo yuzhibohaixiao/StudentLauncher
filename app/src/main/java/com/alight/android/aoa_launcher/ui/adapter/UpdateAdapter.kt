@@ -13,8 +13,8 @@ import com.alight.android.aoa_launcher.utils.StringUtils
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -247,17 +247,33 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 file.packName
             ) >= file.versionCode
         ) {
-            GlobalScope.launch(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 tvUpdate.text = "已完成"
+                //安装完成后删除安装包
+                CoroutineScope(Dispatchers.IO).launch {
+                    deleteSingleFile(file)
+                }
             }
         } else {
-            GlobalScope.launch(Dispatchers.IO) {
+            CoroutineScope(Dispatchers.IO).launch {
                 delay(1000 * 1)
                 refreshInstallState(file, tvUpdate)
             }
         }
     }
 
+    /**
+     * 删除单个文件
+     *
+     * @param filePath 被删除文件的文件名
+     * @return 文件删除成功返回true，否则返回false
+     */
+    fun deleteSingleFile(file: File): Boolean {
+        val file = java.io.File(file.path)
+        return if (file.isFile && file.exists()) {
+            file.delete()
+        } else false
+    }
 
     override fun getItemViewType(position: Int): Int {
         return position
