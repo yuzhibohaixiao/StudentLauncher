@@ -1388,17 +1388,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     }
 
     /**
-     * 发送自定义刷新安装状态的广播
-     */
-    private void sendUpdateBroadcast(String packageName) {
-        Log.i(TAG, "sendUpdateBroadcast: packageName = " + packageName);
-        Intent intent = new Intent();
-        intent.setAction("com.alight.android.update");
-        intent.putExtra("packageName", packageName);// 设置广播的消息
-        sendBroadcast(intent);
-    }
-
-    /**
      * 计算Sdcard的剩余大小
      *
      * @return MB

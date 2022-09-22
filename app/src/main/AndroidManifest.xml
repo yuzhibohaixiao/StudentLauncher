@@ -169,12 +169,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".common.broadcast.UpdateReceiver">
-            <intent-filter>
-                <action android:name="com.alight.android.update" />
-            </intent-filter>
-        </receiver>
-
         <service android:name=".service.DownloadService" />
         <service android:name=".service.UpdateService" />
 
