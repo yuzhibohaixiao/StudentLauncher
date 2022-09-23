@@ -4,13 +4,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import com.alight.android.aoa_launcher.activity.NewLauncherActivity
 import com.alight.android.aoa_launcher.utils.BtnClickUtil
 import com.alight.android.aoa_launcher.utils.CommonUtil
-import com.alight.android.aoa_launcher.utils.TimeUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 class HomeWatcherReceiver : BroadcastReceiver() {
     private val LOG_TAG = "HomeReceiver"
@@ -64,5 +66,12 @@ class HomeWatcherReceiver : BroadcastReceiver() {
 //            isClear = true
 //        }
         context.startActivity(intent)
+
+        //不关闭Activity退回主界面
+      /*  val launcherIntent: Intent =
+            Intent(Intent.ACTION_MAIN)
+        launcherIntent.addCategory(Intent.CATEGORY_HOME)
+        context.startActivity(intent)*/
+
     }
 }
