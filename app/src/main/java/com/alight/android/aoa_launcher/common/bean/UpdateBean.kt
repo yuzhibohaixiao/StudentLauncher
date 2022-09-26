@@ -39,5 +39,6 @@ Ota = 3  # ota包
  */
 data class AppInfo(
     val package_name: String,
-    val type: Int
+    val type: Int,
+    val top_flag: Int
 ) : Serializable

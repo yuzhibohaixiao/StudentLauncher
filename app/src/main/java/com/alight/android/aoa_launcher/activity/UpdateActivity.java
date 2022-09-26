@@ -722,6 +722,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 File file = new File();
                 file.setId("" + i);
                 file.setSeq(i);
+//                file.setTopFlag(systemUpdateBean.getApp_info().getTop_flag());
                 if (systemUpdateBean.getFormat() == 2) {
                     file.setFormat(systemUpdateBean.getFormat());
                     file.setFileName(systemUpdateBean.getApp_name() + ".apk");

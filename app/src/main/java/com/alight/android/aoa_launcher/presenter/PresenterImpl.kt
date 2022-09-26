@@ -1722,7 +1722,12 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                     switch.isChecked = false
                 }
                 switch.setOnCheckedChangeListener { buttonView, isChecked ->
-                    if (BtnClickUtil.isFastShow()) return@setOnCheckedChangeListener
+                    switch.isClickable = false
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(2000)
+                        switch.isClickable = true
+                    }
+//                    if (BtnClickUtil.isFastShow()) return@setOnCheckedChangeListener
                     if (isChecked) {
                         val coroutineScope = CoroutineScope(Dispatchers.IO)
                         panelAbility.setOpticalEngineMode(PanelAbility.OpticalEngineMode.HIGH_FPS_MODE)

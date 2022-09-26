@@ -4,7 +4,9 @@ import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
 
 import java.io.Serializable;
+import java.text.Collator;
 import java.util.Date;
+import java.util.Locale;
 
 @Table(name = "download_file")
 public class File implements Serializable, Comparable<File> {
@@ -91,6 +93,17 @@ public class File implements Serializable, Comparable<File> {
     private int versionCode;
 
     private String packName;
+
+    private Integer topFlag;
+
+
+    public Integer getTopFlag() {
+        return topFlag;
+    }
+
+    public void setTopFlag(Integer topFlag) {
+        this.topFlag = topFlag;
+    }
 
     public int getFormat() {
         return format;
@@ -278,7 +291,7 @@ public class File implements Serializable, Comparable<File> {
         } else if (this.getFormat() < o.getFormat()) {
             return -1;
         } else {
-            return 0;
+            return Collator.getInstance(Locale.CHINESE).compare(this.fileName, o.fileName);
         }
     }
 }
