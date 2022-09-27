@@ -252,6 +252,7 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                 tvUpdate.text = "已完成"
                 //安装完成后删除安装包
                 CoroutineScope(Dispatchers.IO).launch {
+                    delay(2000)
                     val isUninstall = deleteSingleFile(file)
                     Log.i("UpdateAdapter", "删除安装包${file.path}:" + if (isUninstall) "成功" else "失败")
                 }
