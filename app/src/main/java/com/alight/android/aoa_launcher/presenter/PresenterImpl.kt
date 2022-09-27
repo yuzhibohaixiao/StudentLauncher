@@ -809,6 +809,7 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         any: UpdateBean,
         activity: Activity
     ) {
+        val result = Gson().toJson(any)
         if (activity == null || activity.isDestroyed) {
             return
         }
