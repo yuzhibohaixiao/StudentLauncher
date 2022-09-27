@@ -722,7 +722,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 File file = new File();
                 file.setId("" + i);
                 file.setSeq(i);
-//                file.setTopFlag(systemUpdateBean.getApp_info().getTop_flag());
+                file.setTopFlag(systemUpdateBean.getApp_info().getTop_flag());
                 if (systemUpdateBean.getFormat() == 2) {
                     file.setFormat(systemUpdateBean.getFormat());
                     file.setFileName(systemUpdateBean.getApp_name() + ".apk");
@@ -774,6 +774,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
             }
             Collections.sort(systemList);
+            complexSorting(systemList);
             for (int i = 0; i < systemList.size(); i++) {
                 File file = systemList.get(i);
                 if (file.getFormat() == 3 || file.getFormat() == 4) {
@@ -794,6 +795,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 File file = new File();
                 file.setId("" + i);
                 file.setSeq(i);
+                file.setTopFlag(otherUpdateBean.getApp_info().getTop_flag());
                 if (otherUpdateBean.getFormat() == 2) {
                     file.setFormat(otherUpdateBean.getFormat());
                     file.setFileName(otherUpdateBean.getApp_name() + ".apk");
@@ -838,6 +840,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 }
             }
             Collections.sort(otherList);
+            complexSorting(otherList);
             for (int i = 0; i < otherList.size(); i++) {
                 File file = otherList.get(i);
                 if (file.getFormat() == 3 || file.getFormat() == 4) {
@@ -850,6 +853,34 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 downloadReceiverMap.put(file.getId(), receiver);
             }
         }
+    }
+
+    private void complexSorting(List<File> list) {
+        ArrayList<File> needUpdateTopFlagList = new ArrayList<>();
+        ArrayList<File> otherTopFlagList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            File file = list.get(i);
+            if (file.getTopFlag() == 1) {
+                if (file.getFormat() == 4) {
+                    //无需更新
+                    otherTopFlagList.add(file);
+                } else {
+                    //需要更新
+                    needUpdateTopFlagList.add(file);
+                }
+            }
+        }
+        list.removeAll(needUpdateTopFlagList);
+        list.removeAll(otherTopFlagList);
+        list.addAll(0, needUpdateTopFlagList);
+        int index = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getFormat() == 4) {
+                index = i;
+                break;
+            }
+        }
+        list.addAll(index, otherTopFlagList);
     }
 
     private void installSystem(Context context) {
