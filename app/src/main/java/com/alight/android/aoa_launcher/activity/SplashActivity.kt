@@ -617,7 +617,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         val uri =
             Uri.parse("android.resource://$packageName/${splashVideoList[userSplashNumber]}")//“xxxx”为视频名称，视频资源在res目录下新建raw，在raw文件夹中放入视频
         CoroutineScope(Dispatchers.IO).launch {
-            delay(1000)
+            delay(500)
             videoView.setVideoURI(uri)
         }
 
