@@ -535,42 +535,21 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 //        val mediaController = MediaController(this@SplashActivity)
 //        //VideoView与MediaController建立关联
 //        videoView.setMediaController(mediaController)
-/*
         videoView.setOnPreparedListener {
             it.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
             it.setOnInfoListener { mp, what, extra ->
                 if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                     simple_video_bg.visibility = View.GONE
-//                    CoroutineScope(Dispatchers.IO).launch {
-//                        delay(2000)
-//                        CoroutineScope(Dispatchers.Main).launch {
-//                            placeholder.visibility = View.GONE
-//                        }
-//                    }
-//                    placeholder.visibility = View.GONE
-//                    videoView.visibility = View.VISIBLE
+                    videoView.setBackgroundColor(Color.TRANSPARENT)
                 }
-//                      videoView.setBackgroundColor(Color.TRANSPARENT)
                 return@setOnInfoListener true
             }
             videoView.start()
-//            placeholder.visibility = View.VISIBLE
-//            videoView.setBackgroundColor(Color.WHITE)
-//            CoroutineScope(Dispatchers.IO).launch {
-//                delay(1000)
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    placeholder.visibility = View.VISIBLE
-//                }
-//            }
         }
-*/
-//        videoView.setOnCompletionListener {
-//            videoView.pause() //视频暂停
-//            placeholder.visibility = View.VISIBLE //遮挡图片设置可见
-//        }
+
         userSplashNumber = 0
         videoView.visibility = View.VISIBLE
-            playSplashVideo()
+        playSplashVideo()
     }
 
     private fun backNewUserSplash() {
@@ -587,8 +566,8 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             sc_next_launcher_splash2.visibility = View.GONE
             tv_next_launcher_splash.text = "下一页"
         } else {
-            sc_next_launcher_splash2.visibility = View.VISIBLE
             sc_next_launcher_splash.visibility = View.VISIBLE
+            sc_next_launcher_splash2.visibility = View.VISIBLE
             tv_next_launcher_splash.text = "上一页"
             tv_next_launcher_splash2.text = "下一页"
         }
@@ -633,34 +612,18 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun playSplashVideo() {
-//        placeholder.visibility = View.VISIBLE
-//        videoView.pause() //视频暂停
-        /* if (videoView.visibility == View.GONE) {
-             videoView.visibility = View.VISIBLE
-         }*/
+        simple_video_bg.visibility = View.VISIBLE
+        videoView.setBackgroundColor(Color.WHITE)
         val uri =
             Uri.parse("android.resource://$packageName/${splashVideoList[userSplashNumber]}")//“xxxx”为视频名称，视频资源在res目录下新建raw，在raw文件夹中放入视频
         CoroutineScope(Dispatchers.IO).launch {
-            videoView.setDataSource(UriTofilePath.getFilePathByUri(this@SplashActivity, uri))
+            delay(1000)
+            videoView.setVideoURI(uri)
         }
-//            .setVideoURI(uri)
 
-        /*  var mediaMetadataRetriever = MediaMetadataRetriever()
-          mediaMetadataRetriever.setDataSource(this, uri)
-          //获取视频中的第一帧照片，设置为封面
-          var bitmap =
-              mediaMetadataRetriever.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
-          if (bitmap == null) {
-              videoView.setBackgroundColor(Color.WHITE)
-          } else {
-              var drawable = BitmapDrawable(resources, bitmap);
-              videoView.background = drawable
-          }*/
-
-//        mediaMetadataRetriever.release()
-
-//        videoView.requestFocus()
-        videoView.start()
+        videoView.requestFocus()
+        videoView.seekTo(1)
+//        videoView.start()
     }
 
     private fun lastSplashClose(): Boolean {
