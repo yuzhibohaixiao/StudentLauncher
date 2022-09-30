@@ -219,7 +219,7 @@ class LauncherRightAdapter :
             var endTime = playTimeBean.data.playtime.stop_playtime
 
             playTimeBean.data.app_manage.forEach {
-                if (packName == it.app_info.package_name && className == it.class_name && (params == null || params.isEmpty() || params.values.indexOf(
+                if (it.app_info != null && it.app_info.package_name.isNotEmpty() && packName == it.app_info.package_name && className == it.class_name && (params == null || params.isEmpty() || params.values.indexOf(
                         it.args
                     ) != -1)
                 ) {
@@ -240,25 +240,29 @@ class LauncherRightAdapter :
                 }
             }
 
-
-            val intent = Intent()
-            val componentName =
-                ComponentName(packName, className)
-            params?.forEach {
-                when (it.value) {
-                    is String -> {
-                        intent.putExtra(it.key, it.value.toString())
-                    }
-                    is Boolean -> {
-                        intent.putExtra(it.key, it.value as? Boolean)
-                    }
-                    is Int -> {
-                        intent.putExtra(it.key, it.value as? Int)
+            if ((params == null || params.isEmpty()) && className.isEmpty()) {
+                val intent = context.packageManager.getLaunchIntentForPackage(packName)
+                context.startActivity(intent)
+            } else {
+                val intent = Intent()
+                val componentName =
+                    ComponentName(packName, className)
+                params?.forEach {
+                    when (it.value) {
+                        is String -> {
+                            intent.putExtra(it.key, it.value.toString())
+                        }
+                        is Boolean -> {
+                            intent.putExtra(it.key, it.value as? Boolean)
+                        }
+                        is Int -> {
+                            intent.putExtra(it.key, it.value as? Int)
+                        }
                     }
                 }
+                intent.component = componentName
+                context.startActivity(intent)
             }
-            intent.component = componentName
-            context.startActivity(intent)
         } catch (e: java.lang.Exception) {
             ToastUtils.showLong(context, "该应用正在开发中，敬请期待！")
             e.printStackTrace()
