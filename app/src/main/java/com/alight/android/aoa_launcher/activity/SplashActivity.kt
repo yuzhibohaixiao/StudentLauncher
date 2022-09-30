@@ -614,15 +614,18 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private fun playSplashVideo() {
         simple_video_bg.visibility = View.VISIBLE
         videoView.setBackgroundColor(Color.WHITE)
-        val uri =
-            Uri.parse("android.resource://$packageName/${splashVideoList[userSplashNumber]}")//“xxxx”为视频名称，视频资源在res目录下新建raw，在raw文件夹中放入视频
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(500)
-            videoView.setVideoURI(uri)
+        try {
+            val uri =
+                Uri.parse("android.resource://$packageName/${splashVideoList[userSplashNumber]}")//“xxxx”为视频名称，视频资源在res目录下新建raw，在raw文件夹中放入视频
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(500)
+                videoView.setVideoURI(uri)
+            }
+            videoView.requestFocus()
+            videoView.seekTo(1)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
-        videoView.requestFocus()
-        videoView.seekTo(1)
 //        videoView.start()
     }
 
