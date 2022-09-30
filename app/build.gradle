@@ -288,6 +288,8 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:3.1.0'
 
     implementation 'com.daimajia.androidanimations:library:2.4@aar'
+
+    implementation 'cn.qssq666:video-player-manager:0.6'
 }
 
 task aos_chip_3399_self_test_builder(group: "aos") {

@@ -3,8 +3,13 @@ package com.alight.android.aoa_launcher.activity
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.media.MediaMetadataRetriever
+import android.media.MediaPlayer
+import android.net.Uri
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -46,13 +51,22 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var splashViews: List<View>;
     private var wifiFlag = false
-    private val userSplashBgList = arrayListOf(
-        R.drawable.launcher_splash1,
-        R.drawable.launcher_splash2,
-        R.drawable.launcher_splash3,
-        R.drawable.launcher_splash4,
-        R.drawable.launcher_splash5,
-        R.drawable.launcher_splash6,
+
+    /*
+        private val userSplashBgList = arrayListOf(
+            R.drawable.launcher_splash1,
+            R.drawable.launcher_splash2,
+            R.drawable.launcher_splash3,
+            R.drawable.launcher_splash4,
+            R.drawable.launcher_splash5,
+            R.drawable.launcher_splash6,
+        )
+    */
+    private val splashVideoList = arrayListOf(
+        R.raw.splash1,
+        R.raw.splash2,
+        R.raw.splash3,
+        R.raw.splash4
     )
     private var isForceUpdate = false
     private var isRebinding = false
@@ -67,6 +81,10 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
     private var fetchCDKRemain: Int = 0;
     private var mUserId = -1
 
+//    private val surfaceView: SurfaceView? = null
+
+    //MediaPlayer对象
+//    private var mediaPlayer: MediaPlayer? = null
 
     //初始化控件
     override fun initView() {
@@ -505,7 +523,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 
     private fun showNewUserSplash() {
         fl_wifi_module.visibility = View.GONE
-        fl_splash.setBackgroundResource(userSplashBgList[0])
+//        fl_splash.setBackgroundResource(userSplashBgList[0])
         fl_splash1.visibility = View.GONE
         sc_next_launcher_splash.visibility = View.VISIBLE
         tv_date_splash.visibility = View.GONE
@@ -513,6 +531,46 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         rv_select_child_splash.visibility = View.GONE
         ll_progress_splash.visibility = View.GONE
         ll_splash5.visibility = View.GONE
+        //增加控制浮窗
+//        val mediaController = MediaController(this@SplashActivity)
+//        //VideoView与MediaController建立关联
+//        videoView.setMediaController(mediaController)
+/*
+        videoView.setOnPreparedListener {
+            it.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
+            it.setOnInfoListener { mp, what, extra ->
+                if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                    simple_video_bg.visibility = View.GONE
+//                    CoroutineScope(Dispatchers.IO).launch {
+//                        delay(2000)
+//                        CoroutineScope(Dispatchers.Main).launch {
+//                            placeholder.visibility = View.GONE
+//                        }
+//                    }
+//                    placeholder.visibility = View.GONE
+//                    videoView.visibility = View.VISIBLE
+                }
+//                      videoView.setBackgroundColor(Color.TRANSPARENT)
+                return@setOnInfoListener true
+            }
+            videoView.start()
+//            placeholder.visibility = View.VISIBLE
+//            videoView.setBackgroundColor(Color.WHITE)
+//            CoroutineScope(Dispatchers.IO).launch {
+//                delay(1000)
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    placeholder.visibility = View.VISIBLE
+//                }
+//            }
+        }
+*/
+//        videoView.setOnCompletionListener {
+//            videoView.pause() //视频暂停
+//            placeholder.visibility = View.VISIBLE //遮挡图片设置可见
+//        }
+        userSplashNumber = 0
+        videoView.visibility = View.VISIBLE
+            playSplashVideo()
     }
 
     private fun backNewUserSplash() {
@@ -527,20 +585,21 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
             ll_progress_splash.visibility = View.GONE
             fl_splash4.visibility = View.GONE
             sc_next_launcher_splash2.visibility = View.GONE
-            tv_next_launcher_splash.text = "下一步"
+            tv_next_launcher_splash.text = "下一页"
         } else {
             sc_next_launcher_splash2.visibility = View.VISIBLE
             sc_next_launcher_splash.visibility = View.VISIBLE
-            tv_next_launcher_splash.text = "上一步"
-            tv_next_launcher_splash2.text = "下一步"
+            tv_next_launcher_splash.text = "上一页"
+            tv_next_launcher_splash2.text = "下一页"
         }
-        fl_splash.setBackgroundResource(userSplashBgList[userSplashNumber])
-    }
+//        fl_splash.setBackgroundResource(userSplashBgList[userSplashNumber])
 
+        playSplashVideo()
+    }
 
     private fun nextNewUserSplash() {
         if (lastSplashClose()) return
-        if (userSplashBgList.size - 1 > userSplashNumber) {
+        if (splashVideoList.size - 1 > userSplashNumber) {
             userSplashNumber++
         }
         //显示launcher引导
@@ -554,9 +613,9 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
         } else {
             sc_next_launcher_splash2.visibility = View.VISIBLE
             sc_next_launcher_splash.visibility = View.VISIBLE
-            tv_next_launcher_splash.text = "上一步"
+            tv_next_launcher_splash.text = "上一页"
         }
-        fl_splash.setBackgroundResource(userSplashBgList[userSplashNumber])
+//        fl_splash.setBackgroundResource(userSplashBgList[userSplashNumber])
         /*  Glide.with(this)
               .load(userSplashBgList[userSplashNumber])
               .into(object : SimpleTarget<Drawable?>() {
@@ -567,13 +626,45 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                       fl_splash.background = resource
                   }
               })*/
-        if (userSplashNumber == userSplashBgList.size - 1) {
-            tv_next_launcher_splash2.text = "完成引导"
+        if (userSplashNumber == splashVideoList.size - 1) {
+            tv_next_launcher_splash2.text = "进入系统"
         }
+        playSplashVideo()
+    }
+
+    private fun playSplashVideo() {
+//        placeholder.visibility = View.VISIBLE
+//        videoView.pause() //视频暂停
+        /* if (videoView.visibility == View.GONE) {
+             videoView.visibility = View.VISIBLE
+         }*/
+        val uri =
+            Uri.parse("android.resource://$packageName/${splashVideoList[userSplashNumber]}")//“xxxx”为视频名称，视频资源在res目录下新建raw，在raw文件夹中放入视频
+        CoroutineScope(Dispatchers.IO).launch {
+            videoView.setDataSource(UriTofilePath.getFilePathByUri(this@SplashActivity, uri))
+        }
+//            .setVideoURI(uri)
+
+        /*  var mediaMetadataRetriever = MediaMetadataRetriever()
+          mediaMetadataRetriever.setDataSource(this, uri)
+          //获取视频中的第一帧照片，设置为封面
+          var bitmap =
+              mediaMetadataRetriever.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+          if (bitmap == null) {
+              videoView.setBackgroundColor(Color.WHITE)
+          } else {
+              var drawable = BitmapDrawable(resources, bitmap);
+              videoView.background = drawable
+          }*/
+
+//        mediaMetadataRetriever.release()
+
+//        videoView.requestFocus()
+        videoView.start()
     }
 
     private fun lastSplashClose(): Boolean {
-        if (userSplashNumber == userSplashBgList.size - 1 && !closeSplash) {
+        if (userSplashNumber == splashVideoList.size - 1 && !closeSplash) {
             //开机引导进入launcher时检测更新
             if (!onlySplash) {
                 closeSplash = true
