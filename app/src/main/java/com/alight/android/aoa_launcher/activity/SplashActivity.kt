@@ -867,6 +867,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
 //                closeSplash()
 //            }
             R.id.tv_next_launcher_splash -> {
+                if (BtnClickUtil.isFastShow()) return
                 //第一页
                 if (userSplashNumber == 0) {
                     nextNewUserSplash()
@@ -875,6 +876,7 @@ class SplashActivity : BaseActivity(), View.OnClickListener {
                 }
             }
             R.id.tv_next_launcher_splash2 -> {
+                if (BtnClickUtil.isFastShow()) return
                 nextNewUserSplash()
             }
             R.id.tv_skip_splash -> {
