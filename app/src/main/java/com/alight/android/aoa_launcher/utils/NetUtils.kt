@@ -9,12 +9,15 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 
 /**
@@ -220,6 +223,42 @@ class NetUtils private constructor() {
 
             })
     }
+
+    fun <T> uploadIcon(
+        url: String,
+        filePath: String,
+        callback: NetCallback
+    ) {
+        val file = File(filePath) // picture是图片路径，通过路径生成file文件
+        val requestBody: RequestBody =
+            RequestBody.create(MediaType.parse(MultipartBody.FORM.toString()), file)
+        // avatar参数是一个自定义的名字，自己随便写
+        val createFormData = MultipartBody.Part.createFormData("avatar", file.name, requestBody)
+        apiService.uploadIcon(url, createFormData).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ResponseBody> {
+                override fun onComplete() {
+
+                }
+
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onNext(t: ResponseBody) {
+                    //回调到model层
+//                    callback.onSuccess(null)
+                }
+
+                override fun onError(e: Throwable) {
+                    if (callback != null) {
+                        callback.onError(e.message!!)
+                    }
+                }
+
+            })
+    }
+
 
     fun isNet(): Boolean {
         return false

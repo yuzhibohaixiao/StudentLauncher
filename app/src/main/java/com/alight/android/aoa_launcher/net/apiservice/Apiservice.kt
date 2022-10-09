@@ -2,6 +2,7 @@ package com.alight.android.aoa_launcher.net.apiservice
 
 import com.alight.android.aoa_launcher.net.urls.Urls
 import io.reactivex.Observable
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -34,4 +35,24 @@ interface Apiservice {
     @Headers("Content-Type: application/json")
     @PUT
     fun putAllInfo(@Url url: String, @Body requestBody: RequestBody): Observable<ResponseBody>
+
+    @Multipart
+    @POST
+    fun  //这里是自己post文件的地址
+            postGoodsReturnPostEntitys(
+        @PartMap map: Map<*, *>,
+        @Part parts: List<*>
+    ): Observable<*>
+
+
+    // 检测记录上报
+    @Headers("Content-Type: application/json")
+    @Multipart
+    @POST("uploadRecord")
+    fun uploadIcon(
+        @Url url: String,
+        @Part file: MultipartBody.Part
+    ): Observable<ResponseBody>
+
+
 }
