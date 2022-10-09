@@ -332,7 +332,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         ll_about_deivce.setOnClickListener(this)
         ll_power.setOnClickListener(this)
         fl_all_app.setOnClickListener(this)
-        fl_storage.setOnClickListener(this)
+//        fl_storage.setOnClickListener(this)
         fl_wifi_set.setOnClickListener(this)
         fl_update_system.setOnClickListener(this)
         tv_family_back.setOnClickListener(this)
@@ -908,7 +908,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 getPresenter().showAppSetting(this)
             }
             R.id.fl_storage -> {
-                getPresenter().showStorage(this)
+//                getPresenter().showStorage(this)
             }
             R.id.tv_family_back -> {
                 selectFamilyPosition--
