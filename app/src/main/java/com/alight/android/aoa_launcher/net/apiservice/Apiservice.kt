@@ -48,7 +48,7 @@ interface Apiservice {
     // 检测记录上报
     @Headers("Content-Type: application/json")
     @Multipart
-    @POST("uploadRecord")
+    @POST
     fun uploadIcon(
         @Url url: String,
         @Part file: MultipartBody.Part

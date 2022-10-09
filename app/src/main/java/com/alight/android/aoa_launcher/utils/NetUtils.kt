@@ -227,13 +227,14 @@ class NetUtils private constructor() {
     fun <T> uploadIcon(
         url: String,
         filePath: String,
+        cls: Class<T>,
         callback: NetCallback
     ) {
         val file = File(filePath) // picture是图片路径，通过路径生成file文件
         val requestBody: RequestBody =
             RequestBody.create(MediaType.parse(MultipartBody.FORM.toString()), file)
         // avatar参数是一个自定义的名字，自己随便写
-        val createFormData = MultipartBody.Part.createFormData("avatar", file.name, requestBody)
+        val createFormData = MultipartBody.Part.createFormData("icon", file.name, requestBody)
         apiService.uploadIcon(url, createFormData).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<ResponseBody> {
@@ -247,7 +248,12 @@ class NetUtils private constructor() {
 
                 override fun onNext(t: ResponseBody) {
                     //回调到model层
-//                    callback.onSuccess(null)
+                    var gson = Gson()
+                    var any = gson.fromJson(t.string(), cls)
+                    if (callback != null && any != null) {
+                        //回调到model层
+                        callback.onSuccess(any)
+                    }
                 }
 
                 override fun onError(e: Throwable) {
