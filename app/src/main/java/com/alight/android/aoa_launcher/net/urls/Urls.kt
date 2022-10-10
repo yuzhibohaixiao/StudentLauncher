@@ -51,5 +51,8 @@ object Urls {
     //静默卸载相关
     const val DEVICE_INSTALL = "device/v1/student/app/install"
 
+    //上传应用图标
+    const val UPLOAD_ICON = "/oss_sts/v1/upload_icon"
+
 
 }
