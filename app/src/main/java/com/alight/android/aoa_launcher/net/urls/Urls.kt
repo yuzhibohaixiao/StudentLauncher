@@ -54,5 +54,8 @@ object Urls {
     //上传应用图标
     const val UPLOAD_ICON = "/oss_sts/v1/upload_icon"
 
+    //设备存储大小 开机和跳转个人中心 PUT
+    const val DEVICE_SPACE = "/device/v1/device/space"
+
 
 }
