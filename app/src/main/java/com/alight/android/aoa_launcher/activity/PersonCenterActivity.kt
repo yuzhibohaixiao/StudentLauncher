@@ -44,6 +44,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -235,10 +236,23 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         val storageBean = StorageUtil.queryWithStorageManager(this)
         var totalSize = storageBean.totalSize
         var useSize = storageBean.useSize
+        var remainSize = storageBean.remainSize
+        val remainSizeMb = DecimalFormat("0").format(remainSize.toDouble() * 1024)
+        getPresenter().putModel(
+            Urls.DEVICE_SPACE,
+            RequestBody.create(
+                null,
+                mapOf(
+                    "dsn" to AccountUtil.getDSN(),
+                    "free_space" to remainSizeMb
+                ).toJson()
+            ), BaseBean::class.java
+        )
         val format = DecimalFormat("0.00")
         totalSize = format.format(BigDecimal(totalSize))
         useSize = format.format(BigDecimal(useSize))
-        tv_storage.text = "已使用${useSize}GB/${totalSize}GB"
+        remainSize = format.format(BigDecimal(remainSize))
+        tv_storage.text = "剩余${remainSize}GB/32.00GB"
         val progress = useSize.toFloat() * 100 / totalSize.toFloat()
         update_progress.progress = progress.toInt()
         if (notifyCenterAdapter == null) {

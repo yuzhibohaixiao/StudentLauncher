@@ -31,6 +31,13 @@ interface IContract {
             cls: Class<T>,
             callback: NetUtils.NetCallback
         )
+
+        fun <T> putNetInfo(
+            url: String,
+            requestBody: RequestBody,
+            cls: Class<T>,
+            callback: NetUtils.NetCallback
+        )
     }
 
     //View视图层

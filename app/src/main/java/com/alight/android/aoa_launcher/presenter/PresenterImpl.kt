@@ -128,6 +128,21 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
         })
     }
 
+    fun <T> putModel(url: String, requestBody: RequestBody, cls: Class<T>) {
+        //调用model
+        getModel().putNetInfo(url, requestBody, cls, object : NetUtils.NetCallback {
+            //model层回调给Presenter层级
+            override fun onSuccess(any: Any) {
+                //希望在View层进行视图的刷新
+                getView()?.onSuccess(any)
+            }
+
+            override fun onError(error: String) {
+                getView()?.onError(error)
+            }
+        })
+    }
+
 
     fun <T> deleteModel(requestBody: RequestBody, cls: Class<T>) {
         //调用model

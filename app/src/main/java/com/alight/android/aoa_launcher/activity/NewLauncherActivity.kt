@@ -56,6 +56,7 @@ import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.text.DecimalFormat
 
 
 /**
@@ -597,6 +598,20 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
         RxTimerUtil.interval(5000) {
             iv_wifi_module.setImageResource(getPresenter().getCurrentWifiDrawable(this))
         }
+        val storageBean = StorageUtil.queryWithStorageManager(this)
+        var remainSize = storageBean.remainSize
+        val remainSizeMb = DecimalFormat("0").format(remainSize.toDouble() * 1024).toLong()
+        //上报设备的剩余内存大小
+        getPresenter().putModel(
+            Urls.DEVICE_SPACE,
+            RequestBody.create(
+                null,
+                mapOf(
+                    "dsn" to AccountUtil.getDSN(),
+                    "free_space" to remainSizeMb
+                ).toJson()
+            ), BaseBean::class.java
+        )
         /*getPresenter().getModel(
             Urls.DEVICE_INSTALL,
             hashMapOf("dsn" to AccountUtil.getDSN()),
@@ -1501,6 +1516,20 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
             }
             NetTools.NETWORK_MOBILE, NetTools.NETWORK_WIFI -> {
                 netState = 1
+                val storageBean = StorageUtil.queryWithStorageManager(this)
+                var remainSize = storageBean.remainSize
+                val remainSizeMb = DecimalFormat("0").format(remainSize.toDouble() * 1024).toLong()
+                //上报设备的剩余内存大小
+                getPresenter().putModel(
+                    Urls.DEVICE_SPACE,
+                    RequestBody.create(
+                        null,
+                        mapOf(
+                            "dsn" to AccountUtil.getDSN(),
+                            "free_space" to remainSizeMb
+                        ).toJson()
+                    ), BaseBean::class.java
+                )
                 getPresenter().getModel(
                     Urls.DEVICE_INSTALL,
                     hashMapOf("dsn" to AccountUtil.getDSN()),

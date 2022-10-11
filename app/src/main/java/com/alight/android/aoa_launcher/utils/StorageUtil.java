@@ -181,7 +181,7 @@ public class StorageUtil {
                     }
                 }
                 Log.d(TAG, "总内存 total = " + getUnit(total, unit) + "\n已用 used(with system) = " + getUnit(used, 1000) + "\n可用 available = " + getUnit(total - used, unit));
-                return new StorageBean(getUnit(total, unit), getUnit(used, unit));
+                return new StorageBean(getUnit(total, unit), getUnit(used, unit), getUnit(total - used, unit));
             } catch (SecurityException e) {
                 Log.e(TAG, "缺少权限：permission.PACKAGE_USAGE_STATS");
             } catch (Exception e) {
