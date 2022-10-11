@@ -90,7 +90,7 @@ public class UpgradeApkReceiver extends BroadcastReceiver {
                 AppConstants.AOA_LAUNCHER_USER_INFO_TOKEN,
                 ""
         );
-        String url = "https://test.api.alight-sys.com/oss_sts/v1/upload_icon";
+        String url = Urls.BASEURL + Urls.UPLOAD_ICON;
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         formBodyBuilder.add("icon_base64", bitmap2StrByBase64);
         formBodyBuilder.add("icon_name", appName);
