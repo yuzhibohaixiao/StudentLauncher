@@ -623,7 +623,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //        MyAppManager.init(this)
         getPresenter().getModel(
             Urls.APPS_SORT + AccountUtil.getDSN(),
-            hashMapOf(), BaseBean::class.java
+            hashMapOf(), AppSortBean::class.java
         )
 
     }
@@ -1024,6 +1024,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                         }
                     }
                 }
+            } else if (any is AppSortBean) {
+                var appSortBean = any
+                val toJson = Gson().toJson(appSortBean)
+                Log.i(TAG, "onSuccess: $toJson")
             }
             /*else if (any is FamilyInfoBean) {
                 familyInfoBean = any
