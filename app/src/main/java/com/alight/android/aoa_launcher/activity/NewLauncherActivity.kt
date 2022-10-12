@@ -621,6 +621,11 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
 //        getPresenter().resetInputType(this)
         //静默卸载
 //        MyAppManager.init(this)
+        getPresenter().getModel(
+            Urls.APPS_SORT + AccountUtil.getDSN(),
+            hashMapOf(), BaseBean::class.java
+        )
+
     }
 
     private var mHomeKeyReceiver: HomeWatcherReceiver? = null

@@ -7,40 +7,50 @@
 
     <ImageView
         android:id="@+id/iv_sxqm_child_launcher"
-        android:layout_width="270dp"
-        android:layout_height="373dp"
+        android:layout_width="540px"
+        android:layout_height="746px"
+        android:minWidth="540px"
+        android:minHeight="746px"
         android:layout_marginStart="54dp"
         android:src="@drawable/sxqm_child_launcher" />
 
 
     <ImageView
         android:id="@+id/iv_kxts_child_launcher"
-        android:layout_width="270dp"
-        android:layout_height="176dp"
+        android:layout_width="540px"
+        android:layout_height="352px"
+        android:minWidth="540px"
+        android:minHeight="352px"
         android:layout_marginStart="345dp"
         android:layout_marginTop="15.5dp"
         android:src="@drawable/kxts_child_launcher" />
 
     <ImageView
         android:id="@+id/iv_hbyd_child_launcher"
-        android:layout_width="270dp"
-        android:layout_height="176dp"
+        android:layout_width="540px"
+        android:layout_height="352px"
+        android:minWidth="540px"
+        android:minHeight="352px"
         android:layout_marginStart="345dp"
         android:layout_marginTop="196.5dp"
         android:src="@drawable/hbyd_child_launcher" />
 
     <ImageView
         android:id="@+id/iv_msqm_child_launcher"
-        android:layout_width="270dp"
-        android:layout_height="176dp"
+        android:layout_width="540px"
+        android:layout_height="352px"
+        android:minWidth="540px"
+        android:minHeight="352px"
         android:layout_marginStart="635dp"
         android:layout_marginTop="15.5dp"
         android:src="@drawable/msqm_child_launcher" />
 
     <ImageView
         android:id="@+id/iv_yzyx_child_launcher"
-        android:layout_width="270dp"
-        android:layout_height="176dp"
+        android:layout_width="540px"
+        android:layout_height="352px"
+        android:minWidth="540px"
+        android:minHeight="352px"
         android:layout_marginStart="635dp"
         android:layout_marginTop="196.5dp"
         android:src="@drawable/yzyx_child_launcher" />

@@ -57,5 +57,8 @@ object Urls {
     //设备存储大小 开机和跳转个人中心 PUT
     const val DEVICE_SPACE = "/device/v1/device/space"
 
+    //应用分类
+    const val APPS_SORT = "/device/v1/student/device/app/"
+
 
 }
