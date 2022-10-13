@@ -22,5 +22,7 @@ data class AppSortBeanData(
     val top_flag: Int,
     val type: Int,
     val un_install: Int,
-    val update_time: String
+    val update_time: String,
+    val args: String,
+    val class_name: String
 )

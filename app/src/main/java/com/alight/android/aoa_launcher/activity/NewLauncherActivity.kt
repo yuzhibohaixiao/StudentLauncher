@@ -1379,7 +1379,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                     it.app_name,
                                     null,
                                     it.package_name,
-                                    null,
+                                    it.class_name,
                                     null,
                                     it.app_icon
                                 )
@@ -1391,7 +1391,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                     it.app_name,
                                     null,
                                     it.package_name,
-                                    null,
+                                    it.class_name,
                                     null,
                                     it.app_icon
                                 )
@@ -1403,7 +1403,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                     it.app_name,
                                     null,
                                     it.package_name,
-                                    null,
+                                    it.class_name,
                                     null,
                                     it.app_icon
                                 )
@@ -1415,7 +1415,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                     it.app_name,
                                     null,
                                     it.package_name,
-                                    null,
+                                    it.class_name,
                                     null,
                                     it.app_icon
                                 )
