@@ -1421,6 +1421,7 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                                 )
                             )
                         }
+                        qualityHorizontalAdapter?.tempList?.clear()
                         qualityHorizontalAdapter?.tempList?.addAll(qualityHorizontalAdapter?.appList4!!)
                         qualityHorizontalAdapter?.resetAppNotifyAdapter()
                     }
