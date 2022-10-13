@@ -31,7 +31,7 @@ object AppGetUtil {
                 NewAppTypeBean(
                     resolveInfo.loadLabel(packageManager).toString(),
                     R.drawable.quality_default_icon,
-                    packageName, null, null
+                    packageName, null, null, null
                 )
             )
         }

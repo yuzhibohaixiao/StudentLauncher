@@ -1025,8 +1025,8 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                     }
                 }
             } else if (any is AppSortBean) {
-                var appSortBean = any
-                val toJson = Gson().toJson(appSortBean)
+                val toJson = Gson().toJson(any)
+                LauncherApplication.getMMKV().encode("appSortList", toJson)
                 Log.i(TAG, "onSuccess: $toJson")
             }
             /*else if (any is FamilyInfoBean) {
@@ -1355,6 +1355,75 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                 rl_ar_launcher.visibility = View.GONE
                 if (qualityHorizontalAdapter == null) {
                     qualityHorizontalAdapter = QualityHorizontalAdapter()
+                    val appSortListString =
+                        LauncherApplication.getMMKV().getString("appSortList", "")
+                    if (appSortListString?.isNotEmpty()!!) {
+                        qualityHorizontalAdapter?.clearAppList()
+                        val appSortBean =
+                            Gson().fromJson(appSortListString, AppSortBean::class.java)
+                        val filter1 = appSortBean.data.filter {
+                            it.app_label == 1
+                        }
+                        val filter2 = appSortBean.data.filter {
+                            it.app_label == 2
+                        }
+                        val filter3 = appSortBean.data.filter {
+                            it.app_label == 3
+                        }
+                        val filter4 = appSortBean.data.filter {
+                            it.app_label == 4
+                        }
+                        filter1.forEach {
+                            qualityHorizontalAdapter?.appList1?.add(
+                                NewAppTypeBean(
+                                    it.app_name,
+                                    null,
+                                    it.package_name,
+                                    null,
+                                    null,
+                                    it.app_icon
+                                )
+                            )
+                        }
+                        filter2.forEach {
+                            qualityHorizontalAdapter?.appList2?.add(
+                                NewAppTypeBean(
+                                    it.app_name,
+                                    null,
+                                    it.package_name,
+                                    null,
+                                    null,
+                                    it.app_icon
+                                )
+                            )
+                        }
+                        filter3.forEach {
+                            qualityHorizontalAdapter?.appList3?.add(
+                                NewAppTypeBean(
+                                    it.app_name,
+                                    null,
+                                    it.package_name,
+                                    null,
+                                    null,
+                                    it.app_icon
+                                )
+                            )
+                        }
+                        filter4.forEach {
+                            qualityHorizontalAdapter?.appList4?.add(
+                                NewAppTypeBean(
+                                    it.app_name,
+                                    null,
+                                    it.package_name,
+                                    null,
+                                    null,
+                                    it.app_icon
+                                )
+                            )
+                        }
+                        qualityHorizontalAdapter?.tempList?.addAll(qualityHorizontalAdapter?.appList4!!)
+                        qualityHorizontalAdapter?.resetAppNotifyAdapter()
+                    }
                     qualityHorizontalAdapter?.setOnItemClickListener(object :
                         QualityHorizontalAdapter.OnItemClickListener {
                         override fun onItemClick(
@@ -1538,6 +1607,10 @@ class NewLauncherActivity : BaseActivity(), View.OnClickListener, LauncherListen
                             "free_space" to remainSizeMb
                         ).toJson()
                     ), BaseBean::class.java
+                )
+                getPresenter().getModel(
+                    Urls.APPS_SORT + AccountUtil.getDSN(),
+                    hashMapOf(), AppSortBean::class.java
                 )
                 getPresenter().getModel(
                     Urls.DEVICE_INSTALL,

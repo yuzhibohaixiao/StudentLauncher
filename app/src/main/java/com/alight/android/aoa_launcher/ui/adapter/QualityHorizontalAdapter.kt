@@ -24,11 +24,12 @@ class QualityHorizontalAdapter :
     /**
      * 思维启蒙分类
      */
-    private val appList1: ArrayList<NewAppTypeBean> = arrayListOf(
+    val appList1: ArrayList<NewAppTypeBean> = arrayListOf(
         NewAppTypeBean(
             "天天练",
             R.drawable.wjdnxyy,
             "com.leleketang.SchoolFantasy",
+            null,
             null,
             null
         ),
@@ -38,10 +39,12 @@ class QualityHorizontalAdapter :
             "com.enuma.todomathcn",
             null,
             null,
+            null,
         ),
         NewAppTypeBean(
             "宝宝巴士",
             R.drawable.quality_default_icon, "com.sinyee.babybus.recommendapp",
+            null,
             null,
             null
         ),
@@ -49,17 +52,20 @@ class QualityHorizontalAdapter :
             "科学实验",
             R.drawable.quality_default_icon, "org.pbskids.playandlearnscience",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "中国象棋",
             R.drawable.quality_default_icon, "com.cnvcs.xiangqi",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "黑白棋",
             R.drawable.quality_default_icon, "com.popoko.reversijp",
+            null,
             null,
             null
         ),
@@ -68,10 +74,11 @@ class QualityHorizontalAdapter :
     /**
      * 艺术启蒙分类
      */
-    private val appList2: ArrayList<NewAppTypeBean> = arrayListOf(
+    val appList2: ArrayList<NewAppTypeBean> = arrayListOf(
         NewAppTypeBean(
             "架子鼓",
             R.drawable.quality_default_icon, "com.gamestar.xdrum",
+            null,
             null,
             null
         ),
@@ -79,11 +86,13 @@ class QualityHorizontalAdapter :
             "宝宝乐器",
             R.drawable.quality_default_icon, "com.sinyee.babybus.songIV",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "小猪佩奇绘画",
             R.drawable.quality_default_icon, "air.com.peppapig.paintbox",
+            null,
             null,
             null
         ),
@@ -93,16 +102,18 @@ class QualityHorizontalAdapter :
             "com.ximalayaos.pad.tingkid",
             null,
             null,
+            null,
         ),
     )
 
     /**
      * 语言启蒙分类
      */
-    private val appList3: ArrayList<NewAppTypeBean> = arrayListOf(
+    val appList3: ArrayList<NewAppTypeBean> = arrayListOf(
         NewAppTypeBean(
             "洪恩识字",
             R.drawable.quality_default_icon, "com.hongen.app.word",
+            null,
             null,
             null
         ),
@@ -110,17 +121,20 @@ class QualityHorizontalAdapter :
             "儿歌点点",
             R.drawable.quality_default_icon, "com.mampod.ergedd",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "kada故事",
             R.drawable.quality_default_icon, "com.hhdd.kada",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "爱奇艺奇巴布",
             R.drawable.quality_default_icon, "com.qiyi.video.child",
+            null,
             null,
             null
         ),
@@ -130,11 +144,12 @@ class QualityHorizontalAdapter :
     /**
      * 趣味学习分类
      */
-    private val appList4: ArrayList<NewAppTypeBean> = arrayListOf(
+    val appList4: ArrayList<NewAppTypeBean> = arrayListOf(
 
         NewAppTypeBean(
             "作业帮",
             R.drawable.quality_default_icon, "com.baidu.homework",
+            null,
             null,
             null
         ),
@@ -142,11 +157,13 @@ class QualityHorizontalAdapter :
             "猿辅导",
             R.drawable.quality_default_icon, "com.yuantiku.tutor",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "火狐浏览器",
             R.drawable.quality_default_icon, "org.mozilla.firefox",
+            null,
             null,
             null
         ),
@@ -154,23 +171,25 @@ class QualityHorizontalAdapter :
             "科学",
             R.drawable.science, "com.jxw.online_study",
             "com.jxw.online_study.activity.BookCaseWrapperActivity",
-            mapOf<String, Any>("StartArgs" to "d:/同步学习/科学|e:JWFD")
+            mapOf<String, Any>("StartArgs" to "d:/同步学习/科学|e:JWFD"),
+            null
         ),
         NewAppTypeBean(
             "思想品德",
             R.drawable.moral, "com.jxw.online_study",
             "com.jxw.online_study.activity.BookCaseWrapperActivity",
-            mapOf<String, Any>("StartArgs" to "d:/同步学习/政治|e:JWFD")
+            mapOf<String, Any>("StartArgs" to "d:/同步学习/政治|e:JWFD"),
+            null
         ),
         NewAppTypeBean(
             "五子棋",
             R.drawable.quality_default_icon, "com.alight.game.gobang",
             null,
-            null
+            null, null
         ),
     )
 
-    private val tempList: ArrayList<NewAppTypeBean> = arrayListOf()
+    val tempList: ArrayList<NewAppTypeBean> = arrayListOf()
 
     /**
      * 过滤应用
@@ -181,12 +200,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             AppConstants.LAUNCHER_PACKAGE_NAME,
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             AppConstants.AOA_PACKAGE_NAME,
+            null,
             null,
             null
         ),
@@ -195,12 +216,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             AppConstants.OLD_AOA_PACKAGE_NAME,
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "android.rk.RockVideoPlayer",
+            null,
             null,
             null
         ),
@@ -209,12 +232,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com.android.camera2",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com.android.contacts",
+            null,
             null,
             null
         ),
@@ -223,12 +248,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com.android.calendar",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com.android.deskclock",
+            null,
             null,
             null
         ),
@@ -237,12 +264,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com.android.email",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com.android.gallery3d",
+            null,
             null,
             null
         ),
@@ -251,12 +280,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com.android.music",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com.android.settings",
+            null,
             null,
             null
         ),
@@ -265,12 +296,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com.android.soundrecorder",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com.coolapk.market",
+            null,
             null,
             null
         ),
@@ -279,12 +312,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com,sohu.inputmethod.sogou",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com,jxw.launcher",
+            null,
             null,
             null
         ),
@@ -293,12 +328,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com.android.calculator2",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com.android.documentsui",
+            null,
             null,
             null
         ),
@@ -307,12 +344,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com.android.quicksearchbox",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com.android.rk",
+            null,
             null,
             null
         ),
@@ -321,12 +360,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "teaonly.rk.droidipcam",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com.iflytek.speechcloud",
+            null,
             null,
             null
         ),
@@ -335,12 +376,14 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com.jxw.huiben",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "",
             R.drawable.quality_default_icon,
             "com.google.android.inputmethod.latin",
+            null,
             null,
             null
         ),
@@ -349,6 +392,7 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com.oirsdfg89.flg",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
@@ -356,11 +400,13 @@ class QualityHorizontalAdapter :
             R.drawable.quality_default_icon,
             "com.jxw.pedu.clickread",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "alook-浏览器",
             R.drawable.science, "alook.browser",
+            null,
             null,
             null
         ),
@@ -368,11 +414,13 @@ class QualityHorizontalAdapter :
             "浏览器",
             R.drawable.science, "com.android.browser",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "完美钢琴",
             R.drawable.quality_default_icon, "com.gamestar.perfectpiano",
+            null,
             null,
             null
         ),
@@ -380,11 +428,13 @@ class QualityHorizontalAdapter :
             "星尘浏览器",
             R.drawable.science, "com.chaozhuo.browser",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "儿童画画填色",
             R.drawable.quality_default_icon, "com.melestudio.paintd",
+            null,
             null,
             null
         ),
@@ -392,17 +442,20 @@ class QualityHorizontalAdapter :
             "阿布睡前故事",
             R.drawable.quality_default_icon, "com.android.abustory",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "科魔大战",
             R.drawable.quality_default_icon, "com.lotfun.svmAndroid",
             null,
+            null,
             null
         ),
         NewAppTypeBean(
             "熊猫博士识字",
             R.drawable.quality_default_icon, "com.drpanda.chineseacademy.b2b",
+            null,
             null,
             null
         ),
@@ -498,6 +551,13 @@ class QualityHorizontalAdapter :
         tempList.addAll(appList4)
         setNewInstance(typeTextList)
         resetAppNotifyAdapter()
+    }
+
+    fun clearAppList() {
+        appList1.clear()
+        appList2.clear()
+        appList3.clear()
+        appList4.clear()
     }
 
     @Synchronized

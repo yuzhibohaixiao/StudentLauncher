@@ -22,12 +22,14 @@ class QualityAdapter :
         val ivQualityIcon = holder.getView<ImageView>(R.id.iv_quality_icon)
 //        val imageView2 = holder.getView<ImageView>(R.id.iv_quality_launcher_item2)
 //        val imageView3 = holder.getView<ImageView>(R.id.iv_quality_launcher_item3)
-        if (item.params != null && !StringUtils.isEmpty(item.className)) {
-            ivQualityIcon.setImageResource(item.appIcon)
+        if (item.iconUrl != null && item.iconUrl!!.isNotEmpty()) {
+            Glide.with(context).load(item.iconUrl).into(ivQualityIcon)
+        } else if (item.params != null && !StringUtils.isEmpty(item.className)) {
+            ivQualityIcon.setImageResource(item.appIcon!!)
         } else if (!StringUtils.isEmpty(item.appPackName)) {
             setRoundImage(getIcon(item.appPackName), ivQualityIcon)
-        } else if (item.appIcon != 0) {
-            ivQualityIcon.setImageResource(item.appIcon)
+        } else if (item.appIcon != null && item.appIcon != 0) {
+            ivQualityIcon.setImageResource(item.appIcon!!)
         } else {
             ivQualityIcon.visibility =
                 View.INVISIBLE
