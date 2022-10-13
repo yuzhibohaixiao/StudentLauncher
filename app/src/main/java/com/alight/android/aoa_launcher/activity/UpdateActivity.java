@@ -39,7 +39,6 @@ import com.alight.android.aoa_launcher.common.db.DbHelper;
 import com.alight.android.aoa_launcher.common.event.UpdateEvent;
 import com.alight.android.aoa_launcher.net.model.File;
 import com.alight.android.aoa_launcher.presenter.PresenterImpl;
-import com.alight.android.aoa_launcher.service.DownloadService;
 import com.alight.android.aoa_launcher.service.UpdateService;
 import com.alight.android.aoa_launcher.ui.adapter.UpdateAdapter;
 import com.alight.android.aoa_launcher.ui.view.CustomDialog;
@@ -1256,7 +1255,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 //出错则继续下载
                                 file.setStatus(File.DOWNLOAD_PROCEED);
                                 file.setSpeed("---");
-                                intent = new Intent(LauncherApplication.Companion.getContext(), DownloadService.class);
+                                intent = new Intent(LauncherApplication.Companion.getContext(), UpdateService.class);
                                 intent.putExtra("filename", file.getFileName());
                                 intent.putExtra("url", file.getUrl());
                                 intent.putExtra("id", file.getId());

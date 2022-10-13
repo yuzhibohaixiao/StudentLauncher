@@ -174,13 +174,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.DownloadService" />
         <service android:name=".service.UpdateService" />
-
-        <activity
-            android:name=".activity.MoreDownloadActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/transparentStyle" />
 
         <activity
             android:name=".activity.UpdateActivity"
