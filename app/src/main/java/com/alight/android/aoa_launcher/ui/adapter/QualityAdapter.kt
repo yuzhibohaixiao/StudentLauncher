@@ -8,6 +8,7 @@ import com.alight.android.aoa_launcher.R
 import com.alight.android.aoa_launcher.common.bean.NewAppTypeBean
 import com.alight.android.aoa_launcher.utils.StringUtils
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -23,7 +24,17 @@ class QualityAdapter :
 //        val imageView2 = holder.getView<ImageView>(R.id.iv_quality_launcher_item2)
 //        val imageView3 = holder.getView<ImageView>(R.id.iv_quality_launcher_item3)
         if (item.iconUrl != null && item.iconUrl!!.isNotEmpty()) {
-            Glide.with(context).load(item.iconUrl).into(ivQualityIcon)
+            /*    val requestOptions: RequestOptions = RequestOptions()
+                    .placeholder(R.drawable.testphoto_1)
+                    .error(R.drawable.testphoto_2)
+                    .fallback(R.drawable.testphoto_3)
+                    .override(100, 100)*/
+            Glide.with(context).load(item.iconUrl).skipMemoryCache(true).diskCacheStrategy(
+                DiskCacheStrategy.NONE
+            )
+                .error(ivQualityIcon.drawable)
+                .placeholder(ivQualityIcon.drawable)
+                .into(ivQualityIcon)
         } else if (item.params != null && !StringUtils.isEmpty(item.className)) {
             ivQualityIcon.setImageResource(item.appIcon!!)
         } else if (!StringUtils.isEmpty(item.appPackName)) {
