@@ -716,12 +716,16 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 systemAppList.add(updateBeanData)
             } else if (updateBeanData.app_info.type == 2) {
                 otherAppList.add(updateBeanData)
+            } else if (updateBeanData.app_info.type == 3) {
+                otherAppList.add(updateBeanData)
             }
         }
 
         if (systemApp?.app_info?.type == 1) {
             systemAppList.add(systemApp)
         } else if (systemApp?.app_info?.type == 2) {
+            otherAppList.add(systemApp)
+        } else if (systemApp?.app_info?.type == 3) {
             otherAppList.add(systemApp)
         }
         //newSplash true表示使用新用户第一次开启ota升级
@@ -845,12 +849,16 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 systemAppList.add(updateBeanData)
             } else if (updateBeanData.app_info.type == 2) {
                 otherAppList.add(updateBeanData)
+            } else if (updateBeanData.app_info.type == 3) {
+                otherAppList.add(updateBeanData)
             }
         }
 
         if (systemApp?.app_info?.type == 1) {
             systemAppList.add(systemApp)
         } else if (systemApp?.app_info?.type == 2) {
+            otherAppList.add(systemApp)
+        } else if (systemApp?.app_info?.type == 3) {
             otherAppList.add(systemApp)
         }
         var intent = Intent(activity, UpdateActivity::class.java)
@@ -939,12 +947,16 @@ class PresenterImpl : BasePresenter<IContract.IView>() {
                 systemAppList.add(updateBeanData)
             } else if (updateBeanData.app_info.type == 2) {
                 otherAppList.add(updateBeanData)
+            } else if (updateBeanData.app_info.type == 3) {
+                otherAppList.add(updateBeanData)
             }
         }
 
         if (systemApp?.app_info?.type == 1) {
             systemAppList.add(systemApp)
         } else if (systemApp?.app_info?.type == 2) {
+            otherAppList.add(systemApp)
+        } else if (systemApp?.app_info?.type == 3) {
             otherAppList.add(systemApp)
         }
 

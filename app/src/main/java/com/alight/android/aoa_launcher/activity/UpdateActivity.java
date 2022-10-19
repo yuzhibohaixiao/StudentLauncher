@@ -1269,7 +1269,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                         e.printStackTrace();
                     }
                 }
-            } else if (type == 2) {
+            } else if (type == 2 || type == 3) {
                 //预装应用
                 for (int i = 0; i < otherList.size(); i++) {
                     File file = otherList.get(i);
