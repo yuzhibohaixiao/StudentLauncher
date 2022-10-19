@@ -418,13 +418,6 @@ class QualityHorizontalAdapter :
             null
         ),
         NewAppTypeBean(
-            "完美钢琴",
-            R.drawable.quality_default_icon, "com.gamestar.perfectpiano",
-            null,
-            null,
-            null
-        ),
-        NewAppTypeBean(
             "星尘浏览器",
             R.drawable.science, "com.chaozhuo.browser",
             null,
