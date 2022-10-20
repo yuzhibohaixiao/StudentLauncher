@@ -96,6 +96,16 @@ public class File implements Serializable, Comparable<File> {
 
     private Integer topFlag;
 
+    public boolean isToBeUpdated() {
+        return toBeUpdated;
+    }
+
+    public void setToBeUpdated(boolean toBeUpdated) {
+        this.toBeUpdated = toBeUpdated;
+    }
+
+    //待更新
+    private boolean toBeUpdated;
 
     public Integer getTopFlag() {
         return topFlag;

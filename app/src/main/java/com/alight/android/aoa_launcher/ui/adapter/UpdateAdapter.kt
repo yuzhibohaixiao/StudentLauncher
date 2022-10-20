@@ -185,11 +185,11 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                     tvUpdate.text = "无需更新"
                     tvUpdate.setTextColor(context.getColor(R.color.person_center_text_alpha_green))
                 } else {
-                    tvUpdate.isEnabled = true
-                    tvUpdate.text = "更新"
-                    tvUpdate.setTextColor(context.getColor(R.color.person_center_text_green))
-                    tvUpdate.setBackgroundResource(R.drawable.launcher_ota_update)
-                    tvSize.visibility = View.VISIBLE
+                        tvUpdate.isEnabled = true
+                        tvUpdate.text = "更新"
+                        tvUpdate.setTextColor(context.getColor(R.color.person_center_text_green))
+                        tvUpdate.setBackgroundResource(R.drawable.launcher_ota_update)
+                        tvSize.visibility = View.VISIBLE
                 }
                 //表示已经加载过图片
                 data[holder.layoutPosition].iconState = 1
@@ -204,9 +204,11 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
                     {
                         pbUpdate.visibility = View.VISIBLE
                         pbUpdate.progress = file.progress
+                        file.isToBeUpdated = false
                     }
                     File.DOWNLOAD_PROCEED -> //下载进行中
                     {
+                        file.isToBeUpdated = false
                         pbUpdate.visibility = View.VISIBLE
                         pbUpdate.progress = file.progress
                         if (pbUpdate.progress != 100) {
@@ -235,7 +237,12 @@ class UpdateAdapter : BaseQuickAdapter<File, BaseViewHolder>(R.layout.item_updat
 //                tvUpdate.text = "${pbUpdate.progress}%";
                     }
                 }
-
+                if (file.isToBeUpdated) {
+                    //待更新
+                    tvUpdate.isEnabled = false
+                    tvUpdate.setBackgroundResource(R.drawable.update_oval_trans20);
+                    tvUpdate.text = "待更新";
+                }
             }
             if (file.isInstalled)
                 refreshInstallState(file, tvUpdate)

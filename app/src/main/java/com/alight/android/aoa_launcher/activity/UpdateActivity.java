@@ -5,6 +5,7 @@ import static com.alight.android.aoa_launcher.common.constants.AppConstants.LAUN
 import static com.alight.android.aoa_launcher.common.constants.AppConstants.SYSTEM_ZIP_FULL_PATH;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -1012,6 +1013,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
      *
      * @param v The view that was clicked.
      */
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -1044,14 +1046,16 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     for (int i = 0; i < otherAdapter.getData().size(); i++) {
                         File file = otherAdapter.getData().get(i);
                         if (file.getFormat() == 1 || file.getFormat() == 2) {
-                            TextView tvUpdate = (TextView) otherAdapter.getViewByPosition(i, R.id.tv_update_item);
+                            file.setToBeUpdated(true);
+                         /*   TextView tvUpdate = (TextView) otherAdapter.getViewByPosition(i, R.id.tv_update_item);
                             if (tvUpdate != null) {
                                 tvUpdate.setEnabled(false);
                                 tvUpdate.setBackgroundResource(R.drawable.update_oval_trans20);
                                 tvUpdate.setText("待更新");
-                            }
+                            }*/
                         }
                     }
+                    otherAdapter.notifyDataSetChanged();
                     if (downAllOtherAppThread == null) {
                         Runnable runnable = () -> {
                             for (int i = 0; i < otherAdapter.getData().size(); i++) {
