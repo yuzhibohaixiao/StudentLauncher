@@ -148,6 +148,9 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
     public static int selectPage;
 
+    private Thread downAllOtherAppThread;
+    private final static Object lockObjectA = new Object();
+
     @Override
 
     public void initData() {
@@ -1036,7 +1039,44 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 tvUpdateAll.setTextColor(Color.parseColor("#80215558"));
                 tvUpdateAll.setEnabled(false);
                 tvUpdateAll.setClickable(false);
-                startSystemAppDownload();
+                if (tvOtherApp.isSelected()) {
+                    //预装应用一键更新
+                    for (int i = 0; i < otherAdapter.getData().size(); i++) {
+                        File file = otherAdapter.getData().get(i);
+                        if (file.getFormat() == 1 || file.getFormat() == 2) {
+                            TextView tvUpdate = (TextView) otherAdapter.getViewByPosition(i, R.id.tv_update_item);
+                            if (tvUpdate != null) {
+                                tvUpdate.setEnabled(false);
+                                tvUpdate.setBackgroundResource(R.drawable.update_oval_trans20);
+                                tvUpdate.setText("待更新");
+                            }
+                        }
+                    }
+                    if (downAllOtherAppThread == null) {
+                        Runnable runnable = () -> {
+                            for (int i = 0; i < otherAdapter.getData().size(); i++) {
+                                synchronized (lockObjectA) {
+                                    File file = otherAdapter.getData().get(i);
+                                    if (file.getFormat() == 1 || file.getFormat() == 2) {
+                                        startSingleDownload(i);
+                                        try {
+                                            lockObjectA.wait();
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
+                        };
+                        downAllOtherAppThread = new Thread(runnable);
+                        downAllOtherAppThread.start();
+                    }
+
+
+                } else {
+                    //系统一键更新
+                    startSystemAppDownload();
+                }
                 break;
             case R.id.ll_back_update:
                 finish();
@@ -1157,7 +1197,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
         systemRecyclerView.setVisibility(view == tvSystemApp ? View.VISIBLE : View.GONE);
         otherRecyclerView.setVisibility(view == tvOtherApp ? View.VISIBLE : View.GONE);
-        tvUpdateAll.setVisibility(view == tvSystemApp ? View.VISIBLE : View.GONE);
+        tvUpdateAll.setVisibility(view == tvSystemApp || view == tvOtherApp ? View.VISIBLE : View.GONE);
         llOtaUpdate.setVisibility(view == tvOtaApp ? View.VISIBLE : View.GONE);
     }
 
@@ -1291,6 +1331,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                             file.setProgress(pencent);
                             file.setSizeStr(totalSize);
                             file.setPath(filePath);
+                            //预装应用一键更新时继续更新下一个应用
+                            if (downAllOtherAppThread != null) {
+                                synchronized (lockObjectA) {
+                                    lockObjectA.notify();
+                                }
+                            }
                             otherAdapter.notifyItemChanged(i);
                             LauncherApplication.Companion.getDownloadTaskHashMap().remove(file.getId());
                             String apkPath = Environment.getExternalStorageDirectory().getPath() + "/" + file.getFileName();
