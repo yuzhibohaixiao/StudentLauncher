@@ -21,7 +21,20 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/tv_update_all"
+            android:id="@+id/tv_update_all_system"
+            android:layout_width="95.5dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="38.5dp"
+            android:background="@drawable/launcher_ota_update"
+            android:gravity="center"
+            android:text="一键更新"
+            android:textColor="@color/person_center_text_green"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_update_all_other"
             android:layout_width="95.5dp"
             android:layout_height="30dp"
             android:layout_gravity="end|center_vertical"

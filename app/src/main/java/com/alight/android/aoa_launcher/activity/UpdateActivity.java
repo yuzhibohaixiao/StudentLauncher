@@ -105,7 +105,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private TextView tvSystemApp;
     private TextView tvOtherApp;
     private View llBackUpdate;
-    private TextView tvUpdateAll;
+    private TextView tvUpdateAllSystem;
+    private TextView tvUpdateAllOther;
     private Intent serviceIntent;
     private ArrayList<UpdateBeanData> systemAppList;
     private ArrayList<UpdateBeanData> otherAppList;
@@ -226,11 +227,25 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                     //表示有需要更新的
                     break;
                 } else if (i == systemAdapter.getData().size() - 1) {
-                    tvUpdateAll.setBackgroundResource(R.drawable.update_oval);
-                    tvUpdateAll.setTextColor(getColor(R.color.person_center_text_alpha_green));
-                    tvUpdateAll.setEnabled(false);
-                    tvUpdateAll.setClickable(false);
-                    tvUpdateAll.setText("无需更新");
+                    tvUpdateAllSystem.setBackgroundResource(R.drawable.update_oval);
+                    tvUpdateAllSystem.setTextColor(getColor(R.color.person_center_text_alpha_green));
+                    tvUpdateAllSystem.setEnabled(false);
+                    tvUpdateAllSystem.setClickable(false);
+                    tvUpdateAllSystem.setText("无需更新");
+                }
+            }
+        }
+        if (otherAdapter.getData().size() > 0) {
+            for (int i = 0; i < otherAdapter.getData().size(); i++) {
+                if (otherAdapter.getData().get(i).getFormat() != 3 && otherAdapter.getData().get(i).getFormat() != 4) {
+                    //表示有需要更新的
+                    break;
+                } else if (i == otherAdapter.getData().size() - 1) {
+                    tvUpdateAllOther.setBackgroundResource(R.drawable.update_oval);
+                    tvUpdateAllOther.setTextColor(getColor(R.color.person_center_text_alpha_green));
+                    tvUpdateAllOther.setEnabled(false);
+                    tvUpdateAllOther.setClickable(false);
+                    tvUpdateAllOther.setText("无需更新");
                 }
             }
         }
@@ -936,7 +951,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvSystemApp.setOnClickListener(this);
         tvOtherApp.setOnClickListener(this);
         llBackUpdate.setOnClickListener(this);
-        tvUpdateAll.setOnClickListener(this);
+        tvUpdateAllSystem.setOnClickListener(this);
+        tvUpdateAllOther.setOnClickListener(this);
         tvOtaAppUpdate.setOnClickListener(this);
     }
 
@@ -949,7 +965,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         tvOtaApp.setSelected(true);
         systemRecyclerView = findViewById(R.id.rv_system_app_update);
         otherRecyclerView = findViewById(R.id.rv_other_app_update);
-        tvUpdateAll = findViewById(R.id.tv_update_all);
+        tvUpdateAllSystem = findViewById(R.id.tv_update_all_system);
+        tvUpdateAllOther = findViewById(R.id.tv_update_all_other);
         tvLocalOtaApp = findViewById(R.id.tv_local_ota_app);
         tvNewOtaApp = findViewById(R.id.tv_new_ota_app);
         tvOtaAppUpdate = findViewById(R.id.tv_ota_app_update);
@@ -1035,51 +1052,54 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 selectPage = 2;
                 break;
             //开始下载
-            case R.id.tv_update_all:
+            case R.id.tv_update_all_system:
+                //系统应用一键更新
                 ToastUtils.showShort(this, "开始一键更新");
-                tvUpdateAll.setBackgroundResource(R.drawable.update_oval);
-                tvUpdateAll.setTextColor(Color.parseColor("#80215558"));
-                tvUpdateAll.setEnabled(false);
-                tvUpdateAll.setClickable(false);
-                if (tvOtherApp.isSelected()) {
-                    //预装应用一键更新
-                    for (int i = 0; i < otherAdapter.getData().size(); i++) {
-                        File file = otherAdapter.getData().get(i);
-                        if (file.getFormat() == 1 || file.getFormat() == 2) {
-                            file.setToBeUpdated(true);
+                tvUpdateAllSystem.setBackgroundResource(R.drawable.update_oval);
+                tvUpdateAllSystem.setTextColor(Color.parseColor("#80215558"));
+                tvUpdateAllSystem.setEnabled(false);
+                tvUpdateAllSystem.setClickable(false);
+                //系统一键更新
+                startSystemAppDownload();
+                break;
+            case R.id.tv_update_all_other:
+                //预装应用一键更新
+                ToastUtils.showShort(this, "开始一键更新");
+                tvUpdateAllOther.setBackgroundResource(R.drawable.update_oval);
+                tvUpdateAllOther.setTextColor(Color.parseColor("#80215558"));
+                tvUpdateAllOther.setEnabled(false);
+                tvUpdateAllOther.setClickable(false);
+                for (int i = 0; i < otherAdapter.getData().size(); i++) {
+                    File file = otherAdapter.getData().get(i);
+                    if (file.getFormat() == 1 || file.getFormat() == 2) {
+                        file.setToBeUpdated(true);
                          /*   TextView tvUpdate = (TextView) otherAdapter.getViewByPosition(i, R.id.tv_update_item);
                             if (tvUpdate != null) {
                                 tvUpdate.setEnabled(false);
                                 tvUpdate.setBackgroundResource(R.drawable.update_oval_trans20);
                                 tvUpdate.setText("待更新");
                             }*/
-                        }
                     }
-                    otherAdapter.notifyDataSetChanged();
-                    if (downAllOtherAppThread == null) {
-                        Runnable runnable = () -> {
-                            for (int i = 0; i < otherAdapter.getData().size(); i++) {
-                                synchronized (lockObjectA) {
-                                    File file = otherAdapter.getData().get(i);
-                                    if (file.getFormat() == 1 || file.getFormat() == 2) {
-                                        startSingleDownload(i);
-                                        try {
-                                            lockObjectA.wait();
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
+                }
+                otherAdapter.notifyDataSetChanged();
+                if (downAllOtherAppThread == null) {
+                    Runnable runnable = () -> {
+                        for (int i = 0; i < otherAdapter.getData().size(); i++) {
+                            synchronized (lockObjectA) {
+                                File file = otherAdapter.getData().get(i);
+                                if (file.getFormat() == 1 || file.getFormat() == 2) {
+                                    startSingleDownload(i);
+                                    try {
+                                        lockObjectA.wait();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             }
-                        };
-                        downAllOtherAppThread = new Thread(runnable);
-                        downAllOtherAppThread.start();
-                    }
-
-
-                } else {
-                    //系统一键更新
-                    startSystemAppDownload();
+                        }
+                    };
+                    downAllOtherAppThread = new Thread(runnable);
+                    downAllOtherAppThread.start();
                 }
                 break;
             case R.id.ll_back_update:
@@ -1201,7 +1221,8 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
         systemRecyclerView.setVisibility(view == tvSystemApp ? View.VISIBLE : View.GONE);
         otherRecyclerView.setVisibility(view == tvOtherApp ? View.VISIBLE : View.GONE);
-        tvUpdateAll.setVisibility(view == tvSystemApp || view == tvOtherApp ? View.VISIBLE : View.GONE);
+        tvUpdateAllSystem.setVisibility(view == tvSystemApp ? View.VISIBLE : View.GONE);
+        tvUpdateAllOther.setVisibility(view == tvOtherApp ? View.VISIBLE : View.GONE);
         llOtaUpdate.setVisibility(view == tvOtaApp ? View.VISIBLE : View.GONE);
     }
 
